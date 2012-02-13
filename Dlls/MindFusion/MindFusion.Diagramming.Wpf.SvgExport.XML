@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MindFusion.Diagramming.Wpf.SvgExport</name>
+    </assembly>
+    <members>
+        <member name="T:MindFusion.Diagramming.Wpf.Export.SvgExporter">
+            <summary>
+            Creates SVG (Scalable Vector Graphics) files from MindFusion.Diagramming diagrams.
+            </summary>
+        </member>
+        <member name="M:MindFusion.Diagramming.Wpf.Export.SvgExporter.#ctor">
+            <summary>
+            Initializes a new instance of the SvgExporter class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.Diagramming.Wpf.Export.SvgExporter.Export(MindFusion.Diagramming.Wpf.Diagram,System.String)">
+            <summary>
+            Creates an SVG file representing the specified diagram.
+            </summary>
+            <param name="diagram">A reference to the diagram that will be exported.</param>
+            <param name="filePath">The full path to the SVG file.</param>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.SvgExporter.m_bDrawInvisible">
+            <summary>
+            Specifies whether invisible items should be drawn.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.SvgExporter.InvisibleItems">
+            <summary>
+            Gets or sets a value indicating whether invisible items should be exporter.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.SvgExporter.ExternalImages">
+            <summary>
+            Specifies whether images displayed by diagram items should be exported to external files.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.SvgExporter.GZipCompression">
+            <summary>
+            Specifies whether to create GZip compressed SVG.
+            </summary>
+        </member>
+    </members>
+</doc>

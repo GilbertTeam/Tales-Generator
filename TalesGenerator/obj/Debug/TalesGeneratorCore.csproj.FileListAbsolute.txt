@@ -1,0 +1,5 @@
+C:\Git\GhOrga\TalesGenerator\TalesGenerator\bin\Debug\TalesGeneratorCore.dll
+C:\Git\GhOrga\TalesGenerator\TalesGenerator\bin\Debug\TalesGeneratorCore.pdb
+C:\Git\GhOrga\TalesGenerator\TalesGenerator\obj\Debug\ResolveAssemblyReference.cache
+C:\Git\GhOrga\TalesGenerator\TalesGenerator\obj\Debug\TalesGeneratorCore.dll
+C:\Git\GhOrga\TalesGenerator\TalesGenerator\obj\Debug\TalesGeneratorCore.pdb
