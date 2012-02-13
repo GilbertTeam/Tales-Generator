@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using Microsoft.Windows.Controls.Ribbon;
+using TalesGeneratorCore;
 
 namespace TalesGeneratorUI
 {
@@ -20,9 +21,78 @@ namespace TalesGeneratorUI
 	/// </summary>
 	public partial class MainWindow : RibbonWindow
 	{
+		ISemanticNetwork _network;
+
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			_network = null;
 		}
+
+		#region CommandHandlers
+
+		private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void New_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+
+		}
+
+		private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+
+		}
+
+		private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _network != null;
+		}
+
+		private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+
+		}
+
+		private void SaveAs_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _network != null;
+		}
+
+		private void Save_AsExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+
+		}
+
+		private void CloseProject_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _network != null;
+		}
+
+		private void CloseProject_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+
+		}
+
+		private void Close_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void Close_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			this.Close();
+		}
+
+		#endregion
+
 	}
 }

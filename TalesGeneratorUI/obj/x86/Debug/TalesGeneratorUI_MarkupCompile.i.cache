@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Git\GhOrga\TalesGenerator\TalesGeneratorUI\obj\x86\Debug\
+D:\Git\TalesGenerator\TalesGeneratorUI\obj\x86\Debug\
 TalesGeneratorUI
 none
 false
 DEBUG;TRACE
-C:\Git\GhOrga\TalesGenerator\TalesGeneratorUI\App.xaml
+D:\Git\TalesGenerator\TalesGeneratorUI\App.xaml
 11151548125
 
-6-480523821
-16737658507
+6-777613162
+16-1617232633
 MainWindow.xaml;
 
-False
+True
 
