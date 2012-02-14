@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MindFusion.Diagramming.Wpf.PdfExport</name>
+    </assembly>
+    <members>
+        <member name="T:MindFusion.Diagramming.Wpf.Export.PdfExporter">
+            <summary>
+            Exports diagrams to Adobe Portable Document Format (PDF) files.
+            </summary>
+        </member>
+        <member name="M:MindFusion.Diagramming.Wpf.Export.PdfExporter.Export(MindFusion.Diagramming.Wpf.Diagram,System.String)">
+            <summary>
+            Creates a PDF file representing the specified diagram.
+            </summary>
+            <param name="diagram">A reference to the diagram that will be exported.</param>
+            <param name="filePath">The full path to the PDF file.</param>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.PdfExporter.m_bDrawInvisible">
+            <summary>
+            Specifies whether invisible items should be drawn.
+            </summary>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.PdfExporter.m_orientation">
+            <summary>
+            Specifies pages orientation.
+            </summary>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.PdfExporter.m_bAutoOrientation">
+            <summary>
+            Specifies whether the pages should be auto-rotated.
+            </summary>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.PdfExporter.m_AutoSize">
+            <summary>
+            Specifies currently used auto-sizing mode.
+            </summary>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.PdfExporter.m_pageSizeEnum">
+            <summary>
+            Specifies PDF page size.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.PdfExporter.Margins">
+            <summary>
+            Gets or sets the margins for the PDF pages.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.PdfExporter.AutoScale">
+            <summary>
+            Specifies whether the diagram should be scaled to fit one
+            or more pages of the PDF document.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.PdfExporter.Scale">
+            <summary>
+            Gets or sets the scale of the PDF output relatively
+            to the original on-screen size of the diagram.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.PdfExporter.AutoOrientation">
+            <summary>
+            Specifies whether the exporter should choose the PDF page
+            orientation automatically.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.PdfExporter.InvisibleItems">
+            <summary>
+            Gets or sets a value indicating whether invisible items should be exporter.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.PdfExporter.PageOrientation">
+            <summary>
+            Gets or sets page orientation that is set to the resulting PDF pages.
+            </summary>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.PdfExporter.PageSize">
+            <summary>
+            Gets or sets PDF page size.
+            </summary>
+        </member>
+        <member name="T:MindFusion.Diagramming.Wpf.Export.AutoScale">
+            <summary>
+            Specifies the auto-scale mode when exporting to a PDF document.
+            </summary>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.AutoScale.None">
+            <summary>
+            No automatic scaling.
+            </summary>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.AutoScale.FitToPage">
+            <summary>
+            Scales the chart (aspect ratio is preserved) to
+            fit the page bounds if the document is too large.
+            </summary>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.AutoScale.FitToPageNoUpScale">
+            <summary>
+            Scales down the chart (aspect ratio is preserved) to
+            fit the page bounds if the document is too large.
+            Otherwise chart's size is left untouched.
+            </summary>
+        </member>
+        <member name="F:MindFusion.Diagramming.Wpf.Export.AutoScale.FitToWidth">
+            <summary>
+            Scales down the chart (aspect ratio is preserved) to
+            make sure that the width of the chart is less than the
+            width of the PDF page.
+            </summary>
+        </member>
+    </members>
+</doc>
