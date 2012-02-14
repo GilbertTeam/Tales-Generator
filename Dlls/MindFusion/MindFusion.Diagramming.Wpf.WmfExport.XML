@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MindFusion.Diagramming.Wpf.WmfExport</name>
+    </assembly>
+    <members>
+        <member name="T:MindFusion.Diagramming.Wpf.Export.WmfExporter">
+            <summary>
+            Creates WMF (Windows MetaFile) images from MindFusion.Diagramming diagrams.
+            </summary>
+        </member>
+        <member name="M:MindFusion.Diagramming.Wpf.Export.WmfExporter.#ctor">
+            <summary>
+            Initializes a new instance of the WmfExporter class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.Diagramming.Wpf.Export.WmfExporter.Export(MindFusion.Diagramming.Wpf.Diagram,System.String)">
+            <summary>
+            Creates a WMF file representing the specified diagram.
+            </summary>
+            <param name="diagram">A reference to the diagram that will be exported.</param>
+            <param name="filePath">The full path to the WMF file.</param>
+        </member>
+        <member name="P:MindFusion.Diagramming.Wpf.Export.WmfExporter.Description">
+            <summary>
+            Gets or sets a description string associated with the metafile.
+            </summary>
+        </member>
+    </members>
+</doc>
