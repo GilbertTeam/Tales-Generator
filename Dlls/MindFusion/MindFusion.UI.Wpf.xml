@@ -1,0 +1,2943 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MindFusion.UI.Wpf</name>
+    </assembly>
+    <members>
+        <member name="T:MindFusion.UI.Wpf.YearCell">
+            <summary>
+            Represents a Year view in a Calendar control.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.Cell">
+            <summary>
+            Represents the base class for all views in a Calendar control.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Cell.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Cell.#ctor">
+            <summary>
+            Initializes a new instance of the Cell class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Cell.OnApplyTemplate">
+            <summary>
+            FrameworkElement.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Cell.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            UIElement.OnMouseLeftButtonDown override.
+            </summary>
+            <param name="e">
+            The MouseButtonEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Cell.OnMouseMove(System.Windows.Input.MouseEventArgs)">
+            <summary>
+            UIElement.OnMouseMove override.
+            </summary>
+            <param name="e">
+            The MouseEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Cell.OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            UIElement.OnMouseLeftButtonUp override.
+            </summary>
+            <param name="e">
+            The MouseButtonEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Cell.OnMouseEnter(System.Windows.Input.MouseEventArgs)">
+            <summary>
+            UIElement.OnMouseEnter override.
+            </summary>
+            <param name="e">
+            The MouseEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Cell.OnMouseLeave(System.Windows.Input.MouseEventArgs)">
+            <summary>
+            UIElement.OnMouseLeave override.
+            </summary>
+            <param name="e">
+            The MouseEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.ShowTodayProperty">
+            <summary>
+            Identifies the ShowToday dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.HolidaysDateSelectionProperty">
+            <summary>
+            Idenitifies the HolidaysDateSelection dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.FocusDateSelectionProperty">
+            <summary>
+            Identifies the FocusDateSelection dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.HoverDateSelectionProperty">
+            <summary>
+            Identifies the HoverDateSelection dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.DateSelectionProperty">
+            <summary>
+            Identifies the DateSelection dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.DateProperty">
+            <summary>
+            Identifies the Date dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.SelectionModeProperty">
+            <summary>
+            Identifies the SelectionMode dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.SelectionOnTopProperty">
+            <summary>
+            Identifies the SelectionOnTop dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.CurrentViewProperty">
+            <summary>
+            Identifies the CurrentView dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.DefaultItemTemplateProperty">
+            <summary>
+            Identifies the DefaultItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.PaddingItemTemplateProperty">
+            <summary>
+            Identifies the PaddingItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.TodayItemTemplateProperty">
+            <summary>
+            Identifies the TodayItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.WeekendItemTemplateProperty">
+            <summary>
+            Identifies the WeekendItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.HolidayItemTemplateProperty">
+            <summary>
+            Identifies the HolidayItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.SelectionItemTemplateProperty">
+            <summary>
+            Identifies the SelectionItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.HoverItemTemplateProperty">
+            <summary>
+            Identifies the HoverItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.FocusItemTemplateProperty">
+            <summary>
+            Identifies the FocusItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.DateFormatProperty">
+            <summary>
+            Identifies the DateFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Cell.ShowPaddingDaysProperty">
+            <summary>
+            Identifies the ShowPaddingDays dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.LanguageCulture">
+            <summary>
+            Gets the current CultureInfo of this instance.
+            </summary>
+            <remarks>
+            CutureInfo from Language property is used.
+            </remarks>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.ShowToday">
+            <summary>
+            Gets or sets a value indicating whether the current date is displayed in this view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.HolidaysDateSelection">
+            <summary>
+            Gets or sets a list of dates representing the holidays in this view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.FocusDateSelection">
+            <summary>
+            Gets or sets a list with the currently focused dates.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.HoverDateSelection">
+            <summary>
+            Gets or sets a list with the dates currently pointed with the mouse.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.DateSelection">
+            <summary>
+            Gets or sets a list with the curretly selected dates.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.Date">
+            <summary>
+            Gets or sets a date defining the range of dates currently displayed in the view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.SelectionMode">
+            <summary>
+            Gets or sets the mode of the interactive selection in this view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.SelectionOnTop">
+            <summary>
+            Gets or sets a value indicating whether the selection is displayed above the
+            corresponding cells or below them. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.CurrentView">
+            <summary>
+            Gets or sets the current view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.DefaultItemTemplate">
+            <summary>
+            Gets or sets the default template of the calendar's cells.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.PaddingItemTemplate">
+            <summary>
+            Gets or sets the template of the padding cells.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.TodayItemTemplate">
+            <summary>
+            Gets or sets the template of the cell representing the current date.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.WeekendItemTemplate">
+            <summary>
+            Gets or sets the template of the cells representing weekends.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.HolidayItemTemplate">
+            <summary>
+            Gets or sets the template of the cells representing holidays.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.SelectionItemTemplate">
+            <summary>
+            Gets or sets the template of the selected cells.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.HoverItemTemplate">
+            <summary>
+            Gets or sets the template of the cell pointed with the mouse.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.FocusItemTemplate">
+            <summary>
+            Gets or sets the template of the cell containing the logical focus.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.DateFormat">
+            <summary>
+            Gets or sets the formatting of the dates and times displayed in this view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Cell.ShowPaddingDays">
+            <summary>
+            Gets or sets a value indicating whether the previous and next time
+            intervals are displayed in the available space of the current view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.YearCell.#ctor">
+            <summary>
+            Initializes a new instance of the YearCell class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.YearCell.OnApplyTemplate">
+            <summary>
+            Cell.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.WindowHost">
+            <summary>
+            Represents a container for Window objects.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.WindowHost.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.WindowHost.#ctor">
+            <summary>
+            Initializes a new WindowHost class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.WindowHost.OnApplyTemplate">
+            <summary>
+            FrameworkElement.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.WindowHost.WindowsProperty">
+            <summary>
+            Identifies the Windows dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.WindowHost.Windows">
+            <summary>
+            Gets or sets a collection with the windows contained in the host.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.CenturyCell">
+            <summary>
+            Represents a Century view in a Calendar control.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.CenturyCell.#ctor">
+            <summary>
+            Initializes a new instance of the CenturyCell class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.CenturyCell.OnApplyTemplate">
+            <summary>
+            Cell.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.PopupWindow.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.PopupWindow.#ctor">
+            <summary>
+            Initializes a new instance of the PopupWindow class.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.UniformPanel">
+            <summary>
+            Represents a horizontal stack-like panel, which arranges its elements so that their width
+            and height are equivalent.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.UniformPanel.MeasureOverride(System.Windows.Size)">
+            <summary>
+            FrameworkElement.MeasureOverride override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.UniformPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>
+            FrameworkElement.ArrangeOverride override.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.SelectionMode">
+            <summary>
+            Specifies the interactive selection behavior in a Calendar control.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.SelectionMode.Single">
+            <summary>
+            Indicates that only a single cell can be selected at a time.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.SelectionMode.Multiple">
+            <summary>
+            Indicates that multiple consecutive cells can be selected.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.SelectionMode.Jagged">
+            <summary>
+            Indicates that multiple cells can be selected.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.MinimizeConverter">
+            <summary>
+            Converts WindowState values to GridLength.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MinimizeConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.Convert implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MinimizeConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.ConvertBack implementation.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.ResizeDirection">
+            <summary>
+            Specifies the interactive operation being performed on a Window.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.ColorPicker.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.ColorPicker.#ctor">
+            <summary>
+            Initializes a new instance of the ColorPicker class.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.ColorPicker.DropDownClosed">
+            <summary>
+            Raised when the drop down editor is closed.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.ColorPicker.DropDownOpened">
+            <summary>
+            Raised when the drop down editor is opened.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.CalendarView">
+            <summary>
+            Specifies the view type in a Calendar control.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.CalendarView.Time">
+            <summary>
+            Indicates that the calendar displays the hours of a single day.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.CalendarView.Month">
+            <summary>
+            Indicates that the calendar displays the days of a single month.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.CalendarView.Year">
+            <summary>
+            Indicates that the calendar displays the months of a single year.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.CalendarView.Decade">
+            <summary>
+            Indicates that the calendar displays the years in a decade.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.CalendarView.Century">
+            <summary>
+            Indicates that the calendar displays the decades in a century.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.ButtonElement.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.ButtonElement.#ctor">
+            <summary>
+            Initializes a new instance of the ButtonElement class.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.Window">
+            <summary>
+            Represents a window with title and contents, which can be
+            moved, resized and arranged interactively.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.#ctor">
+            <summary>
+            Initializes a new instance of the Window class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.OnClosing(MindFusion.UI.Wpf.ConfirmEventArgs)">
+            <summary>
+            Raises the Closing event.
+            </summary>
+            <param name="e">
+            An object, containing the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.OnClosed(System.EventArgs)">
+            <summary>
+            Raises the Closed event.
+            </summary>
+            <param name="e">
+            An object, containing the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.OnLostFocus(System.Windows.RoutedEventArgs)">
+            <summary>
+            Control.OnLostFocus override.
+            </summary>
+            <param name="e">
+            A RoutedEventArgs that contains event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.OnGotFocus(System.Windows.RoutedEventArgs)">
+            <summary>
+            Control.OnGotFocus override.
+            </summary>
+            <param name="e">
+            A RoutedEventArgs that contains event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.OnMouseDoubleClick(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Control.OnMouseDoubleClick override.
+            </summary>
+            <param name="e">
+            The event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            UIElement.OnMouseLeftButtonDown override.
+            </summary>
+            <param name="e">
+            The MouseButtonEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.OnMouseMove(System.Windows.Input.MouseEventArgs)">
+            <summary>
+            UIElement.OnMouseMove override.
+            </summary>
+            <param name="e">
+            The MouseEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.OnMouseLeftButtonUp(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            UIElement.OnMouseLeftButtonUp override.
+            </summary>
+            <param name="e">
+            The MouseButtonEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.OnApplyTemplate">
+            <summary>
+            FrameworkElement.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.Show(MindFusion.UI.Wpf.WindowHost)">
+            <summary>
+            Adds the window to the specified host.
+            </summary>
+            <param name="host">
+            The WindowHost to add this window to.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Window.ShowDialog(MindFusion.UI.Wpf.WindowHost)">
+            <summary>
+            Displays the window within the specified host as a modal dialog.
+            </summary>
+            <param name="host">
+            The WindowHost to add this window to.
+            </param>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.HeaderProperty">
+            <summary>
+            Identifies the Header dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.HeaderTemplateProperty">
+            <summary>
+            Identifies the HeaderTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.IconProperty">
+            <summary>
+            Identifies the Icon dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.CanMoveProperty">
+            <summary>
+            Identifies the CanMove dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.CanCloseProperty">
+            <summary>
+            Identifies the CanClose dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.KeepInsideHostProperty">
+            <summary>
+            Identifies the KeepInsideHost dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.IsActiveProperty">
+            <summary>
+            Identifies the IsActive dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.IsAnimatedProperty">
+            <summary>
+            Identifies the IsAnimated dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ResizeModeProperty">
+            <summary>
+            Identifies the ResizeMode dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.StartupLocationProperty">
+            <summary>
+            Identifies the StartupLocation dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.WindowStateProperty">
+            <summary>
+            Identifies the WindowState dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.MinimizeModeProperty">
+            <summary>
+            Identifies the MinimizeMode dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.CornerRadiusProperty">
+            <summary>
+            Identifies the CornerRadius dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ContentCornerRadiusProperty">
+            <summary>
+            Identifies the ContentCornerRadius dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.HeaderMarginProperty">
+            <summary>
+            Identifies the HeaderMargin dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ContentMarginProperty">
+            <summary>
+            Identifies the ContentMargin dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ButtonBorderThicknessProperty">
+            <summary>
+            Identifies the ButtonBorderThickness dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ContentBackgroundProperty">
+            <summary>
+            Identifies the ContentBackground dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.InactiveBackgroundProperty">
+            <summary>
+            Identifies the InactiveBackground dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.InactiveBorderBrushProperty">
+            <summary>
+            Identifies the InactiveBorderBrush dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ButtonBackgroundProperty">
+            <summary>
+            Identifies the ButtonBackground dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ButtonOverBackgroundProperty">
+            <summary>
+            Identifies the ButtonOverBackground dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ButtonPressedBackgroundProperty">
+            <summary>
+            Identifies the ButtonPressedBackground dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ButtonBorderBrushProperty">
+            <summary>
+            Identifies the ButtonBorderBrush dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.HeaderHeightProperty">
+            <summary>
+            Identifies the HeaderHeight dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.MinimizedWidthProperty">
+            <summary>
+            Identifies the MinimizedWidth dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Window.ResizeDirectionProperty">
+            <summary>
+            Identifies the ResizeDirection dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.Header">
+            <summary>
+            Gets or sets the content of the window title bar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.HeaderTemplate">
+            <summary>
+            Gets or sets the template used to display the content of the window's title.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.Icon">
+            <summary>
+            Gets or sets the icon displayed in the window's title bar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.CanMove">
+            <summary>
+            Gets or sets a value indicating whether the window can be moved interactively.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.CanClose">
+            <summary>
+            Gets or sets a value indicating whether the window will display a 'Close' button
+            in its title bar. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.KeepInsideHost">
+            <summary>
+            Gets or sets a value indicating whether the window can be interactively dragged outside
+            of its containing WindowHost boundaries. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.IsActive">
+            <summary>
+            Gets or sets a value indicating whether the window is active.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.IsAnimated">
+            <summary>
+            Gets or sets a value indicating whether the window is animated.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ResizeMode">
+            <summary>
+            Gets or sets a value indicating the allowed user interactions on this window.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.StartupLocation">
+            <summary>
+            Gets or sets the initial location of the window relative to its host.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.WindowState">
+            <summary>
+            Gets or sets the current state of the window.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.MinimizeMode">
+            <summary>
+            Gets or sets the behavior of this window when it is minimized.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.CornerRadius">
+            <summary>
+            Gets or sets the corner radius of the window's border.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ContentCornerRadius">
+            <summary>
+            Gets or sets the corner radius of the border around the window's content.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.HeaderMargin">
+            <summary>
+            Gets or sets the margin of the window's header.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ContentMargin">
+            <summary>
+            Gets or sets the margin of the window's content.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ButtonBorderThickness">
+            <summary>
+            Gets or sets the ButtonBorderThickness of the window.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ContentBackground">
+            <summary>
+            Gets or sets the background of the window's content.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.InactiveBackground">
+            <summary>
+            Gets or sets background brush of the window when it is not active.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.InactiveBorderBrush">
+            <summary>
+            Gets or sets the border brush of the window when it is not active.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ButtonBackground">
+            <summary>
+            Gets or sets the Button Background of the window.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ButtonOverBackground">
+            <summary>
+            Gets or sets the Button OverBackground of the window.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ButtonPressedBackground">
+            <summary>
+            Gets or sets the Button PressedBackground of the window.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ButtonBorderBrush">
+            <summary>
+            Gets or sets the Button BorderBrush of the window.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.HeaderHeight">
+            <summary>
+            Gets or sets the height of the window's header.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.MinimizedWidth">
+            <summary>
+            Gets or sets the width of the window when it is minimized.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.ResizeDirection">
+            <summary>
+            Gets or sets the current interactive operation performed on this window.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.Left">
+            <summary>
+            Gets or sets the left side of the window within its container.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Window.Top">
+            <summary>
+            Gets or sets the top side of the window within its container.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.Window.Closing">
+            <summary>
+            Raised before the window is closed in order to confirm the operation.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.Window.Closed">
+            <summary>
+            Raised when a window is closed.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.WeekHeaderAlignment">
+            <summary>
+            Specifies the alignment of the week numbers header in a Calendar control.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.WeekHeaderAlignment.Left">
+            <summary>
+            Indicates that the header is displayed on the left side.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.WeekHeaderAlignment.Right">
+            <summary>
+            Indicates that the header is displayed on the right side.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.VisibilityConverter">
+            <summary>
+            Converts System.Boolean to System.Windows.Visibility by mapping true to
+            Visibility.Visible and false to Visibility.Collapsed.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.Convert implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.ConvertBack implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Rating.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Rating.#ctor">
+            <summary>
+            Initializes a new instance of the Slider class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DockPanel.MeasureOverride(System.Windows.Size)">
+            <summary>
+            FrameworkElement.MeasureOverride override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DockPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>
+            FrameworkElement.ArrangeOverride override.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.DisplayDateFormat">
+            <summary>
+            Specifies how dates are displayed in the DateTimePicker control.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DisplayDateFormat.Short">
+            <summary>
+            Indicates that dates are formatted with a short date pattern.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DisplayDateFormat.Long">
+            <summary>
+            Indicates that dates are formatted with a long date pattern.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DisplayDateFormat.Custom">
+            <summary>
+            Indicates that dates are formatted with a custom date pattern.
+            </summary>
+            <remarks>
+            In the DateTimePicker this value is used along with CustomDateTimeFormat property.
+            If the latter is not set, DisplayDateFormat.Short is used instead.
+            </remarks>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.DayOfWeekColumnConverter">
+            <summary>
+            Converts DayOfWeekFormat values to the name of the day of the week.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DayOfWeekColumnConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.Convert implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DayOfWeekColumnConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.ConvertBack implementation.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.WindowState">
+            <summary>
+            Specifies the state of a Window.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.WindowState.Normal">
+            <summary>
+            Indicates that the window is neither minimized nor maximized.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.WindowState.Minimized">
+            <summary>
+            Indicates that the window is minimized.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.WindowState.Maximized">
+            <summary>
+            Indicates that the window is maximized.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.VisualTreeView">
+            <summary>
+            Visualizes the visual tree structure of an arbitrary DependencyObject in a TreeView and
+            allows navigation through the tree.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisualTreeView.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisualTreeView.#ctor">
+            <summary>
+            Initializes a new instance of the VisualTreeView class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisualTreeView.OnApplyTemplate">
+            <summary>
+            FrameworkElement.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisualTreeView.OnKeyDown(System.Windows.Input.KeyEventArgs)">
+            <summary>
+            UIElement.OnKeyDown override.
+            </summary>
+            <param name="e">
+            The System.Windows.Input.KeyEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisualTreeView.OnSelectedItemChanged(System.Object,System.Windows.RoutedPropertyChangedEventArgs{System.Object})">
+            <summary>
+            Handles the SelectedItemChanged event of the underlying TreeView.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisualTreeView.UpdateSelection">
+            <summary>
+            Updates the overlay element and the property info.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisualTreeView.UpdateSelection(System.Windows.Controls.TreeViewItem)">
+            <summary>
+            Updates the overlay element and the property info.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisualTreeView.PopulateTree">
+            <summary>
+            Builds the tree content out of the selected object.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.VisualTreeView.PopulateTree(System.Windows.Controls.TreeViewItem,System.Windows.DependencyObject)">
+            <summary>
+            Recursively builds up the tree content.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.VisualTreeView.SelectedObjectProperty">
+            <summary>
+            Identifies the SelectedObject dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.VisualTreeView.CommonParentProperty">
+            <summary>
+            Identifies the CommonParent dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.VisualTreeView.OverlayBackgroundProperty">
+            <summary>
+            Identifies the OverlayBackground dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.VisualTreeView.OverlayBorderBrushProperty">
+            <summary>
+            Identifies the OverlayBorderBrush dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.VisualTreeView.OverlayBorderThicknessProperty">
+            <summary>
+            Identifies the OverlayBorderThickness dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.VisualTreeView.ShowInfoProperty">
+            <summary>
+            Identifies the ShowInfo dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.VisualTreeView.SelectedObject">
+            <summary>
+            Gets or sets the DependencyObject selected in the view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.VisualTreeView.CommonParent">
+            <summary>
+            Gets or sets a panel containing the SelectedObject. This element will be used
+            as a parent of the overlay element. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.VisualTreeView.OverlayBackground">
+            <summary>
+            Gets or sets the background brush of the overlay element.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.VisualTreeView.OverlayBorderBrush">
+            <summary>
+            Gets or sets the border brush of the overlay element.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.VisualTreeView.OverlayBorderThickness">
+            <summary>
+            Gets or sets the border thickness of the overlay element.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.VisualTreeView.ShowInfo">
+            <summary>
+            Gets or sets a value indicating whether to display the property info panel.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.EnumToVisibilityConverter">
+            <summary>
+            Converts enumeration values to Visibility.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.EnumToVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.Convert implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.EnumToVisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.ConvertBack implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.PropertyGrid.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.PropertyGrid.#ctor">
+            <summary>
+            Initializes a new instance of the PropertyGrid class.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.MonthCell">
+            <summary>
+            Represents a Month view in a Calendar control.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MonthCell.#ctor">
+            <summary>
+            Initializes a new instance of the MonthCell class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MonthCell.OnApplyTemplate">
+            <summary>
+            Cell.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.DecadeCell">
+            <summary>
+            Represents a Decade view in a Calendar control.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DecadeCell.#ctor">
+            <summary>
+            Initializes a new instance of the DecadeCell class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DecadeCell.OnApplyTemplate">
+            <summary>
+            Cell.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.DayOfWeekFormat">
+            <summary>
+            Specifies the display format of a day of the week.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DayOfWeekFormat.SingleLetter">
+            <summary>
+            Only the first letter of the name of the day is displayed.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DayOfWeekFormat.Abbreviated">
+            <summary>
+            The first three letters of the day of the week are displayed.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DayOfWeekFormat.Full">
+            <summary>
+            The complete name of the day of the week is displayed.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.GetRelativeBounds(System.Windows.FrameworkElement,System.Windows.UIElement)">
+            <summary>
+            Returns the bounding rectangle of the element expressed
+            in coordinates relative to the specified UIElement's client space.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.SetTag(System.Windows.Controls.ColumnDefinition,System.Object)">
+            <summary>
+            Sets the specified object as a tag to the specified column definition.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.GetTag(System.Windows.Controls.ColumnDefinition)">
+            <summary>
+            Gets the tag of the specified column definition.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.SetTag(System.Windows.Controls.RowDefinition,System.Object)">
+            <summary>
+            Sets the specified object as a tag to the specified row definition.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.GetTag(System.Windows.Controls.RowDefinition)">
+            <summary>
+            Gets the tag of the specified row definition.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.GetGridRow(System.Windows.UIElement)">
+            <summary>
+            Gets the grid row of the specified element.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.SetGridRow(System.Windows.UIElement,System.Int32)">
+            <summary>
+            Sets the grid row of the specified element.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.GetGridColumn(System.Windows.UIElement)">
+            <summary>
+            Gets the grid column of the specified element.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.SetGridColumn(System.Windows.UIElement,System.Int32)">
+            <summary>
+            Sets the grid column of the specified element.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.GetGridRowSpan(System.Windows.UIElement)">
+            <summary>
+            Gets the number of grid rows the specified element spans.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.SetGridRowSpan(System.Windows.UIElement,System.Int32)">
+            <summary>
+            Sets the number of grid rows the specified element spans.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.GetGridColumnSpan(System.Windows.UIElement)">
+            <summary>
+            Gets the number of grid columns the specified element spans.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.SetGridColumnSpan(System.Windows.UIElement,System.Int32)">
+            <summary>
+            Sets the number of grid columns the specified element spans.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.GetImageWidth(System.Windows.Media.Imaging.BitmapImage)">
+            <summary>
+            Returns the width of the specified image.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.GetImageHeight(System.Windows.Media.Imaging.BitmapImage)">
+            <summary>
+            Returns the height of the specified image.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.CreateLinearGradientBrush(System.Windows.Media.Color,System.Windows.Media.Color,System.Double)">
+            <summary>
+            Creates a linear gradient brush with the specified colors and angle.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Interop.CreateLinearGradientBrush(System.Windows.Media.GradientStopCollection,System.Windows.Point,System.Windows.Point)">
+            <summary>
+            Creates a linear gradient brush using the specified gradient and orientation.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.Clip">
+            <summary>
+            A helper class which can provide ClipToBounds functionality in Silverlight.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Clip.GetToBounds(System.Windows.DependencyObject)">
+            <summary>
+            Gets the value of the Clip.ToBounds attached property for a given dependency object.
+            </summary>
+            <param name="element">
+            The element from which the property value is read.
+            </param>
+            <returns>
+            The value of the Clip.ToBounds property for the specified element.
+            </returns>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Clip.SetToBounds(System.Windows.DependencyObject,System.Boolean)">
+            <summary>
+            Sets the value of the Clip.ToBounds attached property for a given dependency object.
+            </summary>
+            <param name="element">
+            The element to which the property value is written.
+            </param>
+            <param name="value">
+            The value of the Clip.ToBounds property for the specified element.
+            </param>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Clip.ToBoundsProperty">
+            <summary>
+            Identifies the ToBounds attached property.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Clip.ClipToBounds(System.Windows.FrameworkElement)">
+            <summary>
+            Creates a rectangular clipping geometry which matches the geometry of the
+            passed element
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TabItem.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TabItem.#ctor">
+            <summary>
+            Initializes a new instance of the ColorPicker class.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.TabItem.HeaderProperty">
+            <summary>
+            Identifies the Header dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.TabItem.HeaderTemplateProperty">
+            <summary>
+            Identifies the HeaderTemplate dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.TabItem.Header">
+            <summary>
+            Gets or sets the content of the window title bar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.TabItem.HeaderTemplate">
+            <summary>
+            Gets or sets the template used to display the content of the window's title.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TabHeaderPanel.MeasureOverride(System.Windows.Size)">
+            <summary>
+            FrameworkElement.MeasureOverride override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TabHeaderPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>
+            FrameworkElement.ArrangeOverride override.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.ResizeMode">
+            <summary>
+            Specifies the allowed user interactions on a window.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.ResizeMode.CanResize">
+            <summary>
+            Indicates that the window can be resized interactively.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.ResizeMode.CanMinimize">
+            <summary>
+            Indicates that the window can be minimized interactively.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.ResizeMode.NoResize">
+            <summary>
+            Indicates that the window cannot be resized interactively.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.NumericUpDown.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.NumericUpDown.#ctor">
+            <summary>
+            Initializes a new instance of the Slider class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.NumericUpDown.OnApplyTemplate">
+            <summary>
+            FrameworkElement.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MindFusionButton.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MindFusionButton.#ctor">
+            <summary>
+            Initializes a new instance of the MindFusionButton class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MindFusionButton.OnPopupOpened(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Popup Opened event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MindFusionButton.OnPopupClosed(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Popup Closed event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MindFusionButton.OnPopupPreviewMouseLeftButtonDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Handles the Popup PreviewMouseLeftButtonDown event.
+            </summary>
+            <remarks>
+            Updates a boolean flag, to indicate that the Popup should not reopen,
+            when the DropDownButton is clicked.
+            </remarks>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.MindFusionButton.disablePopupReopen">
+            <summary>
+            a flag, used to indicate whether the popup shouldn't reopen
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.MindFusionButton.DropDownClosed">
+            <summary>
+            Raised when the drop down editor is closed.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.MindFusionButton.DropDownOpened">
+            <summary>
+            Raised when the drop down editor is opened.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.Calendar">
+            <summary>
+            Represents a light-weight calendar control.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Calendar.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Calendar.#ctor">
+            <summary>
+            Initializes a new instance of the Calendar class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Calendar.OnKeyDown(System.Windows.Input.KeyEventArgs)">
+            <summary>
+            UIElement.OnKeyDown override.
+            </summary>
+            <param name="e">
+            The System.Windows.Input.KeyEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Calendar.OnMouseLeftButtonDown(System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            UIElement.OnMouseLeftButtonDown override.
+            </summary>
+            <param name="e">
+            The System.Windows.Input.MouseButtonEventArgs that contains the event data.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Calendar.OnApplyTemplate">
+            <summary>
+            FrameworkElement.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HeaderHeightProperty">
+            <summary>
+            Identifies the HeaderHeight dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.SubHeaderHeightProperty">
+            <summary>
+            Identifies the SubHeaderHeight dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.WeekHeaderWidthProperty">
+            <summary>
+            Identifies the WeekHeaderWidth dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.ShowTodayProperty">
+            <summary>
+            Identifies the ShowToday dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.ShowPaddingDaysProperty">
+            <summary>
+            Identifies the ShowPaddingDays dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.SelectionOnTopProperty">
+            <summary>
+            Identifies the SelectionOnTop dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.CurrentViewProperty">
+            <summary>
+            Identifies the CurrentView dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.WeekHeaderAlignmentProperty">
+            <summary>
+            Identifies the WeekHeaderAlignment dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.DayOfWeekFormatProperty">
+            <summary>
+            Identifies the DayOfWeekFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.SelectionModeProperty">
+            <summary>
+            Identifies the SelectionMode dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.MaxDrillInProperty">
+            <summary>
+            Identifies the MaxDrillIn dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.MaxDrillOutProperty">
+            <summary>
+            Identifies the MaxDrillOut property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HeaderBorderThicknessProperty">
+            <summary>
+            Identifies the HeaderBorderThickness dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.ContentBorderThicknessProperty">
+            <summary>
+            Identifies the ContentBorderThickness dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.TimeViewFormatProperty">
+            <summary>
+            Identifies the TimeViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.MonthViewFormatProperty">
+            <summary>
+            Identifies the MonthViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.YearViewFormatProperty">
+            <summary>
+            Identifies the YearViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.DecadeViewFormatProperty">
+            <summary>
+            Identifies the DecadeViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.CenturyViewFormatProperty">
+            <summary>
+            Identifies the CenturyViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.ContentBackgroundProperty">
+            <summary>
+            Identifies the ContentBackground dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.ContentBorderBrushProperty">
+            <summary>
+            Identifies the ContentBorderBrush dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HeaderBackgroundProperty">
+            <summary>
+            Identifies the HeaderBackground dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HeaderBorderBrushProperty">
+            <summary>
+            Identifies the HeaderBorderBrush dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.DateProperty">
+            <summary>
+            Identifies the Date dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HeaderTextProperty">
+            <summary>
+            Identifies the HeaderText dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.DateSelectionProperty">
+            <summary>
+            Identifies the DateSelection dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HolidaysDateSelectionProperty">
+            <summary>
+            Identifies the HolidaysDateSelection dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HeaderProperty">
+            <summary>
+            Identifies the Header dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HeaderTemplateProperty">
+            <summary>
+            Identifies the HeaderTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.DefaultItemTemplateProperty">
+            <summary>
+            Identifies the DefaultItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.PaddingItemTemplateProperty">
+            <summary>
+            Identifies the PaddingItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.TodayItemTemplateProperty">
+            <summary>
+            Identifies the TodayItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.WeekendItemTemplateProperty">
+            <summary>
+            Identifies the WeekendItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HolidayItemTemplateProperty">
+            <summary>
+            Identifies the HolidayItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.SelectionItemTemplateProperty">
+            <summary>
+            Identifies the SelectionItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.HoverItemTemplateProperty">
+            <summary>
+            Identifies the HoverItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.Calendar.FocusItemTemplateProperty">
+            <summary>
+            Identifies the FocusItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.HeaderHeight">
+            <summary>
+            Gets or sets the height of the calendar header.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.SubHeaderHeight">
+            <summary>
+            Gets or sets the height of the subheader, which displays the days of the week.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.WeekHeaderWidth">
+            <summary>
+            Gets or sets the width of the subheader, which displays the week numbers.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.ShowToday">
+            <summary>
+            Gets or sets a value indicating whether the current date is highlighted in the calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.ShowPaddingDays">
+            <summary>
+            Gets or sets a value indicating whether the previous and next time
+            intervals are displayed in the available space of the current view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.SelectionOnTop">
+            <summary>
+            Gets or sets a value indicating whether the selection is displayed above the
+            corresponding cells or below them. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.CurrentView">
+            <summary>
+            Gets or sets the current view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.WeekHeaderAlignment">
+            <summary>
+            Gets or sets the alignment of the subheader, which displays the week numbers.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.DayOfWeekFormat">
+            <summary>
+            Gets or sets the format of the days of the week displayed in the subheader.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.SelectionMode">
+            <summary>
+            Gets or sets the mode of the interactive selection in the calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.MaxDrillIn">
+            <summary>
+            Gets or sets the last view that can be drilled-in to.
+            This is a dependency property.
+            </summary>
+            <remarks>
+            The user can drill-in by clicking on any cell in the current view.
+            </remarks>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.MaxDrillOut">
+            <summary>
+            Gets or sets the last view that can be drilled-out to.
+            This is a dependency property.
+            </summary>
+            <remarks>
+            The user can drill-out by clicking on any cell in the current view.
+            </remarks>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.HeaderBorderThickness">
+            <summary>
+            Gets or sets the thickness of the border around the calendar header.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.ContentBorderThickness">
+            <summary>
+            Gets or sets the border thickness of the calendar content.
+            This is a dependency property.
+            </summary>
+            <remarks>
+            The contents is the portion of the control excluding the title and any other visible headers.
+            </remarks>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.TimeViewFormat">
+            <summary>
+            Gets or sets the formatting of the times in the Time view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.MonthViewFormat">
+            <summary>
+            Gets or sets the formatting of the dates in the Month view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.YearViewFormat">
+            <summary>
+            Gets or sets the formatting of the dates in the Year view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.DecadeViewFormat">
+            <summary>
+            Gets or sets the formatting of the dates in the Decade view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.CenturyViewFormat">
+            <summary>
+            Gets or sets the formatting of the dates in the Century view.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.ContentBackground">
+            <summary>
+            Gets or sets the background of the calendar content.
+            This is a dependency property.
+            </summary>
+            <remarks>
+            The contents is the portion of the control excluding the title and any other visible headers.
+            </remarks>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.ContentBorderBrush">
+            <summary>
+            Gets or sets the border brush of the calendar content.
+            This is a dependency property.
+            </summary>
+            <remarks>
+            The contents is the portion of the control excluding the title and any other visible headers.
+            </remarks>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.HeaderBackground">
+            <summary>
+            Gets or sets the background of the calendar header.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.HeaderBorderBrush">
+            <summary>
+            Gets or sets the brush of the border around the calendar header.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.Date">
+            <summary>
+            Gets or sets the currently displayed date.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.HeaderText">
+            <summary>
+            Gets or sets the text displayed as a Header of the calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.DateSelection">
+            <summary>
+            Gets or sets the list of dates selected in the calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.HolidaysDateSelection">
+            <summary>
+            Gets or sets a list of holiday dates. This is a dependency property.
+            </summary>
+            <remarks>
+            The content of the holiday dates is displayed using the HolidayItemTemplate template.
+            </remarks>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.Header">
+            <summary>
+            Gets or sets the content of the calendar header.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.HeaderTemplate">
+            <summary>
+            Gets or sets the template used to display the content of the calendar's header.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.DefaultItemTemplate">
+            <summary>
+            Gets or sets the default template of the calendar's cells.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.PaddingItemTemplate">
+            <summary>
+            Gets or sets the template of the padding cells.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.TodayItemTemplate">
+            <summary>
+            Gets or sets the template of the cell representing the current date.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.WeekendItemTemplate">
+            <summary>
+            Gets or sets the template of the cells representing weekends.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.HolidayItemTemplate">
+            <summary>
+            Gets or sets the template of the cells representing holidays.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.SelectionItemTemplate">
+            <summary>
+            Gets or sets the template of the selected cells.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.HoverItemTemplate">
+            <summary>
+            Gets or sets the template of the cell pointed with the mouse.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.Calendar.FocusItemTemplate">
+            <summary>
+            Gets or sets the template of the cell containing the logical focus.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.Calendar.DateSelectionChanged">
+            <summary>
+            Raises when the currently selected date in the calendar is changed interactively.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.Calendar.DateClicked">
+            <summary>
+            Raised when the user clicks with the mouse on a specific date in the calendar.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.Calendar.DrilledIn">
+            <summary>
+            Raised when the calendar is drilled-in interactively to a more specific view.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.Calendar.DrilledOut">
+            <summary>
+            Raised when the calendar is drilled-out interactively to a more general view.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.Calendar.Scrolled">
+            <summary>
+            Raises when the calendar is scrolled back and forth through the navigation buttons.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.WeekNumberConverter">
+            <summary>
+            Converts DateTime objects to the number of the corresponding week of the year.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.WeekNumberConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.Convert implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.WeekNumberConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.ConvertBack implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Slider.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Slider.#ctor">
+            <summary>
+            Initializes a new instance of the Slider class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.Slider.OnApplyTemplate">
+            <summary>
+            FrameworkElement.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.MinimizeMode">
+            <summary>
+            Specifies the behavior of minimized windows.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.MinimizeMode.InPlace">
+            <summary>
+            Indicates that the window is minimized in-place.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.MinimizeMode.HostBottom">
+            <summary>
+            Indicates that the minimized window is arranged at the bottom of their containing WindowHost.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.MinimizeMode.HostTop">
+            <summary>
+            Indicates that the minimized window is arranged at the top of their containing WindowHost.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.ConfirmEventArgs">
+            <summary>
+            Contains the arguments passed to handlers of validation events.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.ConfirmEventArgs.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the ConfirmEventArgs class.
+            </summary>
+            <param name="confirm">
+            The initial value of the Confirm property.
+            </param>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.ConfirmEventArgs.Confirm">
+            <summary>
+            Gets or sets a value indicating whether the operations has been validated.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.CollectionSetter.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.CollectionSetter.#ctor">
+            <summary>
+            Initializes a new instance of the CollectionSetter class.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.TimeCell">
+            <summary>
+            Represents a Time view in a Calendar control.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TimeCell.#ctor">
+            <summary>
+            Initializes a new instance of the TimeCell class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TimeCell.OnApplyTemplate">
+            <summary>
+            TimeCell.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TabControl.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TabControl.#ctor">
+            <summary>
+            Initializes a new instance of the ColorPicker class.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.GridLengthConverter">
+            <summary>
+            Converts double values to GridLength objects.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.GridLengthConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.Convert implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.GridLengthConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.ConvertBack implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DockControl.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DockControl.#ctor">
+            <summary>
+            Initializes a new instance of the ColorPicker class.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.DateTimePicker">
+            <summary>
+            Represents a drop-down control which enables users to select dates and times.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.#cctor">
+            <summary>
+            The static constructor of the DateTimePicker class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.#ctor">
+            <summary>
+            Initializes a new instance of the DateTimePicker class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnApplyTemplate">
+            <summary>
+            FrameworkElement.OnApplyTemplate override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.FocusText">
+            <summary>
+            Attempts to set focus to the TextBox element in the DateTimePicker.
+            </summary>
+            <returns>
+            true if keyboard focus and logical focus were set to this element; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.SetText(System.String)">
+            <summary>
+            Sets text to the text box element of the DateTimePicker.
+            </summary>
+            <param name="text">
+            text to be set.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.ClearText">
+            <summary>
+            Clears any text in the text box element of the DateTimePicker.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.SelectText(System.Int32,System.Int32)">
+            <summary>
+            Selects a range of text in the text box element of the DateTimePicker.
+            </summary>
+            <param name="start">
+            The zero-based character index of the first character in the selection.
+            </param>
+            <param name="length">
+            The length of the selection, in characters.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnCalendarOpened(System.EventArgs)">
+            <summary>
+            Raises the CalendarOpened event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnCalendarClosed(System.EventArgs)">
+            <summary>
+            Raises the CalendarClosed event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnSelectedDateChanged(MindFusion.UI.Wpf.DateEventArgs)">
+            <summary>
+            Raises the DateSelectionChanged event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.UpdateHeaderText">
+            <summary>
+            Applies a custom DateTime format on the drop-down calendar's header text.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.ToggleCalendar">
+            <summary>
+            Toggles the state of the drop-down calendar between opened and closed.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.SetDisplayDate">
+            <summary>
+            Updates the DisplayDate, visible in the TextBox.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.SetSelectedDate">
+            <summary>
+            Processes input from the TextBox and if the input can be parsed to
+            a valid DateTime object, SelectedDate is changed accordingly.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.Button_Click(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Handles the DropDownButton Click event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.Popup_Opened(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Popup Opened event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.Popup_Closed(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Popup Closed event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.Popup_PreviewMouseLeftButtonDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Handles the Popup PreviewMouseLeftButtonDown event.
+            </summary>
+            <remarks>
+            Updates a boolean flag, to indicate that the Popup should not reopen,
+            when the DropDownButton is clicked.
+            </remarks>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.Calendar_DateSelectionChange(System.Object,MindFusion.UI.Wpf.DateEventArgs)">
+            <summary>
+            Handles the Calendar DateSelectionChage event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.Calendar_DrilledIn(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Calendar DrilledIn event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.Calendar_DrilledOut(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Calendar DrilledOut event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.Calendar_Scrolled(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Calendar Scrolled event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.TextBox_GotFocus(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Handles the TextBox GotFocus event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.TextBox_LostFocus(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Handles the TextBox LostFocus event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.DateTimePicker_PreviewKeyDown(System.Object,System.Windows.Input.KeyEventArgs)">
+            <summary>
+            Handles the DateTimePicker KeyDown event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.DateTimePicker_MouseLeftButtonUp(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+            <summary>
+            Handles DateTimePicker MouseLeftButtonDown event.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.DisplayDateProperty">
+            <summary>
+            Identifies the DisplayDate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.SelectedDateProperty">
+            <summary>
+            Identifies the SelectedDate dependency property.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnSelectedDateChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            The SelectedDateProperty static ValueChangedCallback.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnSelectedDateChanged(System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary>
+            The SelectedDateProperty ValueChangedCallback.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.DisplayDateFormatProperty">
+            <summary>
+            Identifies the DisplayDateFormat dependency property.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnDisplayDateFormatChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            The DisplayDateFormatProperty static ValueChangedCallback.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.IsCalendarOpenProperty">
+            <summary>
+            Identifies the IsCalendarOpen dependency property.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnIsCalendarOpenChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            The IsCalendarOpenProperty static ValueChangedCallback.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnIsCalendarOpenChanged(System.Boolean)">
+            <summary>
+            The IsCalendarOpenProperty ValueChangedCallback.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.TextBoxBorderBrushProperty">
+            <summary>
+            Identifies the TextBoxBorderBrush dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.DropDownButtonTextBrushProperty">
+            <summary>
+            Identifies the DropDownButtonTextBrush dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.IsShowingTimeProperty">
+            <summary>
+            Identifies the IsShowingTime dependency property.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnIsShowingTimeChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            The IsShowingTimeProperty static ValueChangedCallback.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.IsShowingCenturiesProperty">
+            <summary>
+            Identifies the IsShowingCenturies dependency property.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateTimePicker.OnIsShowingCenturiesChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            The IsShowingCenturiesProperty static ValueChangedCallback.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.IsAnimationEnabledProperty">
+            <summary>
+            Identifies the IsAnimationEnabled dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.DefaultItemTemplateProperty">
+            <summary>
+            Identifies the DefaultItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.SelectionItemTemplateProperty">
+            <summary>
+            Identifies the SelectionItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.TodayItemTemplateProperty">
+            <summary>
+            Identifies the TodayItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.WeekendItemTemplateProperty">
+            <summary>
+            Identifies the WeekendItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.HoverItemTemplateProperty">
+            <summary>
+            Identifies the HoverItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.FocusItemTemplateProperty">
+            <summary>
+            Identifies the FocusItemTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.HeaderTemplateProperty">
+            <summary>
+            Identifies the HeaderTemplate dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.ShowTodayProperty">
+            <summary>
+            Identifies the ShowToday dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarMinWidthProperty">
+            <summary>
+            Identifies the CalendarMinWidth dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarMinHeightProperty">
+            <summary>
+            Identifies the CalendarMinHeight dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarMaxWidthProperty">
+            <summary>
+            Identifies the CalendarMaxWidth dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarMaxHeightProperty">
+            <summary>
+            Identifies the CalendarMaxHeight dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CenturyViewFormatProperty">
+            <summary>
+            Identifies the CenturyViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.DecadeViewFormatProperty">
+            <summary>
+            Identifies the DecadeViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.YearViewFormatProperty">
+            <summary>
+            Identifies the YearViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.MonthViewFormatProperty">
+            <summary>
+            Identifies the MonthViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.TimeViewFormatProperty">
+            <summary>
+            Identifies the TimeViewFormat dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarWidthProperty">
+            <summary>
+            Identifies the CalendarWidth dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarHeightProperty">
+            <summary>
+            Identifies the CalendarHeight dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarHeaderBackgroundProperty">
+            <summary>
+            Identifies the CalendarHeaderBackground dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarFontSizeProperty">
+            <summary>
+            Identifies the CalendarFontSize dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarHorizontalOffsetProperty">
+            <summary>
+            Identifies the CalendarHorizontalOffset dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.CalendarVerticalOffsetProperty">
+            <summary>
+            Identifies the CalendarVerticalOffset dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.MaxDrillOutProperty">
+            <summary>
+            Identifies the MaxDrillOut dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.MaxDrillInProperty">
+            <summary>
+            Identifies the MaxDrillIn dependency property.
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.button">
+            <summary>
+            the DropDownButton template part
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.calendar">
+            <summary>
+            the Calendar template part
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.popup">
+            <summary>
+            the Popup template part
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.textBox">
+            <summary>
+            the TextBox template part
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.disablePopupReopen">
+            <summary>
+            a flag, used to indicate whether the popup shouldn't reopen
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.isShowingTime">
+            <summary>
+            a flag, used to indicate whether the calendar is showing CalendarView.TimeView
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.previousCalendarView">
+            <summary>
+            stores the previously set CalendarView
+            </summary>
+        </member>
+        <member name="F:MindFusion.UI.Wpf.DateTimePicker.currentCalendarView">
+            <summary>
+            stores the current CalendarView
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.DateTimePicker.CalendarOpened">
+            <summary>
+            Raised when the drop-down calendar is opened.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.DateTimePicker.CalendarClosed">
+            <summary>
+            Raised when the drop-down calendar is closed.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.DateTimePicker.SelectedDateChanged">
+            <summary>
+            Occurs when the drop-down calendar date selection changes.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.DisplayDate">
+            <summary>
+            Gets or sets the date to display in the TextBox.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.SelectedDate">
+            <summary>
+            Gets or sets the currently selected date in the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.DisplayDateFormat">
+            <summary>
+            Gets or sets the DisplayDateFormat in the inner TextBox.
+            This is a dependency property.
+            </summary>
+            <remarks>
+            Default template value is DisplayDateFormat.Short
+            </remarks>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.IsCalendarOpen">
+            <summary>
+            Gets a value that indicates whether the drop-down calendar is currently open.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.TextBoxBorderBrush">
+            <summary>
+            Gets or sets the BorderBrush property of the inner TextBox.
+            This is a dependency property.
+            </summary>
+            <remarks>
+            Default template value is "#00FFFFFF"
+            </remarks>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.DropDownButtonTextBrush">
+            <summary>
+            Gets or sets the text Brush of the DropDownButton.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.IsShowingTime">
+            <summary>
+            Gets or sets a value that enables or disables the TimeView on the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.IsShowingCenturies">
+            <summary>
+            Gets or sets a value that enables or disables the CenturyView on the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.IsAnimationEnabled">
+            <summary>
+            Gets or sets a value that enables or disables the popup animation of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.DefaultItemTemplate">
+            <summary>
+            Gets or sets the default template of the cells in the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.SelectionItemTemplate">
+            <summary>
+            Gets or sets the template of the selected cells in the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.TodayItemTemplate">
+            <summary>
+            Gets or sets the template of the cell representing the current date
+            in the drop-down calendar. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.WeekendItemTemplate">
+            <summary>
+            Gets or sets the template of the cells representing weekends in the
+            drop-down calendar control. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.HoverItemTemplate">
+            <summary>
+            Gets or sets the template of the cell pointed with the mouse in the
+            drop-down calendar control. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.FocusItemTemplate">
+            <summary>
+            Gets or sets the template of the cell containing the logical focus
+            in the drop-down calendar control. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.HeaderTemplate">
+            <summary>
+            Gets or sets the template used to display the content of the header
+            in the drop-down calendar control. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.ShowToday">
+            <summary>
+            Gets or sets a value indicating whether the current date is highlighted
+            in the drop-down calendar control. This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarMinWidth">
+            <summary>
+            Gets or sets the MinWidth property of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarMinHeight">
+            <summary>
+            Gets or sets the MinHeight property of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarMaxWidth">
+            <summary>
+            Gets or sets the MaxWidth property of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarMaxHeight">
+            <summary>
+            Gets or sets the MaxHeight property of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CenturyViewFormat">
+            <summary>
+            Gets or sets a Standard .NET DateTimeFormat string to be applied on the cells in a CenturyView.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.DecadeViewFormat">
+            <summary>
+            Gets or sets a Standard .NET DateTimeFormat string to be applied on the cells in a DecadeView.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.YearViewFormat">
+            <summary>
+            Gets or sets a Standard .NET DateTimeFormat string to be applied on the cells in a YearView.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.MonthViewFormat">
+            <summary>
+            Gets or sets a Standard .NET DateTimeFormat string to be applied on the cells in a MonthView.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.TimeViewFormat">
+            <summary>
+            Gets or sets a Standard .NET DateTimeFormat string to be applied on the cells in a TimeView.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarWidth">
+            <summary>
+            Gets or sets the Width property of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarHeight">
+            <summary>
+            Gets or sets the Height property of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarHeaderBackground">
+            <summary>
+            Gets or sets the color theme of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarFontSize">
+            <summary>
+            Gets or sets the FontSize property of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarHorizontalOffset">
+            <summary>
+            Gets or sets the distance between the left side of the DateTimePicker control and the 
+            left side of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.CalendarVerticalOffset">
+            <summary>
+            Gets or sets the distance between the bottom side of the DateTimePicker control and the 
+            top side of the drop-down calendar.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.MaxDrillOut">
+            <summary>
+            Gets or sets the Calendar.MaxDrillOut property.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateTimePicker.MaxDrillIn">
+            <summary>
+            Gets or sets the Calendar.MaxDrillIn property.
+            This is a dependency property.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.DateEventArgs">
+            <summary>
+            Contains the arguments passed to handlers of date-related events.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateEventArgs.#ctor(System.DateTime)">
+            <summary>
+            Initializes a new instance of the DateEventArgs class.
+            </summary>
+            <param name="date">
+            The DateTime object related to the event.
+            </param>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateEventArgs.Date">
+            <summary>
+            Gets the DateTime object related to the event.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TabControlPanel.MeasureOverride(System.Windows.Size)">
+            <summary>
+            FrameworkElement.MeasureOverride override.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.TabControlPanel.ArrangeOverride(System.Windows.Size)">
+            <summary>
+            FrameworkElement.ArrangeOverride override.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.MinimizeVisibilityConverter">
+            <summary>
+            Converts ResizeMode values to Visibility.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MinimizeVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.Convert implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MinimizeVisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.ConvertBack implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DockItem.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DockItem.#ctor">
+            <summary>
+            Initializes a new instance of the DockItem class.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.DateCollection">
+            <summary>
+            Represents a strongly-typed collection of DateTime objects.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.#ctor">
+            <summary>
+            Initializes a new instance of the DateCollection class.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.Contains(System.DateTime)">
+            <summary>
+            Determines whether the collection contains a specific date.
+            </summary>
+            <param name="date">
+            The date to locate in the collection.
+            </param>
+            <returns>
+            true if date is found in the collection; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.IndexOf(System.DateTime)">
+            <summary>
+            Determines the index of a specific date in the collection.
+            </summary>
+            <param name="date">
+            The date to locate in the collection.
+            </param>
+            <returns>
+            The index of date if found in the list; otherwise, -1.
+            </returns>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.Insert(System.Int32,System.DateTime)">
+            <summary>
+            Inserts a date to the collection at the specified index.
+            </summary>
+            <param name="index">
+            The zero-based index at which date should be inserted.
+            </param>
+            <param name="date">
+            The date to insert into the collection.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.RemoveAt(System.Int32)">
+            <summary>
+            Removes the collection date at the specified index.
+            </summary>
+            <param name="index">
+            The zero-based index of the date to remove.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.CopyTo(System.DateTime[],System.Int32)">
+            <summary>
+            Copies the dates of the collection to an System.Array, starting at a particular System.Array index.
+            </summary>
+            <param name="array">
+            The one-dimensional System.Array that is the destination of the dates copied from
+            the collection. The System.Array must have zero-based indexing.
+            </param>
+            <param name="arrayIndex">
+            The zero-based index in array at which copying begins.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.Add(System.DateTime)">
+            <summary>
+            Adds a date to the collection.
+            </summary>
+            <param name="date">
+            The date to add to the collection.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.AddRange(System.Collections.Generic.List{System.DateTime})">
+            <summary>
+            Adds a range of dates to the collection.
+            </summary>
+            <param name="dateList">
+            The dates to add to the collection.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.AddSingle(System.DateTime)">
+            <summary>
+            Replaces the current content of the collection with the specified date.
+            </summary>
+            <param name="date">
+            The date to become the sole element in the collection.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.Remove(System.DateTime)">
+            <summary>
+            Removes the first occurrence of a specific date from the collection.
+            </summary>
+            <param name="date">
+            The date to remove from the collection.
+            </param>
+            <returns>
+            true if date was successfully removed from the collection; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.RemoveRange(System.Collections.Generic.List{System.DateTime})">
+            <summary>
+            Removes a list of dates from the collection.
+            </summary>
+            <param name="dateList">
+            The dates to remove from the collection.
+            </param>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.Clear">
+            <summary>
+            Removes all dates from the collection.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+            <returns>
+            A System.Collections.IEnumerator that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.System#Collections#Generic#IEnumerable{System#DateTime}#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.DateCollection.OnCollectionChanged(System.EventArgs)">
+            <summary>
+            Raises the CollectionChanged event.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateCollection.Count">
+            <summary>
+            Gets the number of dates contained in the collection.
+            </summary>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateCollection.Item(System.Int32)">
+            <summary>
+            Gets or sets the date at the specified index in the collection.
+            </summary>
+            <param name="index">
+            The zero-based index of the date to get or set.
+            </param>
+            <returns>
+            The date at the specified index.
+            </returns>
+        </member>
+        <member name="P:MindFusion.UI.Wpf.DateCollection.IsReadOnly">
+            <summary>
+            Gets a value indicating whether the collection is read-only.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.DateCollection.CollectionChanged">
+            <summary>
+            Raised when the collection has changed.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.ColorEditor.#cctor">
+            <summary>
+            Static constructor.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.ColorEditor.#ctor">
+            <summary>
+            Initializes a new instance of the ColorPicker class.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.ColorEditor.CustomColorRightButtonClick">
+            <summary>
+            Raised when a custom color box is clicked with the right mouse button.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.ColorEditor.AddCustomColorClick">
+            <summary>
+            Raised when a AddCustomColor button is clicked.
+            </summary>
+        </member>
+        <member name="E:MindFusion.UI.Wpf.ColorEditor.ColorBoxClick">
+            <summary>
+            Raised when a Color Box has been selected.
+            </summary>
+        </member>
+        <member name="T:MindFusion.UI.Wpf.MaximizeVisibilityConverter">
+            <summary>
+            Converts ResizeMode values to Visibility.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MaximizeVisibilityConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.Convert implementation.
+            </summary>
+        </member>
+        <member name="M:MindFusion.UI.Wpf.MaximizeVisibilityConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            IValueConverter.ConvertBack implementation.
+            </summary>
+        </member>
+    </members>
+</doc>
