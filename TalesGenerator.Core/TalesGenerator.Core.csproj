@@ -8,8 +8,8 @@
     <ProjectGuid>{E891914B-7804-4874-B084-027C2B3D59F8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TalesGeneratorCore</RootNamespace>
-    <AssemblyName>TalesGeneratorCore</AssemblyName>
+    <RootNamespace>TalesGenerator.Core</RootNamespace>
+    <AssemblyName>TalesGenerator.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -12,9 +12,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using Microsoft.Windows.Controls.Ribbon;
-using TalesGeneratorCore;
+using TalesGenerator.Core;
 
-namespace TalesGeneratorUI
+namespace TalesGenerator.UI
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

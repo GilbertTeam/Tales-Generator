@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace TalesGeneratorCore
+namespace TalesGenerator.Core
 {
 	/// <summary>
 	/// Семантическая сеть
