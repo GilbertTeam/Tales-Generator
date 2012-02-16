@@ -1,0 +1,5 @@
+D:\Git\TalesGenerator\TalesGenerator\TalesGenerator\obj\Debug\ResolveAssemblyReference.cache
+D:\Git\TalesGenerator\TalesGenerator\TalesGenerator\bin\Debug\TalesGenerator.dll
+D:\Git\TalesGenerator\TalesGenerator\TalesGenerator\bin\Debug\TalesGenerator.pdb
+D:\Git\TalesGenerator\TalesGenerator\TalesGenerator\obj\Debug\TalesGenerator.dll
+D:\Git\TalesGenerator\TalesGenerator\TalesGenerator\obj\Debug\TalesGenerator.pdb
