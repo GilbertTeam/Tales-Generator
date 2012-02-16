@@ -107,7 +107,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TalesGenerator\TalesGeneratorCore.csproj">
+    <ProjectReference Include="..\TalesGenerator.Core\TalesGenerator.Core.csproj">
       <Project>{E891914B-7804-4874-B084-027C2B3D59F8}</Project>
       <Name>TalesGeneratorCore</Name>
     </ProjectReference>
