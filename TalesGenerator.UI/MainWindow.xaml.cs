@@ -26,7 +26,7 @@ namespace TalesGenerator.UI
 		public MainWindow()
 		{
 			InitializeComponent();
-
+			
 			_network = null;
 		}
 
@@ -90,6 +90,17 @@ namespace TalesGenerator.UI
 		private void Close_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			this.Close();
+		}
+
+		private void ShowProps_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void ShowProps_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			this.PanelShowProps.Visibility = this.PanelShowProps.Visibility == Visibility.Collapsed ?
+				Visibility.Visible : Visibility.Collapsed;
 		}
 
 		#endregion

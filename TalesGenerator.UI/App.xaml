@@ -3,6 +3,15 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 StartupUri="MainWindow.xaml">
 	<Application.Resources>
-		 
+		 <!--Цветовая схема-->
+		<SolidColorBrush x:Key="MainBrush" Color="#917A56"/>
+		<SolidColorBrush x:Key="DarkMainBrush" Color="#CC9258"/>
+		<SolidColorBrush x:Key="DarkDarkMainBrush" Color="#7D2A35"/>
+		<SolidColorBrush x:Key="LightMainBrush" Color="#B4BA6C"/>
+		<SolidColorBrush x:Key="LightLightMainBrush" Color="#FEFFC2"/>
+		<Style x:Key="MainStyle">
+			<Setter Property="Control.Background" Value="{StaticResource LightLightMainBrush}"/>
+			<Setter Property="Control.BorderBrush" Value="{StaticResource DarkMainBrush}"/>
+		</Style>
 	</Application.Resources>
 </Application>

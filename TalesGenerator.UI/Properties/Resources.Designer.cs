@@ -60,13 +60,6 @@ namespace TalesGenerator.UI.Properties {
             }
         }
         
-        public static System.Drawing.Bitmap CloseImage {
-            get {
-                object obj = ResourceManager.GetObject("CloseImage", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
         /// <summary>
         ///   Looks up a localized string similar to Закрыть проект.
         /// </summary>
@@ -82,20 +75,6 @@ namespace TalesGenerator.UI.Properties {
         public static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
-            }
-        }
-        
-        public static System.Drawing.Bitmap ExitImage {
-            get {
-                object obj = ResourceManager.GetObject("ExitImage", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        public static System.Drawing.Bitmap NewImage {
-            get {
-                object obj = ResourceManager.GetObject("NewImage", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -123,13 +102,6 @@ namespace TalesGenerator.UI.Properties {
         public static string SaveAsProject {
             get {
                 return ResourceManager.GetString("SaveAsProject", resourceCulture);
-            }
-        }
-        
-        public static System.Drawing.Bitmap SaveImage {
-            get {
-                object obj = ResourceManager.GetObject("SaveImage", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

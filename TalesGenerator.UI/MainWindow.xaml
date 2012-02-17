@@ -3,11 +3,14 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:ribbon="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
 		xmlns:p="clr-namespace:TalesGenerator.UI.Properties"
+		xmlns:local="clr-namespace:TalesGenerator.UI"
+		xmlns:diag="http://mindfusion.eu/diagramming/wpf"
 		Title="MainWindow" Height="600" Width="800"
 		ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
 	
 	<Window.Resources>
 		<RoutedUICommand x:Key="CloseProject"/>
+		<RoutedUICommand x:Key="ShowProps"/>
 	</Window.Resources>
 	
 	<Window.CommandBindings>
@@ -18,44 +21,80 @@
 		<CommandBinding Command="{StaticResource CloseProject}" CanExecute="CloseProject_CanExecute"
 						Executed="CloseProject_Executed"/>
 		<CommandBinding Command="Close" CanExecute="Close_CanExecute" Executed="Close_Executed"/>
+		<CommandBinding Command="{StaticResource ShowProps}" CanExecute="ShowProps_CanExecute"
+						Executed="ShowProps_Executed"/>
 	</Window.CommandBindings>
 	
-	<Grid x:Name="LayoutGrid">
+	<Grid x:Name="LayoutGrid" ShowGridLines="False">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="306*"/>
 		</Grid.RowDefinitions>
 		<!--Ribbon-->
-		<ribbon:Ribbon x:Name="Ribbon" Grid.Row="0">
+		<ribbon:Ribbon x:Name="Ribbon" Grid.Row="0"
+					   Style="{StaticResource MainStyle}"
+					   FocusedBackground="{StaticResource DarkMainBrush}"
+					   FocusedBorderBrush="{StaticResource DarkDarkMainBrush}"
+					   CheckedBackground="{StaticResource DarkMainBrush}"
+					   CheckedBorderBrush="{StaticResource DarkDarkMainBrush}"
+					   MouseOverBackground="{StaticResource DarkMainBrush}"
+					   MouseOverBorderBrush="{StaticResource DarkDarkMainBrush}"
+					   PressedBackground="{StaticResource DarkMainBrush}"
+					   PressedBorderBrush="{StaticResource DarkDarkMainBrush}">
 			<!--Main Menu-->
 			<ribbon:Ribbon.ApplicationMenu>
-				<ribbon:RibbonApplicationMenu>
+				<ribbon:RibbonApplicationMenu Style="{StaticResource MainStyle}"
+											  SmallImageSource="Images\MainMenuImage.png">
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.NewProject}"
-													  Command="New"/>
+													  Command="New"
+													  ImageSource="Images\NewImage.png"/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.OpenProject}"
-													  Command="Open"/>
+													  Command="Open"
+													  ImageSource="Images\OpenImage.png"/>
 					<ribbon:RibbonSeparator/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveProject}"
-													  Command="Save"/>
+													  Command="Save"
+													  ImageSource="Images\SaveImage.png"/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveAsProject}"
-													  Command="SaveAs"/>
+													  Command="SaveAs"
+													  ImageSource="Images\SaveImage.png"/>
 					<ribbon:RibbonSeparator/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.CloseProject}"
-													  Command="{StaticResource CloseProject}"/>
+													  Command="{StaticResource CloseProject}"
+													  ImageSource="Images\CloseImage.png"/>
 					<ribbon:RibbonSeparator/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.Exit}"
-													  Command="Close"/>
+													  Command="Close"
+													  ImageSource="Images\ExitImage.png"/>
 				</ribbon:RibbonApplicationMenu>
 			</ribbon:Ribbon.ApplicationMenu>
 			<!--Tab Main-->
 			<ribbon:RibbonTab x:Name="TabMain"
 							  Header="Главная">
-				<ribbon:RibbonGroup Header="Test">
-					<ribbon:RibbonButton x:Name="ButtonTest"
-										 Label="Test"/>
+				<ribbon:RibbonGroup Header="Вид">
+					<ribbon:RibbonToggleButton x:Name="ButtonViewShowPropsPanel"
+											   Label="Показать свойства"
+											   Command="{StaticResource ShowProps}"
+											   LargeImageSource="Images\ShowPropsImage.png"/>
 				</ribbon:RibbonGroup>
 			</ribbon:RibbonTab>
 		</ribbon:Ribbon>
 		<!--Content-->
+		<DockPanel x:Name="DockContent" Grid.Row="1">
+			<local:CtrlPropsPanel x:Name="PanelShowProps" 
+								  DockPanel.Dock="Left"
+								  VerticalAlignment="Stretch"
+								  HorizontalAlignment="Left">
+				
+			</local:CtrlPropsPanel>
+			<diag:Diagram x:Name="DiagramNetwork"
+						  DockPanel.Dock="Right"
+						  VerticalAlignment="Stretch"
+						  HorizontalAlignment="Stretch"
+						  Margin="5,5,5,5"
+						  BackBrush="{StaticResource DarkMainBrush}"
+						  BorderBrush="{StaticResource DarkMainBrush}"
+						  />
+		</DockPanel>
 	</Grid>
 </ribbon:RibbonWindow>
