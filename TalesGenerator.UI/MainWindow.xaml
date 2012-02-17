@@ -37,7 +37,7 @@
 					   FocusedBorderBrush="{StaticResource DarkDarkMainBrush}"
 					   CheckedBackground="{StaticResource DarkMainBrush}"
 					   CheckedBorderBrush="{StaticResource DarkDarkMainBrush}"
-					   MouseOverBackground="{StaticResource DarkMainBrush}"
+					   MouseOverBackground="{StaticResource LightMainBrush}"
 					   MouseOverBorderBrush="{StaticResource DarkDarkMainBrush}"
 					   PressedBackground="{StaticResource DarkMainBrush}"
 					   PressedBorderBrush="{StaticResource DarkDarkMainBrush}">
@@ -93,8 +93,7 @@
 						  HorizontalAlignment="Stretch"
 						  Margin="5,5,5,5"
 						  BackBrush="{StaticResource DarkMainBrush}"
-						  BorderBrush="{StaticResource DarkMainBrush}"
-						  />
+						  BorderBrush="{StaticResource DarkMainBrush}" Behavior="LinkShapes" />
 		</DockPanel>
 	</Grid>
 </ribbon:RibbonWindow>

@@ -28,6 +28,8 @@ namespace TalesGenerator.UI
 			InitializeComponent();
 			
 			_network = null;
+
+			ButtonViewShowPropsPanel.IsChecked = this.PanelShowProps.Visibility == Visibility.Visible;
 		}
 
 		#region CommandHandlers
