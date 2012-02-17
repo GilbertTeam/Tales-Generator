@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGeneratorCore", "TalesGenerator\TalesGeneratorCore.csproj", "{E891914B-7804-4874-B084-027C2B3D59F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGenerator.Core", "TalesGenerator.Core\TalesGenerator.Core.csproj", "{E891914B-7804-4874-B084-027C2B3D59F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGeneratorUI", "TalesGeneratorUI\TalesGeneratorUI.csproj", "{8E22E3DC-A3DC-4B38-9BD1-C2219899D805}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGenerator.UI", "TalesGenerator.UI\TalesGenerator.UI.csproj", "{8E22E3DC-A3DC-4B38-9BD1-C2219899D805}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
