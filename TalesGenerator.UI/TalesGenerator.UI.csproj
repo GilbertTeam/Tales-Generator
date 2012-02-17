@@ -48,6 +48,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -113,6 +114,18 @@
       <Project>{E891914B-7804-4874-B084-027C2B3D59F8}</Project>
       <Name>TalesGeneratorCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\CloseImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\ExitImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\NewImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\SaveImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
