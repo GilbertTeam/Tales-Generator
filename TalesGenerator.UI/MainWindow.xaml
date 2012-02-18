@@ -32,10 +32,10 @@
 		</Grid.RowDefinitions>
 		<!--Ribbon-->
 		<ribbon:Ribbon x:Name="Ribbon" Grid.Row="0"
-					   Style="{StaticResource MainStyle}">
+					   Style="{StaticResource MainStyleEx}">
 			<!--Main Menu-->
 			<ribbon:Ribbon.ApplicationMenu>
-				<ribbon:RibbonApplicationMenu Style="{StaticResource MainStyle}"
+				<ribbon:RibbonApplicationMenu Style="{StaticResource MainStyleEx}"
 											  SmallImageSource="Images\MainMenuImage.png">
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.NewProject}"
 													  Command="New"
@@ -87,7 +87,7 @@
 						  VerticalAlignment="Stretch"
 						  HorizontalAlignment="Stretch"
 						  Margin="5,5,5,5"
-						  Style="{StaticResource MainStyle}"
+						  Style="{StaticResource MainStyleEx}"
 						  BackBrush="{StaticResource BrushPrimary4}"
 						  Behavior="LinkShapes" />
 		</DockPanel>

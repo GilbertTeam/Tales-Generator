@@ -6,27 +6,44 @@
 			 StartupUri="MainWindow.xaml">
 	<Application.Resources>
 		<!--BrandNewColors-->
-		<!--http://colorschemedesigner.com/#1851Tw0w0w0w0-->
+		<!--http://colorschemedesigner.com/#1U51T7F-удалить текст-w0w0-->
 		<!--Primary Color-->
-		<SolidColorBrush x:Key="BrushPrimary1" Color="#FFBB00"/>
-		<SolidColorBrush x:Key="BrushPrimary2" Color="#BF9930"/> <!--Dark-->
-		<SolidColorBrush x:Key="BrushPrimary3" Color="#A67A00"/> <!--DarkDark-->
-		<SolidColorBrush x:Key="BrushPrimary4" Color="#FFCC40"/> <!--Light-->
-		<SolidColorBrush x:Key="BrushPrimary5" Color="#FFDA73"/> <!--LightLight-->
+		<SolidColorBrush x:Key="BrushPrimary1" Color="#FEFFC2"/>
+		<SolidColorBrush x:Key="BrushPrimary2" Color="#BFBF9D"/> <!--Dark-->
+		<SolidColorBrush x:Key="BrushPrimary3" Color="#A4A63F"/> <!--DarkDark-->
+		<SolidColorBrush x:Key="BrushPrimary4" Color="#FEFFD1"/> <!--Light-->
+		<SolidColorBrush x:Key="BrushPrimary5" Color="#FFFFDD"/> <!--LightLight-->
 		<!--Secondary Color A-->
-		<SolidColorBrush x:Key="BrushSecondaryA1" Color="#FFE400"/>
-		<SolidColorBrush x:Key="BrushSecondaryA2" Color="#BFB030"/> <!--Dark-->
-		<SolidColorBrush x:Key="BrushSecondaryA3" Color="#A69400"/> <!--DarkDark-->
-		<SolidColorBrush x:Key="BrushSecondaryA4" Color="#FFEB40"/> <!--Light-->
-		<SolidColorBrush x:Key="BrushSecondaryA5" Color="#FFF073  "/> <!--LightLight-->
+		<SolidColorBrush x:Key="BrushSecondaryA1" Color="#EAFFC2"/>
+		<SolidColorBrush x:Key="BrushSecondaryA2" Color="#B3BF9D"/> <!--Dark-->
+		<SolidColorBrush x:Key="BrushSecondaryA3" Color="#82A63F"/> <!--DarkDark-->
+		<SolidColorBrush x:Key="BrushSecondaryA4" Color="#EFFFD1"/> <!--Light-->
+		<SolidColorBrush x:Key="BrushSecondaryA5" Color="#F3FFDD"/> <!--LightLight-->
 		<!--Secondary Color B-->
-		<SolidColorBrush x:Key="BrushSecondaryB1" Color="#FF8C00"/>
-		<SolidColorBrush x:Key="BrushSecondaryB2" Color="#BF7F30"/> <!--Dark-->
-		<SolidColorBrush x:Key="BrushSecondaryB3" Color="#A65B00"/> <!--DarkDark-->
-		<SolidColorBrush x:Key="BrushSecondaryB4" Color="#FFA940"/> <!--Light-->
-		<SolidColorBrush x:Key="BrushSecondaryB5" Color="#FFC073"/> <!--LightLight-->
+		<SolidColorBrush x:Key="BrushSecondaryB1" Color="#FFF5C2"/>
+		<SolidColorBrush x:Key="BrushSecondaryB2" Color="#BFBA9D"/> <!--Dark-->
+		<SolidColorBrush x:Key="BrushSecondaryB3" Color="#A6953F"/> <!--DarkDark-->
+		<SolidColorBrush x:Key="BrushSecondaryB4" Color="#FFF7D1"/> <!--Light-->
+		<SolidColorBrush x:Key="BrushSecondaryB5" Color="#FFF9DD"/> <!--LightLight-->
 		<!--Secondary Color B-->
 		<!--Styles-->
+		<!--Этот стиль используется-->
+		<Style x:Key="MainStyleEx">
+			<!--Controls -->
+			<Setter Property="Control.Background" Value="{StaticResource BrushPrimary1}"/>
+			<Setter Property="Control.BorderBrush" Value="{StaticResource BrushPrimary2}"/>
+			<!--Ribbon Colors-->
+			<Setter Property="ribbon:Ribbon.MouseOverBackground" Value="{StaticResource BrushPrimary3}"/>
+			<Setter Property="ribbon:Ribbon.MouseOverBorderBrush" Value="#00000000"/>
+			<Setter Property="ribbon:Ribbon.CheckedBackground" Value="{StaticResource BrushPrimary2}"/>
+			<Setter Property="ribbon:Ribbon.CheckedBorderBrush" Value="#00000000"/>
+			<Setter Property="ribbon:Ribbon.PressedBackground" Value="{StaticResource BrushPrimary2}"/>
+			<Setter Property="ribbon:Ribbon.PressedBorderBrush" Value="#00000000"/>
+			<Setter Property="ribbon:Ribbon.FocusedBorderBrush" Value="Black"/>
+			<!--MindFusion-->
+			<Setter Property="diag:Diagram.BorderBrush" Value="{StaticResource BrushPrimary3}"/>
+		</Style>
+		<!--Старый стиль-->
 		<Style x:Key="MainStyle">
 			<Setter Property="Control.Background" Value="{StaticResource BrushPrimary4}"/>
 			<Setter Property="Control.BorderBrush" Value="{StaticResource BrushPrimary3}"/>
