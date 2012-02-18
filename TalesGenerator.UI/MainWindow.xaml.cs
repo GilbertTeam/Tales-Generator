@@ -21,7 +21,8 @@ namespace TalesGenerator.UI
 	/// </summary>
 	public partial class MainWindow : RibbonWindow
 	{
-		ISemanticNetwork _network;
+		//ISemanticNetwork _network;
+		Network _network;
 
 		public MainWindow()
 		{

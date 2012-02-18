@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 
 namespace TalesGenerator.Core
 {
@@ -26,11 +22,11 @@ namespace TalesGenerator.Core
 		/// <summary>
 		/// Сохраняет XML представление объекта.
 		/// </summary>
-		/// <param name="xElement"></param>
+		/// <param name="xElement">Элемент, в котором должно быть сохранено XML представление объекта.</param>
 		internal abstract void SaveToXml(XElement xElement);
 
 		/// <summary>
-		/// Загружает объект.
+		/// Загружает объект на основе XML представления.
 		/// </summary>
 		/// <param name="xElement"></param>
 		internal abstract void LoadFromXml(XElement xElement);

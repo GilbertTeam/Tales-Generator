@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace TalesGenerator.Core
 {
@@ -11,12 +14,31 @@ namespace TalesGenerator.Core
 	{
 		#region Fields
 
-		private readonly NetworkNodeCollection _nodes = new NetworkNodeCollection();
+		/// <summary>
+		/// Коллекция вершин сети.
+		/// </summary>
+		private readonly NetworkNodeCollection _nodes;
 
-		private readonly NetworkEdgeCollection _edges = new NetworkEdgeCollection();
+		/// <summary>
+		/// Коллекция дуг сети.
+		/// </summary>
+		private readonly NetworkEdgeCollection _edges;
+
+		/// <summary>
+		/// Следующий используемый индекс объекта сети.
+		/// </summary>
+		private int _nextId;
 		#endregion
 
 		#region Properties
+
+		/// <summary>
+		/// Возвращает идентификатор объекта.
+		/// </summary>
+		internal int NextId
+		{
+			get { return _nextId; }
+		}
 
 		/// <summary>
 		/// Возвращает коллекцию вершин сети.
@@ -42,6 +64,24 @@ namespace TalesGenerator.Core
 		/// </summary>
 		public Network()
 		{
+			_nextId = 0;
+
+			_nodes = new NetworkNodeCollection();
+			_nodes.CollectionChanged += NetworkObjectCollectionOnChanged;
+
+			_edges = new NetworkEdgeCollection();
+			_edges.CollectionChanged += NetworkObjectCollectionOnChanged;
+		}
+		#endregion
+
+		#region Event Handlers
+
+		private void NetworkObjectCollectionOnChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.Action == NotifyCollectionChangedAction.Add)
+			{
+				_nextId += e.NewItems.Count;
+			}
 		}
 		#endregion
 
@@ -72,21 +112,44 @@ namespace TalesGenerator.Core
 			return xDocument;
 		}
 
-		//TODO Дописать метод загруки сети.
 		private static Network LoadFromXml(XDocument xDocument)
 		{
 			Network network = new Network();
 
+			//TODO Необходимо доработать логику десериализации.
+			network.Nodes.CollectionChanged -= network.NetworkObjectCollectionOnChanged;
+			network.Edges.CollectionChanged -= network.NetworkObjectCollectionOnChanged;
+
 			XNamespace xNamespace = SerializableObject.XNamespace;
 			XElement xNetwork = xDocument.Root;
-			XElement xNodes = xNetwork.Element(xNamespace + "Nodes");
 
-			foreach (XElement xNode in xNodes.Elements(xNamespace + "Node"))
+			XElement xNodesBase = xNetwork.Element(xNamespace + "Nodes");
+			var xNodes = xNodesBase.Elements(xNamespace + "Node");
+			foreach (XElement xNode in xNodes)
 			{
 				NetworkNode networkNode = new NetworkNode(network);
 
 				networkNode.LoadFromXml(xNode);
+
+				network.Nodes.Add(networkNode);
 			}
+
+			XElement xEdgesBase = xNetwork.Element(xNamespace + "Edges");
+			var xEdges = xEdgesBase.Elements(xNamespace + "Edge");
+			foreach (XElement xEdge in xEdges)
+			{
+				NetworkEdge networkEdge = new NetworkEdge(network);
+
+				networkEdge.LoadFromXml(xEdge);
+
+				network.Edges.Add(networkEdge);
+			}
+
+			//TODO Необходимо доработать логику десериализации.
+			network._nextId = Math.Max(network.Nodes.Select(node => node.Id).Max(), network.Edges.Select(edge => edge.Id).Max()) + 1;
+			network.Nodes.CollectionChanged += network.NetworkObjectCollectionOnChanged;
+			network.Edges.CollectionChanged += network.NetworkObjectCollectionOnChanged;
+
 			return network;
 		}
 

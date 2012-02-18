@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TalesGenerator.Core;
+using System.Collections.Generic;
 
 namespace Test.Core
 {
@@ -13,6 +14,8 @@ namespace Test.Core
 	public class NetworkTest
 	{
 		#region Fields
+
+		private List<string> _fileNames;
 
 		private TestContext _testContextInstance;
 		#endregion
@@ -121,19 +124,24 @@ namespace Test.Core
 		//public static void MyClassCleanup()
 		//{
 		//}
-		//
-		//Use TestInitialize to run code before running each test
-		//[TestInitialize()]
-		//public void MyTestInitialize()
-		//{
-		//}
-		//
-		//Use TestCleanup to run code after each test has run
-		//[TestCleanup()]
-		//public void MyTestCleanup()
-		//{
-		//}
-		//
+
+		[TestInitialize()]
+		public void MyTestInitialize()
+		{
+			_fileNames = new List<string>();
+		}
+		
+		[TestCleanup()]
+		public void MyTestCleanup()
+		{
+			foreach (string fileName in _fileNames)
+			{
+				if (File.Exists(fileName))
+				{
+					File.Delete(fileName);
+				}
+			}
+		}
 		#endregion
 
 		/// <summary>
@@ -204,6 +212,8 @@ namespace Test.Core
 			Network network = CreateNetwork();
 			string fileName = Path.GetTempFileName();
 
+			_fileNames.Add(fileName);
+
 			network.Save(fileName);
 
 			bool fileExists = File.Exists(fileName);
@@ -228,6 +238,8 @@ namespace Test.Core
 		{
 			Network network = CreateNetwork();
 			string fileName = Path.GetTempFileName();
+
+			_fileNames.Add(fileName);
 
 			network.Save(fileName);
 
@@ -257,6 +269,8 @@ namespace Test.Core
 		{
 			Network network = CreateNetwork();
 			string fileName = Path.GetTempFileName();
+
+			_fileNames.Add(fileName);
 			
 			using (FileStream fileStream = File.Open(fileName, FileMode.Create))
 			{
@@ -284,6 +298,8 @@ namespace Test.Core
 		{
 			Network network = CreateNetwork();
 			string fileName = Path.GetTempFileName();
+
+			_fileNames.Add(fileName);
 
 			using (FileStream fileStream = File.Open(fileName, FileMode.Create))
 			{

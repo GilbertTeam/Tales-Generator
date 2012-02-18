@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
 using System.Xml.Linq;
 
@@ -11,27 +8,35 @@ namespace TalesGenerator.Core
 	{
 		#region Fields
 
-		private string _id;
+		/// <summary>
+		/// Сеть, которой принадлежит объект.
+		/// </summary>
 		protected readonly Network _network;
+
+		/// <summary>
+		/// Уникальный (в рамках сети) идентификатор объекта.
+		/// </summary>
+		private int _id;
 		#endregion
 
 		#region Properties
 
+		/// <summary>
+		/// Возвращает сеть, которой принадлежит данный объект.
+		/// </summary>
 		public Network Parent
 		{
 			get { return _network; }
 		}
 
-		public string Id
+		/// <summary>
+		/// Возвращает уникальный идентификатор данного объекта.
+		/// </summary>
+		public int Id
 		{
 			get
 			{
-				throw new NotImplementedException();
-			}
-
-			private set
-			{
-				
+				return _id;
 			}
 		}
 		#endregion
@@ -51,6 +56,7 @@ namespace TalesGenerator.Core
 			}
 
 			_network = parent;
+			_id = _network.NextId;
 		}
 		#endregion
 
@@ -66,12 +72,12 @@ namespace TalesGenerator.Core
 
 		internal override void LoadFromXml(XElement xElement)
 		{
-			Id = xElement.Attribute("id").Value;
+			_id = int.Parse(xElement.Attribute("id").Value);
 		}
 
 		internal override void SaveToXml(XElement xElement)
 		{
-			xElement.Add(new XAttribute("id", Id));
+			xElement.Add(new XAttribute("id", _id));
 		}
 		#endregion
 	}

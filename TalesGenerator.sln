@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGenerator.Core", "Tale
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGenerator.UI", "TalesGenerator.UI\TalesGenerator.UI.csproj", "{8E22E3DC-A3DC-4B38-9BD1-C2219899D805}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Core", "Test.Core\Test.Core.csproj", "{A5A28AEA-5248-47F5-89CF-080E6141B195}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGenerator.Test", "Test.Core\TalesGenerator.Test.csproj", "{A5A28AEA-5248-47F5-89CF-080E6141B195}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

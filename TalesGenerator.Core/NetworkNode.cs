@@ -58,11 +58,20 @@ namespace TalesGenerator.Core
 
 		#region Constructors
 
+		/// <summary>
+		/// Создает новую вершину сети.
+		/// </summary>
+		/// <param name="network">Сеть, которой принадлежит вершина.</param>
 		public NetworkNode(Network network)
 			: base(network)
 		{
 		}
 
+		/// <summary>
+		/// Создает новую вершину сети с заданным именем.
+		/// </summary>
+		/// <param name="network">Сеть, которой должна принадлежать вершина.</param>
+		/// <param name="name">Имя вершины.</param>
 		public NetworkNode(Network network, string name)
 			: this(network)
 		{
@@ -79,8 +88,7 @@ namespace TalesGenerator.Core
 
 		internal override XElement GetXml()
 		{
-			XNamespace xNamespace = Namespace;
-			XElement xNetworkNode = new XElement(xNamespace + "Node");
+			XElement xNetworkNode = new XElement(XNamespace + "Node");
 
 			base.SaveToXml(xNetworkNode);
 

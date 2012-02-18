@@ -20,5 +20,24 @@ namespace TalesGenerator.Core
 				Add(node);
 			}
 		}
+
+		public NetworkNode FindById(int id)
+		{
+			NetworkNode networkNode = null;
+			var networkNodes = Items.Where(node => node.Id == id);
+			int count = networkNodes.Count();
+
+			if (count == 1)
+			{
+				networkNode = networkNodes.First();
+			}
+			else if (count > 1)
+			{
+				//В сети не может быть вершин с одинаковыми идентификаторами.
+				throw new InvalidOperationException();
+			}
+
+			return networkNode;
+		}
 	}
 }
