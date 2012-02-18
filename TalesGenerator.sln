@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGenerator.Core", "Tale
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGenerator.UI", "TalesGenerator.UI\TalesGenerator.UI.csproj", "{8E22E3DC-A3DC-4B38-9BD1-C2219899D805}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalesGenerator.Test", "Test.Core\TalesGenerator.Test.csproj", "{A5A28AEA-5248-47F5-89CF-080E6141B195}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,16 @@ Global
 		{8E22E3DC-A3DC-4B38-9BD1-C2219899D805}.Release|Mixed Platforms.Build.0 = Release|x86
 		{8E22E3DC-A3DC-4B38-9BD1-C2219899D805}.Release|x86.ActiveCfg = Release|x86
 		{8E22E3DC-A3DC-4B38-9BD1-C2219899D805}.Release|x86.Build.0 = Release|x86
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A5A28AEA-5248-47F5-89CF-080E6141B195}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
