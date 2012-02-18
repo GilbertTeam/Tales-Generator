@@ -86,7 +86,7 @@ namespace TalesGenerator.Core
 			_endNode= _network.Nodes.Single(node => node.Id == xElement.Attribute("endNode").Value);
 		}
 
-		public override string SaveToXml()
+		internal override XElement GetXml()
 		{
 			XNamespace xNamespace = Namespace;
 			XElement xNetworkEdge = new XElement(xNamespace + "NetworkEdge");
@@ -97,7 +97,7 @@ namespace TalesGenerator.Core
 				new XAttribute("startNode", _startNode.Id),
 				new XAttribute("endNode", _endNode.Id));
 
-			return xNetworkEdge.ToString();
+			return xNetworkEdge;
 		}
 		#endregion
 	}

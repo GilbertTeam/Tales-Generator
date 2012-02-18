@@ -7,6 +7,9 @@ using System.Xml.Linq;
 
 namespace TalesGenerator.Core
 {
+	/// <summary>
+	/// Представляет вершину сети.
+	/// </summary>
 	public class NetworkNode : NetworkObject
 	{
 		#region Fields
@@ -16,6 +19,9 @@ namespace TalesGenerator.Core
 
 		#region Properties
 
+		/// <summary>
+		/// Возвращает или задает имя вершины.
+		/// </summary>
 		public string Name
 		{
 			get { return _name; }
@@ -27,6 +33,9 @@ namespace TalesGenerator.Core
 			}
 		}
 
+		/// <summary>
+		/// Возвращает набор входящих дуг.
+		/// </summary>
 		public IEnumerable<NetworkEdge> IncomingEdges
 		{
 			get
@@ -35,6 +44,9 @@ namespace TalesGenerator.Core
 			}
 		}
 
+		/// <summary>
+		/// Возвращает набор выходящих дуг.
+		/// </summary>
 		public IEnumerable<NetworkEdge> OutgoingEdges
 		{
 			get
@@ -65,6 +77,18 @@ namespace TalesGenerator.Core
 
 		#region Methods
 
+		internal override XElement GetXml()
+		{
+			XNamespace xNamespace = Namespace;
+			XElement xNetworkNode = new XElement(xNamespace + "Node");
+
+			base.SaveToXml(xNetworkNode);
+
+			xNetworkNode.Add(new XAttribute("name", Name));
+
+			return xNetworkNode;
+		}
+
 		internal override void SaveToXml(XElement xElement)
 		{
 			base.SaveToXml(xElement);
@@ -75,22 +99,7 @@ namespace TalesGenerator.Core
 			base.LoadFromXml(xElement);
 
 			Name = xElement.Attribute("name").Value;
-
 		}
-
-		public override string SaveToXml()
-		{
-			XNamespace xNamespace = Namespace;
-			XElement xNetworkNode = new XElement(xNamespace + "Node");
-
-			base.SaveToXml(xNetworkNode);
-
-			xNetworkNode.Add(new XAttribute("name", Name));
-
-			return xNetworkNode.ToString();
-		}
-
-		
 
 		public override string ToString()
 		{

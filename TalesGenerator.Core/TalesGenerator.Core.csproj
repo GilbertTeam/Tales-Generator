@@ -40,8 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Implementations.cs" />
-    <Compile Include="Interfaces.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="NetworkEdge.cs" />
     <Compile Include="NetworkEdgeCollection.cs" />

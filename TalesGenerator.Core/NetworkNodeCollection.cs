@@ -8,6 +8,17 @@ namespace TalesGenerator.Core
 {
 	public class NetworkNodeCollection : ObservableCollection<NetworkNode>
 	{
+		public void AddRange(IEnumerable<NetworkNode> nodes)
+		{
+			if (nodes == null)
+			{
+				throw new ArgumentNullException("nodes");
+			}
 
+			foreach (NetworkNode node in nodes)
+			{
+				Add(node);
+			}
+		}
 	}
 }
