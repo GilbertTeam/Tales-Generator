@@ -3,7 +3,8 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:ribbon="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
 			 xmlns:diag="http://mindfusion.eu/diagramming/wpf"
-			 StartupUri="MainWindow.xaml">
+			 xmlns:windows="clr-namespase:TalesGenerator.UI.Windows"
+			 StartupUri="Windows/MainWindow.xaml">
 	<Application.Resources>
 		<!--BrandNewColors-->
 		<!--http://colorschemedesigner.com/#1U51T7F-удалить текст-w0w0-->
@@ -33,11 +34,11 @@
 			<Setter Property="Control.Background" Value="{StaticResource BrushPrimary1}"/>
 			<Setter Property="Control.BorderBrush" Value="{StaticResource BrushPrimary2}"/>
 			<!--Ribbon Colors-->
-			<Setter Property="ribbon:Ribbon.MouseOverBackground" Value="{StaticResource BrushPrimary3}"/>
+			<Setter Property="ribbon:Ribbon.MouseOverBackground" Value="{StaticResource BrushPrimary2}"/>
 			<Setter Property="ribbon:Ribbon.MouseOverBorderBrush" Value="#00000000"/>
 			<Setter Property="ribbon:Ribbon.CheckedBackground" Value="{StaticResource BrushPrimary2}"/>
 			<Setter Property="ribbon:Ribbon.CheckedBorderBrush" Value="#00000000"/>
-			<Setter Property="ribbon:Ribbon.PressedBackground" Value="{StaticResource BrushPrimary2}"/>
+			<Setter Property="ribbon:Ribbon.PressedBackground" Value="{StaticResource BrushPrimary3}"/>
 			<Setter Property="ribbon:Ribbon.PressedBorderBrush" Value="#00000000"/>
 			<Setter Property="ribbon:Ribbon.FocusedBorderBrush" Value="Black"/>
 			<!--MindFusion-->

@@ -12,14 +12,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TalesGenerator.UI
+namespace TalesGenerator.UI.Controls
 {
 	/// <summary>
 	/// Interaction logic for CtrlPropsPanel.xaml
 	/// </summary>
-	public partial class CtrlPropsPanel : UserControl
+	public partial class PropsPanel : UserControl
 	{
-		public CtrlPropsPanel()
+		public PropsPanel()
 		{
 			InitializeComponent();
 		}

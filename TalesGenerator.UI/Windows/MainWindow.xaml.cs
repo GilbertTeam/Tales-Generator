@@ -10,18 +10,20 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
 using Microsoft.Windows.Controls.Ribbon;
-using TalesGenerator.Core;
 
-namespace TalesGenerator.UI
+using TalesGenerator.Core;
+using TalesGenerator.UI.Classes;
+
+using MindFusion.Diagramming.Wpf;
+
+namespace TalesGenerator.UI.Windows
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
 	public partial class MainWindow : RibbonWindow
 	{
-		//ISemanticNetwork _network;
 		Network _network;
 
 		public MainWindow()
@@ -42,7 +44,7 @@ namespace TalesGenerator.UI
 
 		private void New_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-
+			_network = new Network();
 		}
 
 		private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -107,6 +109,87 @@ namespace TalesGenerator.UI
 		}
 
 		#endregion
+
+		#region MF events
+
+		private void DiagramNetwork_MouseWheel(object sender, MouseWheelEventArgs e)
+		{
+			int count = Math.Abs(e.Delta / 120);
+			bool zoomOut = e.Delta < 0;
+			for (int i = 0; i < count; i++)
+			{
+				if (zoomOut && DiagramNetwork.ZoomFactor != 0)
+				{
+					DiagramNetwork.ZoomOut();
+					double factor = 100 / DiagramNetwork.ZoomFactor;
+					Rect newBounds = new Rect(0, 0, ScrollDiagram.ActualWidth * factor,
+						ScrollDiagram.ActualHeight * factor);
+					if (newBounds.Bottom > DiagramNetwork.Bounds.Bottom ||
+						newBounds.Right > DiagramNetwork.Bounds.Right)
+						DiagramNetwork.Bounds = newBounds;
+				}
+				else DiagramNetwork.ZoomIn();
+			}
+			e.Handled = true;
+		}
+
+		private void RibbonWindow_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Delete)
+			{
+				DiagramItemCollection selectedItems = DiagramNetwork.Selection.Items;
+				for (int count = selectedItems.Count, i = count - 1; i >= 0; i--)
+				{
+					DiagramItem item = selectedItems[i];
+					if (item as DiagramNode != null) DiagramNetwork.Nodes.Remove(item as DiagramNode);
+					else DiagramNetwork.Links.Remove(item as DiagramLink);
+
+				}
+				e.Handled = true;
+			}
+		}
+
+		private void DiagramNetwork_NodeSelected(object sender, NodeEventArgs e)
+		{
+
+		}
+
+		private void DiagramNetwork_LinkSelected(object sender, LinkEventArgs e)
+		{
+
+		}
+
+		private void DiagramNetwork_NodeDeleted(object sender, NodeEventArgs e)
+		{
+
+		}
+
+		private void DiagramNetwork_LinkDeleted(object sender, LinkEventArgs e)
+		{
+
+		}
+
+		#endregion
+
+		private void DiagramNetwork_NodeCreated(object sender, NodeEventArgs e)
+		{
+
+		}
+
+		private void DiagramNetwork_LinkCreated(object sender, LinkEventArgs e)
+		{
+
+		}
+
+		private void DiagramNetwork_NodeDeselected(object sender, NodeEventArgs e)
+		{
+
+		}
+
+		private void DiagramNetwork_LinkDeselected(object sender, LinkEventArgs e)
+		{
+
+		}
 
 	}
 }

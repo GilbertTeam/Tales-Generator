@@ -1,12 +1,12 @@
-﻿<ribbon:RibbonWindow x:Class="TalesGenerator.UI.MainWindow"
+﻿<ribbon:RibbonWindow x:Class="TalesGenerator.UI.Windows.MainWindow"
 		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:ribbon="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
 		xmlns:p="clr-namespace:TalesGenerator.UI.Properties"
-		xmlns:local="clr-namespace:TalesGenerator.UI"
+		xmlns:controls="clr-namespace:TalesGenerator.UI.Controls"
 		xmlns:diag="http://mindfusion.eu/diagramming/wpf"
 		Title="MainWindow" Height="600" Width="800"
-		ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+		ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" KeyDown="RibbonWindow_KeyDown">
 	
 	<Window.Resources>
 		<RoutedUICommand x:Key="CloseProject"/>
@@ -36,31 +36,34 @@
 			<!--Main Menu-->
 			<ribbon:Ribbon.ApplicationMenu>
 				<ribbon:RibbonApplicationMenu Style="{StaticResource MainStyleEx}"
-											  SmallImageSource="Images\MainMenuImage.png">
+											  SmallImageSource="..\Images\MainMenuImage.png">
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.NewProject}"
 													  Command="New"
-													  ImageSource="Images\NewImage.png"/>
+													  ImageSource="..\Images\NewImage.png"/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.OpenProject}"
 													  Command="Open"
-													  ImageSource="Images\OpenImage.png"/>
+													  ImageSource="..\Images\OpenImage.png"/>
 					<ribbon:RibbonSeparator/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveProject}"
 													  Command="Save"
-													  ImageSource="Images\SaveImage.png"/>
+													  ImageSource="..\Images\SaveImage.png"/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveAsProject}"
 													  Command="SaveAs"
-													  ImageSource="Images\SaveImage.png">
-						<ribbon:RibbonApplicationMenuItem Header="Сохранить в pdf"/>
-						<ribbon:RibbonApplicationMenuItem Header="Сохранить в svg"/>
+													  ImageSource="..\Images\SaveImage.png">
+						<ribbon:RibbonApplicationMenuItem Header="Сохранить в pdf" 
+														  ImageSource="..\Images\SaveAsPngImage.png"
+														  />
+						<ribbon:RibbonApplicationMenuItem Header="Сохранить в svg"
+														  ImageSource="..\Images\SaveAsSvgImage.png"/>
 					</ribbon:RibbonApplicationMenuItem>
 					<ribbon:RibbonSeparator/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.CloseProject}"
 													  Command="{StaticResource CloseProject}"
-													  ImageSource="Images\CloseImage.png"/>
+													  ImageSource="..\Images\CloseImage.png"/>
 					<ribbon:RibbonSeparator/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.Exit}"
 													  Command="Close"
-													  ImageSource="Images\ExitImage.png"/>
+													  ImageSource="..\Images\ExitImage.png"/>
 				</ribbon:RibbonApplicationMenu>
 			</ribbon:Ribbon.ApplicationMenu>
 			<!--Tab Main-->
@@ -70,26 +73,45 @@
 					<ribbon:RibbonToggleButton x:Name="ButtonViewShowPropsPanel"
 											   Label="Показать свойства"
 											   Command="{StaticResource ShowProps}"
-											   LargeImageSource="Images\ShowPropsImage.png"/>
+											   LargeImageSource="..\Images\ShowPropsImage.png"/>
 				</ribbon:RibbonGroup>
 			</ribbon:RibbonTab>
 		</ribbon:Ribbon>
 		<!--Content-->
 		<DockPanel x:Name="DockContent" Grid.Row="1">
-			<local:CtrlPropsPanel x:Name="PanelShowProps" 
+			<controls:PropsPanel x:Name="PanelShowProps" 
 								  DockPanel.Dock="Left"
 								  VerticalAlignment="Stretch"
 								  HorizontalAlignment="Left">
-				
-			</local:CtrlPropsPanel>
-			<diag:Diagram x:Name="DiagramNetwork"
-						  DockPanel.Dock="Right"
-						  VerticalAlignment="Stretch"
-						  HorizontalAlignment="Stretch"
-						  Margin="5,5,5,5"
-						  Style="{StaticResource MainStyleEx}"
-						  BackBrush="{StaticResource BrushPrimary4}"
-						  Behavior="LinkShapes" />
+
+			</controls:PropsPanel>
+			<ScrollViewer x:Name="ScrollDiagram"
+						  HorizontalScrollBarVisibility="Auto"
+						  VerticalScrollBarVisibility="Auto"
+						  MouseWheel="DiagramNetwork_MouseWheel">
+				<diag:Diagram x:Name="DiagramNetwork"
+							  DockPanel.Dock="Right"
+							  VerticalAlignment="Stretch"
+							  HorizontalAlignment="Stretch"
+							  Margin="5,5,5,5"
+							  Style="{StaticResource MainStyleEx}"
+							  BackBrush="{StaticResource BrushPrimary4}"
+							  Behavior="LinkShapes"
+							  DefaultShape="Ellipse"
+							  ZoomFactor="100"
+							  AutoResize="AllDirections"
+							  HorizontalContentAlignment="Stretch"
+							  VerticalContentAlignment="Stretch"
+							  MouseWheel="DiagramNetwork_MouseWheel"
+							  NodeSelected="DiagramNetwork_NodeSelected"
+							  NodeDeselected="DiagramNetwork_NodeDeselected"
+							  NodeDeleted="DiagramNetwork_NodeDeleted"
+							  NodeCreated="DiagramNetwork_NodeCreated"
+							  LinkSelected="DiagramNetwork_LinkSelected"
+							  LinkDeselected="DiagramNetwork_LinkDeselected"
+							  LinkDeleted="DiagramNetwork_LinkDeleted"
+							  LinkCreated="DiagramNetwork_LinkCreated"/>
+			</ScrollViewer>
 		</DockPanel>
 	</Grid>
 </ribbon:RibbonWindow>
