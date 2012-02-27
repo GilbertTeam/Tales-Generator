@@ -89,7 +89,7 @@
 		</ribbon:Ribbon>
 		<!--Content-->
 		<DockPanel x:Name="DockContent" Grid.Row="1">
-			<controls:PropsPanel x:Name="PanelShowProps" 
+			<controls:PropsPanel x:Name="PanelProps" 
 								  DockPanel.Dock="Left"
 								  VerticalAlignment="Stretch"
 								  HorizontalAlignment="Left">

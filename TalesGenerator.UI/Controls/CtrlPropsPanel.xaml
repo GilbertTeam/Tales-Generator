@@ -4,12 +4,42 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="100">
-    <Grid>
-		<Button x:Name="Test"
-				Width="90"
-				Margin="5,5,5,5">
-			Test
-		</Button>
-	</Grid>
+             d:DesignHeight="300">
+	<UserControl.Resources>
+		<Style x:Key="BasePropsStyle">
+			<Setter Property="Control.Margin" Value="5,0,5,0"/>
+		</Style>
+		<Style x:Key="BoldTextStyle" BasedOn="{StaticResource BasePropsStyle}">
+			<Setter Property="Control.FontWeight" Value="Bold"/>
+		</Style>
+		<Style x:Key="ContextPropsStyle" BasedOn="{StaticResource BasePropsStyle}">
+			<Setter Property="Control.Margin" Value="10,0,5,0"/>
+		</Style>
+	</UserControl.Resources>
+	<StackPanel x:Name="StackItems"
+		Background="{StaticResource BrushPrimary5}" Margin="5"
+				Style="{StaticResource BasePropsStyle}">
+		<TextBlock Text="Инспектор объектов" TextWrapping="Wrap" TextAlignment="Left"
+					Style="{StaticResource BoldTextStyle}"/>
+		<Separator Style="{StaticResource BasePropsStyle}"/>
+		<TextBlock x:Name="NodeHead" TextAlignment="Left" Text="Вершина" Tag="Node"
+					Style="{StaticResource BoldTextStyle}"/>
+		<TextBlock x:Name="NodeTextLabel" TextAlignment="Justify" Text="Текст вершины" Tag="Node"
+					Style="{StaticResource ContextPropsStyle}"/>
+		<TextBox x:Name="NodeText" Tag="Node"
+					Style="{StaticResource ContextPropsStyle}"/>
+		<TextBlock x:Name="LinkHead" TextAlignment="Left" Text="Отношение" Tag="Link"
+					Style="{StaticResource BoldTextStyle}"/>
+		<TextBlock x:Name="LinkTypeLabel" TextAlignment="Left" Text="Тип отношения" Tag="Link"
+					Style="{StaticResource ContextPropsStyle}"/>
+		<ComboBox x:Name="LinkTypeCombo" Tag="Link"
+					Style="{StaticResource ContextPropsStyle}"
+				  SelectionChanged="LinkTypeCombo_SelectionChanged">
+			<ComboBox.Items>
+				<ComboBoxItem Content="is_a" IsSelected="True"/>
+				<ComboBoxItem Content="агент"/>
+				<ComboBoxItem Content="реципиент"/>
+			</ComboBox.Items>
+		</ComboBox>
+	</StackPanel>
 </UserControl>

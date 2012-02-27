@@ -11,13 +11,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Windows.Controls.Ribbon;
+using Microsoft.Win32;
 
 using TalesGenerator.Core;
 using TalesGenerator.UI.Classes;
 
 using MindFusion.Diagramming.Wpf;
 using MindFusion.Diagramming.Wpf.Export;
-using Microsoft.Win32;
 
 namespace TalesGenerator.UI.Windows
 {
@@ -34,7 +34,7 @@ namespace TalesGenerator.UI.Windows
 			
 			_network = null;
 
-			ButtonViewShowPropsPanel.IsChecked = this.PanelShowProps.Visibility == Visibility.Visible;
+			ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
 		}
 
 		#region CommandHandlers
@@ -106,7 +106,7 @@ namespace TalesGenerator.UI.Windows
 
 		private void ShowProps_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			this.PanelShowProps.Visibility = this.PanelShowProps.Visibility == Visibility.Collapsed ?
+			this.PanelProps.Visibility = this.PanelProps.Visibility == Visibility.Collapsed ?
 				Visibility.Visible : Visibility.Collapsed;
 		}
 
