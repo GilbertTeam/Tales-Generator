@@ -26,15 +26,26 @@ namespace TalesGenerator.UI.Windows
 	/// </summary>
 	public partial class MainWindow : RibbonWindow
 	{
-		Network _network;
+		Project _project;
 
 		public MainWindow()
 		{
 			InitializeComponent();
-			
-			_network = null;
 
+			_project = new Project();
+			_project.Diagram = DiagramNetwork;
+			_project.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_project_PropertyChanged);
+
+			DiagramNetwork.IsEnabled = _project.Network != null;
 			ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
+		}
+
+		void _project_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == "Network")
+			{
+				this.DiagramNetwork.IsEnabled = _project.Network != null;
+			}
 		}
 
 		#region CommandHandlers
@@ -46,7 +57,8 @@ namespace TalesGenerator.UI.Windows
 
 		private void New_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			_network = new Network();
+			_project.Network = new Network();
+			DiagramNetwork.Items.Clear();
 		}
 
 		private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -61,7 +73,7 @@ namespace TalesGenerator.UI.Windows
 
 		private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = _network != null;
+			e.CanExecute = _project != null && _project.Network != null;
 		}
 
 		private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -71,7 +83,7 @@ namespace TalesGenerator.UI.Windows
 
 		private void SaveAs_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = _network != null;
+			e.CanExecute = _project != null && _project.Network != null;
 		}
 
 		private void Save_AsExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -81,17 +93,19 @@ namespace TalesGenerator.UI.Windows
 
 		private void CloseProject_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = _network != null;
+			e.CanExecute = _project != null && _project.Network != null;
 		}
 
 		private void CloseProject_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-
+			_project.Network = null;
+			DiagramNetwork.Items.Clear();
 		}
 
 		private void Close_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = true;
+			
 		}
 
 		private void Close_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -112,7 +126,7 @@ namespace TalesGenerator.UI.Windows
 
 		private void SaveAsPdf_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = _network != null;
+			e.CanExecute = _project != null && _project.Network != null;
 		}
 
 		private void SaveAsPdf_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -122,7 +136,7 @@ namespace TalesGenerator.UI.Windows
 
 		private void SaveAsSvg_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = _network != null;
+			e.CanExecute = _project != null && _project.Network != null;
 		}
 
 		private void SaveAsSvg_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -222,6 +236,9 @@ namespace TalesGenerator.UI.Windows
 
 		#region Window methods
 
+		/// <summary>
+		/// Ресайз диаграммы
+		/// </summary>
 		protected void ResizeDiagram()
 		{
 			double factor = 100 / DiagramNetwork.ZoomFactor;
@@ -257,6 +274,7 @@ namespace TalesGenerator.UI.Windows
 		}
 
 		#endregion
+
 
 	}
 }
