@@ -97,11 +97,29 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Экспортировать в PDF.
+        /// </summary>
+        public static string SaveAsPdf {
+            get {
+                return ResourceManager.GetString("SaveAsPdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Сохранить как.
         /// </summary>
         public static string SaveAsProject {
             get {
                 return ResourceManager.GetString("SaveAsProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Экспортировать в SVG.
+        /// </summary>
+        public static string SaveAsSvg {
+            get {
+                return ResourceManager.GetString("SaveAsSvg", resourceCulture);
             }
         }
         

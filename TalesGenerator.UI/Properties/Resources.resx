@@ -129,8 +129,14 @@
   <data name="OpenProject" xml:space="preserve">
     <value>Открыть проект</value>
   </data>
+  <data name="SaveAsPdf" xml:space="preserve">
+    <value>Экспортировать в PDF</value>
+  </data>
   <data name="SaveAsProject" xml:space="preserve">
     <value>Сохранить как</value>
+  </data>
+  <data name="SaveAsSvg" xml:space="preserve">
+    <value>Экспортировать в SVG</value>
   </data>
   <data name="SaveProject" xml:space="preserve">
     <value>Сохранить</value>

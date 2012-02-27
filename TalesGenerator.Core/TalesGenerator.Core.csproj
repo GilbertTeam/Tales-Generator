@@ -136,7 +136,6 @@
     <Compile Include="Network.cs" />
     <Compile Include="NetworkEdge.cs" />
     <Compile Include="Collections\NetworkEdgeCollection.cs" />
-    <Compile Include="NetworkEdgeType.cs" />
     <Compile Include="NetworkNode.cs" />
     <Compile Include="Collections\NetworkNodeCollection.cs" />
     <Compile Include="NetworkObject.cs" />

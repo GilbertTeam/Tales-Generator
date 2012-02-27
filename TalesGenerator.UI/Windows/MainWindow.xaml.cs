@@ -16,6 +16,8 @@ using TalesGenerator.Core;
 using TalesGenerator.UI.Classes;
 
 using MindFusion.Diagramming.Wpf;
+using MindFusion.Diagramming.Wpf.Export;
+using Microsoft.Win32;
 
 namespace TalesGenerator.UI.Windows
 {
@@ -108,6 +110,35 @@ namespace TalesGenerator.UI.Windows
 				Visibility.Visible : Visibility.Collapsed;
 		}
 
+		private void SaveAsPdf_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _network != null;
+		}
+
+		private void SaveAsPdf_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			ExportDiagram("pdf");
+		}
+
+		private void SaveAsSvg_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _network != null;
+		}
+
+		private void SaveAsSvg_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			ExportDiagram("svg");
+		}
+
+		#endregion
+
+		#region Window events
+
+		private void RibbonWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+		{
+			ResizeDiagram();
+		}
+
 		#endregion
 
 		#region MF events
@@ -121,32 +152,11 @@ namespace TalesGenerator.UI.Windows
 				if (zoomOut && DiagramNetwork.ZoomFactor != 0)
 				{
 					DiagramNetwork.ZoomOut();
-					double factor = 100 / DiagramNetwork.ZoomFactor;
-					Rect newBounds = new Rect(0, 0, ScrollDiagram.ActualWidth * factor,
-						ScrollDiagram.ActualHeight * factor);
-					if (newBounds.Bottom > DiagramNetwork.Bounds.Bottom ||
-						newBounds.Right > DiagramNetwork.Bounds.Right)
-						DiagramNetwork.Bounds = newBounds;
+					ResizeDiagram();
 				}
 				else DiagramNetwork.ZoomIn();
 			}
 			e.Handled = true;
-		}
-
-		private void RibbonWindow_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.Key == Key.Delete)
-			{
-				DiagramItemCollection selectedItems = DiagramNetwork.Selection.Items;
-				for (int count = selectedItems.Count, i = count - 1; i >= 0; i--)
-				{
-					DiagramItem item = selectedItems[i];
-					if (item as DiagramNode != null) DiagramNetwork.Nodes.Remove(item as DiagramNode);
-					else DiagramNetwork.Links.Remove(item as DiagramLink);
-
-				}
-				e.Handled = true;
-			}
 		}
 
 		private void DiagramNetwork_NodeSelected(object sender, NodeEventArgs e)
@@ -169,11 +179,8 @@ namespace TalesGenerator.UI.Windows
 
 		}
 
-		#endregion
-
 		private void DiagramNetwork_NodeCreated(object sender, NodeEventArgs e)
 		{
-
 		}
 
 		private void DiagramNetwork_LinkCreated(object sender, LinkEventArgs e)
@@ -190,6 +197,66 @@ namespace TalesGenerator.UI.Windows
 		{
 
 		}
+
+		#endregion
+
+		#region ScrollDiagram events
+
+		private void ScrollDiagram_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Delete)
+			{
+				DiagramItemCollection selectedItems = DiagramNetwork.Selection.Items;
+				for (int count = selectedItems.Count, i = count - 1; i >= 0; i--)
+				{
+					DiagramItem item = selectedItems[i];
+					if (item as DiagramNode != null) DiagramNetwork.Nodes.Remove(item as DiagramNode);
+					else DiagramNetwork.Links.Remove(item as DiagramLink);
+
+				}
+				e.Handled = true;
+			}
+		}
+
+		#endregion
+
+		#region Window methods
+
+		protected void ResizeDiagram()
+		{
+			double factor = 100 / DiagramNetwork.ZoomFactor;
+			Rect newBounds = new Rect(0, 0, ScrollDiagram.ActualWidth * factor,
+					ScrollDiagram.ActualHeight * factor);
+			if (newBounds.Bottom > DiagramNetwork.Bounds.Bottom ||
+				newBounds.Right > DiagramNetwork.Bounds.Right)
+				DiagramNetwork.Bounds = newBounds;
+		}
+
+		/// <summary>
+		/// Экпорт диаграммы в один из типов
+		/// </summary>
+		/// <param name="type">Тип для экспорта</param>
+		protected void ExportDiagram(string type)
+		{
+			SaveFileDialog saveDialog = new SaveFileDialog();
+			saveDialog.Filter = type + " файлы (*." + type + ")|*." + type;
+			bool? result = saveDialog.ShowDialog();
+			if (result == true)
+			switch (type)
+			{
+
+				case "pdf":
+					PdfExporter pdfExporter = new PdfExporter();
+					pdfExporter.Export(DiagramNetwork, saveDialog.FileName);
+					break;
+				case "svg":
+					SvgExporter svgExporter = new SvgExporter();
+					svgExporter.Export(DiagramNetwork, saveDialog.FileName);
+					break;
+			}
+		}
+
+		#endregion
 
 	}
 }

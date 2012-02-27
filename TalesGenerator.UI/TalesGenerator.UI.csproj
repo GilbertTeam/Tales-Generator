@@ -137,6 +137,12 @@
     <Reference Include="MindFusion.Diagramming.Wpf">
       <HintPath>..\Dlls\MindFusion\MindFusion.Diagramming.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.PdfExport">
+      <HintPath>..\Dlls\MindFusion\MindFusion.Diagramming.Wpf.PdfExport.dll</HintPath>
+    </Reference>
+    <Reference Include="MindFusion.Diagramming.Wpf.SvgExport">
+      <HintPath>..\Dlls\MindFusion\MindFusion.Diagramming.Wpf.SvgExport.dll</HintPath>
+    </Reference>
     <Reference Include="RibbonControlsLibrary, Version=4.0.0.11019, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dlls\Ribbon\RibbonControlsLibrary.dll</HintPath>
@@ -202,8 +208,8 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\SaveAsPngImage.png" />
-    <Resource Include="Images\SaveAsSvgImage.png" />
+    <Resource Include="Images\Ribbon\SaveAsPngImage.png" />
+    <Resource Include="Images\Ribbon\SaveAsSvgImage.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\CtrlPropsPanel.xaml">
@@ -222,25 +228,25 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\CloseImage.png" />
+    <Resource Include="Images\Ribbon\CloseImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ExitImage.png" />
+    <Resource Include="Images\Ribbon\ExitImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\NewImage.png" />
+    <Resource Include="Images\Ribbon\NewImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\SaveImage.png" />
+    <Resource Include="Images\Ribbon\SaveImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\OpenImage.png" />
+    <Resource Include="Images\Ribbon\OpenImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\MainMenuImage.png" />
+    <Resource Include="Images\Ribbon\MainMenuImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ShowPropsImage.png" />
+    <Resource Include="Images\Ribbon\ShowPropsImage.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
