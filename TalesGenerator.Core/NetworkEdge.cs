@@ -1,9 +1,18 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
+using TalesGenerator.Core.Serialization;
 
 namespace TalesGenerator.Core
 {
+	public enum NetworkEdgeType
+	{
+		IsA,
+		Agent,
+		Recipient
+	}
+
 	/// <summary>
 	/// Представляет дугу сети.
 	/// </summary>
@@ -19,7 +28,12 @@ namespace TalesGenerator.Core
 		#region Properties
 
 		/// <summary>
-		/// Возвращает вершину сети, из которой исходит данная дуга.
+		/// Возвращает или задает тип данной дуги.
+		/// </summary>
+		public NetworkEdgeType Type { get; set; }
+
+		/// <summary>
+		/// Возвращает или задает вершину сети, из которой исходит данная дуга.
 		/// </summary>
 		public NetworkNode StartNode
 		{
@@ -39,7 +53,7 @@ namespace TalesGenerator.Core
 		}
 
 		/// <summary>
-		/// Возвращает вершину сети, в которую входит данная дуга.
+		/// Возвращает или задает вершину сети, в которую входит данная дуга.
 		/// </summary>
 		public NetworkNode EndNode
 		{
@@ -72,7 +86,7 @@ namespace TalesGenerator.Core
 		/// <param name="parent">Сеть, которой должна принадлежать дуга.</param>
 		/// <param name="startNode">Вершина, из которой должна исходить данная дуга.</param>
 		/// <param name="endNode">Вершина, в которую должна входить данная дуга.</param>
-		public NetworkEdge(Network parent, NetworkNode startNode, NetworkNode endNode)
+		internal NetworkEdge(Network parent, NetworkNode startNode, NetworkNode endNode)
 			: base(parent)
 		{
 			if (startNode == null)
@@ -119,11 +133,32 @@ namespace TalesGenerator.Core
 
 			base.LoadFromXml(xNetworkEdge);
 
-			int startNodeId = int.Parse(xNetworkEdge.Attribute("startNodeId").Value);
-			int endNodeId = int.Parse(xNetworkEdge.Attribute("endNodeId").Value);
+			XAttribute xStartNodeIdAttribute = xNetworkEdge.Attribute("startNodeId");
+			XAttribute xEndNodeIdAttribute = xNetworkEdge.Attribute("endNodeId");
 
-			_startNode = _network.Nodes.Single(node => node.Id == startNodeId);
-			_endNode= _network.Nodes.Single(node => node.Id == endNodeId);
+			if (xStartNodeIdAttribute == null ||
+				xEndNodeIdAttribute == null)
+			{
+				throw new SerializationException();
+			}
+
+			int startNodeId;
+			int endNodeId;
+
+			if (!int.TryParse(xStartNodeIdAttribute.Value, out startNodeId) ||
+				!int.TryParse(xEndNodeIdAttribute.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out endNodeId))
+			{
+				throw new SerializationException();
+			}
+
+			_startNode = _network.Nodes.SingleOrDefault(node => node.Id == startNodeId);
+			_endNode= _network.Nodes.SingleOrDefault(node => node.Id == endNodeId);
+
+			if (_startNode == null ||
+				_endNode == null)
+			{
+				throw new SerializationException();
+			}
 		}
 		#endregion
 	}

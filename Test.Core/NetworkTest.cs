@@ -1,20 +1,21 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TalesGenerator.Core;
-using System.Collections.Generic;
 
-namespace Test.Core
+namespace TalesGenerator.Core
 {
 	/// <summary>
-	///This is a test class for NetworkTest and is intended
-	///to contain all NetworkTest Unit Tests
+	///Содержит модульные тесты класса TalesGenerator.Core.Network.
 	///</summary>
 	[TestClass()]
 	public class NetworkTest
 	{
 		#region Fields
 
+		/// <summary>
+		/// Список имен файлов, используемых для тестирования механизма сериализации.
+		/// </summary>
 		private List<string> _fileNames;
 
 		private TestContext _testContextInstance;
@@ -41,24 +42,82 @@ namespace Test.Core
 
 		#region Methods
 
+		private void CheckNetworkObjectId(NetworkObject networkObject)
+		{
+			var nodesWithSameId = networkObject.Network.Nodes.Where(node => node.Id == networkObject.Id).ToList();
+			var edgesWithSameId = networkObject.Network.Edges.Where(edge => edge.Id == networkObject.Id).ToList();
+
+			NetworkNode networkNode = networkObject as NetworkNode;
+			if (networkNode != null)
+			{
+				Assert.AreEqual(1, nodesWithSameId.Count);
+				Assert.AreEqual(networkNode, nodesWithSameId[0]);
+
+				Assert.AreEqual(0, edgesWithSameId.Count);
+			}
+
+			NetworkEdge networkEdge = networkObject as NetworkEdge;
+			if (networkEdge != null)
+			{
+				Assert.AreEqual(1, edgesWithSameId.Count);
+				Assert.AreEqual(networkEdge, edgesWithSameId[0]);
+
+				Assert.AreEqual(0, nodesWithSameId.Count);
+			}
+		}
+
+		private void CheckNetworkNode(
+			NetworkNode networkNode, Network network, string name,
+			List<NetworkEdge> incomingEdges, List<NetworkEdge> outgoingEdges)
+		{
+			Assert.IsNotNull(networkNode);
+
+			CheckNetworkObjectId(networkNode);
+
+			Assert.AreEqual(network, networkNode.Network);
+			Assert.AreEqual(name, networkNode.Name);
+
+			Assert.AreEqual(incomingEdges.Count, networkNode.IncomingEdges.Count());
+			for (int i = 0; i < incomingEdges.Count; i++)
+			{
+				Assert.AreEqual(incomingEdges[i], networkNode.IncomingEdges.ElementAt(i));
+			}
+
+			Assert.AreEqual(outgoingEdges.Count, networkNode.OutgoingEdges.Count());
+			for (int i = 0; i < outgoingEdges.Count; i++)
+			{
+				Assert.AreEqual(outgoingEdges[i], networkNode.OutgoingEdges.ElementAt(i));
+			}
+		}
+
+		private void CheckNetworkEdge(
+			NetworkEdge networkEdge, Network network,
+			NetworkNode startNode, NetworkNode endNode)
+		{
+			Assert.IsNotNull(networkEdge);
+
+			CheckNetworkObjectId(networkEdge);
+
+			Assert.AreEqual(network, networkEdge.Network);
+			Assert.AreEqual(startNode, networkEdge.StartNode);
+			Assert.AreEqual(endNode, networkEdge.EndNode);
+		}
+
 		private Network CreateNetwork()
 		{
 			Network network = new Network();
-			NetworkNode node1 = new NetworkNode(network, "Node 1");
-			NetworkNode node2 = new NetworkNode(network, "Node 2");
-			NetworkNode node3 = new NetworkNode(network, "Node 3");
-			NetworkNode node4 = new NetworkNode(network, "Node 4");
-			NetworkNode node5 = new NetworkNode(network, "Node 5");
 
-			network.Nodes.AddRange(new[] { node1, node2, node3, node4, node5 });
+			NetworkNode node1 = network.Nodes.Add("Node 1");
+			NetworkNode node2 = network.Nodes.Add("Node 2");
+			NetworkNode node3 = network.Nodes.Add("Node 3");
+			NetworkNode node4 = network.Nodes.Add("Node 4");
+			NetworkNode node5 = network.Nodes.Add("Node 5");
 
-			NetworkEdge edge12 = new NetworkEdge(network, node1, node2);
-			NetworkEdge edge23 = new NetworkEdge(network, node2, node3);
-			NetworkEdge edge34 = new NetworkEdge(network, node3, node4);
-			NetworkEdge edge45 = new NetworkEdge(network, node4, node5);
-			NetworkEdge edge51 = new NetworkEdge(network, node5, node1);
-
-			network.Edges.AddRange(new[] { edge12, edge23, edge34, edge45, edge51 });
+			NetworkEdge edge12 = network.Edges.Add(node1, node2);
+			NetworkEdge edge23 = network.Edges.Add(node2, node3);
+			NetworkEdge edge34 = network.Edges.Add(node3, node4);
+			NetworkEdge edge45 = network.Edges.Add(node4, node5);
+			NetworkEdge edge51 = network.Edges.Add(node5, node1);
 
 			return network;
 		}
@@ -69,44 +128,22 @@ namespace Test.Core
 			Assert.AreEqual(5, network.Nodes.Count);
 			Assert.AreEqual(5, network.Edges.Count);
 
-			//Проверим имена вершин.
-			Assert.AreEqual("Node 1", network.Nodes[0]);
-			Assert.AreEqual("Node 2", network.Nodes[1]);
-			Assert.AreEqual("Node 3", network.Nodes[2]);
-			Assert.AreEqual("Node 4", network.Nodes[3]);
-			Assert.AreEqual("Node 5", network.Nodes[4]);
+			CheckNetworkNode(network.Nodes[0], network, "Node 1",
+				new List<NetworkEdge> { network.Edges[4] }, new List<NetworkEdge> { network.Edges[0] });
+			CheckNetworkNode(network.Nodes[1], network, "Node 2",
+				new List<NetworkEdge> { network.Edges[0] }, new List<NetworkEdge> { network.Edges[1] });
+			CheckNetworkNode(network.Nodes[2], network, "Node 3",
+				new List<NetworkEdge> { network.Edges[1] }, new List<NetworkEdge> { network.Edges[2] });
+			CheckNetworkNode(network.Nodes[3], network, "Node 4",
+				new List<NetworkEdge> { network.Edges[2] }, new List<NetworkEdge> { network.Edges[3] });
+			CheckNetworkNode(network.Nodes[4], network, "Node 5",
+				new List<NetworkEdge> { network.Edges[3] }, new List<NetworkEdge> { network.Edges[4] });
 
-			//Проверим число входящих и исходящих дуг для каждой из вершин.
-			Assert.AreEqual(1, network.Nodes[0].IncomingEdges.Count());
-			Assert.AreEqual(1, network.Nodes[0].OutgoingEdges.Count());
-
-			Assert.AreEqual(1, network.Nodes[1].IncomingEdges.Count());
-			Assert.AreEqual(1, network.Nodes[1].OutgoingEdges.Count());
-
-			Assert.AreEqual(1, network.Nodes[2].IncomingEdges.Count());
-			Assert.AreEqual(1, network.Nodes[2].OutgoingEdges.Count());
-
-			Assert.AreEqual(1, network.Nodes[3].IncomingEdges.Count());
-			Assert.AreEqual(1, network.Nodes[3].OutgoingEdges.Count());
-
-			Assert.AreEqual(1, network.Nodes[4].IncomingEdges.Count());
-			Assert.AreEqual(1, network.Nodes[4].OutgoingEdges.Count());
-
-			//Проверим входящие и исходящие вершины для дуг.
-			Assert.AreEqual(network.Nodes[0], network.Edges[0].StartNode);
-			Assert.AreEqual(network.Nodes[1], network.Edges[0].EndNode);
-
-			Assert.AreEqual(network.Nodes[0], network.Edges[0].StartNode);
-			Assert.AreEqual(network.Nodes[1], network.Edges[0].EndNode);
-
-			Assert.AreEqual(network.Nodes[0], network.Edges[0].StartNode);
-			Assert.AreEqual(network.Nodes[1], network.Edges[0].EndNode);
-
-			Assert.AreEqual(network.Nodes[0], network.Edges[0].StartNode);
-			Assert.AreEqual(network.Nodes[1], network.Edges[0].EndNode);
-
-			Assert.AreEqual(network.Nodes[0], network.Edges[0].StartNode);
-			Assert.AreEqual(network.Nodes[1], network.Edges[0].EndNode);
+			CheckNetworkEdge(network.Edges[0], network, network.Nodes[0], network.Nodes[1]);
+			CheckNetworkEdge(network.Edges[1], network, network.Nodes[1], network.Nodes[2]);
+			CheckNetworkEdge(network.Edges[2], network, network.Nodes[2], network.Nodes[3]);
+			CheckNetworkEdge(network.Edges[3], network, network.Nodes[3], network.Nodes[4]);
+			CheckNetworkEdge(network.Edges[4], network, network.Nodes[4], network.Nodes[0]);
 		}
 
 		#region Additional test attributes
@@ -153,7 +190,10 @@ namespace Test.Core
 			Network network = new Network();
 
 			Assert.IsNotNull(network.Nodes);
+			Assert.AreEqual(0, network.Nodes.Count);
+
 			Assert.IsNotNull(network.Edges);
+			Assert.AreEqual(0, network.Edges.Count);
 		}
 
 		/// <summary>
@@ -163,18 +203,36 @@ namespace Test.Core
 		public void NodesTest()
 		{
 			Network network = new Network();
+			NetworkNode networkNode;
+			List<NetworkNode> networkNodes;
 
 			for (int i = 0; i < 5; i++)
 			{
-				network.Nodes.Add(new NetworkNode(network));
+				networkNode = network.Nodes.Add();
+
+				Assert.IsNotNull(networkNode);
+
+				//Проверим, существует ли другие вершины с таким же индексом.
+				networkNodes = network.Nodes.Where(node => node.Id == networkNode.Id).ToList();
+				Assert.AreEqual(1, networkNodes.Count);
+				Assert.AreEqual(networkNode, networkNodes[0]);
 			}
 
 			Assert.AreEqual(5, network.Nodes.Count);
 
+			networkNode = network.Nodes[0];
 			network.Nodes.RemoveAt(0);
-			network.Nodes.RemoveAt(1);
 
-			Assert.AreEqual(3, network.Nodes.Count);
+			//Проверим, удалилась ли вершина.
+			var nodesLikeAFirst = network.Nodes.Where(node => node == networkNode);
+			Assert.AreEqual(0, nodesLikeAFirst.Count());
+			Assert.AreEqual(4, network.Nodes.Count);
+
+			networkNode = network.Nodes.Add();
+			//Проверим, является ли индекс вновь добавленной вершины уникальным.
+			networkNodes = network.Nodes.Where(node => node.Id == networkNode.Id).ToList();
+			Assert.AreEqual(1, networkNodes.Count);
+			Assert.AreEqual(networkNode, networkNodes[0]);
 		}
 
 		/// <summary>
@@ -185,14 +243,14 @@ namespace Test.Core
 		{
 			Network network = new Network();
 
-			network.Nodes.Add(new NetworkNode(network));
-			network.Nodes.Add(new NetworkNode(network));
+			network.Nodes.Add();
+			network.Nodes.Add();
 
 			Assert.AreEqual(2, network.Nodes.Count);
 
 			for (int i = 0; i < 5; i++)
 			{
-				network.Edges.Add(new NetworkEdge(network, network.Nodes[0], network.Nodes[1]));
+				network.Edges.Add(network.Nodes[0], network.Nodes[1]);
 			}
 
 			Assert.AreEqual(5, network.Edges.Count);

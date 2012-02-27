@@ -1,12 +1,12 @@
 ﻿using System.Xml.Linq;
 
-namespace TalesGenerator.Core
+namespace TalesGenerator.Core.Serialization
 {
 	public abstract class SerializableObject
 	{
 		#region Fields
 
-		internal const string Namespace = "http://www.giblertteam.com";
+		internal const string Namespace = "http://www.gilbertteam.com";
 
 		internal static readonly XNamespace XNamespace = Namespace;
 		#endregion

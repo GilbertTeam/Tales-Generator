@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Xml.Linq;
+using TalesGenerator.Core.Serialization;
 
 namespace TalesGenerator.Core
 {
@@ -9,14 +11,14 @@ namespace TalesGenerator.Core
 		#region Fields
 
 		/// <summary>
-		/// Сеть, которой принадлежит объект.
-		/// </summary>
-		protected readonly Network _network;
-
-		/// <summary>
 		/// Уникальный (в рамках сети) идентификатор объекта.
 		/// </summary>
 		private int _id;
+
+		/// <summary>
+		/// Сеть, которой принадлежит объект.
+		/// </summary>
+		protected readonly Network _network;
 		#endregion
 
 		#region Properties
@@ -24,7 +26,7 @@ namespace TalesGenerator.Core
 		/// <summary>
 		/// Возвращает сеть, которой принадлежит данный объект.
 		/// </summary>
-		public Network Parent
+		public Network Network
 		{
 			get { return _network; }
 		}
@@ -72,7 +74,19 @@ namespace TalesGenerator.Core
 
 		internal override void LoadFromXml(XElement xElement)
 		{
-			_id = int.Parse(xElement.Attribute("id").Value);
+			XAttribute xIdAttribute = xElement.Attribute("id");
+
+			if (xIdAttribute == null)
+			{
+				throw new SerializationException();
+			}
+			else
+			{
+				if (!int.TryParse(xIdAttribute.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out _id))
+				{
+					throw new SerializationException();
+				}
+			}
 		}
 
 		internal override void SaveToXml(XElement xElement)

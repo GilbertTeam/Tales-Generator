@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.ComponentModel;
 using System.Xml.Linq;
 
 namespace TalesGenerator.Core
@@ -40,7 +38,7 @@ namespace TalesGenerator.Core
 		{
 			get
 			{
-				return _network.Edges.Where(edge => edge.StartNode == this);
+				return _network.Edges.Where(edge => edge.EndNode == this);
 			}
 		}
 
@@ -51,7 +49,7 @@ namespace TalesGenerator.Core
 		{
 			get
 			{
-				return _network.Edges.Where(edge => edge.EndNode == this);
+				return _network.Edges.Where(edge => edge.StartNode == this);
 			}
 		}
 		#endregion
@@ -62,7 +60,7 @@ namespace TalesGenerator.Core
 		/// Создает новую вершину сети.
 		/// </summary>
 		/// <param name="network">Сеть, которой принадлежит вершина.</param>
-		public NetworkNode(Network network)
+		internal NetworkNode(Network network)
 			: base(network)
 		{
 		}
@@ -72,7 +70,7 @@ namespace TalesGenerator.Core
 		/// </summary>
 		/// <param name="network">Сеть, которой должна принадлежать вершина.</param>
 		/// <param name="name">Имя вершины.</param>
-		public NetworkNode(Network network, string name)
+		internal NetworkNode(Network network, string name)
 			: this(network)
 		{
 			if (name == null)

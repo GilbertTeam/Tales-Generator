@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
-using System.Xml.Linq;
 using System.Linq;
+using System.Xml.Linq;
+using TalesGenerator.Core.Collections;
+using TalesGenerator.Core.Serialization;
 
 namespace TalesGenerator.Core
 {
@@ -37,7 +37,10 @@ namespace TalesGenerator.Core
 		/// </summary>
 		internal int NextId
 		{
-			get { return _nextId; }
+			get
+			{
+				return _nextId++;
+			}
 		}
 
 		/// <summary>
@@ -66,22 +69,9 @@ namespace TalesGenerator.Core
 		{
 			_nextId = 0;
 
-			_nodes = new NetworkNodeCollection();
-			_nodes.CollectionChanged += NetworkObjectCollectionOnChanged;
+			_nodes = new NetworkNodeCollection(this);
 
-			_edges = new NetworkEdgeCollection();
-			_edges.CollectionChanged += NetworkObjectCollectionOnChanged;
-		}
-		#endregion
-
-		#region Event Handlers
-
-		private void NetworkObjectCollectionOnChanged(object sender, NotifyCollectionChangedEventArgs e)
-		{
-			if (e.Action == NotifyCollectionChangedAction.Add)
-			{
-				_nextId += e.NewItems.Count;
-			}
+			_edges = new NetworkEdgeCollection(this);
 		}
 		#endregion
 
@@ -116,10 +106,6 @@ namespace TalesGenerator.Core
 		{
 			Network network = new Network();
 
-			//TODO Необходимо доработать логику десериализации.
-			network.Nodes.CollectionChanged -= network.NetworkObjectCollectionOnChanged;
-			network.Edges.CollectionChanged -= network.NetworkObjectCollectionOnChanged;
-
 			XNamespace xNamespace = SerializableObject.XNamespace;
 			XElement xNetwork = xDocument.Root;
 
@@ -147,8 +133,6 @@ namespace TalesGenerator.Core
 
 			//TODO Необходимо доработать логику десериализации.
 			network._nextId = Math.Max(network.Nodes.Select(node => node.Id).Max(), network.Edges.Select(edge => edge.Id).Max()) + 1;
-			network.Nodes.CollectionChanged += network.NetworkObjectCollectionOnChanged;
-			network.Edges.CollectionChanged += network.NetworkObjectCollectionOnChanged;
 
 			return network;
 		}
