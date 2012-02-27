@@ -17,7 +17,7 @@ namespace TalesGenerator.Core.Collections
 		{
 			NetworkNode networkNode = new NetworkNode(_network);
 
-			Items.Add(networkNode);
+			Add(networkNode);
 
 			return networkNode;
 		}

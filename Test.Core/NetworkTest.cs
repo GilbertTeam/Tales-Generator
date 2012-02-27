@@ -261,6 +261,32 @@ namespace TalesGenerator.Core
 			Assert.AreEqual(3, network.Edges.Count);
 		}
 
+		[TestMethod]
+		public void IsDirtyTest()
+		{
+			Network network = new Network();
+
+			Assert.IsFalse(network.IsDirty);
+
+			NetworkNode networkNode = network.Nodes.Add();
+			Assert.IsTrue(network.IsDirty);
+
+			using (MemoryStream memoryStream = new MemoryStream())
+			{
+				network.Save(memoryStream);
+			}
+			Assert.IsFalse(network.IsDirty);
+
+			networkNode.Name = "Node 1";
+			Assert.IsTrue(network.IsDirty);
+
+			using (MemoryStream memoryStream = new MemoryStream())
+			{
+				network.Save(memoryStream);
+			}
+			Assert.IsFalse(network.IsDirty);
+		}
+
 		/// <summary>
 		///A test for SaveToFileAndLoadFromFileTest
 		///</summary>

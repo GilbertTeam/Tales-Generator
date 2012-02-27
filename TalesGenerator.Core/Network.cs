@@ -4,6 +4,8 @@ using System.Linq;
 using System.Xml.Linq;
 using TalesGenerator.Core.Collections;
 using TalesGenerator.Core.Serialization;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace TalesGenerator.Core
 {
@@ -28,6 +30,8 @@ namespace TalesGenerator.Core
 		/// Следующий используемый индекс объекта сети.
 		/// </summary>
 		private int _nextId;
+
+		private bool _isDirty;
 		#endregion
 
 		#region Properties
@@ -58,6 +62,11 @@ namespace TalesGenerator.Core
 		{
 			get { return _edges; }
 		}
+
+		public bool IsDirty
+		{
+			get { return _isDirty; }
+		}
 		#endregion
 
 		#region Constructors
@@ -70,8 +79,32 @@ namespace TalesGenerator.Core
 			_nextId = 0;
 
 			_nodes = new NetworkNodeCollection(this);
+			_nodes.CollectionChanged += OnNetworkObjectCollectionChanged;
 
 			_edges = new NetworkEdgeCollection(this);
+			_edges.CollectionChanged += OnNetworkObjectCollectionChanged;
+		}
+		#endregion
+
+		#region Event Handlers
+
+		private void OnNetworkObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.Action == NotifyCollectionChangedAction.Add)
+			{
+				foreach (object newItem in e.NewItems)
+				{
+					NetworkObject networkObject = (NetworkObject)newItem;
+					networkObject.PropertyChanged += OnNetworkObjectPropertyChanged;
+				}
+			}
+
+			_isDirty = true;
+		}
+
+		private void OnNetworkObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			_isDirty = true;
 		}
 		#endregion
 
@@ -150,6 +183,8 @@ namespace TalesGenerator.Core
 
 			XDocument xDocument = SaveToXml();
 			xDocument.Save(fileName);
+
+			_isDirty = false;
 		}
 
 		/// <summary>
@@ -165,6 +200,8 @@ namespace TalesGenerator.Core
 
 			XDocument xDocument = SaveToXml();
 			xDocument.Save(stream);
+
+			_isDirty = false;
 		}
 
 		/// <summary>

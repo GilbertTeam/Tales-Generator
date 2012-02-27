@@ -27,7 +27,7 @@ namespace TalesGenerator.Core.Collections
 
 			NetworkEdge networkEdge = new NetworkEdge(_network, startNode, endNode);
 
-			Items.Add(networkEdge);
+			Add(networkEdge);
 
 			return networkEdge;
 		}

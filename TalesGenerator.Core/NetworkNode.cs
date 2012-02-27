@@ -63,6 +63,7 @@ namespace TalesGenerator.Core
 		internal NetworkNode(Network network)
 			: base(network)
 		{
+			_name = string.Empty;
 		}
 
 		/// <summary>
@@ -71,7 +72,7 @@ namespace TalesGenerator.Core
 		/// <param name="network">Сеть, которой должна принадлежать вершина.</param>
 		/// <param name="name">Имя вершины.</param>
 		internal NetworkNode(Network network, string name)
-			: this(network)
+			: base(network)
 		{
 			if (name == null)
 			{
