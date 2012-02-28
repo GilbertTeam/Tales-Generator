@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.ComponentModel;
+using System.Xml;
 
 using TalesGenerator.Core;
 using MindFusion.Diagramming.Wpf;
@@ -171,11 +172,8 @@ namespace TalesGenerator.UI.Classes
 			_network.Save(stream);
 			XDocument xDoc = XDocument.Load(stream);
 			XElement xPresentation = new XElement("Presentation");
-			BinaryFormatter formatter = new BinaryFormatter();
-			MemoryStream ms = new MemoryStream();
-			formatter.Serialize(ms, Diagram);
-			xPresentation.Add(Convert.ToBase64String(ms.ToArray()));
-			ms.Close();
+			xPresentation.Add(Diagram.SaveToString(SaveToStringFormat.Xml, true));
+
 		}
 
 		/// <summary>
@@ -187,9 +185,7 @@ namespace TalesGenerator.UI.Classes
 			_network = Network.Load(stream);
 			XDocument xDoc = XDocument.Load(stream);
 			XElement xPresentation = xDoc.Element("Presentation");
-			BinaryFormatter formatter = new BinaryFormatter();
-			Diagram = formatter.Deserialize(new MemoryStream(Convert.FromBase64String(xPresentation.Value)))
-				as Diagram;
+			Diagram.LoadFromString(xPresentation.Value);
 		}
 
 		private void CheckObjects()
