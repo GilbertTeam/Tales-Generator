@@ -23,6 +23,8 @@ namespace TalesGenerator.Core
 		private NetworkNode _startNode;
 
 		private NetworkNode _endNode;
+
+		private NetworkEdgeType _edgeType;
 		#endregion
 
 		#region Properties
@@ -30,7 +32,17 @@ namespace TalesGenerator.Core
 		/// <summary>
 		/// Возвращает или задает тип данной дуги.
 		/// </summary>
-		public NetworkEdgeType Type { get; set; }
+		public NetworkEdgeType Type
+		{
+			get { return _edgeType; }
+
+			set
+			{
+				_edgeType = value;
+
+				OnPropertyChanged("Type");
+			}
+		}
 
 		/// <summary>
 		/// Возвращает или задает вершину сети, из которой исходит данная дуга.
