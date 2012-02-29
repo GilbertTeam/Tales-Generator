@@ -28,6 +28,8 @@ namespace TalesGenerator.UI.Windows
 	{
 		Project _project;
 
+		BindingExpressionBase expreBase;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -173,44 +175,143 @@ namespace TalesGenerator.UI.Windows
 			e.Handled = true;
 		}
 
-		private void DiagramNetwork_NodeSelected(object sender, NodeEventArgs e)
+		#region NodeEvents
+
+		private void DiagramNetwork_NodeCreated(object sender, NodeEventArgs e)
 		{
+			ShapeNode newNode = e.Node as ShapeNode;
+			if (newNode == null)
+				return;
 
-		}
-
-		private void DiagramNetwork_LinkSelected(object sender, LinkEventArgs e)
-		{
-
+			Network network = _project.Network;
+			NetworkNode netNode = network.Nodes.Add();
+			newNode.Uid = netNode.Id.ToString();
+			// биндинг
+			Binding binding = new Binding();
+			binding.Path = new PropertyPath("Name");
+			binding.Source = netNode;
+			newNode.SetBinding(DiagramItem.TextProperty, binding);
 		}
 
 		private void DiagramNetwork_NodeDeleted(object sender, NodeEventArgs e)
 		{
+			ShapeNode deletedNode = e.Node as ShapeNode;
+			if (deletedNode == null)
+				return;
+
+			Network network = _project.Network;
+			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(deletedNode.Uid));
+			network.Nodes.Remove(netNode);
 
 		}
 
-		private void DiagramNetwork_LinkDeleted(object sender, LinkEventArgs e)
+		private void DiagramNetwork_NodeSelected(object sender, NodeEventArgs e)
 		{
+			if (DiagramNetwork.Selection.Items.Count > 1)
+				return;
 
-		}
+			ShapeNode selectedNode = e.Node as ShapeNode;
+			if (selectedNode == null)
+				return;
 
-		private void DiagramNetwork_NodeCreated(object sender, NodeEventArgs e)
-		{
-		}
-
-		private void DiagramNetwork_LinkCreated(object sender, LinkEventArgs e)
-		{
+			Network network = _project.Network;
+			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(selectedNode.Uid));
+			PanelProps.Node = netNode;
 
 		}
 
 		private void DiagramNetwork_NodeDeselected(object sender, NodeEventArgs e)
 		{
+			ShapeNode selectedNode = e.Node as ShapeNode;
+			if (selectedNode == null)
+				return;
+
+			Network network = _project.Network;
+			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(selectedNode.Uid));
+
+			if (netNode == PanelProps.Node)
+				PanelProps.Node = null;
+		}
+
+		#endregion
+
+		#region Link events
+
+		private void DiagramNetwork_LinkCreated(object sender, LinkEventArgs e)
+		{
+			DiagramLink link = e.Link;
+			if (link == null)
+				return;
+
+			Network network = _project.Network;
+			NetworkNode origin = network.Nodes.FindById(Int32.Parse(link.Origin.Uid));
+			NetworkNode destination = network.Nodes.FindById(Int32.Parse(link.Destination.Uid));
+
+			NetworkEdge edge = network.Edges.Add(origin, destination);
+			link.Uid = edge.Id.ToString();
+
+			Binding binding = new Binding();
+			binding.Path = new PropertyPath("Type");
+			binding.Converter = new NetworkEdgeTypeStringConverter();
+			binding.Source = edge;
+			binding.Mode = BindingMode.TwoWay;
+			expreBase = link.SetBinding(DiagramLink.TextProperty, binding);
 
 		}
+
+		private void DiagramNetwork_LinkDeleted(object sender, LinkEventArgs e)
+		{
+			DiagramLink link = e.Link;
+			if (link == null)
+				return;
+
+			Network network = _project.Network;
+			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
+
+			network.Edges.Remove(edge);
+		}
+
+		private void DiagramNetwork_LinkSelected(object sender, LinkEventArgs e)
+		{
+			if (DiagramNetwork.Selection.Items.Count > 1)
+				return;
+			
+			DiagramLink link = e.Link;
+			if (link == null)
+				return;
+
+			Network network = _project.Network;
+			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
+			PanelProps.Edge = edge;
+
+		}
+
+		void edge_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			DiagramLink link = DiagramNetwork.Selection.Items[0] as DiagramLink;
+			if (link == null)
+				return;
+
+			Network network = _project.Network;
+			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
+
+		}
+
 
 		private void DiagramNetwork_LinkDeselected(object sender, LinkEventArgs e)
 		{
+			DiagramLink link = e.Link;
+			if (link == null)
+				return;
 
+			Network network = _project.Network;
+			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
+
+			if (PanelProps.Edge == edge)
+				PanelProps.Edge = null;
 		}
+
+		#endregion
 
 		#endregion
 

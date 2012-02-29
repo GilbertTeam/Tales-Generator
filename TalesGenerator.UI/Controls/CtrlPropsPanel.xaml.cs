@@ -136,9 +136,11 @@ namespace TalesGenerator.UI.Controls
 
 			_node = value;
 			_currentContex = PropsPanelContext.Node;
-			Binding binding = new Binding("Name");
+			Binding binding = new Binding();
+			binding.Path = new PropertyPath("Name");
 			binding.Source = _node;
-			NodeText.SetBinding(TextBlock.TextProperty, binding);
+			binding.UpdateSourceTrigger = UpdateSourceTrigger.LostFocus;
+			NodeText.SetBinding(TextBox.TextProperty, binding);
 			SetVisibilities();
 		}
 
@@ -152,7 +154,7 @@ namespace TalesGenerator.UI.Controls
 			foreach (FrameworkElement control in this.StackItems.Children)
 			{
 				string controlTag = control.Tag as string;
-				if (controlTag == tag || (tag == "" && controlTag == "Node" || controlTag == "Link"))
+				if (controlTag == tag || (tag == "" && (controlTag == "Node" || controlTag == "Link")))
 				{
 					control.Visibility = System.Windows.Visibility.Collapsed;
 				}
@@ -172,7 +174,11 @@ namespace TalesGenerator.UI.Controls
 			if (_currentContex != PropsPanelContext.Edge)
 				return;
 
-			_edge.Type = Utils.ConvertType(LinkTypeCombo.SelectedItem as string) ;
+			ComboBoxItem item = LinkTypeCombo.SelectedItem as ComboBoxItem;
+			if (item == null)
+				return;
+
+			_edge.Type = Utils.ConvertType(item.Content as string) ;
 		}
 
 		#endregion

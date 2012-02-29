@@ -140,7 +140,7 @@ namespace TalesGenerator.UI.Classes
 			if (Path == "")
 				throw new ArgumentException("Path");
 			FileStream reader = new FileStream(Path, FileMode.Open);
-			LoadFomrStream(reader);
+			LoadFromStream(reader);
 			reader.Close();
 		}
 
@@ -160,7 +160,7 @@ namespace TalesGenerator.UI.Classes
 		/// <param name="stream">Поток для загрузки</param>
 		public void Load(Stream stream)
 		{
-			LoadFomrStream(stream);
+			LoadFromStream(stream);
 		}
 
 		/// <summary>
@@ -180,7 +180,7 @@ namespace TalesGenerator.UI.Classes
 		/// Загрузить проект из потока
 		/// </summary>
 		/// <param name="stream">Поток для загрузки</param>
-		protected void LoadFomrStream(Stream stream)
+		protected void LoadFromStream(Stream stream)
 		{
 			_network = Network.Load(stream);
 			XDocument xDoc = XDocument.Load(stream);

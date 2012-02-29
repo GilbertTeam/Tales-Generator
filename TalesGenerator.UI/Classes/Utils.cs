@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using TalesGenerator.Core;
+using System.Windows.Data;
 
 namespace TalesGenerator.UI.Classes
 {
@@ -59,4 +60,22 @@ namespace TalesGenerator.UI.Classes
 			return res;
 		}
 	}
+
+	[ValueConversion(typeof(String), typeof(NetworkEdgeType))]
+	public class NetworkEdgeTypeStringConverter : IValueConverter
+	{
+	public object  Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+	{
+		NetworkEdgeType type = (NetworkEdgeType)value;
+		return Utils.ConvertType(type);
+	}
+
+	public object  ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+	{
+
+		String type = value as String;
+		return Utils.ConvertType(type);
+	}
+}
+
 }
