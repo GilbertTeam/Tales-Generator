@@ -116,6 +116,17 @@ namespace TalesGenerator.Core
 			XDocument xDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 			XElement xNetwork = new XElement(xNamespace + "Network");
 
+			SaveToElement(xNetwork);
+
+			xDocument.AddFirst(xNetwork);
+
+			return xDocument;
+		}
+
+		public void SaveToElement(XElement xNetwork)
+		{
+			XNamespace xNamespace = SerializableObject.XNamespace;
+
 			XElement xNodes = new XElement(xNamespace + "Nodes");
 			foreach (NetworkNode node in _nodes)
 			{
@@ -129,18 +140,22 @@ namespace TalesGenerator.Core
 				xEdges.Add(edge.GetXml());
 			}
 			xNetwork.Add(xEdges);
-
-			xDocument.AddFirst(xNetwork);
-
-			return xDocument;
 		}
 
 		private static Network LoadFromXml(XDocument xDocument)
 		{
-			Network network = new Network();
-
 			XNamespace xNamespace = SerializableObject.XNamespace;
 			XElement xNetwork = xDocument.Root;
+
+			Network network = LoadFromElement(xNetwork);
+
+			return network;
+		}
+
+		public static Network LoadFromElement(XElement xNetwork)
+		{
+			Network network = new Network();
+			XNamespace xNamespace = SerializableObject.XNamespace;
 
 			XElement xNodesBase = xNetwork.Element(xNamespace + "Nodes");
 			var xNodes = xNodesBase.Elements(xNamespace + "Node");

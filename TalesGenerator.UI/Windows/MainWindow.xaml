@@ -105,8 +105,6 @@
 							  VerticalAlignment="Stretch"
 							  HorizontalAlignment="Stretch"
 							  Margin="5,5,5,5"
-							  Style="{StaticResource MainStyleEx}"
-							  BackBrush="{StaticResource BrushPrimary4}"
 							  Behavior="LinkShapes"
 							  DefaultShape="Ellipse"
 							  ZoomFactor="100"

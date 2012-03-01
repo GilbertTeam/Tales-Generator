@@ -120,6 +120,9 @@
   <data name="CloseProject" xml:space="preserve">
     <value>Закрыть проект</value>
   </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>Подтверждение</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Выход</value>
   </data>
@@ -140,5 +143,8 @@
   </data>
   <data name="SaveProject" xml:space="preserve">
     <value>Сохранить</value>
+  </data>
+  <data name="SaveWarning" xml:space="preserve">
+    <value>Текущий проект содержит изменения. Желаете сохранить его перед закрытием?</value>
   </data>
 </root>

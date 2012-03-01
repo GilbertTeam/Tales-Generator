@@ -70,6 +70,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Подтверждение.
+        /// </summary>
+        public static string Confirmation {
+            get {
+                return ResourceManager.GetString("Confirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Выход.
         /// </summary>
         public static string Exit {
@@ -129,6 +138,15 @@ namespace TalesGenerator.UI.Properties {
         public static string SaveProject {
             get {
                 return ResourceManager.GetString("SaveProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Текущий проект содержит изменения. Желаете сохранить его перед закрытием?.
+        /// </summary>
+        public static string SaveWarning {
+            get {
+                return ResourceManager.GetString("SaveWarning", resourceCulture);
             }
         }
     }

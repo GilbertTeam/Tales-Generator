@@ -10,6 +10,8 @@ using System.Xml;
 using TalesGenerator.Core;
 using MindFusion.Diagramming.Wpf;
 using System.Xml.Linq;
+using System.Windows.Data;
+using System.Windows.Input;
 
 
 namespace TalesGenerator.UI.Classes
@@ -169,10 +171,28 @@ namespace TalesGenerator.UI.Classes
 		/// <param name="stream">Поток для сохранения</param>
 		protected void SaveToStream(Stream stream)
 		{
-			_network.Save(stream);
-			XDocument xDoc = XDocument.Load(stream);
-			XElement xPresentation = new XElement("Presentation");
-			xPresentation.Add(Diagram.SaveToString(SaveToStringFormat.Xml, true));
+			//_network.Save(stream);
+			stream.Close();
+			Diagram.SaveToXml(_path);
+			XDocument xDoc = XDocument.Load(_path);
+			XElement xNetwork = new XElement("Network");
+			_network.SaveToElement(xNetwork);
+			xDoc.Root.Add(xNetwork);
+			xDoc.Save(_path);
+			//stream.Position = 0;
+			//XDocument xDoc = XDocument.Load(stream);
+			//stream.Close();
+			//string presentation = Diagram.SaveToString(SaveToStringFormat.Xml, true);
+			
+			//MemoryStream ms = new MemoryStream();
+			//BinaryFormatter formatter = new BinaryFormatter();
+			//formatter.Serialize(ms, Diagram);
+			//string presentation = Convert.ToBase64String(ms.ToArray());
+			//Diagram.SaveToXml(_path);
+			//XmlDocument doc = new XmlDocument();
+			//xPresentation.Add(presentation);
+			//xDoc.Root.Add(xPresentation);
+			//xDoc.Save(_path);
 
 		}
 
@@ -182,10 +202,14 @@ namespace TalesGenerator.UI.Classes
 		/// <param name="stream">Поток для загрузки</param>
 		protected void LoadFromStream(Stream stream)
 		{
-			_network = Network.Load(stream);
-			XDocument xDoc = XDocument.Load(stream);
-			XElement xPresentation = xDoc.Element("Presentation");
-			Diagram.LoadFromString(xPresentation.Value);
+			stream.Close();
+			Diagram.LoadFromXml(_path);
+			XDocument xDoc = XDocument.Load(_path);
+			XElement xNetwork = xDoc.Root.Element("Network");
+			_network = Network.LoadFromElement(xNetwork);
+			//XDocument xDoc = XDocument.Load(stream);
+			//XElement xPresentation = xDoc.Element("Presentation");
+			//Diagram.LoadFromString(xPresentation.Value);
 		}
 
 		private void CheckObjects()

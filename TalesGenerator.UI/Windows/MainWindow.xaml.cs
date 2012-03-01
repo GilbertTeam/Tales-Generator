@@ -15,6 +15,7 @@ using Microsoft.Win32;
 
 using TalesGenerator.Core;
 using TalesGenerator.UI.Classes;
+using TalesGenerator.UI.Properties;
 
 using MindFusion.Diagramming.Wpf;
 using MindFusion.Diagramming.Wpf.Export;
@@ -27,8 +28,6 @@ namespace TalesGenerator.UI.Windows
 	public partial class MainWindow : RibbonWindow
 	{
 		Project _project;
-
-		BindingExpressionBase expreBase;
 
 		public MainWindow()
 		{
@@ -70,7 +69,16 @@ namespace TalesGenerator.UI.Windows
 
 		private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-
+			OpenFileDialog openDialog = new OpenFileDialog();
+			openDialog.Filter = "TalesGeneratorProject files (*.tgp)|*.tgp";
+			bool? result = openDialog.ShowDialog();
+			if (result == true)
+			{
+				if (_project.Network != null)
+					this.CloseProject_Executed(sender, e);
+				_project.Path = openDialog.FileName;
+				_project.Load();
+			}
 		}
 
 		private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -80,7 +88,12 @@ namespace TalesGenerator.UI.Windows
 
 		private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-
+			if (_project.Path != "")
+			{
+				_project.Save();
+				return;
+			}
+			Save_AsExecuted(sender, e);
 		}
 
 		private void SaveAs_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -90,7 +103,15 @@ namespace TalesGenerator.UI.Windows
 
 		private void Save_AsExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
+			SaveFileDialog saveDialog = new SaveFileDialog();
+			saveDialog.Filter = "TalesGeneratorProject files (*.tgp)|*.tgp";
+			bool? result = saveDialog.ShowDialog();
+			if (result == true)
+			{
+				_project.Path = saveDialog.FileName;
 
+				_project.Save();
+			}
 		}
 
 		private void CloseProject_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -100,8 +121,17 @@ namespace TalesGenerator.UI.Windows
 
 		private void CloseProject_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
+			if (_project.Network.IsDirty)
+			{
+				if (MessageBox.Show(Properties.Resources.SaveWarning, Properties.Resources.Confirmation,
+					MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					this.Save_Executed(sender, e);
+				}
+			}
 			_project.Network = null;
-			DiagramNetwork.Items.Clear();
+			_project.Path = "";
+			DiagramNetwork.ClearAll();
 		}
 
 		private void Close_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -112,6 +142,14 @@ namespace TalesGenerator.UI.Windows
 
 		private void Close_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
+			if (_project.Network.IsDirty)
+			{
+				if (MessageBox.Show(Properties.Resources.SaveWarning, Properties.Resources.Confirmation,
+					MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				{
+					this.Save_Executed(sender, e);
+				}
+			}
 			this.Close();
 		}
 
@@ -187,10 +225,10 @@ namespace TalesGenerator.UI.Windows
 			NetworkNode netNode = network.Nodes.Add();
 			newNode.Uid = netNode.Id.ToString();
 			// биндинг
-			Binding binding = new Binding();
-			binding.Path = new PropertyPath("Name");
-			binding.Source = netNode;
-			newNode.SetBinding(DiagramItem.TextProperty, binding);
+			//Binding binding = new Binding();
+			//binding.Path = new PropertyPath("Name");
+			//binding.Source = netNode;
+			//newNode.SetBinding(DiagramItem.TextProperty, binding);
 		}
 
 		private void DiagramNetwork_NodeDeleted(object sender, NodeEventArgs e)
@@ -218,6 +256,23 @@ namespace TalesGenerator.UI.Windows
 			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(selectedNode.Uid));
 			PanelProps.Node = netNode;
 
+			netNode.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
+
+		}
+
+		void netNode_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			ShapeNode mfNode = DiagramNetwork.Selection.Items[0] as ShapeNode;
+			if (mfNode == null)
+				return;
+
+			Network network = _project.Network;
+			NetworkNode node = network.Nodes.FindById(Int32.Parse(mfNode.Uid));
+
+			if (e.PropertyName == "Name")
+			{
+				mfNode.Text = node.Name;
+			}
 		}
 
 		private void DiagramNetwork_NodeDeselected(object sender, NodeEventArgs e)
@@ -231,6 +286,9 @@ namespace TalesGenerator.UI.Windows
 
 			if (netNode == PanelProps.Node)
 				PanelProps.Node = null;
+
+			if (netNode != null)
+				netNode.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
 		}
 
 		#endregion
@@ -249,13 +307,12 @@ namespace TalesGenerator.UI.Windows
 
 			NetworkEdge edge = network.Edges.Add(origin, destination);
 			link.Uid = edge.Id.ToString();
-
-			Binding binding = new Binding();
-			binding.Path = new PropertyPath("Type");
-			binding.Converter = new NetworkEdgeTypeStringConverter();
-			binding.Source = edge;
-			binding.Mode = BindingMode.TwoWay;
-			expreBase = link.SetBinding(DiagramLink.TextProperty, binding);
+			link.Text = Utils.ConvertType(edge.Type);
+			//Binding binding = new Binding();
+			//binding.Path = new PropertyPath("Type");
+			//binding.Converter = new NetworkEdgeTypeStringConverter();
+			//binding.Source = edge;
+			//binding.Mode = BindingMode.TwoWay;
 
 		}
 
@@ -284,19 +341,9 @@ namespace TalesGenerator.UI.Windows
 			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
 			PanelProps.Edge = edge;
 
-		}
-
-		void edge_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			DiagramLink link = DiagramNetwork.Selection.Items[0] as DiagramLink;
-			if (link == null)
-				return;
-
-			Network network = _project.Network;
-			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
+			edge.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(edge_PropertyChanged);
 
 		}
-
 
 		private void DiagramNetwork_LinkDeselected(object sender, LinkEventArgs e)
 		{
@@ -309,6 +356,25 @@ namespace TalesGenerator.UI.Windows
 
 			if (PanelProps.Edge == edge)
 				PanelProps.Edge = null;
+
+			if (edge != null)
+				edge.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(edge_PropertyChanged);
+		}
+
+		void edge_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			DiagramLink link = DiagramNetwork.Selection.Items[0] as DiagramLink;
+			if (link == null)
+				return;
+
+			Network network = _project.Network;
+			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
+
+			if (e.PropertyName == "Type")
+			{
+				link.Text = Utils.ConvertType(edge.Type);
+			}
+
 		}
 
 		#endregion
