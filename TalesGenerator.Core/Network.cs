@@ -142,10 +142,32 @@ namespace TalesGenerator.Core
 			xNetwork.Add(xEdges);
 		}
 
+		public void SaveToXDocument(XDocument xDoc)
+		{
+			XNamespace xNamespace = SerializableObject.XNamespace;
+
+			XElement xNetwork = new XElement(xNamespace + "Network");
+			SaveToElement(xNetwork);
+
+			if (xDoc.Root != null)
+				xDoc.Root.Add(xNetwork);
+			else xDoc.AddFirst(xNetwork);
+		}
+
 		private static Network LoadFromXml(XDocument xDocument)
 		{
 			XNamespace xNamespace = SerializableObject.XNamespace;
 			XElement xNetwork = xDocument.Root;
+
+			Network network = LoadFromElement(xNetwork);
+
+			return network;
+		}
+
+		public static Network LoadFromXDocument(XDocument xDoc)
+		{
+			XNamespace xNamespace = SerializableObject.XNamespace;
+			XElement xNetwork = xDoc.Root.Element(xNamespace + "Network");
 
 			Network network = LoadFromElement(xNetwork);
 

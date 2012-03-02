@@ -78,6 +78,10 @@ namespace TalesGenerator.UI.Windows
 					this.CloseProject_Executed(sender, e);
 				_project.Path = openDialog.FileName;
 				_project.Load();
+				if (_project.Network != null)
+				{
+					DiagramNetwork.IsEnabled = true;
+				}
 			}
 		}
 
@@ -171,7 +175,7 @@ namespace TalesGenerator.UI.Windows
 
 		private void SaveAsPdf_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			ExportDiagram("pdf");
+			ExportDiagram(ExportType.pdf);
 		}
 
 		private void SaveAsSvg_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -181,7 +185,12 @@ namespace TalesGenerator.UI.Windows
 
 		private void SaveAsSvg_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			ExportDiagram("svg");
+			ExportDiagram(ExportType.svg);
+		}
+
+		private void Export_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _project != null && _project.Network != null;
 		}
 
 		#endregion
@@ -225,10 +234,10 @@ namespace TalesGenerator.UI.Windows
 			NetworkNode netNode = network.Nodes.Add();
 			newNode.Uid = netNode.Id.ToString();
 			// биндинг
-			//Binding binding = new Binding();
-			//binding.Path = new PropertyPath("Name");
-			//binding.Source = netNode;
-			//newNode.SetBinding(DiagramItem.TextProperty, binding);
+			Binding binding = new Binding();
+			binding.Path = new PropertyPath("Name");
+			binding.Source = netNode;
+			newNode.SetBinding(DiagramItem.TextProperty, binding);
 		}
 
 		private void DiagramNetwork_NodeDeleted(object sender, NodeEventArgs e)
@@ -238,6 +247,9 @@ namespace TalesGenerator.UI.Windows
 				return;
 
 			Network network = _project.Network;
+			if (network == null)
+				return;
+
 			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(deletedNode.Uid));
 			network.Nodes.Remove(netNode);
 
@@ -253,27 +265,30 @@ namespace TalesGenerator.UI.Windows
 				return;
 
 			Network network = _project.Network;
+			if (network == null)
+				return;
+
 			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(selectedNode.Uid));
 			PanelProps.Node = netNode;
 
-			netNode.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
+			//netNode.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
 
 		}
 
-		void netNode_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			ShapeNode mfNode = DiagramNetwork.Selection.Items[0] as ShapeNode;
-			if (mfNode == null)
-				return;
+		//void netNode_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		//{
+		//    ShapeNode mfNode = DiagramNetwork.Selection.Items[0] as ShapeNode;
+		//    if (mfNode == null)
+		//        return;
 
-			Network network = _project.Network;
-			NetworkNode node = network.Nodes.FindById(Int32.Parse(mfNode.Uid));
+		//    Network network = _project.Network;
+		//    NetworkNode node = network.Nodes.FindById(Int32.Parse(mfNode.Uid));
 
-			if (e.PropertyName == "Name")
-			{
-				mfNode.Text = node.Name;
-			}
-		}
+		//    if (e.PropertyName == "Name")
+		//    {
+		//        mfNode.Text = node.Name;
+		//    }
+		//}
 
 		private void DiagramNetwork_NodeDeselected(object sender, NodeEventArgs e)
 		{
@@ -282,13 +297,16 @@ namespace TalesGenerator.UI.Windows
 				return;
 
 			Network network = _project.Network;
+			if (network == null)
+				return;
+
 			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(selectedNode.Uid));
 
 			if (netNode == PanelProps.Node)
 				PanelProps.Node = null;
 
-			if (netNode != null)
-				netNode.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
+			//if (netNode != null)
+			//    netNode.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
 		}
 
 		#endregion
@@ -302,18 +320,22 @@ namespace TalesGenerator.UI.Windows
 				return;
 
 			Network network = _project.Network;
+			if (network == null)
+				return;
+
 			NetworkNode origin = network.Nodes.FindById(Int32.Parse(link.Origin.Uid));
 			NetworkNode destination = network.Nodes.FindById(Int32.Parse(link.Destination.Uid));
 
 			NetworkEdge edge = network.Edges.Add(origin, destination);
 			link.Uid = edge.Id.ToString();
 			link.Text = Utils.ConvertType(edge.Type);
-			//Binding binding = new Binding();
-			//binding.Path = new PropertyPath("Type");
-			//binding.Converter = new NetworkEdgeTypeStringConverter();
-			//binding.Source = edge;
-			//binding.Mode = BindingMode.TwoWay;
-
+			//yay, the king has returned!
+			Binding binding = new Binding();
+			binding.Path = new PropertyPath("Type");
+			binding.Converter = new NetworkEdgeTypeStringConverter();
+			binding.Source = edge;
+			binding.Mode = BindingMode.TwoWay;
+			link.SetBinding(DiagramLink.TextProperty, binding);
 		}
 
 		private void DiagramNetwork_LinkDeleted(object sender, LinkEventArgs e)
@@ -323,8 +345,10 @@ namespace TalesGenerator.UI.Windows
 				return;
 
 			Network network = _project.Network;
-			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
+			if (network == null)
+				return;
 
+			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
 			network.Edges.Remove(edge);
 		}
 
@@ -338,10 +362,13 @@ namespace TalesGenerator.UI.Windows
 				return;
 
 			Network network = _project.Network;
+			if (network == null)
+				return;
+
 			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
 			PanelProps.Edge = edge;
 
-			edge.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(edge_PropertyChanged);
+			//edge.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(edge_PropertyChanged);
 
 		}
 
@@ -351,31 +378,34 @@ namespace TalesGenerator.UI.Windows
 			if (link == null)
 				return;
 
+
 			Network network = _project.Network;
+			if (network == null)
+				return;
+
 			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
 
 			if (PanelProps.Edge == edge)
 				PanelProps.Edge = null;
-
-			if (edge != null)
-				edge.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(edge_PropertyChanged);
+			//if (edge != null)
+			//    edge.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(edge_PropertyChanged);
 		}
 
-		void edge_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			DiagramLink link = DiagramNetwork.Selection.Items[0] as DiagramLink;
-			if (link == null)
-				return;
+		//void edge_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		//{
+		//    DiagramLink link = DiagramNetwork.Selection.Items[0] as DiagramLink;
+		//    if (link == null)
+		//        return;
 
-			Network network = _project.Network;
-			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
+		//    Network network = _project.Network;
+		//    NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
 
-			if (e.PropertyName == "Type")
-			{
-				link.Text = Utils.ConvertType(edge.Type);
-			}
+		//    if (e.PropertyName == "Type")
+		//    {
+		//        link.Text = Utils.ConvertType(edge.Type);
+		//    }
 
-		}
+		//}
 
 		#endregion
 
@@ -420,7 +450,7 @@ namespace TalesGenerator.UI.Windows
 		/// Экпорт диаграммы в один из типов
 		/// </summary>
 		/// <param name="type">Тип для экспорта</param>
-		protected void ExportDiagram(string type)
+		public void ExportDiagram(ExportType type)
 		{
 			SaveFileDialog saveDialog = new SaveFileDialog();
 			saveDialog.Filter = type + " файлы (*." + type + ")|*." + type;
@@ -429,11 +459,11 @@ namespace TalesGenerator.UI.Windows
 			switch (type)
 			{
 
-				case "pdf":
+				case ExportType.pdf:
 					PdfExporter pdfExporter = new PdfExporter();
 					pdfExporter.Export(DiagramNetwork, saveDialog.FileName);
 					break;
-				case "svg":
+				case ExportType.svg:
 					SvgExporter svgExporter = new SvgExporter();
 					svgExporter.Export(DiagramNetwork, saveDialog.FileName);
 					break;

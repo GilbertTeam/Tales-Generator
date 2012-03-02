@@ -15,6 +15,7 @@
 		<RoutedUICommand x:Key="ShowProps"/>
 		<RoutedUICommand x:Key="SaveAsPdf"/>
 		<RoutedUICommand x:Key="SaveAsSvg"/>
+		<RoutedUICommand x:Key="Export"/>
 	</Window.Resources>
 	
 	<Window.CommandBindings>
@@ -31,6 +32,7 @@
 						Executed="SaveAsPdf_Executed"/>
 		<CommandBinding Command="{StaticResource SaveAsSvg}" CanExecute="SaveAsSvg_CanExecute"
 						Executed="SaveAsSvg_Executed"/>
+		<CommandBinding Command="{StaticResource Export}" CanExecute="Export_CanExecute"/>
 	</Window.CommandBindings>
 	
 	<Grid x:Name="LayoutGrid" ShowGridLines="False">
@@ -57,6 +59,10 @@
 													  ImageSource="..\Images\Ribbon\SaveImage.png"/>
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveAsProject}"
 													  Command="SaveAs"
+													  ImageSource="..\Images\Ribbon\SaveImage.png">
+					</ribbon:RibbonApplicationMenuItem>
+					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.ExportProject}"
+													  Command="{StaticResource Export}"
 													  ImageSource="..\Images\Ribbon\SaveImage.png">
 						<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveAsPdf}"
 														  Command="{StaticResource SaveAsPdf}"

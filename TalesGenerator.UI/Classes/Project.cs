@@ -173,12 +173,21 @@ namespace TalesGenerator.UI.Classes
 		{
 			//_network.Save(stream);
 			stream.Close();
-			Diagram.SaveToXml(_path);
-			XDocument xDoc = XDocument.Load(_path);
-			XElement xNetwork = new XElement("Network");
-			_network.SaveToElement(xNetwork);
-			xDoc.Root.Add(xNetwork);
+
+			//Diagram.SaveToXml(_path);
+			XDocument xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
+			XElement xEl = new XElement("TalesGeneratorProject");
+			xDoc.AddFirst(xEl);
+			//_network.SaveToXDocument(xDoc);
+			_network.SaveToXDocument(xDoc);
+			DiagramSerializer diagSr = new DiagramSerializer(Diagram);
+			diagSr.SaveToXDocument(xDoc);
+			
 			xDoc.Save(_path);
+			//XElement xNetwork = new XElement("Network");
+			//_network.SaveToElement(xNetwork);
+			//xDoc.Root.Add(xNetwork);
+			//xDoc.Save(_path);
 			//stream.Position = 0;
 			//XDocument xDoc = XDocument.Load(stream);
 			//stream.Close();
@@ -203,10 +212,17 @@ namespace TalesGenerator.UI.Classes
 		protected void LoadFromStream(Stream stream)
 		{
 			stream.Close();
-			Diagram.LoadFromXml(_path);
 			XDocument xDoc = XDocument.Load(_path);
-			XElement xNetwork = xDoc.Root.Element("Network");
-			_network = Network.LoadFromElement(xNetwork);
+			XElement xEl = xDoc.Element("TalesGeneratorProject");
+			_network = Network.LoadFromXDocument(xDoc);
+			DiagramSerializer diagSr = new DiagramSerializer(_diagram);
+			diagSr.LoadFromXDocument(xDoc, _network);
+			//_network = Network.LoadFromXDocument(xDoc);
+			//Diagram.LoadFromXml(_path);
+			//Diagram.IsEnabled = true;
+			
+			//XElement xNetwork = xDoc.Root.Element("Network");
+			//_network = Network.LoadFromElement(xNetwork);
 			//XDocument xDoc = XDocument.Load(stream);
 			//XElement xPresentation = xDoc.Element("Presentation");
 			//Diagram.LoadFromString(xPresentation.Value);

@@ -126,6 +126,9 @@
   <data name="Exit" xml:space="preserve">
     <value>Выход</value>
   </data>
+  <data name="ExportProject" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
   <data name="NewProject" xml:space="preserve">
     <value>Новый проект</value>
   </data>

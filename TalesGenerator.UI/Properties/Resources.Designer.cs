@@ -88,6 +88,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Экспорт.
+        /// </summary>
+        public static string ExportProject {
+            get {
+                return ResourceManager.GetString("ExportProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Новый проект.
         /// </summary>
         public static string NewProject {
