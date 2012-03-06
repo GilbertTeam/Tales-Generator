@@ -179,7 +179,7 @@ namespace TalesGenerator.UI.Classes
 			XElement xEl = new XElement("TalesGeneratorProject");
 			xDoc.AddFirst(xEl);
 			//_network.SaveToXDocument(xDoc);
-			_network.SaveToXDocument(xDoc);
+			xEl.Add(_network.SaveToXml());
 			DiagramSerializer diagSr = new DiagramSerializer(Diagram);
 			diagSr.SaveToXDocument(xDoc);
 			
@@ -214,7 +214,8 @@ namespace TalesGenerator.UI.Classes
 			stream.Close();
 			XDocument xDoc = XDocument.Load(_path);
 			XElement xEl = xDoc.Element("TalesGeneratorProject");
-			_network = Network.LoadFromXDocument(xDoc);
+
+			_network = Network.LoadFromXml(xDoc);
 			DiagramSerializer diagSr = new DiagramSerializer(_diagram);
 			diagSr.LoadFromXDocument(xDoc, _network);
 			//_network = Network.LoadFromXDocument(xDoc);

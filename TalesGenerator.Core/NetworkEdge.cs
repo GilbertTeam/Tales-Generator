@@ -125,6 +125,7 @@ namespace TalesGenerator.Core
 			base.SaveToXml(xNetworkEdge);
 
 			xNetworkEdge.Add(
+				new XAttribute("type", _edgeType),
 				new XAttribute("startNodeId", _startNode.Id),
 				new XAttribute("endNodeId", _endNode.Id));
 
@@ -145,20 +146,24 @@ namespace TalesGenerator.Core
 
 			base.LoadFromXml(xNetworkEdge);
 
+			XAttribute xEdgeTypeAttribute = xNetworkEdge.Attribute("type");
 			XAttribute xStartNodeIdAttribute = xNetworkEdge.Attribute("startNodeId");
 			XAttribute xEndNodeIdAttribute = xNetworkEdge.Attribute("endNodeId");
 
-			if (xStartNodeIdAttribute == null ||
+			if (xEdgeTypeAttribute == null ||
+				xStartNodeIdAttribute == null ||
 				xEndNodeIdAttribute == null)
 			{
 				throw new SerializationException();
 			}
 
+			NetworkEdgeType edgeType;
 			int startNodeId;
 			int endNodeId;
 
-			if (!int.TryParse(xStartNodeIdAttribute.Value, out startNodeId) ||
-				!int.TryParse(xEndNodeIdAttribute.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out endNodeId))
+			if (!Enum.TryParse<NetworkEdgeType>(xEdgeTypeAttribute.Value, out edgeType) ||
+				!Int32.TryParse(xStartNodeIdAttribute.Value, out startNodeId) ||
+				!Int32.TryParse(xEndNodeIdAttribute.Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out endNodeId))
 			{
 				throw new SerializationException();
 			}

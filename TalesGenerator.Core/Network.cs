@@ -63,6 +63,9 @@ namespace TalesGenerator.Core
 			get { return _edges; }
 		}
 
+		/// <summary>
+		/// Возвращает значение, определяющая имеет ли сеть несохраненные изменения.
+		/// </summary>
 		public bool IsDirty
 		{
 			get { return _isDirty; }
@@ -110,22 +113,10 @@ namespace TalesGenerator.Core
 
 		#region Methods
 
-		private XDocument SaveToXml()
+		private XElement SaveToXElement()
 		{
 			XNamespace xNamespace = SerializableObject.XNamespace;
-			XDocument xDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 			XElement xNetwork = new XElement(xNamespace + "Network");
-
-			SaveToElement(xNetwork);
-
-			xDocument.AddFirst(xNetwork);
-
-			return xDocument;
-		}
-
-		public void SaveToElement(XElement xNetwork)
-		{
-			XNamespace xNamespace = SerializableObject.XNamespace;
 
 			XElement xNodes = new XElement(xNamespace + "Nodes");
 			foreach (NetworkNode node in _nodes)
@@ -140,41 +131,21 @@ namespace TalesGenerator.Core
 				xEdges.Add(edge.GetXml());
 			}
 			xNetwork.Add(xEdges);
+
+			return xNetwork;
 		}
 
-		public void SaveToXDocument(XDocument xDoc)
+		private XDocument SaveToXDocument()
 		{
 			XNamespace xNamespace = SerializableObject.XNamespace;
+			XDocument xDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 
-			XElement xNetwork = new XElement(xNamespace + "Network");
-			SaveToElement(xNetwork);
+			xDocument.Add(SaveToXElement());
 
-			if (xDoc.Root != null)
-				xDoc.Root.Add(xNetwork);
-			else xDoc.AddFirst(xNetwork);
+			return xDocument;
 		}
 
-		private static Network LoadFromXml(XDocument xDocument)
-		{
-			XNamespace xNamespace = SerializableObject.XNamespace;
-			XElement xNetwork = xDocument.Root;
-
-			Network network = LoadFromElement(xNetwork);
-
-			return network;
-		}
-
-		public static Network LoadFromXDocument(XDocument xDoc)
-		{
-			XNamespace xNamespace = SerializableObject.XNamespace;
-			XElement xNetwork = xDoc.Root.Element(xNamespace + "Network");
-
-			Network network = LoadFromElement(xNetwork);
-
-			return network;
-		}
-
-		public static Network LoadFromElement(XElement xNetwork)
+		private static Network LoadFromXElement(XElement xNetwork)
 		{
 			Network network = new Network();
 			XNamespace xNamespace = SerializableObject.XNamespace;
@@ -202,7 +173,78 @@ namespace TalesGenerator.Core
 			}
 
 			//TODO Необходимо доработать логику десериализации.
-			network._nextId = Math.Max(network.Nodes.Select(node => node.Id).Max(), network.Edges.Select(edge => edge.Id).Max()) + 1;
+			if (network._nodes.Count == 0)
+			{
+				network._nextId = 0;
+			}
+			else if (network._edges.Count == 0)
+			{
+				network._nextId = network._nodes.Max(node => node.Id) + 1;
+			}
+			else
+			{
+				network._nextId = Math.Max(network.Nodes.Max(node => node.Id), network.Edges.Max(edge => edge.Id)) + 1;
+			}
+
+			return network;
+		}
+
+		private static Network LoadFromXDocument(XDocument xDocument)
+		{
+			XNamespace xNamespace = SerializableObject.XNamespace;
+			XElement xNetwork = xDocument.Element(xNamespace + "Network");
+
+			if (xNetwork == null)
+			{
+				throw new SerializationException();
+			}
+
+			Network network = LoadFromXElement(xNetwork);
+
+			return network;
+		}
+
+		/// <summary>
+		/// Сохраняет сеть в XML.
+		/// </summary>
+		/// <returns>XML представление сети.</returns>
+		public XElement SaveToXml()
+		{
+			XElement xNetwork = SaveToXElement();
+
+			return xNetwork;
+		}
+
+		/// <summary>
+		/// Загружает сеть из XML.
+		/// </summary>
+		/// <param name="xNetwork">XML представление сети.</param>
+		/// <returns>Загруженная сеть.</returns>
+		public static Network LoadFromXml(XElement xNetwork)
+		{
+			if (xNetwork == null)
+			{
+				throw new ArgumentException("xElement");
+			}
+
+			Network network = LoadFromXElement(xNetwork);
+
+			return network;
+		}
+
+		/// <summary>
+		/// Загружает сеть из XML.
+		/// </summary>
+		/// <param name="xDocument">XML документ, содержащий представление сети.</param>
+		/// <returns></returns>
+		public static Network LoadFromXml(XDocument xDocument)
+		{
+			if (xDocument == null)
+			{
+				throw new ArgumentNullException("xDocument");
+			}
+
+			Network network = LoadFromXDocument(xDocument);
 
 			return network;
 		}
@@ -211,14 +253,14 @@ namespace TalesGenerator.Core
 		/// Сохраняет сеть в файл.
 		/// </summary>
 		/// <param name="fileName">Имя файла, в который должна быть сохранена сеть.</param>
-		public void Save(string fileName)
+		public void SaveToFile(string fileName)
 		{
 			if (string.IsNullOrEmpty(fileName))
 			{
 				throw new ArgumentException("fileName");
 			}
 
-			XDocument xDocument = SaveToXml();
+			XDocument xDocument = SaveToXDocument();
 			xDocument.Save(fileName);
 
 			_isDirty = false;
@@ -228,14 +270,14 @@ namespace TalesGenerator.Core
 		/// Сохраняет сеть в поток.
 		/// </summary>
 		/// <param name="stream">Поток, в который должна быть сохранена сеть.</param>
-		public void Save(Stream stream)
+		public void SaveToStream(Stream stream)
 		{
 			if (stream == null)
 			{
 				throw new ArgumentNullException("stream");
 			}
 
-			XDocument xDocument = SaveToXml();
+			XDocument xDocument = SaveToXDocument();
 			xDocument.Save(stream);
 
 			_isDirty = false;
@@ -246,7 +288,7 @@ namespace TalesGenerator.Core
 		/// </summary>
 		/// <param name="path">Файл, из которого должна быть загружена сеть.</param>
 		/// <returns>Загруженная сеть.</returns>
-		public static Network Load(string path)
+		public static Network LoadFromFile(string path)
 		{
 			if (string.IsNullOrEmpty(path))
 			{
@@ -254,8 +296,9 @@ namespace TalesGenerator.Core
 			}
 
 			XDocument xDocument = XDocument.Load(path);
+			Network network = LoadFromXDocument(xDocument);
 
-			return LoadFromXml(xDocument);
+			return network;
 		}
 
 		/// <summary>
@@ -263,7 +306,7 @@ namespace TalesGenerator.Core
 		/// </summary>
 		/// <param name="stream">Поток, из которого должна быть загружена сеть.</param>
 		/// <returns>Загруженная сеть.</returns>
-		public static Network Load(Stream stream)
+		public static Network LoadFromStream(Stream stream)
 		{
 			if (stream == null)
 			{
@@ -271,8 +314,9 @@ namespace TalesGenerator.Core
 			}
 
 			XDocument xDocument = XDocument.Load(stream);
+			Network network = LoadFromXDocument(xDocument);
 
-			return LoadFromXml(xDocument);
+			return network;
 		}
 		#endregion
 	}

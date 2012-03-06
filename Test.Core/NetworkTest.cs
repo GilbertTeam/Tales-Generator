@@ -42,6 +42,38 @@ namespace TalesGenerator.Core
 
 		#region Methods
 
+		private Network CreateNetworkWithNodesAndEdges()
+		{
+			Network network = new Network();
+
+			NetworkNode node1 = network.Nodes.Add("Node 1");
+			NetworkNode node2 = network.Nodes.Add("Node 2");
+			NetworkNode node3 = network.Nodes.Add("Node 3");
+			NetworkNode node4 = network.Nodes.Add("Node 4");
+			NetworkNode node5 = network.Nodes.Add("Node 5");
+
+			NetworkEdge edge12 = network.Edges.Add(node1, node2);
+			NetworkEdge edge23 = network.Edges.Add(node2, node3);
+			NetworkEdge edge34 = network.Edges.Add(node3, node4);
+			NetworkEdge edge45 = network.Edges.Add(node4, node5);
+			NetworkEdge edge51 = network.Edges.Add(node5, node1);
+
+			return network;
+		}
+
+		private Network CreateNetworkWithOnlyNodes()
+		{
+			Network network = new Network();
+
+			NetworkNode node1 = network.Nodes.Add("Node 1");
+			NetworkNode node2 = network.Nodes.Add("Node 2");
+			NetworkNode node3 = network.Nodes.Add("Node 3");
+			NetworkNode node4 = network.Nodes.Add("Node 4");
+			NetworkNode node5 = network.Nodes.Add("Node 5");
+
+			return network;
+		}
+
 		private void CheckNetworkObjectId(NetworkObject networkObject)
 		{
 			var nodesWithSameId = networkObject.Network.Nodes.Where(node => node.Id == networkObject.Id).ToList();
@@ -103,26 +135,7 @@ namespace TalesGenerator.Core
 			Assert.AreEqual(endNode, networkEdge.EndNode);
 		}
 
-		private Network CreateNetwork()
-		{
-			Network network = new Network();
-
-			NetworkNode node1 = network.Nodes.Add("Node 1");
-			NetworkNode node2 = network.Nodes.Add("Node 2");
-			NetworkNode node3 = network.Nodes.Add("Node 3");
-			NetworkNode node4 = network.Nodes.Add("Node 4");
-			NetworkNode node5 = network.Nodes.Add("Node 5");
-
-			NetworkEdge edge12 = network.Edges.Add(node1, node2);
-			NetworkEdge edge23 = network.Edges.Add(node2, node3);
-			NetworkEdge edge34 = network.Edges.Add(node3, node4);
-			NetworkEdge edge45 = network.Edges.Add(node4, node5);
-			NetworkEdge edge51 = network.Edges.Add(node5, node1);
-
-			return network;
-		}
-
-		private void CheckNetwork(Network network)
+		private void CheckNetworkWithNodesAndEdges(Network network)
 		{
 			//Проверим общее количество элементов в коллекциях.
 			Assert.AreEqual(5, network.Nodes.Count);
@@ -144,6 +157,125 @@ namespace TalesGenerator.Core
 			CheckNetworkEdge(network.Edges[2], network, network.Nodes[2], network.Nodes[3]);
 			CheckNetworkEdge(network.Edges[3], network, network.Nodes[3], network.Nodes[4]);
 			CheckNetworkEdge(network.Edges[4], network, network.Nodes[4], network.Nodes[0]);
+		}
+
+		private void CheckNetworkWithOnlyNodes(Network network)
+		{
+			//Проверим общее количество элементов в коллекциях.
+			Assert.AreEqual(5, network.Nodes.Count);
+
+			CheckNetworkNode(network.Nodes[0], network, "Node 1",
+				new List<NetworkEdge> { }, new List<NetworkEdge> { });
+			CheckNetworkNode(network.Nodes[1], network, "Node 2",
+				new List<NetworkEdge> { }, new List<NetworkEdge> { });
+			CheckNetworkNode(network.Nodes[2], network, "Node 3",
+				new List<NetworkEdge> { }, new List<NetworkEdge> { });
+			CheckNetworkNode(network.Nodes[3], network, "Node 4",
+				new List<NetworkEdge> { }, new List<NetworkEdge> { });
+			CheckNetworkNode(network.Nodes[4], network, "Node 5",
+				new List<NetworkEdge> { }, new List<NetworkEdge> { });
+		}
+
+		private Network SaveToFileAndLoadFromFile(Network network)
+		{
+			string fileName = Path.GetTempFileName();
+			Network loadedNetwork = null;
+
+			_fileNames.Add(fileName);
+
+			network.SaveToFile(fileName);
+
+			bool fileExists = File.Exists(fileName);
+
+			Assert.AreEqual(true, fileExists);
+
+			if (fileExists)
+			{
+				loadedNetwork = Network.LoadFromFile(fileName);
+			}
+
+			Assert.IsNotNull(loadedNetwork);
+
+			return loadedNetwork;
+		}
+
+		private Network SaveToFileAndLoadFromStream(Network network)
+		{
+			string fileName = Path.GetTempFileName();
+			Network loadedNetwork = null;
+
+			_fileNames.Add(fileName);
+
+			network.SaveToFile(fileName);
+
+			bool fileExists = File.Exists(fileName);
+
+			Assert.AreEqual(true, fileExists);
+
+			if (fileExists)
+			{
+				using (FileStream fileStream = File.Open(fileName, FileMode.Open))
+				{
+					loadedNetwork = Network.LoadFromStream(fileStream);
+				}
+			}
+
+			Assert.IsNotNull(loadedNetwork);
+
+			return loadedNetwork;
+		}
+
+		private Network SaveToStreamAndLoadFromFile(Network network)
+		{
+			string fileName = Path.GetTempFileName();
+			Network loadedNetwork = null;
+
+			_fileNames.Add(fileName);
+
+			using (FileStream fileStream = File.Open(fileName, FileMode.Create))
+			{
+				network.SaveToStream(fileStream);
+			}
+			bool fileExists = File.Exists(fileName);
+
+			Assert.AreEqual(true, fileExists);
+
+			if (fileExists)
+			{
+				loadedNetwork = Network.LoadFromFile(fileName);
+			}
+
+			Assert.IsNotNull(loadedNetwork);
+
+			return loadedNetwork;
+		}
+
+		private Network SaveToStreamAndLoadFromStream(Network network)
+		{
+			string fileName = Path.GetTempFileName();
+			Network loadedNetwork = null;
+
+			_fileNames.Add(fileName);
+
+			using (FileStream fileStream = File.Open(fileName, FileMode.Create))
+			{
+				network.SaveToStream(fileStream);
+			}
+			bool fileExists = File.Exists(fileName);
+
+			Assert.AreEqual(true, fileExists);
+
+			if (fileExists)
+			{
+				using (FileStream fileStream = File.Open(fileName, FileMode.Open))
+				{
+					loadedNetwork = Network.LoadFromStream(fileStream);
+				}
+			}
+
+			Assert.IsNotNull(loadedNetwork);
+
+			return loadedNetwork;
 		}
 
 		#region Additional test attributes
@@ -181,9 +313,6 @@ namespace TalesGenerator.Core
 		}
 		#endregion
 
-		/// <summary>
-		///A test for Network Constructor
-		///</summary>
 		[TestMethod()]
 		public void NetworkConstructorTest()
 		{
@@ -196,15 +325,11 @@ namespace TalesGenerator.Core
 			Assert.AreEqual(0, network.Edges.Count);
 		}
 
-		/// <summary>
-		///A test for Nodes
-		///</summary>
 		[TestMethod()]
 		public void NodesTest()
 		{
 			Network network = new Network();
 			NetworkNode networkNode;
-			List<NetworkNode> networkNodes;
 
 			for (int i = 0; i < 5; i++)
 			{
@@ -212,10 +337,7 @@ namespace TalesGenerator.Core
 
 				Assert.IsNotNull(networkNode);
 
-				//Проверим, существует ли другие вершины с таким же индексом.
-				networkNodes = network.Nodes.Where(node => node.Id == networkNode.Id).ToList();
-				Assert.AreEqual(1, networkNodes.Count);
-				Assert.AreEqual(networkNode, networkNodes[0]);
+				CheckNetworkObjectId(networkNode);
 			}
 
 			Assert.AreEqual(5, network.Nodes.Count);
@@ -230,18 +352,14 @@ namespace TalesGenerator.Core
 
 			networkNode = network.Nodes.Add();
 			//Проверим, является ли индекс вновь добавленной вершины уникальным.
-			networkNodes = network.Nodes.Where(node => node.Id == networkNode.Id).ToList();
-			Assert.AreEqual(1, networkNodes.Count);
-			Assert.AreEqual(networkNode, networkNodes[0]);
+			CheckNetworkObjectId(networkNode);
 		}
 
-		/// <summary>
-		///A test for Edges
-		///</summary>
 		[TestMethod()]
 		public void EdgesTest()
 		{
 			Network network = new Network();
+			NetworkEdge networkEdge;
 
 			network.Nodes.Add();
 			network.Nodes.Add();
@@ -250,15 +368,28 @@ namespace TalesGenerator.Core
 
 			for (int i = 0; i < 5; i++)
 			{
-				network.Edges.Add(network.Nodes[0], network.Nodes[1]);
-			}
+				networkEdge = network.Edges.Add(network.Nodes[0], network.Nodes[1]);
 
+				Assert.IsNotNull(networkEdge);
+
+				//Проверим, существует ли другие вершины или дуги с таким же индексом.
+				CheckNetworkObjectId(networkEdge);
+			}
 			Assert.AreEqual(5, network.Edges.Count);
 
 			network.Edges.RemoveAt(0);
 			network.Edges.RemoveAt(1);
-
 			Assert.AreEqual(3, network.Edges.Count);
+
+			network.Nodes.RemoveAt(0);
+			Assert.AreEqual(1, network.Nodes.Count);
+
+			network.Nodes.Add();
+			Assert.AreEqual(2, network.Nodes.Count);
+
+			networkEdge = network.Edges.Add(network.Nodes[0], network.Nodes[1]);
+			Assert.IsNotNull(networkEdge);
+			CheckNetworkObjectId(networkEdge);
 		}
 
 		[TestMethod]
@@ -273,7 +404,7 @@ namespace TalesGenerator.Core
 
 			using (MemoryStream memoryStream = new MemoryStream())
 			{
-				network.Save(memoryStream);
+				network.SaveToStream(memoryStream);
 			}
 			Assert.IsFalse(network.IsDirty);
 
@@ -282,132 +413,65 @@ namespace TalesGenerator.Core
 
 			using (MemoryStream memoryStream = new MemoryStream())
 			{
-				network.Save(memoryStream);
+				network.SaveToStream(memoryStream);
 			}
 			Assert.IsFalse(network.IsDirty);
 		}
 
-		/// <summary>
-		///A test for SaveToFileAndLoadFromFileTest
-		///</summary>
 		[TestMethod()]
 		public void SaveToFileAndLoadFromFileTest()
 		{
-			Network network = CreateNetwork();
-			string fileName = Path.GetTempFileName();
+			Network network = CreateNetworkWithNodesAndEdges();
+			Network loadedNetwork = SaveToFileAndLoadFromFile(network);
 
-			_fileNames.Add(fileName);
+			CheckNetworkWithNodesAndEdges(loadedNetwork);
 
-			network.Save(fileName);
+			network = CreateNetworkWithOnlyNodes();
+			loadedNetwork = SaveToFileAndLoadFromFile(network);
 
-			bool fileExists = File.Exists(fileName);
-
-			Assert.AreEqual(true, fileExists);
-
-			if (fileExists)
-			{
-				Network loadedNetwork = Network.Load(fileName);
-
-				Assert.IsNotNull(loadedNetwork);
-
-				if (loadedNetwork != null)
-				{
-					CheckNetwork(loadedNetwork);
-				}
-			}
+			CheckNetworkWithOnlyNodes(loadedNetwork);
 		}
 
 		[TestMethod()]
-		public void SaveToFileAndLoadFromStream()
+		public void SaveToFileAndLoadFromStreamTest()
 		{
-			Network network = CreateNetwork();
-			string fileName = Path.GetTempFileName();
+			Network network = CreateNetworkWithNodesAndEdges();
+			Network loadedNetwork = SaveToFileAndLoadFromStream(network);
 
-			_fileNames.Add(fileName);
+			CheckNetworkWithNodesAndEdges(loadedNetwork);
 
-			network.Save(fileName);
+			network = CreateNetworkWithOnlyNodes();
+			loadedNetwork = SaveToFileAndLoadFromStream(network);
 
-			bool fileExists = File.Exists(fileName);
-
-			Assert.AreEqual(true, fileExists);
-
-			if (fileExists)
-			{
-				Network loadedNetwork;
-				using (FileStream fileStream = File.Open(fileName, FileMode.Open))
-				{
-					loadedNetwork = Network.Load(fileStream);
-				}
-
-				Assert.IsNotNull(loadedNetwork);
-
-				if (loadedNetwork != null)
-				{
-					CheckNetwork(loadedNetwork);
-				}
-			}
+			CheckNetworkWithOnlyNodes(loadedNetwork);
 		}
 
 		[TestMethod()]
-		public void SaveToStreamAndLoadFromFile()
+		public void SaveToStreamAndLoadFromFileTest()
 		{
-			Network network = CreateNetwork();
-			string fileName = Path.GetTempFileName();
+			Network network = CreateNetworkWithNodesAndEdges();
+			Network loadedNetwork = SaveToStreamAndLoadFromFile(network);
 
-			_fileNames.Add(fileName);
-			
-			using (FileStream fileStream = File.Open(fileName, FileMode.Create))
-			{
-				network.Save(fileStream);
-			}
-			bool fileExists = File.Exists(fileName);
+			CheckNetworkWithNodesAndEdges(loadedNetwork);
 
-			Assert.AreEqual(true, fileExists);
+			network = CreateNetworkWithOnlyNodes();
+			loadedNetwork = SaveToStreamAndLoadFromFile(network);
 
-			if (fileExists)
-			{
-				Network loadedNetwork = Network.Load(fileName);
-
-				Assert.IsNotNull(loadedNetwork);
-
-				if (loadedNetwork != null)
-				{
-					CheckNetwork(loadedNetwork);
-				}
-			}
+			CheckNetworkWithOnlyNodes(loadedNetwork);
 		}
 
 		[TestMethod()]
-		public void SaveToStreamAndLoadFromStream()
+		public void SaveToStreamAndLoadFromStreamTest()
 		{
-			Network network = CreateNetwork();
-			string fileName = Path.GetTempFileName();
+			Network network = CreateNetworkWithNodesAndEdges();
+			Network loadedNetwork = SaveToStreamAndLoadFromStream(network);
 
-			_fileNames.Add(fileName);
+			CheckNetworkWithNodesAndEdges(loadedNetwork);
 
-			using (FileStream fileStream = File.Open(fileName, FileMode.Create))
-			{
-				network.Save(fileStream);
-			}
-			bool fileExists = File.Exists(fileName);
+			network = CreateNetworkWithOnlyNodes();
+			loadedNetwork = SaveToStreamAndLoadFromStream(network);
 
-			Assert.AreEqual(true, fileExists);
-
-			if (fileExists)
-			{
-				Network loadedNetwork;
-				using (FileStream fileStream = File.Open(fileName, FileMode.Open))
-				{
-					loadedNetwork = Network.Load(fileStream);
-				}
-
-				Assert.IsNotNull(loadedNetwork);
-
-				if (loadedNetwork != null)
-				{
-					CheckNetwork(loadedNetwork);
-				}
-			}
+			CheckNetworkWithOnlyNodes(loadedNetwork);
 		}
 		#endregion
 	}
