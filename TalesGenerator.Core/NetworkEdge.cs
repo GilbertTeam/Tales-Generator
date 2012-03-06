@@ -109,6 +109,10 @@ namespace TalesGenerator.Core
 			{
 				throw new ArgumentNullException("endNode");
 			}
+			if (startNode == null)
+			{
+				throw new ArgumentNullException("startNode");
+			}
 
 			_startNode = startNode;
 			_endNode = endNode;

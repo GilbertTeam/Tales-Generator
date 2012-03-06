@@ -24,6 +24,10 @@ namespace TalesGenerator.Core.Collections
 			{
 				throw new ArgumentNullException("endNode");
 			}
+			if (startNode == endNode)
+			{
+				throw new ArgumentException("startNode");
+			}
 
 			NetworkEdge networkEdge = new NetworkEdge(_network, startNode, endNode);
 
