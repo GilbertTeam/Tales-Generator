@@ -17,6 +17,12 @@
 		<RoutedUICommand x:Key="SaveAsSvg"/>
 		<RoutedUICommand x:Key="Export"/>
 	</Window.Resources>
+
+	<Window.InputBindings>
+		<KeyBinding Command="New" Key="N" Modifiers="Ctrl"/>
+		<KeyBinding Command="Open" Key="O" Modifiers="Ctrl"/>
+		<KeyBinding Command="Save" Key="S" Modifiers="Ctrl"/>
+	</Window.InputBindings>
 	
 	<Window.CommandBindings>
 		<CommandBinding Command="New" CanExecute="New_CanExecute" Executed="New_Executed"/>
@@ -117,6 +123,8 @@
 							  AutoResize="AllDirections"
 							  HorizontalContentAlignment="Stretch"
 							  VerticalContentAlignment="Stretch"
+							  Style="{StaticResource MainStyleEx}"
+							  BackBrush="{StaticResource BrushPrimary4}"
 							  MouseWheel="DiagramNetwork_MouseWheel"
 							  NodeSelected="DiagramNetwork_NodeSelected"
 							  NodeDeselected="DiagramNetwork_NodeDeselected"

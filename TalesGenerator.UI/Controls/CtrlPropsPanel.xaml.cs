@@ -114,6 +114,23 @@ namespace TalesGenerator.UI.Controls
 				return;
 
 			_edge = value;
+			
+			//синхронизация комбобокса
+			int i = 0;
+			switch (_edge.Type)
+			{
+				case NetworkEdgeType.Agent: 
+					i = 1;
+					break;
+				case NetworkEdgeType.Recipient:
+					i = 2;
+					break;
+				default:
+					i = 0;
+					break;
+			}
+			LinkTypeCombo.SelectedIndex = i;
+
 			_currentContex = PropsPanelContext.Edge;
 			SetVisibilities();
 		}

@@ -330,16 +330,24 @@ namespace TalesGenerator.UI.Windows
 			NetworkNode origin = network.Nodes.FindById(Int32.Parse(link.Origin.Uid));
 			NetworkNode destination = network.Nodes.FindById(Int32.Parse(link.Destination.Uid));
 
-			NetworkEdge edge = network.Edges.Add(origin, destination);
-			link.Uid = edge.Id.ToString();
-			link.Text = Utils.ConvertType(edge.Type);
-			//yay, the king has returned!
-			Binding binding = new Binding();
-			binding.Path = new PropertyPath("Type");
-			binding.Converter = new NetworkEdgeTypeStringConverter();
-			binding.Source = edge;
-			binding.Mode = BindingMode.TwoWay;
-			link.SetBinding(DiagramLink.TextProperty, binding);
+			try
+			{
+				NetworkEdge edge = network.Edges.Add(origin, destination);
+				link.Uid = edge.Id.ToString();
+				link.Text = Utils.ConvertType(edge.Type);
+				//yay, the king has returned!
+				Binding binding = new Binding();
+				binding.Path = new PropertyPath("Type");
+				binding.Converter = new NetworkEdgeTypeStringConverter();
+				binding.Source = edge;
+				binding.Mode = BindingMode.TwoWay;
+				link.SetBinding(DiagramLink.TextProperty, binding);
+			}
+			catch (ArgumentException ex)
+			{
+				MessageBox.Show(ex.Message);
+				DiagramNetwork.Links.Remove(e.Link);
+			}
 		}
 
 		private void DiagramNetwork_LinkDeleted(object sender, LinkEventArgs e)
@@ -352,8 +360,11 @@ namespace TalesGenerator.UI.Windows
 			if (network == null)
 				return;
 
-			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
-			network.Edges.Remove(edge);
+			if (link.Uid != "")
+			{
+				NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
+				network.Edges.Remove(edge);
+			}
 		}
 
 		private void DiagramNetwork_LinkSelected(object sender, LinkEventArgs e)

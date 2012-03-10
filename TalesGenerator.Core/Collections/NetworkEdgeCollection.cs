@@ -26,7 +26,7 @@ namespace TalesGenerator.Core.Collections
 			}
 			if (startNode == endNode)
 			{
-				throw new ArgumentException("startNode");
+				throw new ArgumentException("Невозможно создать дугу с началом, совпадающим с концом");
 			}
 
 			NetworkEdge networkEdge = new NetworkEdge(_network, startNode, endNode);

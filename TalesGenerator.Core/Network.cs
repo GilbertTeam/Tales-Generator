@@ -193,6 +193,10 @@ namespace TalesGenerator.Core
 		{
 			XNamespace xNamespace = SerializableObject.XNamespace;
 			XElement xNetwork = xDocument.Element(xNamespace + "Network");
+			if (xNetwork == null && xDocument.Root != null)
+			{
+				xNetwork = xDocument.Root.Element(xNamespace + "Network");
+			}
 
 			if (xNetwork == null)
 			{
