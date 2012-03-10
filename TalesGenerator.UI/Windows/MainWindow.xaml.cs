@@ -210,15 +210,19 @@ namespace TalesGenerator.UI.Windows
 		{
 			int count = Math.Abs(e.Delta / 120);
 			bool zoomOut = e.Delta < 0;
-			for (int i = 0; i < count; i++)
+			try
 			{
-				if (zoomOut && DiagramNetwork.ZoomFactor != 0)
+				for (int i = 0; i < count; i++)
 				{
-					DiagramNetwork.ZoomOut();
-					ResizeDiagram();
+					if (zoomOut)
+					{
+						DiagramNetwork.ZoomOut();
+						ResizeDiagram();
+					}
+					else DiagramNetwork.ZoomIn();
 				}
-				else DiagramNetwork.ZoomIn();
 			}
+			catch (Exception ex) { }
 			e.Handled = true;
 		}
 
