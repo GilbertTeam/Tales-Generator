@@ -39,6 +39,8 @@ namespace TalesGenerator.UI.Windows
 
 			DiagramNetwork.IsEnabled = _project.Network != null;
 			ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
+
+			RefreshFrame();
 		}
 
 		void _project_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -82,6 +84,8 @@ namespace TalesGenerator.UI.Windows
 				{
 					DiagramNetwork.IsEnabled = true;
 				}
+				_project.Network.ResetDirtiness();
+				RefreshFrame();
 			}
 		}
 
@@ -95,6 +99,8 @@ namespace TalesGenerator.UI.Windows
 			if (_project.Path != "")
 			{
 				_project.Save();
+				_project.Network.ResetDirtiness();
+				RefreshFrame();
 				return;
 			}
 			Save_AsExecuted(sender, e);
@@ -115,7 +121,9 @@ namespace TalesGenerator.UI.Windows
 				_project.Path = saveDialog.FileName;
 
 				_project.Save();
+				_project.Network.ResetDirtiness();
 			}
+			RefreshFrame();
 		}
 
 		private void CloseProject_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -125,17 +133,7 @@ namespace TalesGenerator.UI.Windows
 
 		private void CloseProject_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			if (_project.Network.IsDirty)
-			{
-				if (MessageBox.Show(Properties.Resources.SaveWarning, Properties.Resources.Confirmation,
-					MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-				{
-					this.Save_Executed(sender, e);
-				}
-			}
-			_project.Network = null;
-			_project.Path = "";
-			DiagramNetwork.ClearAll();
+			this.DoClose();
 		}
 
 		private void Close_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -146,15 +144,8 @@ namespace TalesGenerator.UI.Windows
 
 		private void Close_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			if (_project.Network.IsDirty)
-			{
-				if (MessageBox.Show(Properties.Resources.SaveWarning, Properties.Resources.Confirmation,
-					MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-				{
-					this.Save_Executed(sender, e);
-				}
-			}
-			this.Close();
+			if (DoClose())
+				this.Close();
 		}
 
 		private void ShowProps_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -483,6 +474,55 @@ namespace TalesGenerator.UI.Windows
 					svgExporter.Export(DiagramNetwork, saveDialog.FileName);
 					break;
 			}
+		}
+
+		#endregion
+
+		#region Methods
+
+		protected void RefreshFrame()
+		{
+			string caption = GetCaption();
+			this.Title = caption;
+		}
+
+		private string GetCaption()
+		{
+			
+			if (_project.Network == null)
+			{
+				return Properties.Resources.AppName;
+			}
+
+			string result = _project.Path;
+			result += " - " + Properties.Resources.AppName;
+
+			return result;
+		}
+
+		protected bool DoClose()
+		{
+			if (_project.Network.IsDirty)
+			{
+				MessageBoxResult result = MessageBox.Show(Properties.Resources.SaveWarning,
+					Properties.Resources.Confirmation,
+					MessageBoxButton.YesNoCancel);
+				//стандартный мес. бокс некрасивый. По уму надо бы свой написать
+				if (result == MessageBoxResult.Cancel)
+				{
+					return false;
+				}
+				if (result == MessageBoxResult.Yes)
+				{
+					this.Save_Executed(null, null);
+				}
+			}
+			_project.Network = null;
+			_project.Path = "";
+			DiagramNetwork.ClearAll();
+			RefreshFrame();
+			return true;
+
 		}
 
 		#endregion

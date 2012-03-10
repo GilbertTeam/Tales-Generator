@@ -86,6 +86,8 @@ namespace TalesGenerator.Core
 
 			_edges = new NetworkEdgeCollection(this);
 			_edges.CollectionChanged += OnNetworkObjectCollectionChanged;
+
+			_isDirty = true;
 		}
 		#endregion
 
@@ -112,6 +114,11 @@ namespace TalesGenerator.Core
 		#endregion
 
 		#region Methods
+
+		public void ResetDirtiness()
+		{
+			this._isDirty = false;
+		}
 
 		private XElement SaveToXElement()
 		{
