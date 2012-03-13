@@ -176,6 +176,7 @@
     <Compile Include="Classes\Enums.cs" />
     <Compile Include="Classes\Project.cs" />
     <Compile Include="Classes\Utils.cs" />
+    <Compile Include="Controls\NetworkTreeView.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
