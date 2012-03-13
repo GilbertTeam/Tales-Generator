@@ -184,6 +184,7 @@ namespace TalesGenerator.Core
 			_fileNames.Add(fileName);
 
 			network.SaveToFile(fileName);
+			Assert.IsFalse(network.IsDirty);
 
 			bool fileExists = File.Exists(fileName);
 
@@ -192,6 +193,7 @@ namespace TalesGenerator.Core
 			if (fileExists)
 			{
 				loadedNetwork = Network.LoadFromFile(fileName);
+				Assert.IsFalse(loadedNetwork.IsDirty);
 			}
 
 			Assert.IsNotNull(loadedNetwork);
@@ -207,6 +209,7 @@ namespace TalesGenerator.Core
 			_fileNames.Add(fileName);
 
 			network.SaveToFile(fileName);
+			Assert.IsFalse(network.IsDirty);
 
 			bool fileExists = File.Exists(fileName);
 
@@ -218,6 +221,8 @@ namespace TalesGenerator.Core
 				{
 					loadedNetwork = Network.LoadFromStream(fileStream);
 				}
+
+				Assert.IsFalse(loadedNetwork.IsDirty);
 			}
 
 			Assert.IsNotNull(loadedNetwork);
@@ -236,6 +241,8 @@ namespace TalesGenerator.Core
 			{
 				network.SaveToStream(fileStream);
 			}
+			Assert.IsFalse(network.IsDirty);
+
 			bool fileExists = File.Exists(fileName);
 
 			Assert.AreEqual(true, fileExists);
@@ -243,6 +250,7 @@ namespace TalesGenerator.Core
 			if (fileExists)
 			{
 				loadedNetwork = Network.LoadFromFile(fileName);
+				Assert.IsFalse(loadedNetwork.IsDirty);
 			}
 
 			Assert.IsNotNull(loadedNetwork);
@@ -261,6 +269,8 @@ namespace TalesGenerator.Core
 			{
 				network.SaveToStream(fileStream);
 			}
+			Assert.IsFalse(network.IsDirty);
+
 			bool fileExists = File.Exists(fileName);
 
 			Assert.AreEqual(true, fileExists);
@@ -271,6 +281,8 @@ namespace TalesGenerator.Core
 				{
 					loadedNetwork = Network.LoadFromStream(fileStream);
 				}
+
+				Assert.IsFalse(loadedNetwork.IsDirty);
 			}
 
 			Assert.IsNotNull(loadedNetwork);
@@ -397,7 +409,7 @@ namespace TalesGenerator.Core
 		{
 			Network network = new Network();
 
-			Assert.IsFalse(network.IsDirty);
+			Assert.IsTrue(network.IsDirty);
 
 			NetworkNode networkNode = network.Nodes.Add();
 			Assert.IsTrue(network.IsDirty);
