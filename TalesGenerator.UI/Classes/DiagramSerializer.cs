@@ -46,6 +46,10 @@ namespace TalesGenerator.UI.Classes
 			XElement xDiagBounds = new XElement("Bounds");
 			Utils.SaveRectToXElement(_diagram.Bounds, xDiagBounds);
 			xEl.Add(xDiagBounds);
+
+			XElement xDiagZoom = new XElement("ZoomFactor");
+			xDiagZoom.Add(Convert.ToString(_diagram.ZoomFactor));
+			xEl.Add(xDiagZoom);
 			
 			XElement xNodes = new XElement("Nodes");
 			foreach (ShapeNode node in _diagram.Nodes)
@@ -57,10 +61,6 @@ namespace TalesGenerator.UI.Classes
 				Utils.SaveRectToXElement(node.Bounds, xBounds);
 				xNode.Add(xBounds);
 
-				//XElement xText = new XElement("Text");
-				//xText.Add(node.Text);
-				//xNode.Add(xText);
-
 				xNodes.Add(xNode);
 			}
 			xEl.Add(xNodes);
@@ -71,17 +71,15 @@ namespace TalesGenerator.UI.Classes
 				XElement xLink = new XElement("DiagramLink");
 				xLink.Add(new XAttribute("Id", link.Uid));
 
-				XElement xOriginId = new XElement("OriginId");
-				xOriginId.Add(link.Origin.Uid);
-				xLink.Add(xOriginId);
+				XElement xPoints = new XElement("Points");
+				foreach (Point point in link.ControlPoints)
+				{
+					XElement xPoint = new XElement("Point");
+					Utils.SavePointToXElement(point, xPoint);
+					xPoints.Add(xPoint);
+				}
 
-				XElement xDestinationId = new XElement("DestinationId");
-				xDestinationId.Add(link.Destination.Uid);
-				xLink.Add(xDestinationId);
-
-				//XElement xText = new XElement("Text");
-				//xText.Add(link.Text);
-				//xLink.Add(xText);
+				xLink.Add(xPoints);
 
 				xLinks.Add(xLink);
 			}
@@ -97,6 +95,7 @@ namespace TalesGenerator.UI.Classes
 		public void LoadFromXElement(XElement xEl, Network network)
 		{
 			_diagram.Bounds = Utils.LoadRectFromXElement(xEl.Element("Bounds"));
+			_diagram.ZoomFactor = Convert.ToDouble(xEl.Element("ZoomFactor").Value);
 
 			XElement xNodes = xEl.Element("Nodes");
 			foreach (XElement xNode in xNodes.Elements("ShapeNode"))
@@ -116,17 +115,26 @@ namespace TalesGenerator.UI.Classes
 			XElement xLinks = xEl.Element("Links");
 			foreach (XElement xLink in xLinks.Elements("DiagramLink"))
 			{
-				int originId = Int32.Parse(xLink.Element("OriginId").Value);
-				int destId = Int32.Parse(xLink.Element("DestinationId").Value);
+				int linkId = Convert.ToInt32(xLink.Attribute("Id").Value);
+				NetworkEdge edge = network.Edges.FindById(linkId);
 
-				ShapeNode origin = Utils.FindNodeByUid(_diagram, originId);
-				ShapeNode destination = Utils.FindNodeByUid(_diagram, destId);
+				ShapeNode origin = Utils.FindNodeByUid(_diagram, edge.StartNode.Id);
+				ShapeNode destination = Utils.FindNodeByUid(_diagram, edge.EndNode.Id);
 
 				DiagramLink link = _diagram.Factory.CreateDiagramLink(origin, destination);
-				int id = Int32.Parse(xLink.Attribute("Id").Value);
-				link.Uid = id.ToString();
+				link.Uid = linkId.ToString();
 
-				NetworkEdge edge = network.Edges.FindById(id);
+				link.ControlPoints.Clear();
+
+				XElement xPoints = xLink.Element("Points");
+				foreach (XElement xPoint in xPoints.Elements("Point"))
+				{
+					Point point = Utils.LoadPointFromXElement(xPoint);
+					link.ControlPoints.Add(point);
+				}
+
+				link.UpdateFromPoints();
+
 				Binding binding = new Binding();
 				binding.Path = new PropertyPath("Type");
 				binding.Converter = new NetworkEdgeTypeStringConverter();

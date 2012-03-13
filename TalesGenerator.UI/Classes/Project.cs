@@ -127,10 +127,14 @@ namespace TalesGenerator.UI.Classes
 		public void Save()
 		{
 			CheckObjects();
-			
-			FileStream writer = new FileStream(Path, FileMode.OpenOrCreate);
-			SaveToStream(writer);
-			writer.Close();
+
+			XDocument xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
+			XElement xEl = new XElement("TalesGeneratorProject");
+			xDoc.AddFirst(xEl);
+			xEl.Add(_network.SaveToXml());
+			DiagramSerializer diagSr = new DiagramSerializer(Diagram);
+			diagSr.SaveToXDocument(xDoc);
+			xDoc.Save(_path);
 		}
 
 		/// <summary>
@@ -141,92 +145,11 @@ namespace TalesGenerator.UI.Classes
 
 			if (Path == "")
 				throw new ArgumentException("Path");
-			FileStream reader = new FileStream(Path, FileMode.Open);
-			LoadFromStream(reader);
-			reader.Close();
-		}
-
-		/// <summary>
-		/// Сохранить проект в поток
-		/// </summary>
-		/// <param name="stream">Поток для сохранения</param>
-		public void Save(Stream stream)
-		{
-			CheckObjects();
-			SaveToStream(stream);
-		}
-
-		/// <summary>
-		/// Загрузить проект из потока
-		/// </summary>
-		/// <param name="stream">Поток для загрузки</param>
-		public void Load(Stream stream)
-		{
-			LoadFromStream(stream);
-		}
-
-		/// <summary>
-		/// Сохранить проект в поток
-		/// </summary>
-		/// <param name="stream">Поток для сохранения</param>
-		protected void SaveToStream(Stream stream)
-		{
-			//_network.Save(stream);
-			stream.Close();
-
-			//Diagram.SaveToXml(_path);
-			XDocument xDoc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
-			XElement xEl = new XElement("TalesGeneratorProject");
-			xDoc.AddFirst(xEl);
-			//_network.SaveToXDocument(xDoc);
-			xEl.Add(_network.SaveToXml());
-			DiagramSerializer diagSr = new DiagramSerializer(Diagram);
-			diagSr.SaveToXDocument(xDoc);
-			
-			xDoc.Save(_path);
-			//XElement xNetwork = new XElement("Network");
-			//_network.SaveToElement(xNetwork);
-			//xDoc.Root.Add(xNetwork);
-			//xDoc.Save(_path);
-			//stream.Position = 0;
-			//XDocument xDoc = XDocument.Load(stream);
-			//stream.Close();
-			//string presentation = Diagram.SaveToString(SaveToStringFormat.Xml, true);
-			
-			//MemoryStream ms = new MemoryStream();
-			//BinaryFormatter formatter = new BinaryFormatter();
-			//formatter.Serialize(ms, Diagram);
-			//string presentation = Convert.ToBase64String(ms.ToArray());
-			//Diagram.SaveToXml(_path);
-			//XmlDocument doc = new XmlDocument();
-			//xPresentation.Add(presentation);
-			//xDoc.Root.Add(xPresentation);
-			//xDoc.Save(_path);
-
-		}
-
-		/// <summary>
-		/// Загрузить проект из потока
-		/// </summary>
-		/// <param name="stream">Поток для загрузки</param>
-		protected void LoadFromStream(Stream stream)
-		{
-			stream.Close();
 			XDocument xDoc = XDocument.Load(_path);
-			XElement xEl = xDoc.Element("TalesGeneratorProject");
 
 			_network = Network.LoadFromXml(xDoc);
 			DiagramSerializer diagSr = new DiagramSerializer(_diagram);
 			diagSr.LoadFromXDocument(xDoc, _network);
-			//_network = Network.LoadFromXDocument(xDoc);
-			//Diagram.LoadFromXml(_path);
-			//Diagram.IsEnabled = true;
-			
-			//XElement xNetwork = xDoc.Root.Element("Network");
-			//_network = Network.LoadFromElement(xNetwork);
-			//XDocument xDoc = XDocument.Load(stream);
-			//XElement xPresentation = xDoc.Element("Presentation");
-			//Diagram.LoadFromString(xPresentation.Value);
 		}
 
 		private void CheckObjects()

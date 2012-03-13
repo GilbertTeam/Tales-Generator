@@ -71,13 +71,13 @@ namespace TalesGenerator.UI.Windows
 
 		private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
+			if (_project.Network != null)
+				this.CloseProject_Executed(sender, e);
 			OpenFileDialog openDialog = new OpenFileDialog();
 			openDialog.Filter = "TalesGeneratorProject files (*.tgp)|*.tgp";
 			bool? result = openDialog.ShowDialog();
 			if (result == true)
 			{
-				if (_project.Network != null)
-					this.CloseProject_Executed(sender, e);
 				_project.Path = openDialog.FileName;
 				_project.Load();
 				if (_project.Network != null)

@@ -91,11 +91,22 @@ namespace TalesGenerator.UI.Classes
 		{
 			double x = Double.Parse(xEl.Attribute("X").Value);
 			double y = Double.Parse(xEl.Attribute("Y").Value);
-			//double width = Double.Parse(xEl.Attribute("Width").Value);
 			double width = Convert.ToDouble(xEl.Attribute("Width").Value);
-			//double height = Double.Parse(xEl.Attribute("Height").Value);
 			double height = Convert.ToDouble(xEl.Attribute("Height").Value);
 			return new Rect(x, y, width, height);
+		}
+
+		public static void SavePointToXElement(Point point, XElement xEl)
+		{
+			xEl.Add(new XAttribute("X", Convert.ToString(point.X)));
+			xEl.Add(new XAttribute("Y", Convert.ToString(point.Y)));
+		}
+
+		public static Point LoadPointFromXElement(XElement xEl)
+		{
+			double x = Convert.ToDouble(xEl.Attribute("X").Value);
+			double y = Convert.ToDouble(xEl.Attribute("Y").Value);
+			return new Point(x, y);
 		}
 	}
 

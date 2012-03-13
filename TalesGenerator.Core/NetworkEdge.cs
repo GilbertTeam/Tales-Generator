@@ -174,6 +174,7 @@ namespace TalesGenerator.Core
 
 			_startNode = _network.Nodes.SingleOrDefault(node => node.Id == startNodeId);
 			_endNode= _network.Nodes.SingleOrDefault(node => node.Id == endNodeId);
+			_edgeType = edgeType;
 
 			if (_startNode == null ||
 				_endNode == null)
