@@ -34,7 +34,7 @@ namespace TalesGenerator.Core
 		/// <summary>
 		/// Возвращает набор входящих дуг.
 		/// </summary>
-		public IEnumerable<NetworkEdge> IncomingEdges
+		public virtual IEnumerable<NetworkEdge> IncomingEdges
 		{
 			get
 			{
@@ -45,7 +45,7 @@ namespace TalesGenerator.Core
 		/// <summary>
 		/// Возвращает набор выходящих дуг.
 		/// </summary>
-		public IEnumerable<NetworkEdge> OutgoingEdges
+		public virtual IEnumerable<NetworkEdge> OutgoingEdges
 		{
 			get
 			{

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace TalesGenerator.Core.Collections
 {
@@ -25,6 +25,11 @@ namespace TalesGenerator.Core.Collections
 		#endregion
 
 		#region Methods
+
+		internal new void Add(T networkObject)
+		{
+			Add(networkObject);
+		}
 
 		public T FindById(int id)
 		{

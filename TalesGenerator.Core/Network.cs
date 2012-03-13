@@ -115,11 +115,6 @@ namespace TalesGenerator.Core
 
 		#region Methods
 
-		public void ResetDirtiness()
-		{
-			this._isDirty = false;
-		}
-
 		private XElement SaveToXElement()
 		{
 			XNamespace xNamespace = SerializableObject.XNamespace;

@@ -133,6 +133,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\NetworkBaseNodeCollection.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="NetworkEdge.cs" />
     <Compile Include="Collections\NetworkEdgeCollection.cs" />
@@ -141,8 +142,14 @@
     <Compile Include="NetworkObject.cs" />
     <Compile Include="Collections\NetworkObjectCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Semantic\SemanticNetwork.cs" />
+    <Compile Include="Semantic\SemanticNetworkEdge.cs" />
+    <Compile Include="Semantic\SemanticNetworkNode.cs" />
     <Compile Include="Serialization\SerializableObject.cs" />
     <Compile Include="Serialization\SerializationException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Semantic\Collections\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -20,11 +20,11 @@ namespace TalesGenerator.Core
 	{
 		#region Fields
 
-		private NetworkNode _startNode;
+		protected NetworkNode _startNode;
 
-		private NetworkNode _endNode;
+		protected NetworkNode _endNode;
 
-		private NetworkEdgeType _edgeType;
+		protected NetworkEdgeType _edgeType;
 		#endregion
 
 		#region Properties
