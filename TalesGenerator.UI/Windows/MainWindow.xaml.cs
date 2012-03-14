@@ -86,7 +86,7 @@ namespace TalesGenerator.UI.Windows
 				{
 					DiagramNetwork.IsEnabled = true;
 				}
-				RefreshFrame();
+				AssignNetwork();
 			}
 		}
 
@@ -545,8 +545,8 @@ namespace TalesGenerator.UI.Windows
 			}
 			_project.Network = null;
 			_project.Path = "";
+			AssignNetwork();
 			DiagramNetwork.ClearAll();
-			RefreshFrame();
 			return true;
 
 		}
