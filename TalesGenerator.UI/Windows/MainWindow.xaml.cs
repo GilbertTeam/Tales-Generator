@@ -39,15 +39,16 @@ namespace TalesGenerator.UI.Windows
 
 			DiagramNetwork.IsEnabled = _project.Network != null;
 			ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
+			DispatcherPanelButton.IsChecked = this.DispatcherPanel.Visibility == System.Windows.Visibility.Visible;
 
-			RefreshFrame();
+			AssignNetwork();
 		}
 
 		void _project_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == "Network")
 			{
-				this.DiagramNetwork.IsEnabled = _project.Network != null;
+				AssignNetwork();
 			}
 		}
 
@@ -61,6 +62,7 @@ namespace TalesGenerator.UI.Windows
 		private void New_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			_project.Network = new Network();
+			//Tree.CurrentNetwork = _project.Network;
 			DiagramNetwork.Items.Clear();
 		}
 
@@ -182,6 +184,30 @@ namespace TalesGenerator.UI.Windows
 		private void Export_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = _project != null && _project.Network != null;
+		}
+
+		private void ShowDispatcher_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void ShowDispatcher_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			DispatcherPanel.Visibility = DispatcherPanel.Visibility == System.Windows.Visibility.Visible ?
+				Visibility.Collapsed : Visibility.Visible;
+		}
+
+		private void ChooseLinkType_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			bool canExecute =  DiagramNetwork.IsEnabled && DiagramNetwork.Selection.Items.Count == 1 &&
+				(DiagramNetwork.Selection.Items[0] as DiagramLink != null);
+			e.CanExecute = canExecute;
+			LinkTypeButton.IsEnabled = canExecute;
+		}
+
+		private void StartConsult_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+
 		}
 
 		#endregion
@@ -476,9 +502,12 @@ namespace TalesGenerator.UI.Windows
 			}
 		}
 
-		#endregion
-
-		#region Methods
+		private void AssignNetwork()
+		{
+			DispatcherPanel.SetNetwork(_project.Network);
+			this.DiagramNetwork.IsEnabled = _project.Network != null;
+			RefreshFrame();
+		}
 
 		protected void RefreshFrame()
 		{
@@ -526,7 +555,5 @@ namespace TalesGenerator.UI.Windows
 		}
 
 		#endregion
-
-
 	}
 }

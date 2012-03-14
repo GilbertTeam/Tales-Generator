@@ -79,6 +79,11 @@ namespace TalesGenerator.UI.Classes
 			return result;
 		}
 
+		/// <summary>
+		/// Сохранение прямоугольниа в XElement
+		/// </summary>
+		/// <param name="rect"></param>
+		/// <param name="xEl"></param>
 		public static void SaveRectToXElement(Rect rect, XElement xEl)
 		{
 			xEl.Add(new XAttribute("X", rect.X.ToString()));
@@ -87,6 +92,11 @@ namespace TalesGenerator.UI.Classes
 			xEl.Add(new XAttribute("Height", rect.Height.ToString()));
 		}
 
+		/// <summary>
+		/// Загрузка прямоугольник из XElement'a
+		/// </summary>
+		/// <param name="xEl"></param>
+		/// <returns></returns>
 		public static Rect LoadRectFromXElement(XElement xEl)
 		{
 			double x = Double.Parse(xEl.Attribute("X").Value);
@@ -96,12 +106,22 @@ namespace TalesGenerator.UI.Classes
 			return new Rect(x, y, width, height);
 		}
 
+		/// <summary>
+		/// Сохранение точки в XElement
+		/// </summary>
+		/// <param name="point"></param>
+		/// <param name="xEl"></param>
 		public static void SavePointToXElement(Point point, XElement xEl)
 		{
 			xEl.Add(new XAttribute("X", Convert.ToString(point.X)));
 			xEl.Add(new XAttribute("Y", Convert.ToString(point.Y)));
 		}
 
+		/// <summary>
+		/// Загрузка точки из XElement'a
+		/// </summary>
+		/// <param name="xEl"></param>
+		/// <returns></returns>
 		public static Point LoadPointFromXElement(XElement xEl)
 		{
 			double x = Convert.ToDouble(xEl.Attribute("X").Value);
@@ -110,21 +130,24 @@ namespace TalesGenerator.UI.Classes
 		}
 	}
 
+	#region ValueConverters
+
 	[ValueConversion(typeof(String), typeof(NetworkEdgeType))]
 	public class NetworkEdgeTypeStringConverter : IValueConverter
 	{
-	public object  Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-	{
-		NetworkEdgeType type = (NetworkEdgeType)value;
-		return Utils.ConvertType(type);
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			NetworkEdgeType type = (NetworkEdgeType)value;
+			return Utils.ConvertType(type);
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+
+			String type = value as String;
+			return Utils.ConvertType(type);
+		}
 	}
 
-	public object  ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-	{
-
-		String type = value as String;
-		return Utils.ConvertType(type);
-	}
-}
-
+	#endregion
 }

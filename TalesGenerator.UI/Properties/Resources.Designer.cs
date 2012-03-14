@@ -88,6 +88,24 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Начать консультацию.
+        /// </summary>
+        public static string ConsultStartLabel {
+            get {
+                return ResourceManager.GetString("ConsultStartLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Объекты сети.
+        /// </summary>
+        public static string DispatcherLabel {
+            get {
+                return ResourceManager.GetString("DispatcherLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Выход.
         /// </summary>
         public static string Exit {
@@ -106,11 +124,29 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Тип дуги.
+        /// </summary>
+        public static string LinkTypeLabel {
+            get {
+                return ResourceManager.GetString("LinkTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Новый проект.
         /// </summary>
         public static string NewProject {
             get {
                 return ResourceManager.GetString("NewProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ДиспетчерОбъектов.
+        /// </summary>
+        public static string ObjectDispatcher {
+            get {
+                return ResourceManager.GetString("ObjectDispatcher", resourceCulture);
             }
         }
         
@@ -165,6 +201,33 @@ namespace TalesGenerator.UI.Properties {
         public static string SaveWarning {
             get {
                 return ResourceManager.GetString("SaveWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Связи.
+        /// </summary>
+        public static string TreeLinks {
+            get {
+                return ResourceManager.GetString("TreeLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вершины.
+        /// </summary>
+        public static string TreeNodes {
+            get {
+                return ResourceManager.GetString("TreeNodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Объекты сети.
+        /// </summary>
+        public static string TreeObjects {
+            get {
+                return ResourceManager.GetString("TreeObjects", resourceCulture);
             }
         }
     }

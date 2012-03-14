@@ -163,8 +163,5 @@ namespace TalesGenerator.UI.Classes
 		}
 
 		#endregion
-
-
-
 	}
 }
