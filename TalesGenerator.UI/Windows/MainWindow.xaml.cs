@@ -86,7 +86,6 @@ namespace TalesGenerator.UI.Windows
 				{
 					DiagramNetwork.IsEnabled = true;
 				}
-				_project.Network.ResetDirtiness();
 				RefreshFrame();
 			}
 		}
@@ -101,7 +100,6 @@ namespace TalesGenerator.UI.Windows
 			if (_project.Path != "")
 			{
 				_project.Save();
-				_project.Network.ResetDirtiness();
 				RefreshFrame();
 				return;
 			}
@@ -123,7 +121,6 @@ namespace TalesGenerator.UI.Windows
 				_project.Path = saveDialog.FileName;
 
 				_project.Save();
-				_project.Network.ResetDirtiness();
 			}
 			RefreshFrame();
 		}
