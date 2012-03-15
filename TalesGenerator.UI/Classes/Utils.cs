@@ -25,12 +25,15 @@ namespace TalesGenerator.UI.Classes
 			switch (type)
 			{
 				case "агент":
+				case "#агент":
 					result = NetworkEdgeType.Agent;
 					break;
 				case "реципиент":
+				case "#реципиент":
 					result = NetworkEdgeType.Recipient;
 					break;
 				case "is_a":
+				case "#is_a":
 					result = NetworkEdgeType.IsA;
 					break;
 			}

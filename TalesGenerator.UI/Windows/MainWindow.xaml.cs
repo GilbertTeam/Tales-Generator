@@ -256,6 +256,7 @@ namespace TalesGenerator.UI.Windows
 			Network network = _project.Network;
 			NetworkNode netNode = network.Nodes.Add();
 			newNode.Uid = netNode.Id.ToString();
+			newNode.ContextMenu = FindResource("NodeContextMenuKey") as ContextMenu;
 			// биндинг
 			Binding binding = new Binding();
 			binding.Path = new PropertyPath("Name");
@@ -375,6 +376,8 @@ namespace TalesGenerator.UI.Windows
 				binding.Source = edge;
 				binding.Mode = BindingMode.TwoWay;
 				link.SetBinding(DiagramLink.TextProperty, binding);
+
+				link.ContextMenu = FindResource("LinkContextMenuKey") as ContextMenu;
 			}
 			catch (ArgumentException ex)
 			{

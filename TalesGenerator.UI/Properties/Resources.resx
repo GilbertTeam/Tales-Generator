@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AgentLabel" xml:space="preserve">
+    <value>#агент</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>TalesGenerator</value>
+  </data>
+  <data name="ChangeNodeTextLabel" xml:space="preserve">
+    <value>Переименовать вершину</value>
   </data>
   <data name="CloseProject" xml:space="preserve">
     <value>Закрыть проект</value>
@@ -129,6 +135,12 @@
   <data name="ConsultStartLabel" xml:space="preserve">
     <value>Начать консультацию</value>
   </data>
+  <data name="DeleteLinkLabel" xml:space="preserve">
+    <value>Удалить дугу</value>
+  </data>
+  <data name="DeleteNodeLabel" xml:space="preserve">
+    <value>Удалить вершину</value>
+  </data>
   <data name="DispatcherLabel" xml:space="preserve">
     <value>Объекты сети</value>
   </data>
@@ -137,6 +149,9 @@
   </data>
   <data name="ExportProject" xml:space="preserve">
     <value>Экспорт</value>
+  </data>
+  <data name="IsALabel" xml:space="preserve">
+    <value>#is_a</value>
   </data>
   <data name="LinkTypeLabel" xml:space="preserve">
     <value>Тип дуги</value>
@@ -149,6 +164,9 @@
   </data>
   <data name="OpenProject" xml:space="preserve">
     <value>Открыть проект</value>
+  </data>
+  <data name="RecipientLabel" xml:space="preserve">
+    <value>#реципиент</value>
   </data>
   <data name="SaveAsPdf" xml:space="preserve">
     <value>Экспортировать в PDF</value>

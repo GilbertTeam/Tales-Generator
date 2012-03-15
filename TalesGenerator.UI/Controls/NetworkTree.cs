@@ -136,6 +136,7 @@ namespace TalesGenerator.UI.Controls
 				style = this.FindResource("TreeHeaderNodesStyle") as Style;
 				_nodeNodes.Style = style;
 				_nodeObjects.Items.Add(_nodeNodes);
+				_nodeNodes.ContextMenu = FindResource("NodeContextMenuKey") as ContextMenu;
 
 				//Связи
 				_nodeLinks = new TreeViewItem();

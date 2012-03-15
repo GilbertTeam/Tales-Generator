@@ -79,9 +79,11 @@
 			<Setter Property="Border.Padding" Value="1"/>
 			<Setter Property="Border.BorderBrush" Value="{StaticResource BorderBrushKey}"/>
 		</Style>
-
+		<!--Конвертеры-->
 		<classes:NetworkEdgeTypeStringConverter x:Key="NetworkEdgeTypeStringConverter"/>
 		<classes:NodeNameConverter x:Key="NodeNameConverterKey"/>
+		
+		<!--NetworkTree Styles-->
 		<Style x:Key="TreeHeaderItemStyle">
 			<Setter Property="TreeViewItem.Focusable" Value="False"/>
 		</Style>
@@ -136,6 +138,7 @@
 			</Setter>
 		</Style>
 
+		<!-- NetworkTree Templates -->
 		<DataTemplate x:Key="TreeItemNodeTemplate">
 			<TextBlock Text="{Binding Path=Name, Converter={StaticResource NodeNameConverterKey}}"
 				   Tag="{Binding Path=Id}"/>

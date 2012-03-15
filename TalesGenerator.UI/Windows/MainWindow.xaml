@@ -19,6 +19,40 @@
 		<RoutedUICommand x:Key="ShowDispatcherKey"/>
 		<RoutedUICommand x:Key="LinkTypeKey"/>
 		<RoutedUICommand x:Key="StartConsultKey"/>
+		<!--ContextMenu-->
+		<Style x:Key="ContextMenuRadioStyle">
+			<Setter Property="RadioButton.HorizontalAlignment" Value="Center"/>
+			<Setter Property="RadioButton.GroupName" Value="LinkTypeGroup"/>
+			<Setter Property="RadioButton.IsHitTestVisible" Value="True"/>
+		</Style>
+		<!--Links-->
+		<ContextMenu x:Key="LinkContextMenuKey">
+			<MenuItem Header="Тип дуги">
+				<MenuItem Header="{x:Static p:Resources.IsALabel}">
+					<MenuItem.Icon>
+						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="{x:Static p:Resources.AgentLabel}">
+					<MenuItem.Icon>
+						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="{x:Static p:Resources.RecipientLabel}">
+					<MenuItem.Icon>
+						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+			<Separator/>
+			<MenuItem Header="{x:Static p:Resources.DeleteLinkLabel}"/>
+		</ContextMenu>
+		<!--Nodes-->
+		<ContextMenu x:Key="NodeContextMenuKey">
+			<MenuItem Header="{x:Static p:Resources.ChangeNodeTextLabel}"/>
+			<Separator/>
+			<MenuItem Header="{x:Static p:Resources.DeleteNodeLabel}"/>
+		</ContextMenu>
 	</Window.Resources>
 
 	<Window.InputBindings>
