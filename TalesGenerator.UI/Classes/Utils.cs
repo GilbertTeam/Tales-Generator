@@ -79,6 +79,22 @@ namespace TalesGenerator.UI.Classes
 			return result;
 		}
 
+		public static DiagramItem FindItemByUid(Diagram diagram, int id)
+		{
+			DiagramItem result = null;
+
+			foreach (DiagramItem item in diagram.Items)
+			{
+				if (Convert.ToInt32(item.Uid) == id)
+				{
+					result = item;
+					break;
+				}
+			}
+
+			return result;
+		}
+
 		/// <summary>
 		/// Сохранение прямоугольниа в XElement
 		/// </summary>
@@ -146,6 +162,24 @@ namespace TalesGenerator.UI.Classes
 
 			String type = value as String;
 			return Utils.ConvertType(type);
+		}
+	}
+
+	[ValueConversion(typeof(String), typeof(String))]
+	public class NodeNameConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			string str = (string)value;
+			string res = str.Length == 0 ? Properties.Resources.UnnamedLinkLabel : str;
+			return res;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		{
+			string str = (string)value;
+			string res = str == Properties.Resources.UnnamedLinkLabel ? "" : str;
+			return res;
 		}
 	}
 

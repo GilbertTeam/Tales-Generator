@@ -17,6 +17,8 @@ using TalesGenerator.Core;
 using TalesGenerator.Core.Collections;
 using TalesGenerator.UI.Classes;
 using TalesGenerator.UI.Properties;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace TalesGenerator.UI.Controls
 {
@@ -124,21 +126,21 @@ namespace TalesGenerator.UI.Controls
 				//Объекты
 				_nodeObjects = new TreeViewItem();
 				_nodeObjects.Header = Properties.Resources.TreeObjects;
-				style = _generic["TreeHeaderObjectsStyle"] as Style;
+				style = this.FindResource("TreeHeaderObjectsStyle") as Style;
 				_nodeObjects.Style = style;
 				this.Items.Add(_nodeObjects);
 
 				//Вершины
 				_nodeNodes = new TreeViewItem();
 				_nodeNodes.Header = Properties.Resources.TreeNodes;
-				style = _generic["TreeHeaderNodesStyle"] as Style;
+				style = this.FindResource("TreeHeaderNodesStyle") as Style;
 				_nodeNodes.Style = style;
 				_nodeObjects.Items.Add(_nodeNodes);
 
 				//Связи
 				_nodeLinks = new TreeViewItem();
 				_nodeLinks.Header = Properties.Resources.TreeLinks;
-				style = _generic["TreeHeaderLinksStyle"] as Style;
+				style = this.FindResource("TreeHeaderLinksStyle") as Style;
 				_nodeLinks.Style = style;
 				_nodeObjects.Items.Add(_nodeLinks);
 			}
@@ -146,10 +148,10 @@ namespace TalesGenerator.UI.Controls
 			DataTemplate template;
 
 			_nodeNodes.ItemsSource = _network.Nodes;
-			template = _generic["TreeItemNodeTemplate"] as DataTemplate;
+			template = this.FindResource("TreeItemNodeTemplate") as DataTemplate;
 			_nodeNodes.ItemTemplate = template;
 
-			template = _generic["TreeItemLinkTemplate"] as DataTemplate;
+			template = this.FindResource("TreeItemLinkTemplate") as DataTemplate;
 			_nodeLinks.ItemsSource = _network.Edges;
 			_nodeLinks.ItemTemplate = template;
 
@@ -158,11 +160,123 @@ namespace TalesGenerator.UI.Controls
 			_nodeObjects.IsExpanded = true;
 		}
 
+		//private ObservableCollection<NetworkObjectTreeViewItem> CreateCollectionFromNodes(NetworkNodeCollection networkNodeCollection)
+		//{
+		//    ObservableCollection<NetworkObjectTreeViewItem> collection = new ObservableCollection<NetworkObjectTreeViewItem>();
+
+		//    foreach (NetworkNode node in networkNodeCollection)
+		//    {
+		//        NetworkObjectTreeViewItem item = new NetworkObjectTreeViewItem();
+		//        item.IsExpanded = false;
+		//        item.IsSelected = false;
+		//        item.NetObject = node;
+		//    }
+
+		//    return collection;
+		//}
+
+		//private ObservableCollection<NetworkObjectTreeViewItem> CreateCollectionFromEdges(NetworkEdgeCollection networkNodeCollection)
+		//{
+		//    ObservableCollection<NetworkObjectTreeViewItem> collection = new ObservableCollection<NetworkObjectTreeViewItem>();
+
+		//    foreach (NetworkEdge edge in networkNodeCollection)
+		//    {
+		//        NetworkObjectTreeViewItem item = new NetworkObjectTreeViewItem();
+		//        item.IsExpanded = false;
+		//        item.IsSelected = false;
+		//        item.NetObject = edge;
+		//    }
+
+		//    return collection;
+		//}
+
+		public TreeViewItem FindNode(int id)
+		{
+			if (_network == null)
+				return null;
+
+			foreach (object item in _nodeLinks.Items)
+			{
+				NetworkEdge edge = item as NetworkEdge;
+				if (edge != null && edge.Id == id)
+				{
+					return _nodeLinks.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+				}
+			}
+
+			foreach (object item in _nodeNodes.Items)
+			{
+				NetworkNode node = item as NetworkNode;
+				if (node != null && node.Id == id)
+				{
+					object obj = _nodeNodes.ItemContainerGenerator.ContainerFromItem(item);
+					return obj as TreeViewItem;
+				}
+			}
+
+			return null;
+		}
+
+		public void ClearSelection()
+		{
+			foreach (object item in _nodeLinks.Items)
+			{
+				TreeViewItem treeItem = _nodeLinks.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+				if (treeItem != null) treeItem.IsSelected = false;
+			}
+		
+
+			foreach (object item in _nodeNodes.Items)
+			{
+				TreeViewItem treeItem = _nodeNodes.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+				if (treeItem != null) treeItem.IsSelected = false;
+			}
+		}
+
 		#endregion
 
 		#region EventHandlers
 
 		#endregion
-
 	}
+
+	//public class NetworkObjectTreeViewItem : INotifyPropertyChanged
+	//{
+	//    public event PropertyChangedEventHandler PropertyChanged;
+
+	//    private bool _isSelected;
+	//    private bool _isExpanded;
+	//    private NetworkObject _netObject;
+
+	//    public bool IsExpanded
+	//    {
+	//        get { return _isExpanded; }
+	//        set
+	//        {
+	//            _isExpanded = value;
+	//            this.PropertyChanged(this, new PropertyChangedEventArgs("IsExpanded"));
+	//        }
+	//    }
+
+	//    public bool IsSelected
+	//    {
+	//        get { return _isSelected; }
+	//        set
+	//        {
+	//            _isSelected = value;
+	//            this.PropertyChanged(this, new PropertyChangedEventArgs("IsSelected"));
+	//        }
+	//    }
+
+	//    public NetworkObject NetObject
+	//    {
+	//        get { return _netObject; }
+	//        set
+	//        {
+	//            _netObject = value;
+	//            this.PropertyChanged(this, new PropertyChangedEventArgs("NetObject"));
+	//        }
+	//    }
+
+	//}
 }

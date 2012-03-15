@@ -29,7 +29,8 @@
 							  HorizontalAlignment="Stretch"
 							  VerticalAlignment="Stretch"
 							  Style="{StaticResource ControlWithMarginsStyleKey}"
-							  Grid.Row="2"/>
+							  Grid.Row="2"
+							  SelectedItemChanged="NetworkObjectsTree_SelectedItemChanged"/>
 	</Grid>
 	</Border>
 </UserControl>

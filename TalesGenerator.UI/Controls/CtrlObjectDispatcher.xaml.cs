@@ -22,6 +22,12 @@ namespace TalesGenerator.UI.Controls
 	/// </summary>
 	public partial class CtrlObjectDispatcher : UserControl
 	{
+		#region Fields
+
+		public event OnSelectionChanged SelectionChanged;
+
+		#endregion
+
 		#region Contructors
 
 		public CtrlObjectDispatcher()
@@ -36,6 +42,33 @@ namespace TalesGenerator.UI.Controls
 		public void SetNetwork(Network network)
 		{
 			NetworkObjectsTree.CurrentNetwork = network;
+		}
+
+		public void SetSelection(int id)
+		{
+			if (id == -1)
+			{
+				NetworkObjectsTree.ClearSelection();
+			}
+			else
+			{
+				TreeViewItem item = NetworkObjectsTree.FindNode(id);
+				if (item != null)
+					item.IsSelected = true;
+			}
+		}
+
+		#endregion
+
+		#region Event Handlers
+
+		private void NetworkObjectsTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+		{
+			NetworkObject netObject = e.NewValue as NetworkObject;
+			if (netObject == null)
+				return;
+
+			SelectionChanged(netObject.Id);
 		}
 
 		#endregion

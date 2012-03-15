@@ -29,6 +29,8 @@ namespace TalesGenerator.UI.Windows
 	{
 		Project _project;
 
+		bool _updatingDiagramSelection;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -40,6 +42,9 @@ namespace TalesGenerator.UI.Windows
 			DiagramNetwork.IsEnabled = _project.Network != null;
 			ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
 			DispatcherPanelButton.IsChecked = this.DispatcherPanel.Visibility == System.Windows.Visibility.Visible;
+
+			DispatcherPanel.SelectionChanged += new OnSelectionChanged(DispatcherPanel_SelectionChanged);
+			_updatingDiagramSelection = false;
 
 			AssignNetwork();
 		}
@@ -327,6 +332,20 @@ namespace TalesGenerator.UI.Windows
 			//    netNode.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
 		}
 
+		private void DiagramNetwork_SelectionChanged(object sender, EventArgs e)
+		{
+			if (_updatingDiagramSelection)
+				return;
+			if (DiagramNetwork.Selection.Items.Count == 0)
+			{
+				DispatcherPanel.SetSelection(-1);
+				return;
+			}
+			DiagramItem item = DiagramNetwork.Selection.Items[0];
+			int id = Convert.ToInt32(item.Uid);
+			DispatcherPanel.SetSelection(id);
+		}
+
 		#endregion
 
 		#region Link events
@@ -456,6 +475,20 @@ namespace TalesGenerator.UI.Windows
 				}
 				e.Handled = true;
 			}
+		}
+
+		#endregion
+
+		#region Panels events
+
+		void DispatcherPanel_SelectionChanged(int id)
+		{
+			if (_updatingDiagramSelection)
+				return;
+			_updatingDiagramSelection = true;
+			this.DiagramNetwork.Selection.Clear();
+			Utils.FindItemByUid(DiagramNetwork, id).Selected = true;
+			_updatingDiagramSelection = false;
 		}
 
 		#endregion

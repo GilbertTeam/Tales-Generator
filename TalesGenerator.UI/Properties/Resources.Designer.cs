@@ -230,5 +230,14 @@ namespace TalesGenerator.UI.Properties {
                 return ResourceManager.GetString("TreeObjects", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Неименованная вершина&gt;.
+        /// </summary>
+        public static string UnnamedLinkLabel {
+            get {
+                return ResourceManager.GetString("UnnamedLinkLabel", resourceCulture);
+            }
+        }
     }
 }

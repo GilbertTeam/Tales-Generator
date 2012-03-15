@@ -166,7 +166,8 @@
 							  LinkDeselected="DiagramNetwork_LinkDeselected"
 							  LinkDeleted="DiagramNetwork_LinkDeleted"
 							  LinkCreated="DiagramNetwork_LinkCreated"
-							  DelKeyAction="DeleteSelectedItems"/>
+							  DelKeyAction="DeleteSelectedItems"
+							 SelectionChanged="DiagramNetwork_SelectionChanged"/>
 				</ScrollViewer>
 			</Border>
 		</DockPanel>

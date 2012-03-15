@@ -174,4 +174,7 @@
   <data name="TreeObjects" xml:space="preserve">
     <value>Объекты сети</value>
   </data>
+  <data name="UnnamedLinkLabel" xml:space="preserve">
+    <value>&lt;Неименованная вершина&gt;</value>
+  </data>
 </root>
