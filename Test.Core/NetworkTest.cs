@@ -397,6 +397,11 @@ namespace TalesGenerator.Core
 		{
 			Network network = new Network();
 
+			Assert.IsTrue(network.IsDirty);
+			using (MemoryStream memoryStream = new MemoryStream())
+			{
+				network.SaveToStream(memoryStream);
+			}
 			Assert.IsFalse(network.IsDirty);
 
 			NetworkNode networkNode = network.Nodes.Add();

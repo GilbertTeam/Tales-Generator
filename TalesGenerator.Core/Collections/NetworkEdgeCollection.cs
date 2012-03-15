@@ -6,7 +6,7 @@ namespace TalesGenerator.Core.Collections
 	{
 		#region Constructors
 
-		public NetworkEdgeCollection(Network network)
+		internal NetworkEdgeCollection(Network network)
 			: base(network)
 		{
 		}
@@ -14,7 +14,26 @@ namespace TalesGenerator.Core.Collections
 
 		#region Methods
 
+		protected override void RemoveItem(int index)
+		{
+			NetworkEdge deletingEdge = Items[index];
+
+			if (deletingEdge.Type == NetworkEdgeType.IsA)
+			{
+				deletingEdge.EndNode.BaseNode = null;
+			}
+
+			base.RemoveItem(index);
+		}
+
 		public NetworkEdge Add(NetworkNode startNode, NetworkNode endNode)
+		{
+			NetworkEdge networkEdge = Add(startNode, endNode, NetworkEdgeType.IsA);
+
+			return networkEdge;
+		}
+
+		public NetworkEdge Add(NetworkNode startNode, NetworkNode endNode, NetworkEdgeType edgeType)
 		{
 			if (startNode == null)
 			{
@@ -26,12 +45,17 @@ namespace TalesGenerator.Core.Collections
 			}
 			if (startNode == endNode)
 			{
-				throw new ArgumentException("Невозможно создать дугу с началом, совпадающим с концом");
+				throw new ArgumentException(Properties.Resources.NetworkEdgeCreateError);
 			}
 
-			NetworkEdge networkEdge = new NetworkEdge(_network, startNode, endNode);
+			NetworkEdge networkEdge = new NetworkEdge(_network, startNode, endNode, edgeType);
 
 			Add(networkEdge);
+
+			if (edgeType == NetworkEdgeType.IsA)
+			{
+				endNode.BaseNode = startNode;
+			}
 
 			return networkEdge;
 		}

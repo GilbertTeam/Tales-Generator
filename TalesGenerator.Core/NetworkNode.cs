@@ -13,6 +13,8 @@ namespace TalesGenerator.Core
 		#region Fields
 
 		private string _name;
+
+		private NetworkNode _baseNode;
 		#endregion
 
 		#region Properties
@@ -28,6 +30,19 @@ namespace TalesGenerator.Core
 				_name = value;
 
 				OnPropertyChanged("Name");
+			}
+		}
+
+		/// <summary>
+		/// Возвращает базовую вершину.
+		/// </summary>
+		public NetworkNode BaseNode
+		{
+			get { return _baseNode; }
+
+			internal set
+			{
+				_baseNode = value;
 			}
 		}
 
@@ -70,7 +85,7 @@ namespace TalesGenerator.Core
 		/// Создает новую вершину сети с заданным именем.
 		/// </summary>
 		/// <param name="network">Сеть, которой должна принадлежать вершина.</param>
-		/// <param name="name">Имя вершины.</param>
+		/// <param name="name">Имя новой вершины.</param>
 		internal NetworkNode(Network network, string name)
 			: base(network)
 		{
@@ -79,7 +94,45 @@ namespace TalesGenerator.Core
 				throw new ArgumentNullException("name");
 			}
 
-			Name = name;
+			_name = name;
+		}
+
+		/// <summary>
+		/// Создает новую вершину сети с заданной базовой вершиной.
+		/// </summary>
+		/// <param name="network">Сеть, которой должна принадлежать вершина.</param>
+		/// <param name="baseNode">Базовая вершина.</param>
+		internal NetworkNode(Network network, NetworkNode baseNode)
+			: base(network)
+		{
+			if (baseNode == null)
+			{
+				throw new ArgumentNullException("baseNode");
+			}
+
+			_baseNode = baseNode;
+		}
+
+		/// <summary>
+		/// Создает новую вершину сети с заданными именем и базовой вершиной.
+		/// </summary>
+		/// <param name="network">Сеть, которой должна принадлежать вершина.</param>
+		/// <param name="name">Имя новой вершины.</param>
+		/// <param name="baseNode">Базовая вершина.</param>
+		internal NetworkNode(Network network, string name, NetworkNode baseNode)
+			: base(network)
+		{
+			if (name == null)
+			{
+				throw new ArgumentNullException("name");
+			}
+			if (baseNode == null)
+			{
+				throw new ArgumentNullException("baseNode");
+			}
+
+			_name = name;
+			_baseNode = baseNode;
 		}
 		#endregion
 

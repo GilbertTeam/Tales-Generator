@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using TalesGenerator.Core.Collections;
 using TalesGenerator.Core.Serialization;
-using System.Collections.Specialized;
-using System.ComponentModel;
 
 namespace TalesGenerator.Core
 {
@@ -27,7 +27,7 @@ namespace TalesGenerator.Core
 		private readonly NetworkEdgeCollection _edges;
 
 		/// <summary>
-		/// Следующий используемый индекс объекта сети.
+		/// Следующий свободный индекс объекта сети.
 		/// </summary>
 		private int _nextId;
 

@@ -99,6 +99,19 @@ namespace TalesGenerator.Core
 		/// <param name="startNode">Вершина, из которой должна исходить данная дуга.</param>
 		/// <param name="endNode">Вершина, в которую должна входить данная дуга.</param>
 		internal NetworkEdge(Network parent, NetworkNode startNode, NetworkNode endNode)
+			: this(parent, startNode, endNode, NetworkEdgeType.IsA)
+		{
+			
+		}
+
+		/// <summary>
+		/// Создает новую дугу сети.
+		/// </summary>
+		/// <param name="parent">Сеть, которой должна принадлежать дуга.</param>
+		/// <param name="startNode">Вершина, из которой должна исходить данная дуга.</param>
+		/// <param name="endNode">Вершина, в которую должна входить данная дуга.</param>
+		/// <param name="edgeType">Тип дуги.</param>
+		internal NetworkEdge(Network parent, NetworkNode startNode, NetworkNode endNode, NetworkEdgeType edgeType)
 			: base(parent)
 		{
 			if (startNode == null)
@@ -116,6 +129,7 @@ namespace TalesGenerator.Core
 
 			_startNode = startNode;
 			_endNode = endNode;
+			_edgeType = edgeType;
 		}
 		#endregion
 

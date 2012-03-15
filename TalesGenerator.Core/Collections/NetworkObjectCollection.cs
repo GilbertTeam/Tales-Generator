@@ -26,11 +26,6 @@ namespace TalesGenerator.Core.Collections
 
 		#region Methods
 
-		internal new void Add(T networkObject)
-		{
-			Add(networkObject);
-		}
-
 		public T FindById(int id)
 		{
 			T networkObject = null;

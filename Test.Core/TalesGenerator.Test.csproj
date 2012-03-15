@@ -142,7 +142,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NetworkEdgeCollectionTest.cs" />
     <Compile Include="NetworkEdgeTest.cs" />
+    <Compile Include="NetworkNodeCollectionTest.cs" />
     <Compile Include="NetworkTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

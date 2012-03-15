@@ -5,7 +5,7 @@ namespace TalesGenerator.Core.Collections
 	{
 		#region Constructors
 
-		public NetworkNodeCollection(Network network)
+		internal NetworkNodeCollection(Network network)
 			: base(network)
 		{
 		}
@@ -17,7 +17,7 @@ namespace TalesGenerator.Core.Collections
 		{
 			NetworkNode networkNode = new NetworkNode(_network);
 
-			Add(networkNode);
+			Items.Add(networkNode);
 
 			return networkNode;
 		}
@@ -25,6 +25,24 @@ namespace TalesGenerator.Core.Collections
 		public NetworkNode Add(string name)
 		{
 			NetworkNode networkNode = new NetworkNode(_network, name);
+
+			Items.Add(networkNode);
+
+			return networkNode;
+		}
+
+		public new NetworkNode Add(NetworkNode baseNode)
+		{
+			NetworkNode networkNode = new NetworkNode(_network, baseNode);
+
+			Items.Add(networkNode);
+
+			return networkNode;
+		}
+
+		public NetworkNode Add(string name, NetworkNode baseNode)
+		{
+			NetworkNode networkNode = new NetworkNode(_network, name, baseNode);
 
 			Items.Add(networkNode);
 
