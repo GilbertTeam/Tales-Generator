@@ -31,6 +31,8 @@ namespace TalesGenerator.UI.Windows
 
 		bool _updatingDiagramSelection;
 
+		NetworkEdgeType _currentType;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -45,6 +47,8 @@ namespace TalesGenerator.UI.Windows
 
 			DispatcherPanel.SelectionChanged += new OnSelectionChanged(DispatcherPanel_SelectionChanged);
 			_updatingDiagramSelection = false;
+
+			_currentType = NetworkEdgeType.IsA;
 
 			AssignNetwork();
 		}
@@ -201,10 +205,53 @@ namespace TalesGenerator.UI.Windows
 
 		private void ChooseLinkType_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			bool canExecute =  DiagramNetwork.IsEnabled && DiagramNetwork.Selection.Items.Count == 1 &&
-				(DiagramNetwork.Selection.Items[0] as DiagramLink != null);
+			bool canExecute = DiagramNetwork != null && DiagramNetwork.IsEnabled;
+			if (e.Parameter != null && Utils.ConvertType(e.Parameter as string) == _currentType)
+			{
+
+				RibbonRadioButton button = GetButton(e.Parameter as string); ;
+				if (button != null)
+					button.IsChecked = true;
+			}
 			e.CanExecute = canExecute;
 			LinkTypeButton.IsEnabled = canExecute;
+		}
+
+		private RibbonRadioButton GetButton(string p)
+		{
+			RibbonRadioButton button = null;
+			foreach (RibbonRadioButton item in LinkTypeButton.Items)
+			{
+				if (item.Label == p)
+				{
+					button = item;
+					return button;
+				}
+			}
+			return button;
+		}
+
+		private void ChooseLinkType_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			if (e.Parameter != null)
+			{
+				NetworkEdgeType type = Utils.ConvertType(e.Parameter as string);
+				if (DiagramNetwork.Selection.Items.Count == 1 &&
+					(DiagramNetwork.Selection.Items[0] as DiagramLink != null))
+				{
+					DiagramLink link = DiagramNetwork.Selection.Items[0] as DiagramLink;
+					NetworkEdge edge = _project.Network.Edges.FindById(Convert.ToInt32(link.Uid));
+					try
+					{
+						edge.Type = type;
+					}
+					catch (Exception ex)
+					{
+						ShowErrorMessage(ex.Message);
+					}
+				}
+				_currentType = type;
+			}
 		}
 
 		private void StartConsult_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -380,6 +427,7 @@ namespace TalesGenerator.UI.Windows
 			try
 			{
 				NetworkEdge edge = network.Edges.Add(origin, destination);
+				edge.Type = _currentType; //временно, пока нет конструктора с указанием типа связи
 				link.Uid = edge.Id.ToString();
 				link.Text = Utils.ConvertType(edge.Type);
 				//yay, the king has returned!
@@ -397,7 +445,7 @@ namespace TalesGenerator.UI.Windows
 				link.HeadShape = ArrowHeads.PointerArrow;
 				link.InvalidateVisual();
 			}
-			catch (ArgumentException ex)
+			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
 				DiagramNetwork.Links.Remove(e.Link);
@@ -436,6 +484,8 @@ namespace TalesGenerator.UI.Windows
 
 			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
 			PanelProps.Edge = edge;
+
+			_currentType = edge.Type;
 
 			//edge.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(edge_PropertyChanged);
 
@@ -673,6 +723,7 @@ namespace TalesGenerator.UI.Windows
 				try
 				{
 					edge.Type = type;
+					_currentType = type;
 				}
 				catch (Exception ex)
 				{

@@ -5,6 +5,7 @@
 					 xmlns:p="clr-namespace:TalesGenerator.UI.Properties"
 					 xmlns:controls="clr-namespace:TalesGenerator.UI.Controls"
 					 xmlns:diag="http://mindfusion.eu/diagramming/wpf"
+					 xmlns:core="clr-namespace:TalesGenerator.Core;assembly=TalesGenerator.Core"
 					 Title="MainWindow" Height="600" Width="800"
 					 ResizeMode="CanResizeWithGrip"
 					 WindowStartupLocation="CenterScreen"
@@ -17,7 +18,7 @@
 		<RoutedUICommand x:Key="SaveAsSvg"/>
 		<RoutedUICommand x:Key="Export"/>
 		<RoutedUICommand x:Key="ShowDispatcherKey"/>
-		<RoutedUICommand x:Key="LinkTypeKey"/>
+		<RoutedUICommand x:Key="SetLinkTypeKey"/>
 		<RoutedUICommand x:Key="StartConsultKey"/>
 		<!--ContextMenu-->
 		<Style x:Key="ContextMenuLinkTypeStyle">
@@ -77,7 +78,8 @@
 		<CommandBinding Command="{StaticResource Export}" CanExecute="Export_CanExecute"/>
 		<CommandBinding Command="{StaticResource ShowDispatcherKey}" CanExecute="ShowDispatcher_CanExecute"
 						Executed="ShowDispatcher_Executed"/>
-		<CommandBinding Command="{StaticResource LinkTypeKey}" CanExecute="ChooseLinkType_CanExecute"/>
+		<CommandBinding Command="{StaticResource SetLinkTypeKey}" CanExecute="ChooseLinkType_CanExecute"
+						Executed="ChooseLinkType_Executed"/>
 		<CommandBinding Command="{StaticResource StartConsultKey}" CanExecute="StartConsult_CanExecute"/>
 	</Window.CommandBindings>
 	
@@ -143,14 +145,20 @@
 											   LargeImageSource="..\Images\Ribbon\DispatcherImage.png"/>
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="Дуги">
-					<ribbon:RibbonSplitButton x:Name="LinkTypeButton"
+					<ribbon:RibbonMenuButton x:Name="LinkTypeButton"
 											  Label="{x:Static p:Resources.LinkTypeLabel}"
-											  Command="{StaticResource LinkTypeKey}"
+											  
 											  LargeImageSource="..\Images\Ribbon\LinkTypeImage.png">
-						<ribbon:RibbonRadioButton Label="is_a"/>
-						<ribbon:RibbonRadioButton Label="agent"/>
-						<ribbon:RibbonRadioButton Label="recipient"/>
-					</ribbon:RibbonSplitButton>
+						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsALabel}"
+												  Command="{StaticResource SetLinkTypeKey}"
+												  CommandParameter="{x:Static p:Resources.IsALabel}"/>
+						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.AgentLabel}"
+												  Command="{StaticResource SetLinkTypeKey}"
+												  CommandParameter="{x:Static p:Resources.AgentLabel}"/>
+						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.RecipientLabel}"
+												  Command="{StaticResource SetLinkTypeKey}"
+												  CommandParameter="{x:Static p:Resources.RecipientLabel}"/>
+					</ribbon:RibbonMenuButton>
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="Консультация">
 					<ribbon:RibbonButton x:Name="ConsultButton"
