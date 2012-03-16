@@ -20,38 +20,37 @@
 		<RoutedUICommand x:Key="LinkTypeKey"/>
 		<RoutedUICommand x:Key="StartConsultKey"/>
 		<!--ContextMenu-->
-		<Style x:Key="ContextMenuRadioStyle">
-			<Setter Property="RadioButton.HorizontalAlignment" Value="Center"/>
-			<Setter Property="RadioButton.GroupName" Value="LinkTypeGroup"/>
-			<Setter Property="RadioButton.IsHitTestVisible" Value="True"/>
+		<Style x:Key="ContextMenuLinkTypeStyle">
+			<Setter Property="MenuItem.IsCheckable" Value="True"/>
+			<EventSetter Event="MenuItem.Click" Handler="MenuItemType_Click"/>
 		</Style>
 		<!--Links-->
 		<ContextMenu x:Key="LinkContextMenuKey">
-			<MenuItem Header="Тип дуги">
-				<MenuItem Header="{x:Static p:Resources.IsALabel}">
-					<MenuItem.Icon>
-						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
-					</MenuItem.Icon>
+			<MenuItem Header="Тип дуги"
+					  SubmenuOpened="MenuItem_SubmenuOpened">
+				<MenuItem Header="{x:Static p:Resources.IsALabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
 				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.AgentLabel}">
-					<MenuItem.Icon>
-						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
-					</MenuItem.Icon>
+				<MenuItem Header="{x:Static p:Resources.AgentLabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
+
 				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.RecipientLabel}">
-					<MenuItem.Icon>
-						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
-					</MenuItem.Icon>
+				<MenuItem Header="{x:Static p:Resources.RecipientLabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
+
 				</MenuItem>
 			</MenuItem>
 			<Separator/>
-			<MenuItem Header="{x:Static p:Resources.DeleteLinkLabel}"/>
+			<MenuItem Header="{x:Static p:Resources.DeleteLinkLabel}"
+					  Click="MenuItemDeleteLink_Click"/>
 		</ContextMenu>
 		<!--Nodes-->
 		<ContextMenu x:Key="NodeContextMenuKey">
-			<MenuItem Header="{x:Static p:Resources.ChangeNodeTextLabel}"/>
+			<MenuItem Header="{x:Static p:Resources.ChangeNodeTextLabel}"
+					  Click="MenuItemNodeChangeText_Click"/>
 			<Separator/>
-			<MenuItem Header="{x:Static p:Resources.DeleteNodeLabel}"/>
+			<MenuItem Header="{x:Static p:Resources.DeleteNodeLabel}"
+					  Click="MenuItemNodeDelete_Click"/>
 		</ContextMenu>
 	</Window.Resources>
 
@@ -181,27 +180,29 @@
 						  MouseWheel="DiagramNetwork_MouseWheel"
 						  KeyDown="ScrollDiagram_KeyDown">
 					<diag:Diagram x:Name="DiagramNetwork"
-							  DockPanel.Dock="Right"
-							  VerticalAlignment="Stretch"
-							  HorizontalAlignment="Stretch"
-							  Margin="5"
-							  Behavior="LinkShapes"
-							  DefaultShape="Ellipse"
-							  ZoomFactor="100"
-							  AutoResize="AllDirections"
-							  HorizontalContentAlignment="Stretch"
-							  VerticalContentAlignment="Stretch"
-							  MouseWheel="DiagramNetwork_MouseWheel"
-							  NodeSelected="DiagramNetwork_NodeSelected"
-							  NodeDeselected="DiagramNetwork_NodeDeselected"
-							  NodeDeleted="DiagramNetwork_NodeDeleted"
-							  NodeCreated="DiagramNetwork_NodeCreated"
-							  LinkSelected="DiagramNetwork_LinkSelected"
-							  LinkDeselected="DiagramNetwork_LinkDeselected"
-							  LinkDeleted="DiagramNetwork_LinkDeleted"
-							  LinkCreated="DiagramNetwork_LinkCreated"
-							  DelKeyAction="DeleteSelectedItems"
-							 SelectionChanged="DiagramNetwork_SelectionChanged"/>
+								  DockPanel.Dock="Right"
+								  VerticalAlignment="Stretch"
+								  HorizontalAlignment="Stretch"
+								  Margin="5"
+								  Behavior="LinkShapes"
+								  DefaultShape="Ellipse"
+								  ZoomFactor="100"
+								  AutoResize="AllDirections"
+								  HorizontalContentAlignment="Stretch"
+								  VerticalContentAlignment="Stretch"
+								  MouseWheel="DiagramNetwork_MouseWheel"
+								  NodeSelected="DiagramNetwork_NodeSelected"
+								  NodeDeselected="DiagramNetwork_NodeDeselected"
+								  NodeDeleted="DiagramNetwork_NodeDeleted"
+								  NodeCreated="DiagramNetwork_NodeCreated"
+								  LinkSelected="DiagramNetwork_LinkSelected"
+								  LinkDeselected="DiagramNetwork_LinkDeselected"
+								  LinkDeleted="DiagramNetwork_LinkDeleted"
+								  LinkCreated="DiagramNetwork_LinkCreated"
+								  DelKeyAction="DeleteSelectedItems"
+								  SelectionChanged="DiagramNetwork_SelectionChanged" 
+								  AllowInplaceEdit="False"
+								  InplaceEditAcceptOnEnter="True" />
 				</ScrollViewer>
 			</Border>
 		</DockPanel>

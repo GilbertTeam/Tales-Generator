@@ -148,5 +148,18 @@
 			<TextBlock Text="{Binding Path=Type, Converter={StaticResource NetworkEdgeTypeStringConverter}}"
 				   Tag="{Binding Path=Id}"/>
 		</DataTemplate>
+		
+		<Style x:Key="WindowElementStyle">
+			<Setter Property="FrameworkElement.Margin" Value="5,5,5,5"/>
+		</Style>
+		
+		<!--Button style-->
+		<Style x:Key="CommandButtonStyle" BasedOn="{StaticResource WindowElementStyle}">
+			<Setter Property="Button.Width" Value="75"/>
+			<Setter Property="Button.Height" Value="23"/>
+			<Setter Property="Button.HorizontalAlignment" Value="Right"/>
+			<Setter Property="Button.VerticalAlignment" Value="Center"/>
+		</Style>
 	</Application.Resources>
+	
 </Application>

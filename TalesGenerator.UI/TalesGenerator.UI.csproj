@@ -173,6 +173,7 @@
     </Compile>
     <Compile Include="Classes\CustomBehavior.cs" />
     <Compile Include="Classes\Delegates.cs" />
+    <Compile Include="Classes\DiagramNodeEx.cs" />
     <Compile Include="Classes\DiagramSerializer.cs" />
     <Compile Include="Classes\Enums.cs" />
     <Compile Include="Classes\Project.cs" />
@@ -182,6 +183,9 @@
     </Compile>
     <Compile Include="Controls\NetworkTree.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Windows\StringEditWindow.xaml.cs">
+      <DependentUpon>StringEditWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\CtrlPropsPanel.xaml.cs">
@@ -234,6 +238,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\StringEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
