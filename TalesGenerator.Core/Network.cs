@@ -190,6 +190,8 @@ namespace TalesGenerator.Core
 				network._nextId = Math.Max(network.Nodes.Max(node => node.Id), network.Edges.Max(edge => edge.Id)) + 1;
 			}
 
+			network._isDirty = false;
+
 			return network;
 		}
 

@@ -16,6 +16,43 @@
 		<RoutedUICommand x:Key="SaveAsPdf"/>
 		<RoutedUICommand x:Key="SaveAsSvg"/>
 		<RoutedUICommand x:Key="Export"/>
+		<RoutedUICommand x:Key="ShowDispatcherKey"/>
+		<RoutedUICommand x:Key="LinkTypeKey"/>
+		<RoutedUICommand x:Key="StartConsultKey"/>
+		<!--ContextMenu-->
+		<Style x:Key="ContextMenuRadioStyle">
+			<Setter Property="RadioButton.HorizontalAlignment" Value="Center"/>
+			<Setter Property="RadioButton.GroupName" Value="LinkTypeGroup"/>
+			<Setter Property="RadioButton.IsHitTestVisible" Value="True"/>
+		</Style>
+		<!--Links-->
+		<ContextMenu x:Key="LinkContextMenuKey">
+			<MenuItem Header="Тип дуги">
+				<MenuItem Header="{x:Static p:Resources.IsALabel}">
+					<MenuItem.Icon>
+						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="{x:Static p:Resources.AgentLabel}">
+					<MenuItem.Icon>
+						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="{x:Static p:Resources.RecipientLabel}">
+					<MenuItem.Icon>
+						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
+					</MenuItem.Icon>
+				</MenuItem>
+			</MenuItem>
+			<Separator/>
+			<MenuItem Header="{x:Static p:Resources.DeleteLinkLabel}"/>
+		</ContextMenu>
+		<!--Nodes-->
+		<ContextMenu x:Key="NodeContextMenuKey">
+			<MenuItem Header="{x:Static p:Resources.ChangeNodeTextLabel}"/>
+			<Separator/>
+			<MenuItem Header="{x:Static p:Resources.DeleteNodeLabel}"/>
+		</ContextMenu>
 	</Window.Resources>
 
 	<Window.InputBindings>
@@ -39,6 +76,10 @@
 		<CommandBinding Command="{StaticResource SaveAsSvg}" CanExecute="SaveAsSvg_CanExecute"
 						Executed="SaveAsSvg_Executed"/>
 		<CommandBinding Command="{StaticResource Export}" CanExecute="Export_CanExecute"/>
+		<CommandBinding Command="{StaticResource ShowDispatcherKey}" CanExecute="ShowDispatcher_CanExecute"
+						Executed="ShowDispatcher_Executed"/>
+		<CommandBinding Command="{StaticResource LinkTypeKey}" CanExecute="ChooseLinkType_CanExecute"/>
+		<CommandBinding Command="{StaticResource StartConsultKey}" CanExecute="StartConsult_CanExecute"/>
 	</Window.CommandBindings>
 	
 	<Grid x:Name="LayoutGrid" ShowGridLines="False">
@@ -48,11 +89,12 @@
 		</Grid.RowDefinitions>
 		<!--Ribbon-->
 		<ribbon:Ribbon x:Name="Ribbon" Grid.Row="0"
-					   Style="{StaticResource MainStyleEx}">
+					   Background="{StaticResource BackgroundBrushKey}"
+					   BorderBrush="{StaticResource BorderBrushKey}"
+					   Foreground="{StaticResource ForegroundBrushKey}">
 			<!--Main Menu-->
 			<ribbon:Ribbon.ApplicationMenu>
-				<ribbon:RibbonApplicationMenu Style="{StaticResource MainStyleEx}"
-											  SmallImageSource="..\Images\Ribbon\MainMenuImage.png">
+				<ribbon:RibbonApplicationMenu Background="{StaticResource Background2BrushKey}">
 					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.NewProject}"
 													  Command="New"
 													  ImageSource="..\Images\Ribbon\NewImage.png"/>
@@ -96,35 +138,59 @@
 											   Label="Показать свойства"
 											   Command="{StaticResource ShowProps}"
 											   LargeImageSource="..\Images\Ribbon\ShowPropsImage.png"/>
+					<ribbon:RibbonToggleButton x:Name="DispatcherPanelButton"
+											   Label="{x:Static p:Resources.DispatcherLabel}"
+											   Command="{StaticResource ShowDispatcherKey}"
+											   LargeImageSource="..\Images\Ribbon\DispatcherImage.png"/>
+				</ribbon:RibbonGroup>
+				<ribbon:RibbonGroup Header="Дуги">
+					<ribbon:RibbonSplitButton x:Name="LinkTypeButton"
+											  Label="{x:Static p:Resources.LinkTypeLabel}"
+											  Command="{StaticResource LinkTypeKey}"
+											  LargeImageSource="..\Images\Ribbon\LinkTypeImage.png">
+						<ribbon:RibbonRadioButton Label="is_a"/>
+						<ribbon:RibbonRadioButton Label="agent"/>
+						<ribbon:RibbonRadioButton Label="recipient"/>
+					</ribbon:RibbonSplitButton>
+				</ribbon:RibbonGroup>
+				<ribbon:RibbonGroup Header="Консультация">
+					<ribbon:RibbonButton x:Name="ConsultButton"
+										 Label="{x:Static p:Resources.ConsultStartLabel}"
+										 Command="{StaticResource StartConsultKey}"
+										 LargeImageSource="..\Images\Ribbon\ConsultImage.png"/>
 				</ribbon:RibbonGroup>
 			</ribbon:RibbonTab>
 		</ribbon:Ribbon>
 		<!--Content-->
 		<DockPanel x:Name="DockContent" Grid.Row="1">
-			<controls:PropsPanel x:Name="PanelProps" 
-								  DockPanel.Dock="Left"
-								  VerticalAlignment="Stretch"
-								  HorizontalAlignment="Left">
-
+			<controls:PropsPanel x:Name="PanelProps"
+								 VerticalAlignment="Stretch"
+								 HorizontalAlignment="Left"
+								 Visibility="Collapsed"
+								 Margin="5">
 			</controls:PropsPanel>
-			<ScrollViewer x:Name="ScrollDiagram"
+			<controls:CtrlObjectDispatcher x:Name="DispatcherPanel"
+										   VerticalAlignment="Stretch"
+										   DockPanel.Dock="Left"
+										   Width="200"
+										   Margin="5"/>
+			<Border Style="{StaticResource BorderStyleKey}" Margin="5">
+				<ScrollViewer x:Name="ScrollDiagram"
 						  HorizontalScrollBarVisibility="Auto"
 						  VerticalScrollBarVisibility="Auto"
 						  MouseWheel="DiagramNetwork_MouseWheel"
 						  KeyDown="ScrollDiagram_KeyDown">
-				<diag:Diagram x:Name="DiagramNetwork"
+					<diag:Diagram x:Name="DiagramNetwork"
 							  DockPanel.Dock="Right"
 							  VerticalAlignment="Stretch"
 							  HorizontalAlignment="Stretch"
-							  Margin="5,5,5,5"
+							  Margin="5"
 							  Behavior="LinkShapes"
 							  DefaultShape="Ellipse"
 							  ZoomFactor="100"
 							  AutoResize="AllDirections"
 							  HorizontalContentAlignment="Stretch"
 							  VerticalContentAlignment="Stretch"
-							  Style="{StaticResource MainStyleEx}"
-							  BackBrush="{StaticResource BrushPrimary4}"
 							  MouseWheel="DiagramNetwork_MouseWheel"
 							  NodeSelected="DiagramNetwork_NodeSelected"
 							  NodeDeselected="DiagramNetwork_NodeDeselected"
@@ -134,8 +200,10 @@
 							  LinkDeselected="DiagramNetwork_LinkDeselected"
 							  LinkDeleted="DiagramNetwork_LinkDeleted"
 							  LinkCreated="DiagramNetwork_LinkCreated"
-							  DelKeyAction="DeleteSelectedItems"/>
-			</ScrollViewer>
+							  DelKeyAction="DeleteSelectedItems"
+							 SelectionChanged="DiagramNetwork_SelectionChanged"/>
+				</ScrollViewer>
+			</Border>
 		</DockPanel>
 	</Grid>
 </ribbon:RibbonWindow>

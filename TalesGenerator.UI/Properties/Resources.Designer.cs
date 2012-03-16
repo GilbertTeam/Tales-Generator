@@ -61,11 +61,29 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #агент.
+        /// </summary>
+        public static string AgentLabel {
+            get {
+                return ResourceManager.GetString("AgentLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TalesGenerator.
         /// </summary>
         public static string AppName {
             get {
                 return ResourceManager.GetString("AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Переименовать вершину.
+        /// </summary>
+        public static string ChangeNodeTextLabel {
+            get {
+                return ResourceManager.GetString("ChangeNodeTextLabel", resourceCulture);
             }
         }
         
@@ -88,6 +106,42 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Начать консультацию.
+        /// </summary>
+        public static string ConsultStartLabel {
+            get {
+                return ResourceManager.GetString("ConsultStartLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Удалить дугу.
+        /// </summary>
+        public static string DeleteLinkLabel {
+            get {
+                return ResourceManager.GetString("DeleteLinkLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Удалить вершину.
+        /// </summary>
+        public static string DeleteNodeLabel {
+            get {
+                return ResourceManager.GetString("DeleteNodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Объекты сети.
+        /// </summary>
+        public static string DispatcherLabel {
+            get {
+                return ResourceManager.GetString("DispatcherLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Выход.
         /// </summary>
         public static string Exit {
@@ -106,6 +160,24 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #is_a.
+        /// </summary>
+        public static string IsALabel {
+            get {
+                return ResourceManager.GetString("IsALabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Тип дуги.
+        /// </summary>
+        public static string LinkTypeLabel {
+            get {
+                return ResourceManager.GetString("LinkTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Новый проект.
         /// </summary>
         public static string NewProject {
@@ -115,11 +187,29 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ДиспетчерОбъектов.
+        /// </summary>
+        public static string ObjectDispatcher {
+            get {
+                return ResourceManager.GetString("ObjectDispatcher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Открыть проект.
         /// </summary>
         public static string OpenProject {
             get {
                 return ResourceManager.GetString("OpenProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #реципиент.
+        /// </summary>
+        public static string RecipientLabel {
+            get {
+                return ResourceManager.GetString("RecipientLabel", resourceCulture);
             }
         }
         
@@ -165,6 +255,42 @@ namespace TalesGenerator.UI.Properties {
         public static string SaveWarning {
             get {
                 return ResourceManager.GetString("SaveWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Связи.
+        /// </summary>
+        public static string TreeLinks {
+            get {
+                return ResourceManager.GetString("TreeLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вершины.
+        /// </summary>
+        public static string TreeNodes {
+            get {
+                return ResourceManager.GetString("TreeNodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Объекты сети.
+        /// </summary>
+        public static string TreeObjects {
+            get {
+                return ResourceManager.GetString("TreeObjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Неименованная вершина&gt;.
+        /// </summary>
+        public static string UnnamedLinkLabel {
+            get {
+                return ResourceManager.GetString("UnnamedLinkLabel", resourceCulture);
             }
         }
     }

@@ -154,6 +154,7 @@ namespace Test.Core
 		public void TypeTest()
 		{
 			Network network = new Network();
+
 			Assert.IsTrue(network.IsDirty);
 
 			network.Nodes.Add();

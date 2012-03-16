@@ -29,6 +29,8 @@ namespace TalesGenerator.UI.Windows
 	{
 		Project _project;
 
+		bool _updatingDiagramSelection;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -39,15 +41,19 @@ namespace TalesGenerator.UI.Windows
 
 			DiagramNetwork.IsEnabled = _project.Network != null;
 			ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
+			DispatcherPanelButton.IsChecked = this.DispatcherPanel.Visibility == System.Windows.Visibility.Visible;
 
-			RefreshFrame();
+			DispatcherPanel.SelectionChanged += new OnSelectionChanged(DispatcherPanel_SelectionChanged);
+			_updatingDiagramSelection = false;
+
+			AssignNetwork();
 		}
 
 		void _project_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName == "Network")
 			{
-				this.DiagramNetwork.IsEnabled = _project.Network != null;
+				AssignNetwork();
 			}
 		}
 
@@ -61,6 +67,7 @@ namespace TalesGenerator.UI.Windows
 		private void New_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			_project.Network = new Network();
+			//Tree.CurrentNetwork = _project.Network;
 			DiagramNetwork.Items.Clear();
 		}
 
@@ -84,7 +91,7 @@ namespace TalesGenerator.UI.Windows
 				{
 					DiagramNetwork.IsEnabled = true;
 				}
-				RefreshFrame();
+				AssignNetwork();
 			}
 		}
 
@@ -181,6 +188,30 @@ namespace TalesGenerator.UI.Windows
 			e.CanExecute = _project != null && _project.Network != null;
 		}
 
+		private void ShowDispatcher_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void ShowDispatcher_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			DispatcherPanel.Visibility = DispatcherPanel.Visibility == System.Windows.Visibility.Visible ?
+				Visibility.Collapsed : Visibility.Visible;
+		}
+
+		private void ChooseLinkType_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			bool canExecute =  DiagramNetwork.IsEnabled && DiagramNetwork.Selection.Items.Count == 1 &&
+				(DiagramNetwork.Selection.Items[0] as DiagramLink != null);
+			e.CanExecute = canExecute;
+			LinkTypeButton.IsEnabled = canExecute;
+		}
+
+		private void StartConsult_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+
+		}
+
 		#endregion
 
 		#region Window events
@@ -225,6 +256,7 @@ namespace TalesGenerator.UI.Windows
 			Network network = _project.Network;
 			NetworkNode netNode = network.Nodes.Add();
 			newNode.Uid = netNode.Id.ToString();
+			newNode.ContextMenu = FindResource("NodeContextMenuKey") as ContextMenu;
 			// биндинг
 			Binding binding = new Binding();
 			binding.Path = new PropertyPath("Name");
@@ -301,6 +333,20 @@ namespace TalesGenerator.UI.Windows
 			//    netNode.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
 		}
 
+		private void DiagramNetwork_SelectionChanged(object sender, EventArgs e)
+		{
+			if (_updatingDiagramSelection)
+				return;
+			if (DiagramNetwork.Selection.Items.Count == 0)
+			{
+				DispatcherPanel.SetSelection(-1);
+				return;
+			}
+			DiagramItem item = DiagramNetwork.Selection.Items[0];
+			int id = Convert.ToInt32(item.Uid);
+			DispatcherPanel.SetSelection(id);
+		}
+
 		#endregion
 
 		#region Link events
@@ -330,6 +376,8 @@ namespace TalesGenerator.UI.Windows
 				binding.Source = edge;
 				binding.Mode = BindingMode.TwoWay;
 				link.SetBinding(DiagramLink.TextProperty, binding);
+
+				link.ContextMenu = FindResource("LinkContextMenuKey") as ContextMenu;
 			}
 			catch (ArgumentException ex)
 			{
@@ -434,6 +482,20 @@ namespace TalesGenerator.UI.Windows
 
 		#endregion
 
+		#region Panels events
+
+		void DispatcherPanel_SelectionChanged(int id)
+		{
+			if (_updatingDiagramSelection)
+				return;
+			_updatingDiagramSelection = true;
+			this.DiagramNetwork.Selection.Clear();
+			Utils.FindItemByUid(DiagramNetwork, id).Selected = true;
+			_updatingDiagramSelection = false;
+		}
+
+		#endregion
+
 		#region Window methods
 
 		/// <summary>
@@ -473,9 +535,12 @@ namespace TalesGenerator.UI.Windows
 			}
 		}
 
-		#endregion
-
-		#region Methods
+		private void AssignNetwork()
+		{
+			DispatcherPanel.SetNetwork(_project.Network);
+			this.DiagramNetwork.IsEnabled = _project.Network != null;
+			RefreshFrame();
+		}
 
 		protected void RefreshFrame()
 		{
@@ -516,14 +581,12 @@ namespace TalesGenerator.UI.Windows
 			}
 			_project.Network = null;
 			_project.Path = "";
+			AssignNetwork();
 			DiagramNetwork.ClearAll();
-			RefreshFrame();
 			return true;
 
 		}
 
 		#endregion
-
-
 	}
 }
