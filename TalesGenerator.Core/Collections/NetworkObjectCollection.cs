@@ -60,14 +60,6 @@ namespace TalesGenerator.Core.Collections
 
 		#region Methods
 
-		protected void OnCollectionChanged(NotifyCollectionChangedAction action)
-		{
-			if (CollectionChanged != null)
-			{
-				CollectionChanged(this, new NotifyCollectionChangedEventArgs(action));
-			}
-		}
-
 		protected void OnCollectionChanged(NotifyCollectionChangedAction action, T changedItem)
 		{
 			if (CollectionChanged != null)
@@ -81,6 +73,14 @@ namespace TalesGenerator.Core.Collections
 			if (CollectionChanged != null)
 			{
 				CollectionChanged(this, new NotifyCollectionChangedEventArgs(action, changedItems));
+			}
+		}
+
+		protected void OnCollectionChanged(NotifyCollectionChangedAction action, T changedItem, int index)
+		{
+			if (CollectionChanged != null)
+			{
+				CollectionChanged(this, new NotifyCollectionChangedEventArgs(action, changedItem, index));
 			}
 		}
 
@@ -122,17 +122,18 @@ namespace TalesGenerator.Core.Collections
 			bool result = _items.Remove(item);
 
 			//TODO Подумать над этим.
-			OnCollectionChanged(NotifyCollectionChangedAction.Remove, item);
+			OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
 		}
 
 		public virtual bool Remove(T item)
 		{
 			item.PropertyChanged -= NetworkObjectOnPropertyChanged;
 
+			int index = _items.IndexOf(item);
 			bool result = _items.Remove(item);
 
 			//TODO Подумать над этим.
-			OnCollectionChanged(NotifyCollectionChangedAction.Remove, item);
+			OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
 
 			return result;
 		}

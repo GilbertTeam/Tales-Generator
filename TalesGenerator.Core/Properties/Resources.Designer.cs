@@ -68,5 +68,14 @@ namespace TalesGenerator.Core.Properties {
                 return ResourceManager.GetString("NetworkEdgeCreateError", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Невозможно создание нескольких дуг типа is-a для одной вершины..
+        /// </summary>
+        internal static string NetworkIsAEdgeError {
+            get {
+                return ResourceManager.GetString("NetworkIsAEdgeError", resourceCulture);
+            }
+        }
     }
 }

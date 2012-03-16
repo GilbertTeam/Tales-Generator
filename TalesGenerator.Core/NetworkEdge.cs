@@ -10,7 +10,9 @@ namespace TalesGenerator.Core
 	{
 		IsA,
 		Agent,
-		Recipient
+		Recipient,
+		Locative,
+		Goal
 	}
 
 	/// <summary>
@@ -194,6 +196,11 @@ namespace TalesGenerator.Core
 				_endNode == null)
 			{
 				throw new SerializationException();
+			}
+
+			if (_edgeType == NetworkEdgeType.IsA)
+			{
+				_startNode.BaseNode = _endNode;
 			}
 		}
 		#endregion

@@ -143,6 +143,8 @@ namespace TalesGenerator.Core
 
 			CheckNetworkNode(network.Nodes[0], network, "Node 1",
 				new List<NetworkEdge> { network.Edges[4] }, new List<NetworkEdge> { network.Edges[0] });
+			Assert.AreEqual(network.Nodes[1], network.Nodes[0].BaseNode);
+
 			CheckNetworkNode(network.Nodes[1], network, "Node 2",
 				new List<NetworkEdge> { network.Edges[0] }, new List<NetworkEdge> { network.Edges[1] });
 			CheckNetworkNode(network.Nodes[2], network, "Node 3",

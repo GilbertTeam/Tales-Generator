@@ -120,4 +120,7 @@
   <data name="NetworkEdgeCreateError" xml:space="preserve">
     <value>Невозможно создать дугу с началом, совпадающим с концом.</value>
   </data>
+  <data name="NetworkIsAEdgeError" xml:space="preserve">
+    <value>Невозможно создание нескольких дуг типа is-a для одной вершины.</value>
+  </data>
 </root>

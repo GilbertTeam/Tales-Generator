@@ -2,6 +2,9 @@
 
 namespace TalesGenerator.Core.Collections
 {
+	/// <summary>
+	/// Коллекция дуг сети.
+	/// </summary>
 	public class NetworkEdgeCollection : NetworkObjectCollection<NetworkEdge>
 	{
 		#region Constructors
@@ -14,6 +17,12 @@ namespace TalesGenerator.Core.Collections
 
 		#region Methods
 
+		/// <summary>
+		/// Добавляет новую дугу сети с типом is-a.
+		/// </summary>
+		/// <param name="startNode">Вершина, из которой должна исходить новая дуга.</param>
+		/// <param name="endNode">Вершина, в которую должна входить новая дуга.</param>
+		/// <returns>Новая дуга.</returns>
 		public NetworkEdge Add(NetworkNode startNode, NetworkNode endNode)
 		{
 			NetworkEdge networkEdge = Add(startNode, endNode, NetworkEdgeType.IsA);
@@ -21,6 +30,13 @@ namespace TalesGenerator.Core.Collections
 			return networkEdge;
 		}
 
+		/// <summary>
+		/// Добавляет новую дугу сети с указанным типом.
+		/// </summary>
+		/// <param name="startNode">Вершина, из которой должна исходить новая дуга.</param>
+		/// <param name="endNode">Вершина, в которую должна входить новая дуга.</param>
+		/// <param name="edgeType">Тип дуги.</param>
+		/// <returns>Новая дуга.</returns>
 		public NetworkEdge Add(NetworkNode startNode, NetworkNode endNode, NetworkEdgeType edgeType)
 		{
 			if (startNode == null)
@@ -36,14 +52,19 @@ namespace TalesGenerator.Core.Collections
 				throw new ArgumentException(Properties.Resources.NetworkEdgeCreateError);
 			}
 
+			if (edgeType == NetworkEdgeType.IsA)
+			{
+				if (startNode.BaseNode != null)
+				{
+					throw new ArgumentException(Properties.Resources.NetworkIsAEdgeError);
+				}
+
+				startNode.BaseNode = endNode;
+			}
+
 			NetworkEdge networkEdge = new NetworkEdge(_network, startNode, endNode, edgeType);
 
 			Add(networkEdge);
-
-			if (edgeType == NetworkEdgeType.IsA)
-			{
-				startNode.BaseNode = endNode;
-			}
 
 			return networkEdge;
 		}

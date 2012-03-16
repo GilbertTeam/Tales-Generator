@@ -133,6 +133,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\NetworkEdgesExtension.cs" />
+    <Compile Include="Collections\NetworkNodesExtension.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="NetworkEdge.cs" />
     <Compile Include="Collections\NetworkEdgeCollection.cs" />
@@ -146,6 +148,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Reasoner.cs" />
     <Compile Include="Serialization\SerializableObject.cs" />
     <Compile Include="Serialization\SerializationException.cs" />
   </ItemGroup>
