@@ -202,7 +202,8 @@
 								  DelKeyAction="DeleteSelectedItems"
 								  SelectionChanged="DiagramNetwork_SelectionChanged" 
 								  AllowInplaceEdit="False"
-								  InplaceEditAcceptOnEnter="True" />
+								  InplaceEditAcceptOnEnter="True">
+					</diag:Diagram>
 				</ScrollViewer>
 			</Border>
 		</DockPanel>

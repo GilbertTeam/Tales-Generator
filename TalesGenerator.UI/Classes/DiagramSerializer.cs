@@ -134,11 +134,13 @@ namespace TalesGenerator.UI.Classes
 				}
 
 				link.UpdateFromPoints();
+				link.HeadShape = ArrowHeads.PointerArrow;
 
 				Binding binding = new Binding();
 				binding.Path = new PropertyPath("Type");
 				binding.Converter = new NetworkEdgeTypeStringConverter();
 				binding.Source = edge;
+				binding.ConverterParameter = link;
 				binding.Mode = BindingMode.TwoWay;
 				link.SetBinding(DiagramLink.TextProperty, binding);
 			}

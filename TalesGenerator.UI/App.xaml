@@ -160,6 +160,18 @@
 			<Setter Property="Button.HorizontalAlignment" Value="Right"/>
 			<Setter Property="Button.VerticalAlignment" Value="Center"/>
 		</Style>
+		
+		<!--Link pen-->
+		<SolidColorBrush x:Key="LinkFillBrush" Color="Orange"/>
+		
+		<SolidColorBrush x:Key="IsABrush" Color="Black"/>
+		<SolidColorBrush x:Key="AgentBrush" Color="Green"/>
+		<SolidColorBrush x:Key="RecipientBrush" Color="Blue"/>
+		
+		<Pen x:Key="IsAPen" Brush="{StaticResource IsABrush}" Thickness="3"/>
+		<Pen x:Key="AgentPen" Brush="{StaticResource AgentBrush}" Thickness="3"/>
+		<Pen x:Key="RecipientPen" Brush="{StaticResource RecipientBrush}" Thickness="3"/>
+
 	</Application.Resources>
 	
 </Application>

@@ -220,17 +220,22 @@ namespace TalesGenerator.UI.Controls
 
 		public void ClearSelection()
 		{
-			foreach (object item in _nodeLinks.Items)
+			if (_nodeLinks != null)
 			{
-				TreeViewItem treeItem = _nodeLinks.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
-				if (treeItem != null) treeItem.IsSelected = false;
+				foreach (object item in _nodeLinks.Items)
+				{
+					TreeViewItem treeItem = _nodeLinks.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+					if (treeItem != null) treeItem.IsSelected = false;
+				}
 			}
-		
 
-			foreach (object item in _nodeNodes.Items)
+			if (_nodeNodes != null)
 			{
-				TreeViewItem treeItem = _nodeNodes.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
-				if (treeItem != null) treeItem.IsSelected = false;
+				foreach (object item in _nodeNodes.Items)
+				{
+					TreeViewItem treeItem = _nodeNodes.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+					if (treeItem != null) treeItem.IsSelected = false;
+				}
 			}
 		}
 

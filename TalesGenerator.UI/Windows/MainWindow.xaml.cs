@@ -388,9 +388,14 @@ namespace TalesGenerator.UI.Windows
 				binding.Converter = new NetworkEdgeTypeStringConverter();
 				binding.Source = edge;
 				binding.Mode = BindingMode.TwoWay;
+				binding.NotifyOnSourceUpdated = true;
+				binding.NotifyOnTargetUpdated = true;
+				binding.ConverterParameter = link;
 				link.SetBinding(DiagramLink.TextProperty, binding);
 
 				link.ContextMenu = FindResource("LinkContextMenuKey") as ContextMenu;
+				link.HeadShape = ArrowHeads.PointerArrow;
+				link.InvalidateVisual();
 			}
 			catch (ArgumentException ex)
 			{
@@ -638,8 +643,12 @@ namespace TalesGenerator.UI.Windows
 		{
 			NetworkEdgeType type = Utils.ConvertType(item.Header.ToString());
 			NetworkEdge edge = GetNetworkObjectFromMenuItem(item) as NetworkEdge;
-			if (edge != null && edge.Type == type)
-				item.IsChecked = true;
+			if (edge != null)
+			{
+				if (edge.Type == type)
+					item.IsChecked = true;
+				else item.IsChecked = false;
+			}
 		}
 
 		private void MenuItemType_Click(object sender, RoutedEventArgs e)
