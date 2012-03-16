@@ -14,18 +14,6 @@ namespace TalesGenerator.Core.Collections
 
 		#region Methods
 
-		protected override void RemoveItem(int index)
-		{
-			NetworkEdge deletingEdge = Items[index];
-
-			if (deletingEdge.Type == NetworkEdgeType.IsA)
-			{
-				deletingEdge.EndNode.BaseNode = null;
-			}
-
-			base.RemoveItem(index);
-		}
-
 		public NetworkEdge Add(NetworkNode startNode, NetworkNode endNode)
 		{
 			NetworkEdge networkEdge = Add(startNode, endNode, NetworkEdgeType.IsA);
@@ -54,10 +42,25 @@ namespace TalesGenerator.Core.Collections
 
 			if (edgeType == NetworkEdgeType.IsA)
 			{
-				endNode.BaseNode = startNode;
+				startNode.BaseNode = endNode;
 			}
 
 			return networkEdge;
+		}
+
+		public override bool Remove(NetworkEdge networkEdge)
+		{
+			if (networkEdge == null)
+			{
+				throw new ArgumentNullException("networkEdge");
+			}
+
+			if (networkEdge.Type == NetworkEdgeType.IsA)
+			{
+				networkEdge.EndNode.BaseNode = null;
+			}
+
+			return base.Remove(networkEdge);
 		}
 		#endregion
 	}

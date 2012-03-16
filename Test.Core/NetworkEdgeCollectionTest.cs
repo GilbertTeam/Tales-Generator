@@ -92,17 +92,6 @@ namespace Test.Core
 			Assert.AreEqual(NetworkEdgeType.Agent, newEdge.Type);
 			Assert.IsNull(startNode.BaseNode);
 		}
-
-		[TestMethod()]
-		[DeploymentItem("TalesGenerator.Core.dll")]
-		public void RemoveItemTest()
-		{
-			PrivateObject param0 = null;
-			NetworkEdgeCollection_Accessor target = new NetworkEdgeCollection_Accessor(param0);
-			int index = 0;
-			target.RemoveItem(index);
-			Assert.Inconclusive("A method that does not return a value cannot be verified.");
-		}
 		#endregion
 	}
 }

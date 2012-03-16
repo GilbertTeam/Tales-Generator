@@ -17,7 +17,7 @@ namespace TalesGenerator.Core.Collections
 		{
 			NetworkNode networkNode = new NetworkNode(_network);
 
-			Items.Add(networkNode);
+			Add(networkNode);
 
 			return networkNode;
 		}
@@ -26,16 +26,7 @@ namespace TalesGenerator.Core.Collections
 		{
 			NetworkNode networkNode = new NetworkNode(_network, name);
 
-			Items.Add(networkNode);
-
-			return networkNode;
-		}
-
-		public new NetworkNode Add(NetworkNode baseNode)
-		{
-			NetworkNode networkNode = new NetworkNode(_network, baseNode);
-
-			Items.Add(networkNode);
+			Add(networkNode);
 
 			return networkNode;
 		}
@@ -44,7 +35,7 @@ namespace TalesGenerator.Core.Collections
 		{
 			NetworkNode networkNode = new NetworkNode(_network, name, baseNode);
 
-			Items.Add(networkNode);
+			Add(networkNode);
 
 			return networkNode;
 		}
