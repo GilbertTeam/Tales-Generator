@@ -12,6 +12,6 @@ namespace TalesGenerator.UI
 	/// </summary>
 	public partial class App : Application
 	{
-		
+		public const double StrokeThickness = 3;
 	}
 }

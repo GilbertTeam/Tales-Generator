@@ -8,6 +8,7 @@ using MindFusion.Diagramming.Wpf;
 using System.Windows.Data;
 using System.Windows;
 using System.Xml.Linq;
+using System.Windows.Media;
 
 namespace TalesGenerator.UI.Classes
 {
@@ -157,6 +158,37 @@ namespace TalesGenerator.UI.Classes
 		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
 			NetworkEdgeType type = (NetworkEdgeType)value;
+
+			DiagramLink link = parameter as DiagramLink;
+			if (link != null)
+			{
+				Style style = new Style();
+				Setter setter = new Setter();
+				string str;
+				switch (type)
+				{
+					case NetworkEdgeType.Agent:
+						str = "Agent";
+						break;
+					case NetworkEdgeType.Recipient:
+						str = "Recipient";
+						break;
+					default:
+						str = "IsA";
+						break;
+				}
+				SolidColorBrush brush = App.Current.FindResource(str + "Brush") as SolidColorBrush;
+				Pen pen = App.Current.FindResource(str + "Pen") as Pen;
+
+				link.HeadPen = pen;
+				link.Stroke = brush;
+				link.Brush = App.Current.FindResource("LinkFillBrush") as SolidColorBrush;
+				//link.StrokeThickness = App.StrokeThickness;
+				link.TextBrush = brush;
+				link.FontWeight = FontWeights.Bold;
+				
+			}
+
 			return Utils.ConvertType(type);
 		}
 

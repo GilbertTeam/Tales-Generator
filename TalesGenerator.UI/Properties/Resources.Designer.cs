@@ -142,6 +142,24 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Редактирование.
+        /// </summary>
+        public static string EditLabel {
+            get {
+                return ResourceManager.GetString("EditLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ошибка.
+        /// </summary>
+        public static string ErrorMsgCaption {
+            get {
+                return ResourceManager.GetString("ErrorMsgCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Выход.
         /// </summary>
         public static string Exit {
@@ -255,6 +273,15 @@ namespace TalesGenerator.UI.Properties {
         public static string SaveWarning {
             get {
                 return ResourceManager.GetString("SaveWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Введите новое значение:.
+        /// </summary>
+        public static string StringEditWndEnterLabel {
+            get {
+                return ResourceManager.GetString("StringEditWndEnterLabel", resourceCulture);
             }
         }
         

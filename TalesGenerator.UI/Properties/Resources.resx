@@ -144,6 +144,12 @@
   <data name="DispatcherLabel" xml:space="preserve">
     <value>Объекты сети</value>
   </data>
+  <data name="EditLabel" xml:space="preserve">
+    <value>Редактирование</value>
+  </data>
+  <data name="ErrorMsgCaption" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Выход</value>
   </data>
@@ -182,6 +188,9 @@
   </data>
   <data name="SaveWarning" xml:space="preserve">
     <value>Текущий проект содержит изменения. Желаете сохранить его перед закрытием?</value>
+  </data>
+  <data name="StringEditWndEnterLabel" xml:space="preserve">
+    <value>Введите новое значение:</value>
   </data>
   <data name="TreeLinks" xml:space="preserve">
     <value>Связи</value>

@@ -31,6 +31,8 @@ namespace TalesGenerator.UI.Windows
 
 		bool _updatingDiagramSelection;
 
+		NetworkEdgeType _currentType;
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -45,6 +47,8 @@ namespace TalesGenerator.UI.Windows
 
 			DispatcherPanel.SelectionChanged += new OnSelectionChanged(DispatcherPanel_SelectionChanged);
 			_updatingDiagramSelection = false;
+
+			_currentType = NetworkEdgeType.IsA;
 
 			AssignNetwork();
 		}
@@ -201,10 +205,53 @@ namespace TalesGenerator.UI.Windows
 
 		private void ChooseLinkType_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			bool canExecute =  DiagramNetwork.IsEnabled && DiagramNetwork.Selection.Items.Count == 1 &&
-				(DiagramNetwork.Selection.Items[0] as DiagramLink != null);
+			bool canExecute = DiagramNetwork != null && DiagramNetwork.IsEnabled;
+			if (e.Parameter != null && Utils.ConvertType(e.Parameter as string) == _currentType)
+			{
+
+				RibbonRadioButton button = GetButton(e.Parameter as string); ;
+				if (button != null)
+					button.IsChecked = true;
+			}
 			e.CanExecute = canExecute;
 			LinkTypeButton.IsEnabled = canExecute;
+		}
+
+		private RibbonRadioButton GetButton(string p)
+		{
+			RibbonRadioButton button = null;
+			foreach (RibbonRadioButton item in LinkTypeButton.Items)
+			{
+				if (item.Label == p)
+				{
+					button = item;
+					return button;
+				}
+			}
+			return button;
+		}
+
+		private void ChooseLinkType_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			if (e.Parameter != null)
+			{
+				NetworkEdgeType type = Utils.ConvertType(e.Parameter as string);
+				if (DiagramNetwork.Selection.Items.Count == 1 &&
+					(DiagramNetwork.Selection.Items[0] as DiagramLink != null))
+				{
+					DiagramLink link = DiagramNetwork.Selection.Items[0] as DiagramLink;
+					NetworkEdge edge = _project.Network.Edges.FindById(Convert.ToInt32(link.Uid));
+					try
+					{
+						edge.Type = type;
+					}
+					catch (Exception ex)
+					{
+						ShowErrorMessage(ex.Message);
+					}
+				}
+				_currentType = type;
+			}
 		}
 
 		private void StartConsult_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -260,8 +307,21 @@ namespace TalesGenerator.UI.Windows
 			// биндинг
 			Binding binding = new Binding();
 			binding.Path = new PropertyPath("Name");
+			binding.Mode = BindingMode.TwoWay;
 			binding.Source = netNode;
 			newNode.SetBinding(DiagramItem.TextProperty, binding);
+			newNode.MouseLeftButtonDown += new MouseButtonEventHandler(newNode_MouseLeftButtonDown);
+		}
+
+		void newNode_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.ClickCount == 2)
+			{
+				DiagramNode node = sender as DiagramNode;
+
+				StartEdit(node);
+
+			}
 		}
 
 		private void DiagramNetwork_NodeDeleted(object sender, NodeEventArgs e)
@@ -367,6 +427,7 @@ namespace TalesGenerator.UI.Windows
 			try
 			{
 				NetworkEdge edge = network.Edges.Add(origin, destination);
+				edge.Type = _currentType; //временно, пока нет конструктора с указанием типа связи
 				link.Uid = edge.Id.ToString();
 				link.Text = Utils.ConvertType(edge.Type);
 				//yay, the king has returned!
@@ -375,11 +436,16 @@ namespace TalesGenerator.UI.Windows
 				binding.Converter = new NetworkEdgeTypeStringConverter();
 				binding.Source = edge;
 				binding.Mode = BindingMode.TwoWay;
+				binding.NotifyOnSourceUpdated = true;
+				binding.NotifyOnTargetUpdated = true;
+				binding.ConverterParameter = link;
 				link.SetBinding(DiagramLink.TextProperty, binding);
 
 				link.ContextMenu = FindResource("LinkContextMenuKey") as ContextMenu;
+				link.HeadShape = ArrowHeads.PointerArrow;
+				link.InvalidateVisual();
 			}
-			catch (ArgumentException ex)
+			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message);
 				DiagramNetwork.Links.Remove(e.Link);
@@ -418,6 +484,8 @@ namespace TalesGenerator.UI.Windows
 
 			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
 			PanelProps.Edge = edge;
+
+			_currentType = edge.Type;
 
 			//edge.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(edge_PropertyChanged);
 
@@ -562,6 +630,12 @@ namespace TalesGenerator.UI.Windows
 			return result;
 		}
 
+		private void ShowErrorMessage(string message)
+		{
+			MessageBox.Show(message, Properties.Resources.ErrorMsgCaption, MessageBoxButton.OK,
+						MessageBoxImage.Error);
+		}
+
 		protected bool DoClose()
 		{
 			if (_project.Network.IsDirty)
@@ -584,7 +658,144 @@ namespace TalesGenerator.UI.Windows
 			AssignNetwork();
 			DiagramNetwork.ClearAll();
 			return true;
+		}
 
+		private void StartEdit(DiagramNode node)
+		{
+			Network network = _project.Network;
+			if (network == null)
+				return;
+
+			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(node.Uid));
+
+			DiagramNodeEx nodeEx = new DiagramNodeEx(node, netNode);
+
+			DiagramNetwork.BeginEdit(nodeEx);
+		}
+
+		#endregion
+
+		#region ContextMenus
+
+		private void MenuItem_SubmenuOpened(object sender, RoutedEventArgs e)
+		{
+			MenuItem linkTypes = sender as MenuItem;
+			if (linkTypes == null)
+				return;
+
+			foreach (MenuItem item in linkTypes.Items)
+			{
+				MenuItemUpdate(item);
+			}
+		}
+
+		private void MenuItemUpdate(MenuItem item)
+		{
+			NetworkEdgeType type = Utils.ConvertType(item.Header.ToString());
+			NetworkEdge edge = GetNetworkObjectFromMenuItem(item) as NetworkEdge;
+			if (edge != null)
+			{
+				if (edge.Type == type)
+					item.IsChecked = true;
+				else item.IsChecked = false;
+			}
+		}
+
+		private void MenuItemType_Click(object sender, RoutedEventArgs e)
+		{
+			MenuItem source = e.Source as MenuItem;
+			if (source == null)
+				return;
+
+			MenuItem category = source.Parent as MenuItem;
+			foreach (MenuItem item in category.Items)
+			{
+				item.IsChecked = false;
+			}
+
+			source.IsChecked = true;
+
+			NetworkEdgeType type = Utils.ConvertType(source.Header.ToString());
+
+			NetworkEdge edge = GetNetworkObjectFromMenuItem(source) as NetworkEdge;
+			if (edge != null)
+			{
+				try
+				{
+					edge.Type = type;
+					_currentType = type;
+				}
+				catch (Exception ex)
+				{
+					ShowErrorMessage(ex.Message);
+					
+				}
+			}
+		}
+
+		private void MenuItemDeleteLink_Click(object sender, RoutedEventArgs e)
+		{
+			MenuItem source = e.Source as MenuItem;
+			if (source == null)
+				return;
+
+			ContextMenuDeleteDiagramItem(source);
+		}
+
+		private void MenuItemNodeChangeText_Click(object sender, RoutedEventArgs e)
+		{
+			MenuItem source = e.Source as MenuItem;
+			if (source == null)
+				return;
+
+			ContextMenu menu = source.Parent as ContextMenu;
+			if (menu == null)
+				return;
+			DiagramNode node = menu.PlacementTarget as DiagramNode;
+			if (node == null)
+				return;
+
+			StartEdit(node);
+
+		}
+
+		private void MenuItemNodeDelete_Click(object sender, RoutedEventArgs e)
+		{
+			MenuItem source = e.Source as MenuItem;
+			if (source == null)
+				return;
+
+			ContextMenuDeleteDiagramItem(source);
+		}
+
+		private NetworkObject GetNetworkObjectFromMenuItem(MenuItem item)
+		{
+			MenuItem category = item.Parent as MenuItem;
+			NetworkEdgeType type = Utils.ConvertType(item.Header.ToString());
+
+			ContextMenu menu = category.Parent as ContextMenu;
+			if (menu == null)
+				return null;
+			DiagramLink link = menu.PlacementTarget as DiagramLink;
+			if (link == null)
+				return null;
+			int id = Convert.ToInt32(link.Uid);
+			NetworkObject obj = _project.Network.Edges.FindById(id);
+			if (obj == null)
+				obj = _project.Network.Nodes.FindById(id);
+			return obj;
+		}
+
+		private void ContextMenuDeleteDiagramItem(MenuItem source)
+		{
+			ContextMenu menu = source.Parent as ContextMenu;
+			if (menu == null)
+				return;
+			DiagramItem diagramItem = menu.PlacementTarget as DiagramItem;
+			if (diagramItem == null)
+				return;
+
+			DiagramNetwork.Items.Remove(diagramItem);
 		}
 
 		#endregion

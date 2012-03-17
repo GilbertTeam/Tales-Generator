@@ -5,6 +5,7 @@
 					 xmlns:p="clr-namespace:TalesGenerator.UI.Properties"
 					 xmlns:controls="clr-namespace:TalesGenerator.UI.Controls"
 					 xmlns:diag="http://mindfusion.eu/diagramming/wpf"
+					 xmlns:core="clr-namespace:TalesGenerator.Core;assembly=TalesGenerator.Core"
 					 Title="MainWindow" Height="600" Width="800"
 					 ResizeMode="CanResizeWithGrip"
 					 WindowStartupLocation="CenterScreen"
@@ -17,41 +18,40 @@
 		<RoutedUICommand x:Key="SaveAsSvg"/>
 		<RoutedUICommand x:Key="Export"/>
 		<RoutedUICommand x:Key="ShowDispatcherKey"/>
-		<RoutedUICommand x:Key="LinkTypeKey"/>
+		<RoutedUICommand x:Key="SetLinkTypeKey"/>
 		<RoutedUICommand x:Key="StartConsultKey"/>
 		<!--ContextMenu-->
-		<Style x:Key="ContextMenuRadioStyle">
-			<Setter Property="RadioButton.HorizontalAlignment" Value="Center"/>
-			<Setter Property="RadioButton.GroupName" Value="LinkTypeGroup"/>
-			<Setter Property="RadioButton.IsHitTestVisible" Value="True"/>
+		<Style x:Key="ContextMenuLinkTypeStyle">
+			<Setter Property="MenuItem.IsCheckable" Value="True"/>
+			<EventSetter Event="MenuItem.Click" Handler="MenuItemType_Click"/>
 		</Style>
 		<!--Links-->
 		<ContextMenu x:Key="LinkContextMenuKey">
-			<MenuItem Header="Тип дуги">
-				<MenuItem Header="{x:Static p:Resources.IsALabel}">
-					<MenuItem.Icon>
-						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
-					</MenuItem.Icon>
+			<MenuItem Header="Тип дуги"
+					  SubmenuOpened="MenuItem_SubmenuOpened">
+				<MenuItem Header="{x:Static p:Resources.IsALabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
 				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.AgentLabel}">
-					<MenuItem.Icon>
-						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
-					</MenuItem.Icon>
+				<MenuItem Header="{x:Static p:Resources.AgentLabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
+
 				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.RecipientLabel}">
-					<MenuItem.Icon>
-						<RadioButton Style="{StaticResource ContextMenuRadioStyle}"/>
-					</MenuItem.Icon>
+				<MenuItem Header="{x:Static p:Resources.RecipientLabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
+
 				</MenuItem>
 			</MenuItem>
 			<Separator/>
-			<MenuItem Header="{x:Static p:Resources.DeleteLinkLabel}"/>
+			<MenuItem Header="{x:Static p:Resources.DeleteLinkLabel}"
+					  Click="MenuItemDeleteLink_Click"/>
 		</ContextMenu>
 		<!--Nodes-->
 		<ContextMenu x:Key="NodeContextMenuKey">
-			<MenuItem Header="{x:Static p:Resources.ChangeNodeTextLabel}"/>
+			<MenuItem Header="{x:Static p:Resources.ChangeNodeTextLabel}"
+					  Click="MenuItemNodeChangeText_Click"/>
 			<Separator/>
-			<MenuItem Header="{x:Static p:Resources.DeleteNodeLabel}"/>
+			<MenuItem Header="{x:Static p:Resources.DeleteNodeLabel}"
+					  Click="MenuItemNodeDelete_Click"/>
 		</ContextMenu>
 	</Window.Resources>
 
@@ -78,7 +78,8 @@
 		<CommandBinding Command="{StaticResource Export}" CanExecute="Export_CanExecute"/>
 		<CommandBinding Command="{StaticResource ShowDispatcherKey}" CanExecute="ShowDispatcher_CanExecute"
 						Executed="ShowDispatcher_Executed"/>
-		<CommandBinding Command="{StaticResource LinkTypeKey}" CanExecute="ChooseLinkType_CanExecute"/>
+		<CommandBinding Command="{StaticResource SetLinkTypeKey}" CanExecute="ChooseLinkType_CanExecute"
+						Executed="ChooseLinkType_Executed"/>
 		<CommandBinding Command="{StaticResource StartConsultKey}" CanExecute="StartConsult_CanExecute"/>
 	</Window.CommandBindings>
 	
@@ -144,14 +145,20 @@
 											   LargeImageSource="..\Images\Ribbon\DispatcherImage.png"/>
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="Дуги">
-					<ribbon:RibbonSplitButton x:Name="LinkTypeButton"
+					<ribbon:RibbonMenuButton x:Name="LinkTypeButton"
 											  Label="{x:Static p:Resources.LinkTypeLabel}"
-											  Command="{StaticResource LinkTypeKey}"
+											  
 											  LargeImageSource="..\Images\Ribbon\LinkTypeImage.png">
-						<ribbon:RibbonRadioButton Label="is_a"/>
-						<ribbon:RibbonRadioButton Label="agent"/>
-						<ribbon:RibbonRadioButton Label="recipient"/>
-					</ribbon:RibbonSplitButton>
+						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsALabel}"
+												  Command="{StaticResource SetLinkTypeKey}"
+												  CommandParameter="{x:Static p:Resources.IsALabel}"/>
+						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.AgentLabel}"
+												  Command="{StaticResource SetLinkTypeKey}"
+												  CommandParameter="{x:Static p:Resources.AgentLabel}"/>
+						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.RecipientLabel}"
+												  Command="{StaticResource SetLinkTypeKey}"
+												  CommandParameter="{x:Static p:Resources.RecipientLabel}"/>
+					</ribbon:RibbonMenuButton>
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="Консультация">
 					<ribbon:RibbonButton x:Name="ConsultButton"
@@ -181,27 +188,30 @@
 						  MouseWheel="DiagramNetwork_MouseWheel"
 						  KeyDown="ScrollDiagram_KeyDown">
 					<diag:Diagram x:Name="DiagramNetwork"
-							  DockPanel.Dock="Right"
-							  VerticalAlignment="Stretch"
-							  HorizontalAlignment="Stretch"
-							  Margin="5"
-							  Behavior="LinkShapes"
-							  DefaultShape="Ellipse"
-							  ZoomFactor="100"
-							  AutoResize="AllDirections"
-							  HorizontalContentAlignment="Stretch"
-							  VerticalContentAlignment="Stretch"
-							  MouseWheel="DiagramNetwork_MouseWheel"
-							  NodeSelected="DiagramNetwork_NodeSelected"
-							  NodeDeselected="DiagramNetwork_NodeDeselected"
-							  NodeDeleted="DiagramNetwork_NodeDeleted"
-							  NodeCreated="DiagramNetwork_NodeCreated"
-							  LinkSelected="DiagramNetwork_LinkSelected"
-							  LinkDeselected="DiagramNetwork_LinkDeselected"
-							  LinkDeleted="DiagramNetwork_LinkDeleted"
-							  LinkCreated="DiagramNetwork_LinkCreated"
-							  DelKeyAction="DeleteSelectedItems"
-							 SelectionChanged="DiagramNetwork_SelectionChanged"/>
+								  DockPanel.Dock="Right"
+								  VerticalAlignment="Stretch"
+								  HorizontalAlignment="Stretch"
+								  Margin="5"
+								  Behavior="LinkShapes"
+								  DefaultShape="Ellipse"
+								  ZoomFactor="100"
+								  AutoResize="AllDirections"
+								  HorizontalContentAlignment="Stretch"
+								  VerticalContentAlignment="Stretch"
+								  MouseWheel="DiagramNetwork_MouseWheel"
+								  NodeSelected="DiagramNetwork_NodeSelected"
+								  NodeDeselected="DiagramNetwork_NodeDeselected"
+								  NodeDeleted="DiagramNetwork_NodeDeleted"
+								  NodeCreated="DiagramNetwork_NodeCreated"
+								  LinkSelected="DiagramNetwork_LinkSelected"
+								  LinkDeselected="DiagramNetwork_LinkDeselected"
+								  LinkDeleted="DiagramNetwork_LinkDeleted"
+								  LinkCreated="DiagramNetwork_LinkCreated"
+								  DelKeyAction="DeleteSelectedItems"
+								  SelectionChanged="DiagramNetwork_SelectionChanged" 
+								  AllowInplaceEdit="False"
+								  InplaceEditAcceptOnEnter="True">
+					</diag:Diagram>
 				</ScrollViewer>
 			</Border>
 		</DockPanel>
