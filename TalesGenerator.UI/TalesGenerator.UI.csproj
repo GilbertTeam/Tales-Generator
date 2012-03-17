@@ -183,6 +183,9 @@
     </Compile>
     <Compile Include="Controls\NetworkTree.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Windows\ConsultWindow.xaml.cs">
+      <DependentUpon>ConsultWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\StringEditWindow.xaml.cs">
       <DependentUpon>StringEditWindow.xaml</DependentUpon>
     </Compile>
@@ -236,6 +239,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\ConsultWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\MainWindow.xaml">
       <SubType>Designer</SubType>

@@ -120,6 +120,9 @@
   <data name="AgentLabel" xml:space="preserve">
     <value>#агент</value>
   </data>
+  <data name="AnswerLabel" xml:space="preserve">
+    <value>Ответ:</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>TalesGenerator</value>
   </data>
@@ -135,6 +138,9 @@
   <data name="ConsultStartLabel" xml:space="preserve">
     <value>Начать консультацию</value>
   </data>
+  <data name="ConsultWindowCaption" xml:space="preserve">
+    <value>Консультация</value>
+  </data>
   <data name="DeleteLinkLabel" xml:space="preserve">
     <value>Удалить дугу</value>
   </data>
@@ -147,10 +153,16 @@
   <data name="EditLabel" xml:space="preserve">
     <value>Редактирование</value>
   </data>
+  <data name="EnterQuestionLabel" xml:space="preserve">
+    <value>Введите вопрос:</value>
+  </data>
   <data name="ErrorMsgCaption" xml:space="preserve">
     <value>Ошибка</value>
   </data>
   <data name="Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="ExitLabel" xml:space="preserve">
     <value>Выход</value>
   </data>
   <data name="ExportProject" xml:space="preserve">
@@ -188,6 +200,9 @@
   </data>
   <data name="SaveWarning" xml:space="preserve">
     <value>Текущий проект содержит изменения. Желаете сохранить его перед закрытием?</value>
+  </data>
+  <data name="StartLabel" xml:space="preserve">
+    <value>Запуск</value>
   </data>
   <data name="StringEditWndEnterLabel" xml:space="preserve">
     <value>Введите новое значение:</value>

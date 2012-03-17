@@ -70,6 +70,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ответ:.
+        /// </summary>
+        public static string AnswerLabel {
+            get {
+                return ResourceManager.GetString("AnswerLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TalesGenerator.
         /// </summary>
         public static string AppName {
@@ -115,6 +124,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Консультация.
+        /// </summary>
+        public static string ConsultWindowCaption {
+            get {
+                return ResourceManager.GetString("ConsultWindowCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Удалить дугу.
         /// </summary>
         public static string DeleteLinkLabel {
@@ -151,6 +169,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Введите вопрос:.
+        /// </summary>
+        public static string EnterQuestionLabel {
+            get {
+                return ResourceManager.GetString("EnterQuestionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ошибка.
         /// </summary>
         public static string ErrorMsgCaption {
@@ -165,6 +192,15 @@ namespace TalesGenerator.UI.Properties {
         public static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Выход.
+        /// </summary>
+        public static string ExitLabel {
+            get {
+                return ResourceManager.GetString("ExitLabel", resourceCulture);
             }
         }
         
@@ -273,6 +309,15 @@ namespace TalesGenerator.UI.Properties {
         public static string SaveWarning {
             get {
                 return ResourceManager.GetString("SaveWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Запуск.
+        /// </summary>
+        public static string StartLabel {
+            get {
+                return ResourceManager.GetString("StartLabel", resourceCulture);
             }
         }
         

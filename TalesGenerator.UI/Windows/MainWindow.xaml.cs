@@ -256,7 +256,13 @@ namespace TalesGenerator.UI.Windows
 
 		private void StartConsult_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
+			e.CanExecute = _project != null && _project.Network != null;
+		}
 
+		private void StartConsult_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			ConsultWindow consultWnd = new ConsultWindow();
+			consultWnd.ShowDialog();
 		}
 
 		#endregion
@@ -266,6 +272,12 @@ namespace TalesGenerator.UI.Windows
 		private void RibbonWindow_SizeChanged(object sender, SizeChangedEventArgs e)
 		{
 			ResizeDiagram();
+		}
+
+		private void RibbonWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			if (!DoClose())
+				e.Cancel = true;
 		}
 
 		#endregion
