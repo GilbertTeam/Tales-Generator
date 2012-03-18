@@ -39,7 +39,15 @@
 				</MenuItem>
 				<MenuItem Header="{x:Static p:Resources.RecipientLabel}"
 						  Style="{StaticResource ContextMenuLinkTypeStyle}">
-
+				</MenuItem>
+				<MenuItem Header="{x:Static p:Resources.FollowLabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
+				</MenuItem>
+				<MenuItem Header="{x:Static p:Resources.GoalLabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
+				</MenuItem>
+				<MenuItem Header="{x:Static p:Resources.LocativeLabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
 				</MenuItem>
 			</MenuItem>
 			<Separator/>
@@ -137,10 +145,12 @@
 			<ribbon:RibbonTab x:Name="TabMain"
 							  Header="Главная">
 				<ribbon:RibbonGroup Header="Вид">
+					<!--Упразднена до лучших времён
 					<ribbon:RibbonToggleButton x:Name="ButtonViewShowPropsPanel"
 											   Label="Показать свойства"
 											   Command="{StaticResource ShowProps}"
 											   LargeImageSource="..\Images\Ribbon\ShowPropsImage.png"/>
+					-->
 					<ribbon:RibbonToggleButton x:Name="DispatcherPanelButton"
 											   Label="{x:Static p:Resources.DispatcherLabel}"
 											   Command="{StaticResource ShowDispatcherKey}"
@@ -160,6 +170,15 @@
 						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.RecipientLabel}"
 												  Command="{StaticResource SetLinkTypeKey}"
 												  CommandParameter="{x:Static p:Resources.RecipientLabel}"/>
+						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.FollowLabel}"
+												  Command="{StaticResource SetLinkTypeKey}"
+												  CommandParameter="{x:Static p:Resources.FollowLabel}"/>
+						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.GoalLabel}"
+												  Command="{StaticResource SetLinkTypeKey}"
+												  CommandParameter="{x:Static p:Resources.GoalLabel}"/>
+						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.LocativeLabel}"
+												  Command="{StaticResource SetLinkTypeKey}"
+												  CommandParameter="{x:Static p:Resources.LocativeLabel}"/>
 					</ribbon:RibbonMenuButton>
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="Консультация">
@@ -178,6 +197,7 @@
 								 Visibility="Collapsed"
 								 Margin="5">
 			</controls:PropsPanel>
+			
 			<controls:CtrlObjectDispatcher x:Name="DispatcherPanel"
 										   VerticalAlignment="Stretch"
 										   DockPanel.Dock="Left"

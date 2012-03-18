@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using TalesGenerator.Core;
+
 namespace TalesGenerator.UI.Windows
 {
 	/// <summary>
@@ -18,16 +20,32 @@ namespace TalesGenerator.UI.Windows
 	/// </summary>
 	public partial class ConsultWindow : Window
 	{
-		public ConsultWindow()
+		Network _network;
+		Reasoner _reasoner;
+
+		public ConsultWindow(Network network)
 		{
 			InitializeComponent();
+
+			_network = network;
+
+			_reasoner = new Reasoner(_network);
 
 			QuestionTextBox.Focus();
 		}
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
-
+			try
+			{
+				bool result = _reasoner.Confirm(QuestionTextBox.Text);
+				AnswerTextBox.Text = result ? Properties.Resources.AnswerYes : Properties.Resources.AnswerNo;
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, Properties.Resources.ErrorMsgCaption, MessageBoxButton.OK,
+					MessageBoxImage.Error);
+			}
 		}
 	}
 }

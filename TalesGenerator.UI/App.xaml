@@ -168,10 +168,16 @@
 		<SolidColorBrush x:Key="IsABrush" Color="Black"/>
 		<SolidColorBrush x:Key="AgentBrush" Color="Green"/>
 		<SolidColorBrush x:Key="RecipientBrush" Color="Blue"/>
+		<SolidColorBrush x:Key="GoalBrush" Color="Beige"/>
+		<SolidColorBrush x:Key="LocativeBrush" Color="#5D5D7B"/>
+		<SolidColorBrush x:Key="FollowBrush" Color="#7B7450"/>
 		
 		<Pen x:Key="IsAPen" Brush="{StaticResource IsABrush}" Thickness="3"/>
 		<Pen x:Key="AgentPen" Brush="{StaticResource AgentBrush}" Thickness="3"/>
 		<Pen x:Key="RecipientPen" Brush="{StaticResource RecipientBrush}" Thickness="3"/>
+		<Pen x:Key="GoalPen" Brush="{StaticResource GoalBrush}" Thickness="3"/>
+		<Pen x:Key="LocativePen" Brush="{StaticResource LocativeBrush}" Thickness="3"/>
+		<Pen x:Key="FollowPen" Brush="{StaticResource FollowBrush}" Thickness="3"/>
 
 	</Application.Resources>
 	

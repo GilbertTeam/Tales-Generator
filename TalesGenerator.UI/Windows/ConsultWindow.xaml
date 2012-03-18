@@ -6,15 +6,16 @@
 		WindowStyle="ToolWindow"
 		WindowStartupLocation="CenterScreen" 
 		Width="300"
-		Height="180">
+		Height="220">
 	<StackPanel>
-		<WrapPanel Background="{StaticResource BackgroundBrushKey}">
-			<TextBlock Text="{x:Static p:Resources.EnterQuestionLabel}"
+		<Border Style="{StaticResource BorderStyleKey}" Margin="5"
+				Background="{StaticResource BackgroundBrushKey}">
+				<TextBlock Text="{x:Static p:Resources.EnterQuestionLabel}"
 					   HorizontalAlignment="Stretch"
 					   FontWeight="Bold"
 					   Style="{StaticResource WindowElementStyle}"
 					   />
-		</WrapPanel>
+		</Border>
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
@@ -26,20 +27,22 @@
 			<Button Style="{StaticResource CommandButtonStyle}"
 					Grid.Column="1"
 					Content="{x:Static p:Resources.StartLabel}"
+					IsDefault="True"
 					Click="Button_Click"/>
 		</Grid>
 		<Separator/>
-		<WrapPanel Background="{StaticResource BackgroundBrushKey}">
+		<Border Style="{StaticResource BorderStyleKey}" Margin="5"
+				Background="{StaticResource BackgroundBrushKey}">
 			<TextBlock Text="{x:Static p:Resources.AnswerLabel}"
 					   Style="{StaticResource WindowElementStyle}"
 					   FontWeight="Bold"/>
-		</WrapPanel>
+		</Border>
 		<TextBox x:Name="AnswerTextBox"
-				 Style="{StaticResource WindowElementStyle}"/>
+				 Style="{StaticResource WindowElementStyle}"
+				 IsReadOnly="True"/>
 		<Separator/>
 		<Button Style="{StaticResource CommandButtonStyle}"
 				Content="{x:Static p:Resources.ExitLabel}"
-				IsDefault="True"
 				IsCancel="True"/>
 	</StackPanel>
 </Window>

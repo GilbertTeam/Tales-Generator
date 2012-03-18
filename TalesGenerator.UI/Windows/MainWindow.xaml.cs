@@ -42,7 +42,7 @@ namespace TalesGenerator.UI.Windows
 			_project.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_project_PropertyChanged);
 
 			DiagramNetwork.IsEnabled = _project.Network != null;
-			ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
+			//ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
 			DispatcherPanelButton.IsChecked = this.DispatcherPanel.Visibility == System.Windows.Visibility.Visible;
 
 			DispatcherPanel.SelectionChanged += new OnSelectionChanged(DispatcherPanel_SelectionChanged);
@@ -261,7 +261,7 @@ namespace TalesGenerator.UI.Windows
 
 		private void StartConsult_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			ConsultWindow consultWnd = new ConsultWindow();
+			ConsultWindow consultWnd = new ConsultWindow(_project.Network);
 			consultWnd.ShowDialog();
 		}
 
@@ -650,7 +650,7 @@ namespace TalesGenerator.UI.Windows
 
 		protected bool DoClose()
 		{
-			if (_project.Network.IsDirty)
+			if (_project != null && _project.Network != null && _project.Network.IsDirty)
 			{
 				MessageBoxResult result = MessageBox.Show(Properties.Resources.SaveWarning,
 					Properties.Resources.Confirmation,

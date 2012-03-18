@@ -12,7 +12,8 @@ namespace TalesGenerator.Core
 		Agent,
 		Recipient,
 		Locative,
-		Goal
+		Goal,
+		Follow
 	}
 
 	/// <summary>

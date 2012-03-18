@@ -123,6 +123,12 @@
   <data name="AnswerLabel" xml:space="preserve">
     <value>Ответ:</value>
   </data>
+  <data name="AnswerNo" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="AnswerYes" xml:space="preserve">
+    <value>Да</value>
+  </data>
   <data name="AppName" xml:space="preserve">
     <value>TalesGenerator</value>
   </data>
@@ -168,11 +174,20 @@
   <data name="ExportProject" xml:space="preserve">
     <value>Экспорт</value>
   </data>
+  <data name="FollowLabel" xml:space="preserve">
+    <value>#следовать</value>
+  </data>
+  <data name="GoalLabel" xml:space="preserve">
+    <value>#цель</value>
+  </data>
   <data name="IsALabel" xml:space="preserve">
     <value>#is_a</value>
   </data>
   <data name="LinkTypeLabel" xml:space="preserve">
     <value>Тип дуги</value>
+  </data>
+  <data name="LocativeLabel" xml:space="preserve">
+    <value>#локатив</value>
   </data>
   <data name="NewProject" xml:space="preserve">
     <value>Новый проект</value>

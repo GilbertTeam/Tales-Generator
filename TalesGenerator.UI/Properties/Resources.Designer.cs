@@ -79,6 +79,24 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Нет.
+        /// </summary>
+        public static string AnswerNo {
+            get {
+                return ResourceManager.GetString("AnswerNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Да.
+        /// </summary>
+        public static string AnswerYes {
+            get {
+                return ResourceManager.GetString("AnswerYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TalesGenerator.
         /// </summary>
         public static string AppName {
@@ -214,6 +232,24 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #следовать.
+        /// </summary>
+        public static string FollowLabel {
+            get {
+                return ResourceManager.GetString("FollowLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #цель.
+        /// </summary>
+        public static string GoalLabel {
+            get {
+                return ResourceManager.GetString("GoalLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #is_a.
         /// </summary>
         public static string IsALabel {
@@ -228,6 +264,15 @@ namespace TalesGenerator.UI.Properties {
         public static string LinkTypeLabel {
             get {
                 return ResourceManager.GetString("LinkTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #локатив.
+        /// </summary>
+        public static string LocativeLabel {
+            get {
+                return ResourceManager.GetString("LocativeLabel", resourceCulture);
             }
         }
         

@@ -37,6 +37,15 @@ namespace TalesGenerator.UI.Classes
 				case "#is_a":
 					result = NetworkEdgeType.IsA;
 					break;
+				case "#локатив":
+					result = NetworkEdgeType.Locative;
+					break;
+				case "#следовать":
+					result = NetworkEdgeType.Follow;
+					break;
+				case "#цель":
+					result = NetworkEdgeType.Goal;
+					break;
 			}
 
 			return result;
@@ -54,13 +63,22 @@ namespace TalesGenerator.UI.Classes
 			switch (type)
 			{
 				case NetworkEdgeType.IsA:
-					res = "#is_a";
+					res = Properties.Resources.IsALabel;
 					break;
 				case NetworkEdgeType.Agent:
-					res = "#агент";
+					res = Properties.Resources.AgentLabel;
 					break;
 				case NetworkEdgeType.Recipient:
-					res = "#реципиент";
+					res = Properties.Resources.RecipientLabel;
+					break;
+				case NetworkEdgeType.Locative:
+					res = Properties.Resources.LocativeLabel;
+					break;
+				case NetworkEdgeType.Follow:
+					res = Properties.Resources.FollowLabel;
+					break;
+				case NetworkEdgeType.Goal:
+					res = Properties.Resources.GoalLabel;
 					break;
 			}
 
@@ -172,6 +190,15 @@ namespace TalesGenerator.UI.Classes
 						break;
 					case NetworkEdgeType.Recipient:
 						str = "Recipient";
+						break;
+					case NetworkEdgeType.Goal:
+						str = "Goal";
+						break;
+					case NetworkEdgeType.Locative:
+						str = "Locative";
+						break;
+					case NetworkEdgeType.Follow:
+						str = "Follow";
 						break;
 					default:
 						str = "IsA";

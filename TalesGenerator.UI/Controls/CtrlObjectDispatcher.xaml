@@ -19,10 +19,13 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="*"/>
 			</Grid.RowDefinitions>
-		<TextBlock Text="{x:Static props:Resources.ObjectDispatcher}"
-				   Grid.Row="0"
-				   HorizontalAlignment="Stretch"
-				   Style="{StaticResource PanelHeaderStyleKey}"/>
+		<Border Style="{StaticResource BorderStyleKey}"
+				Background="{StaticResource BackgroundBrushKey}">
+			<TextBlock Text="{x:Static props:Resources.ObjectDispatcher}"
+					   Grid.Row="0"
+					   HorizontalAlignment="Stretch"
+					   Style="{StaticResource PanelHeaderStyleKey}"/>
+		</Border>
 		<Separator Style="{StaticResource ControlWithMarginsStyleKey}"
 				   Grid.Row="1"/>
 		<controls:NetworkTree x:Name="NetworkObjectsTree"
