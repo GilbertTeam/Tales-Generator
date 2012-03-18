@@ -149,6 +149,7 @@
 				   Tag="{Binding Path=Id}"/>
 		</DataTemplate>
 		
+		<!--UiElementStyle-->
 		<Style x:Key="WindowElementStyle">
 			<Setter Property="FrameworkElement.Margin" Value="5,5,5,5"/>
 		</Style>

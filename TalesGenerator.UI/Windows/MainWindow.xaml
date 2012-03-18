@@ -9,7 +9,8 @@
 					 Title="MainWindow" Height="600" Width="800"
 					 ResizeMode="CanResizeWithGrip"
 					 WindowStartupLocation="CenterScreen"
-					 SizeChanged="RibbonWindow_SizeChanged">
+					 SizeChanged="RibbonWindow_SizeChanged"
+					 Closing="RibbonWindow_Closing">
 	
 	<Window.Resources>
 		<RoutedUICommand x:Key="CloseProject"/>
@@ -80,7 +81,8 @@
 						Executed="ShowDispatcher_Executed"/>
 		<CommandBinding Command="{StaticResource SetLinkTypeKey}" CanExecute="ChooseLinkType_CanExecute"
 						Executed="ChooseLinkType_Executed"/>
-		<CommandBinding Command="{StaticResource StartConsultKey}" CanExecute="StartConsult_CanExecute"/>
+		<CommandBinding Command="{StaticResource StartConsultKey}" CanExecute="StartConsult_CanExecute"
+						Executed="StartConsult_Executed"/>
 	</Window.CommandBindings>
 	
 	<Grid x:Name="LayoutGrid" ShowGridLines="False">
