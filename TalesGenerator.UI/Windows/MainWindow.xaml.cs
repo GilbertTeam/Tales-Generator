@@ -438,8 +438,7 @@ namespace TalesGenerator.UI.Windows
 
 			try
 			{
-				NetworkEdge edge = network.Edges.Add(origin, destination);
-				edge.Type = _currentType; //временно, пока нет конструктора с указанием типа связи
+				NetworkEdge edge = network.Edges.Add(origin, destination, _currentType);
 				link.Uid = edge.Id.ToString();
 				link.Text = Utils.ConvertType(edge.Type);
 				//yay, the king has returned!
