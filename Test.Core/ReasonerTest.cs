@@ -38,21 +38,32 @@ namespace Test.Core
 			NetworkNode pest = network.Nodes.Add("Злодей");
 			NetworkNode student = network.Nodes.Add("Студент");
 			NetworkNode teacher = network.Nodes.Add("Преподаватель");
+			NetworkNode gingerbreadMan = network.Nodes.Add("Колобок");
+			NetworkNode fox = network.Nodes.Add("Лиса");
+			NetworkNode wolf = network.Nodes.Add("Волк");
 			NetworkNode verb = network.Nodes.Add("Глагол");
 			NetworkNode meeting = network.Nodes.Add("Встречаться");
 			NetworkNode meetingHeroWithPest = network.Nodes.Add("Встреча главного героя с вредителем");
 			NetworkNode meetingStudentWithPest = network.Nodes.Add("Встреча студента с вредителем");
 			NetworkNode meetingStudentWithTeacher = network.Nodes.Add("Встреча с преподавателем");
+			NetworkNode meetingGingerbreadManWithFox = network.Nodes.Add("Встреча с лисой");
+			NetworkNode meetingGingerbreadManWithWolf = network.Nodes.Add("Встреча с волком");
 
 			network.Edges.Add(meetingHeroWithPest, pest, NetworkEdgeType.Recipient);
 			network.Edges.Add(meetingHeroWithPest, hero, NetworkEdgeType.Agent);
 			network.Edges.Add(meetingStudentWithPest, student, NetworkEdgeType.Agent);
 			network.Edges.Add(meetingStudentWithTeacher, teacher, NetworkEdgeType.Recipient);
+			network.Edges.Add(meetingGingerbreadManWithFox, gingerbreadMan, NetworkEdgeType.Agent);
+			network.Edges.Add(meetingGingerbreadManWithFox, fox, NetworkEdgeType.Recipient);
+			network.Edges.Add(meetingGingerbreadManWithWolf, gingerbreadMan, NetworkEdgeType.Agent);
+			network.Edges.Add(meetingGingerbreadManWithWolf, wolf, NetworkEdgeType.Recipient);
 
 			network.Edges.Add(meeting, verb);
 			network.Edges.Add(meetingHeroWithPest, meeting);
 			network.Edges.Add(meetingStudentWithPest, meetingHeroWithPest);
 			network.Edges.Add(meetingStudentWithTeacher, meetingStudentWithPest);
+			network.Edges.Add(meetingGingerbreadManWithFox, meetingStudentWithPest);
+			network.Edges.Add(meetingGingerbreadManWithWolf, meetingStudentWithPest);
 
 			return network;
 		}
@@ -115,13 +126,17 @@ namespace Test.Core
 			{
 				new Tuple<string, bool>("Студент встречаться преподаватель", true),
 				new Tuple<string, bool>("Студент встречаться злодей", true),
-				new Tuple<string, bool>("Студент встречаться герой", false),
-				new Tuple<string, bool>("Студент встречаться студент", false),
+				//new Tuple<string, bool>("Студент встречаться герой", false),
+				//new Tuple<string, bool>("Студент встречаться студент", false),
 				new Tuple<string, bool>("Герой встречаться преподаватель", true),
 				new Tuple<string, bool>("Герой встречаться злодей", true),
-				new Tuple<string, bool>("Герой встречаться герой", false),
-				new Tuple<string, bool>("Герой встречаться студент", false),
-				new Tuple<string, bool>("\"Студент\" \"встречаться с преподавателем\" \"преподаватель\"", false)
+				//new Tuple<string, bool>("Герой встречаться герой", false),
+				//new Tuple<string, bool>("Герой встречаться студент", false),
+				new Tuple<string, bool>("\"Студент\" \"встреча с преподавателем\" \"преподаватель\"", true),
+				new Tuple<string, bool>("\"Студент\" \"встреча с преподавателем\" \"злодей\"", true),
+				new Tuple<string, bool>("\"Герой\" \"встреча с преподавателем\" \"преподаватель\"", true),
+				new Tuple<string, bool>("\"Герой\" \"встреча с преподавателем\" \"злодей\"", true),
+				new Tuple<string, bool>("\"Герой\" \"встреча с лисой\" \"злодей\"", true)
 			};
 			Network networkWithoutIsA = CreateTestNetworkWithoutIsA();
 			Reasoner reasoner = new Reasoner(networkWithoutIsA);
