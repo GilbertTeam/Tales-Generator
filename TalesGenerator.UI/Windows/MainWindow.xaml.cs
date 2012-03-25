@@ -413,6 +413,7 @@ namespace TalesGenerator.UI.Windows
 		{
 			if (_updatingDiagramSelection)
 				return;
+			_updatingDiagramSelection = true;
 			if (DiagramNetwork.Selection.Items.Count == 0)
 			{
 				DispatcherPanel.SetSelection(-1);
@@ -421,6 +422,7 @@ namespace TalesGenerator.UI.Windows
 			DiagramItem item = DiagramNetwork.Selection.Items[0];
 			int id = Convert.ToInt32(item.Uid);
 			DispatcherPanel.SetSelection(id);
+			_updatingDiagramSelection = false;
 		}
 
 		#endregion
