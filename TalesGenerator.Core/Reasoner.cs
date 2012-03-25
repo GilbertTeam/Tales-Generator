@@ -145,15 +145,24 @@ namespace TalesGenerator.Core
 
 		private bool FindNode(NetworkNode targetNode, NetworkNode targetCaseFrameNode, NetworkEdgeType edgeType)
 		{
-			NetworkEdge targetEdge = targetNode.IncomingEdges.GetEdge(edgeType);
-			NetworkNode startCaseFrameNode = targetEdge.StartNode;
 			bool found = false;
+			var targetEdges = targetNode.IncomingEdges.GetEdges(edgeType);
 
-			found = FindUpcastNode(startCaseFrameNode, targetCaseFrameNode);
-
-			if (!found)
+			foreach (var targetEdge in targetEdges)
 			{
-				found = FindDowncastNode(startCaseFrameNode, targetCaseFrameNode, edgeType);
+				NetworkNode startCaseFrameNode = targetEdge.StartNode;
+
+				found = FindUpcastNode(startCaseFrameNode, targetCaseFrameNode);
+
+				if (!found)
+				{
+					found = FindDowncastNode(startCaseFrameNode, targetCaseFrameNode, edgeType);
+				}
+
+				if (found)
+				{
+					break;
+				}
 			}
 
 			return found;
@@ -183,20 +192,8 @@ namespace TalesGenerator.Core
 				throw new ArgumentException(Properties.Resources.InvalidFormatError, "text");
 			}
 
-			NetworkEdge agentEdge = agentNode.IncomingEdges.GetEdge(NetworkEdgeType.Agent);
-			NetworkEdge recipientEdge = recipientNode.IncomingEdges.GetEdge(NetworkEdgeType.Recipient);
-
-			if (agentEdge == null ||
-				recipientEdge == null)
-			{
-				throw new ArgumentException(Properties.Resources.InvalidFormatError, "text");
-			}
-
-			NetworkNode agentCaseFrameNode = agentEdge.StartNode;
-			NetworkNode recipientCaseFrameNode = recipientEdge.StartNode;
-
-			bool agentFound = FindNode(agentNode, caseFrameNode, NetworkEdgeType.Agent);
-			bool recipientFound = FindNode(recipientNode, caseFrameNode, NetworkEdgeType.Recipient);
+			bool agentFound = FindNode(agentNode, caseFrameNode, NetworkEdgeType.Agent);;
+			bool recipientFound = FindNode(recipientNode, caseFrameNode, NetworkEdgeType.Recipient);;
 
 			return agentFound && recipientFound;
 		}
