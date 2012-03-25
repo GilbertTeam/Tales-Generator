@@ -11,5 +11,10 @@ namespace TalesGenerator.Core.Collections
 		{
 			return networkEdges.FirstOrDefault(edge => edge.Type == edgeType);
 		}
+
+		public static IEnumerable<NetworkEdge> GetEdges(this IEnumerable<NetworkEdge> networkEdges, NetworkEdgeType edgeType)
+		{
+			return networkEdges.Where(edge => edge.Type == edgeType);
+		}
 	}
 }

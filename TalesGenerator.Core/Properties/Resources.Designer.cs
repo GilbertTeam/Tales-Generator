@@ -61,6 +61,15 @@ namespace TalesGenerator.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Неправильный формат..
+        /// </summary>
+        internal static string InvalidFormatError {
+            get {
+                return ResourceManager.GetString("InvalidFormatError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Невозможно создать дугу с началом, совпадающим с концом..
         /// </summary>
         internal static string NetworkEdgeCreateError {

@@ -161,6 +161,37 @@ namespace TalesGenerator.Core
 			Name = xElement.Attribute("name").Value;
 		}
 
+		public bool IsInherit(NetworkNode networkNode)
+		{
+			if (networkNode == null)
+			{
+				throw new ArgumentNullException("networkNode");
+			}
+
+			bool inherit = false;
+
+			if (networkNode == this)
+			{
+				inherit = true;
+			}
+			else
+			{
+				NetworkNode baseNode = networkNode.BaseNode;
+
+				while (!inherit && baseNode != null)
+				{
+					if (baseNode == this)
+					{
+						inherit = true;
+					}
+
+					baseNode = baseNode.BaseNode;
+				}
+			}
+
+			return inherit;
+		}
+
 		public override string ToString()
 		{
 			return Name;

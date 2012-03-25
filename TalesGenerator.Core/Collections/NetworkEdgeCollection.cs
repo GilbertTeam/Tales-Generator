@@ -78,7 +78,7 @@ namespace TalesGenerator.Core.Collections
 
 			if (networkEdge.Type == NetworkEdgeType.IsA)
 			{
-				networkEdge.EndNode.BaseNode = null;
+				networkEdge.StartNode.BaseNode = null;
 			}
 
 			return base.Remove(networkEdge);

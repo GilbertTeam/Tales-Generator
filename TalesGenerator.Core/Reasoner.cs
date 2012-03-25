@@ -13,13 +13,13 @@ namespace TalesGenerator.Core
 
 		private Network _network;
 
-		private readonly Dictionary<NetworkEdgeType, string> _dictionary = new Dictionary<NetworkEdgeType, string>()
+		private readonly Dictionary<string, NetworkEdgeType> _dictionary = new Dictionary<string, NetworkEdgeType>()
 		{
-			{ NetworkEdgeType.IsA, "есть" },
-			{ NetworkEdgeType.Agent, "агент" },
-			{ NetworkEdgeType.Recipient, "реципиент" },
-			{ NetworkEdgeType.Goal, "цель" },
-			{ NetworkEdgeType.Locative, "локатив" }
+			{ "есть", NetworkEdgeType.IsA },
+			{ "агент", NetworkEdgeType.Agent },
+			{ "реципиент", NetworkEdgeType.Recipient },
+			{ "цель", NetworkEdgeType.Goal },
+			{ "локатив", NetworkEdgeType.Locative }
 		};
 		#endregion
 
@@ -55,51 +55,21 @@ namespace TalesGenerator.Core
 
 		#region Methods
 
-		private NetworkNode FindNode(NetworkNode startNode, string name)
+		private string[] PrepareQuestion(string text)
 		{
-			NetworkNode baseNode = null;
-
-			if (startNode.Name.ToLower() == name)
-			{
-				baseNode = startNode;
-			}
-			else
-			{
-				startNode = startNode.BaseNode;
-
-				while (startNode != null)
-				{
-					if (startNode.Name.ToLower() == name)
-					{
-						baseNode = startNode;
-						break;
-					}
-				}
-			}
-
-			return baseNode;
-		}
-
-		private NetworkNode GetNode(NetworkNode baseNode, NetworkEdgeType edgeType)
-		{
-			NetworkEdge agentEdge = baseNode.OutgoingEdges.GetEdge(NetworkEdgeType.Agent);
-
-			return agentEdge.EndNode;
-		}
-
-		public bool Confirm(string text)
-		{
-			if (string.IsNullOrEmpty(text))
-			{
-				throw new ArgumentNullException("text");
-			}
-
 			text = text.ToLower();
 
 			string[] words;
 			if (text.Contains('\"'))
 			{
-				words = Regex.Split(text, @"""[а-я]+""");
+				var matches = Regex.Matches(text, @"""((?:[^\\""]|\\.)*)""");
+
+				if (matches.Count != 3)
+				{
+					throw new ArgumentException(Properties.Resources.InvalidFormatError, "text");
+				}
+
+				words = matches.Cast<Match>().Where(m => m.Success).Select(m => m.Value).ToArray();
 			}
 			else
 			{
@@ -108,12 +78,108 @@ namespace TalesGenerator.Core
 
 			if (words.Length != 3)
 			{
-				throw new ArgumentException("text");
+				throw new ArgumentException(Properties.Resources.InvalidFormatError, "text");
 			}
 
-			string agent = words[0].Trim();
-			string caseFrame = words[1].Trim();
-			string recipient = words[2].Trim();
+			return words;
+		}
+
+		private bool FindUpcastNode(NetworkNode startCaseFrameNode, NetworkNode targetCaseFrameNode)
+		{
+			bool found = false;
+			NetworkNode currentCaseFrameNode = startCaseFrameNode;
+
+			while (!found &&
+				currentCaseFrameNode != null)
+			{
+				if (currentCaseFrameNode == targetCaseFrameNode)
+				{
+					found = true;
+				}
+
+				currentCaseFrameNode = currentCaseFrameNode.BaseNode;
+			}
+
+			return found;
+		}
+
+		private bool FindDowncastNode(NetworkNode startCaseFrameNode, NetworkNode targetCaseFrameNode, NetworkEdgeType edgeType)
+		{
+			bool found = false;
+
+			NetworkNode currentCaseFrameNode = startCaseFrameNode;
+			if (currentCaseFrameNode != null)
+			{
+				if (currentCaseFrameNode == targetCaseFrameNode)
+				{
+					found = true;
+				}
+
+				if (found)
+				{
+					NetworkEdge tempEdge = currentCaseFrameNode.OutgoingEdges.GetEdge(edgeType);
+
+					if (tempEdge != null)
+					{
+						NetworkNode tempNode = tempEdge.EndNode;
+						NetworkNode targetNode = targetCaseFrameNode.OutgoingEdges.GetEdge(edgeType).EndNode;
+
+						found = tempNode.IsInherit(targetNode);
+					}
+				}
+				else
+				{
+					var isAEdges = currentCaseFrameNode.IncomingEdges.GetEdges(NetworkEdgeType.IsA);
+					var enumerator = isAEdges.GetEnumerator();
+
+					while (!found &&
+						enumerator.MoveNext())
+					{
+						found = FindDowncastNode(enumerator.Current.StartNode, targetCaseFrameNode, edgeType);
+					}
+				}
+			}
+
+			return found;
+		}
+
+		private bool FindNode(NetworkNode targetNode, NetworkNode targetCaseFrameNode, NetworkEdgeType edgeType)
+		{
+			bool found = false;
+			var targetEdges = targetNode.IncomingEdges.GetEdges(edgeType);
+
+			foreach (var targetEdge in targetEdges)
+			{
+				NetworkNode startCaseFrameNode = targetEdge.StartNode;
+
+				found = FindUpcastNode(startCaseFrameNode, targetCaseFrameNode);
+
+				if (!found)
+				{
+					found = FindDowncastNode(startCaseFrameNode, targetCaseFrameNode, edgeType);
+				}
+
+				if (found)
+				{
+					break;
+				}
+			}
+
+			return found;
+		}
+
+		public bool Confirm(string question)
+		{
+			if (string.IsNullOrEmpty(question))
+			{
+				throw new ArgumentNullException("text");
+			}
+
+			string[] words = PrepareQuestion(question);
+
+			string agent = words[0].Trim().Replace("\"", "");
+			string caseFrame = words[1].Trim().Replace("\"", "");
+			string recipient = words[2].Trim().Replace("\"", "");
 
 			NetworkNode agentNode = _network.Nodes.GetNode(agent);
 			NetworkNode caseFrameNode = _network.Nodes.GetNode(caseFrame);
@@ -123,45 +189,13 @@ namespace TalesGenerator.Core
 				caseFrameNode == null ||
 				recipientNode == null)
 			{
-				throw new ArgumentException("text");
+				throw new ArgumentException(Properties.Resources.InvalidFormatError, "text");
 			}
 
-			bool result = false;
+			bool agentFound = FindNode(agentNode, caseFrameNode, NetworkEdgeType.Agent);;
+			bool recipientFound = FindNode(recipientNode, caseFrameNode, NetworkEdgeType.Recipient);;
 
-			bool agentFound = false;
-			bool recipientFound = false;
-
-			do
-			{
-				NetworkEdge agentEdge = caseFrameNode.OutgoingEdges.GetEdge(NetworkEdgeType.Agent);
-				NetworkEdge recipientEdge = caseFrameNode.OutgoingEdges.GetEdge(NetworkEdgeType.Recipient);
-
-				if (!agentFound &&
-					agentEdge != null &&
-					agentEdge.EndNode == agentNode)
-				{
-					agentFound = true;
-				}
-
-				if (!recipientFound &&
-					recipientEdge != null &&
-					recipientEdge.EndNode == recipientNode)
-				{
-					recipientFound = true;
-				}
-
-				if (agentFound &&
-					recipientFound)
-				{
-					result = true;
-					break;
-				}
-
-				NetworkEdge isAEdge = caseFrameNode.IncomingEdges.GetEdge(NetworkEdgeType.IsA);
-				caseFrameNode = isAEdge != null ? isAEdge.StartNode : null;
-			} while (caseFrameNode != null);
-
-			return result;
+			return agentFound && recipientFound;
 		}
 		#endregion
 	}

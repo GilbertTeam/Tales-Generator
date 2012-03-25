@@ -97,15 +97,6 @@ namespace TalesGenerator.Core
 
 		private void OnNetworkObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			//if (e.Action == NotifyCollectionChangedAction.Add)
-			//{
-			//    foreach (object newItem in e.NewItems)
-			//    {
-			//        NetworkObject networkObject = (NetworkObject)newItem;
-			//        networkObject.PropertyChanged += OnNetworkObjectPropertyChanged;
-			//    }
-			//}
-
 			_isDirty = true;
 		}
 
