@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.Globalization;
 
 using TalesGenerator.Core;
 
@@ -15,6 +16,8 @@ namespace TalesGenerator.UI.Classes
 	class DiagramSerializer
 	{
 		Diagram _diagram;
+
+		const int _version = 2;
 
 		public DiagramSerializer(Diagram diagram)
 		{
@@ -43,6 +46,8 @@ namespace TalesGenerator.UI.Classes
 		/// <param name="xEl"></param>
 		public void SaveToXElement(XElement xEl)
 		{
+			xEl.Add(new XAttribute("Version", _version));
+
 			XElement xDiagBounds = new XElement("Bounds");
 			Utils.SaveRectToXElement(_diagram.Bounds, xDiagBounds);
 			xEl.Add(xDiagBounds);
@@ -50,6 +55,14 @@ namespace TalesGenerator.UI.Classes
 			XElement xDiagZoom = new XElement("ZoomFactor");
 			xDiagZoom.Add(Convert.ToString(_diagram.ZoomFactor));
 			xEl.Add(xDiagZoom);
+
+			XElement xDiagScrollX = new XElement("ScrollX");
+			xDiagScrollX.Add(Convert.ToString(_diagram.ScrollX, CultureInfo.InvariantCulture));
+			xEl.Add(xDiagScrollX);
+
+			XElement xDiagScrollY = new XElement("ScrollY");
+			xDiagScrollY.Add(Convert.ToString(_diagram.ScrollY, CultureInfo.InvariantCulture));
+			xEl.Add(xDiagScrollY);
 			
 			XElement xNodes = new XElement("Nodes");
 			foreach (ShapeNode node in _diagram.Nodes)
@@ -143,6 +156,17 @@ namespace TalesGenerator.UI.Classes
 				binding.ConverterParameter = link;
 				binding.Mode = BindingMode.TwoWay;
 				link.SetBinding(DiagramLink.TextProperty, binding);
+			}
+
+			XAttribute xVersion = xEl.Attribute("Version");
+			if (xVersion != null)
+			{
+				double version = Convert.ToDouble(xEl.Attribute("Version").Value, CultureInfo.InvariantCulture);
+				if (version == 2)
+				{
+					_diagram.ScrollX = Convert.ToDouble(xEl.Element("ScrollX").Value, CultureInfo.InvariantCulture);
+					_diagram.ScrollY = Convert.ToDouble(xEl.Element("ScrollY").Value, CultureInfo.InvariantCulture);
+				}
 			}
 		}
 	}

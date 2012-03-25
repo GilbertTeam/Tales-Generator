@@ -288,20 +288,24 @@ namespace TalesGenerator.UI.Windows
 		{
 			int count = Math.Abs(e.Delta / 120);
 			bool zoomOut = e.Delta < 0;
-			try
+			if ((Keyboard.Modifiers & ModifierKeys.Control) > 0)
 			{
-				for (int i = 0; i < count; i++)
+				try
 				{
-					if (zoomOut)
+					for (int i = 0; i < count; i++)
 					{
-						DiagramNetwork.ZoomOut();
-						ResizeDiagram();
+						if (zoomOut)
+						{
+							DiagramNetwork.ZoomOut();
+							ResizeDiagram();
+						}
+						else DiagramNetwork.ZoomIn();
 					}
-					else DiagramNetwork.ZoomIn();
+
 				}
+				catch (Exception ex) { }
+				e.Handled = true;
 			}
-			catch (Exception ex) { }
-			e.Handled = true;
 		}
 
 		#region NodeEvents
@@ -569,7 +573,10 @@ namespace TalesGenerator.UI.Windows
 				return;
 			_updatingDiagramSelection = true;
 			this.DiagramNetwork.Selection.Clear();
-			Utils.FindItemByUid(DiagramNetwork, id).Selected = true;
+			DiagramItem item = Utils.FindItemByUid(DiagramNetwork, id);
+			item.Selected = true;
+			DiagramNetwork.ScrollTo(new Point(item.GetBounds().X - DiagramNetwork.Viewport.Width / 2,
+				item.GetBounds().Y - DiagramNetwork.Viewport.Height / 2));
 			_updatingDiagramSelection = false;
 		}
 
@@ -583,8 +590,8 @@ namespace TalesGenerator.UI.Windows
 		protected void ResizeDiagram()
 		{
 			double factor = 100 / DiagramNetwork.ZoomFactor;
-			Rect newBounds = new Rect(0, 0, ScrollDiagram.ActualWidth * factor,
-					ScrollDiagram.ActualHeight * factor);
+			Rect newBounds = new Rect(DiagramNetwork.Bounds.X, DiagramNetwork.Bounds.Y,
+				ScrollDiagram.ActualWidth * factor,	ScrollDiagram.ActualHeight * factor);
 			if (newBounds.Bottom > DiagramNetwork.Bounds.Bottom ||
 				newBounds.Right > DiagramNetwork.Bounds.Right)
 				DiagramNetwork.Bounds = newBounds;
@@ -810,5 +817,6 @@ namespace TalesGenerator.UI.Windows
 		}
 
 		#endregion
+
 	}
 }

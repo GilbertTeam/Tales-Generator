@@ -230,9 +230,10 @@
 								  LinkDeleted="DiagramNetwork_LinkDeleted"
 								  LinkCreated="DiagramNetwork_LinkCreated"
 								  DelKeyAction="DeleteSelectedItems"
-								  SelectionChanged="DiagramNetwork_SelectionChanged" 
+								  SelectionChanged="DiagramNetwork_SelectionChanged"
 								  AllowInplaceEdit="False"
-								  InplaceEditAcceptOnEnter="True">
+								  InplaceEditAcceptOnEnter="True"
+								  AutoScroll="True">
 					</diag:Diagram>
 				</ScrollViewer>
 			</Border>

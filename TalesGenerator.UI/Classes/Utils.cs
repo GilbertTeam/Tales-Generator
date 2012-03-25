@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Globalization;
 
 using TalesGenerator.Core;
 using MindFusion.Diagramming.Wpf;
@@ -124,10 +125,10 @@ namespace TalesGenerator.UI.Classes
 		/// <param name="xEl"></param>
 		public static void SaveRectToXElement(Rect rect, XElement xEl)
 		{
-			xEl.Add(new XAttribute("X", rect.X.ToString()));
-			xEl.Add(new XAttribute("Y", rect.Y.ToString()));
-			xEl.Add(new XAttribute("Width", rect.Width.ToString()));
-			xEl.Add(new XAttribute("Height", rect.Height.ToString()));
+			xEl.Add(new XAttribute("X", rect.X.ToString(CultureInfo.InvariantCulture)));
+			xEl.Add(new XAttribute("Y", rect.Y.ToString(CultureInfo.InvariantCulture)));
+			xEl.Add(new XAttribute("Width", rect.Width.ToString(CultureInfo.InvariantCulture)));
+			xEl.Add(new XAttribute("Height", rect.Height.ToString(CultureInfo.InvariantCulture)));
 		}
 
 		/// <summary>
@@ -137,10 +138,10 @@ namespace TalesGenerator.UI.Classes
 		/// <returns></returns>
 		public static Rect LoadRectFromXElement(XElement xEl)
 		{
-			double x = Double.Parse(xEl.Attribute("X").Value);
-			double y = Double.Parse(xEl.Attribute("Y").Value);
-			double width = Convert.ToDouble(xEl.Attribute("Width").Value);
-			double height = Convert.ToDouble(xEl.Attribute("Height").Value);
+			double x = Double.Parse(xEl.Attribute("X").Value,CultureInfo.InvariantCulture);
+			double y = Double.Parse(xEl.Attribute("Y").Value, CultureInfo.InvariantCulture);
+			double width = Convert.ToDouble(xEl.Attribute("Width").Value, CultureInfo.InvariantCulture);
+			double height = Convert.ToDouble(xEl.Attribute("Height").Value, CultureInfo.InvariantCulture);
 			return new Rect(x, y, width, height);
 		}
 
@@ -151,8 +152,8 @@ namespace TalesGenerator.UI.Classes
 		/// <param name="xEl"></param>
 		public static void SavePointToXElement(Point point, XElement xEl)
 		{
-			xEl.Add(new XAttribute("X", Convert.ToString(point.X)));
-			xEl.Add(new XAttribute("Y", Convert.ToString(point.Y)));
+			xEl.Add(new XAttribute("X", Convert.ToString(point.X, CultureInfo.InvariantCulture)));
+			xEl.Add(new XAttribute("Y", Convert.ToString(point.Y, CultureInfo.InvariantCulture)));
 		}
 
 		/// <summary>
@@ -162,8 +163,8 @@ namespace TalesGenerator.UI.Classes
 		/// <returns></returns>
 		public static Point LoadPointFromXElement(XElement xEl)
 		{
-			double x = Convert.ToDouble(xEl.Attribute("X").Value);
-			double y = Convert.ToDouble(xEl.Attribute("Y").Value);
+			double x = Convert.ToDouble(xEl.Attribute("X").Value, CultureInfo.InvariantCulture);
+			double y = Convert.ToDouble(xEl.Attribute("Y").Value, CultureInfo.InvariantCulture);
 			return new Point(x, y);
 		}
 	}
