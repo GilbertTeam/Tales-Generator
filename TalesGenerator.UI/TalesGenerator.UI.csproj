@@ -306,6 +306,16 @@
   <ItemGroup>
     <Resource Include="Images\AppIcon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ribbon\ZoomIn.png" />
+    <Resource Include="Images\Ribbon\ZoomOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ribbon\SmallZoomIn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ribbon\SmallZoomOut.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

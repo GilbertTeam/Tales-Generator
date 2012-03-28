@@ -240,4 +240,10 @@
   <data name="UnnamedLinkLabel" xml:space="preserve">
     <value>&lt;Неименованная вершина&gt;</value>
   </data>
+  <data name="ZoomInLabel" xml:space="preserve">
+    <value>Увеличить</value>
+  </data>
+  <data name="ZoomOutLabel" xml:space="preserve">
+    <value>Уменьшить</value>
+  </data>
 </root>

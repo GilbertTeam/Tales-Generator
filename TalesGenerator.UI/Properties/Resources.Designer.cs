@@ -428,5 +428,23 @@ namespace TalesGenerator.UI.Properties {
                 return ResourceManager.GetString("UnnamedLinkLabel", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Увеличить.
+        /// </summary>
+        public static string ZoomInLabel {
+            get {
+                return ResourceManager.GetString("ZoomInLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Уменьшить.
+        /// </summary>
+        public static string ZoomOutLabel {
+            get {
+                return ResourceManager.GetString("ZoomOutLabel", resourceCulture);
+            }
+        }
     }
 }

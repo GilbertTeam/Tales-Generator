@@ -300,6 +300,26 @@ namespace TalesGenerator.UI.Windows
 
 		}
 
+		private void ZoomOut_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+
+		}
+
+		private void ZoomOut_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+
+		}
+
+		private void ZoomIn_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+
+		}
+
+		private void ZoomIn_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+
+		}
+
 		#endregion
 
 		#region Window events
@@ -854,6 +874,8 @@ namespace TalesGenerator.UI.Windows
 		}
 
 		#endregion
+
+
 
 
 	}

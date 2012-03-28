@@ -10,7 +10,8 @@
 					 ResizeMode="CanResizeWithGrip"
 					 WindowStartupLocation="CenterScreen"
 					 SizeChanged="RibbonWindow_SizeChanged"
-					 Closing="RibbonWindow_Closing" Icon="/TalesGenerator;component/AppIcon.ico">
+					 Closing="RibbonWindow_Closing"
+					 Icon="/TalesGenerator;component/AppIcon.ico">
 	
 	<Window.Resources>
 		<RoutedUICommand x:Key="CloseProject"/>
@@ -24,6 +25,8 @@
 		<RoutedUICommand x:Key="RenameNodeKey"/>
 		<RoutedUICommand x:Key="DeleteNodeKey"/>
 		<RoutedUICommand x:Key="DeleteLinkKey"/>
+		<RoutedUICommand x:Key="ZoomInCommandKey"/>
+		<RoutedUICommand x:Key="ZoomOutCommandKey"/>
 		<!--ContextMenu-->
 		<Style x:Key="ContextMenuLinkTypeStyle">
 			<Setter Property="MenuItem.IsCheckable" Value="True"/>
@@ -71,6 +74,8 @@
 		<KeyBinding Command="New" Key="N" Modifiers="Ctrl"/>
 		<KeyBinding Command="Open" Key="O" Modifiers="Ctrl"/>
 		<KeyBinding Command="Save" Key="S" Modifiers="Ctrl"/>
+		<KeyBinding Command="{StaticResource ZoomInCommandKey}" Key="OemPlus"/>
+		<KeyBinding Command="{StaticResource ZoomOutCommandKey}" Key="OemMinus"/>
 	</Window.InputBindings>
 	
 	<Window.CommandBindings>
@@ -100,6 +105,10 @@
 						Executed="DeleteNode_Executed"/>
 		<CommandBinding Command="{StaticResource DeleteLinkKey}" CanExecute="DeleteLink_CanExecute"
 						Executed="DeleteLink_Executed"/>
+		<CommandBinding Command="{StaticResource ZoomInCommandKey}" CanExecute="ZoomIn_CanExecute"
+						Executed="ZoomIn_Executed"/>
+		<CommandBinding Command="{StaticResource ZoomOutCommandKey}" CanExecute="ZoomOut_CanExecute"
+						Executed="ZoomOut_Executed"/>
 	</Window.CommandBindings>
 	
 	<Grid x:Name="LayoutGrid" ShowGridLines="False">
@@ -165,6 +174,14 @@
 											   Label="{x:Static p:Resources.DispatcherLabel}"
 											   Command="{StaticResource ShowDispatcherKey}"
 											   LargeImageSource="..\Images\Ribbon\DispatcherImage.png"/>
+					<ribbon:RibbonButton x:Name="ZoomInButton"
+										 Label="{x:Static p:Resources.ZoomInLabel}"
+										 Command="{StaticResource ZoomInCommandKey}"
+										 SmallImageSource="..\Images\Ribbon\SmallZoomIn.png"/>
+					<ribbon:RibbonButton x:Name="ZoomOutButton"
+										 Label="{x:Static p:Resources.ZoomOutLabel}"
+										 Command="{StaticResource ZoomOutCommandKey}"
+										 SmallImageSource="..\Images\Ribbon\SmallZoomOut.png"/>
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="{x:Static p:Resources.NodesLabel}"
 									LargeImageSource="..\Images\Ribbon\Rename.png">
@@ -179,31 +196,24 @@
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="{x:Static p:Resources.LinksLabel}"
 									LargeImageSource="..\Images\Ribbon\LinkTypeImage.png">
-					<ribbon:RibbonGroup x:Name="LinkTypeGroup">
-						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsALabel}"
-												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
-												  CommandParameter="{x:Static p:Resources.IsALabel}"/>
-						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.AgentLabel}"
-												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
-												  CommandParameter="{x:Static p:Resources.AgentLabel}"/>
-						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.RecipientLabel}"
-												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
-												  CommandParameter="{x:Static p:Resources.RecipientLabel}"/>
-						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.FollowLabel}"
-												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
-												  CommandParameter="{x:Static p:Resources.FollowLabel}"/>
-						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.GoalLabel}"
-												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
-												  CommandParameter="{x:Static p:Resources.GoalLabel}"/>
-						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.LocativeLabel}"
-												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
-												  CommandParameter="{x:Static p:Resources.LocativeLabel}"/>
-					</ribbon:RibbonGroup>
-					<!--
-					<ribbon:RibbonMenuButton  x:Name="LinkTypeButton"
-											  Label="{x:Static p:Resources.LinkTypeLabel}"
-											  LargeImageSource="..\Images\Ribbon\LinkTypeImage.png"
-					</ribbon:RibbonMenuButton>-->
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsALabel}"
+												SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
+												CommandParameter="{x:Static p:Resources.IsALabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.AgentLabel}"
+												SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
+												CommandParameter="{x:Static p:Resources.AgentLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.RecipientLabel}"
+												SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
+												CommandParameter="{x:Static p:Resources.RecipientLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.FollowLabel}"
+												SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
+												CommandParameter="{x:Static p:Resources.FollowLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.GoalLabel}"
+												SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
+												CommandParameter="{x:Static p:Resources.GoalLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.LocativeLabel}"
+												SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
+												CommandParameter="{x:Static p:Resources.LocativeLabel}"/>
 					<ribbon:RibbonButton x:Name="DeleteLinkButton"
 										 Command="{StaticResource DeleteLinkKey}"
 										 Label="{x:Static p:Resources.DeleteLinkLabel}"
