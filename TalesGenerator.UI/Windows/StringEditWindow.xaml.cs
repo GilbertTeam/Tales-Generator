@@ -18,16 +18,37 @@ namespace TalesGenerator.UI.Windows
 	/// </summary>
 	public partial class StringEditWindow : Window
 	{
-		String Str { get; set; }
+		public static readonly DependencyProperty ValueProperty;
+
+		static StringEditWindow()
+		{
+			ValueProperty = DependencyProperty.Register("Value", typeof(string), typeof(StringEditWindow));
+		}
 
 		public StringEditWindow(string str)
 		{
 			InitializeComponent();
-			Str = str;
+			Value = str;
 
 			Binding binding = new Binding();
-			binding.Source = Str;
+			binding.Source = this;
+			binding.Path = new PropertyPath("Value");
 			StringTextBox.SetBinding(TextBox.TextProperty, binding);
+
+			StringTextBox.Focus();
+		}
+
+		public string Value
+		{
+			get { return (string)GetValue(ValueProperty); }
+			set { SetValue(ValueProperty, value); }
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			Value = StringTextBox.Text;
+			this.DialogResult = true;
+			this.Close();
 		}
 
 	}

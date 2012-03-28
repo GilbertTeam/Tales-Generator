@@ -71,7 +71,6 @@ namespace TalesGenerator.UI.Windows
 		private void New_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			_project.Network = new Network();
-			//Tree.CurrentNetwork = _project.Network;
 			DiagramNetwork.Items.Clear();
 		}
 
@@ -269,55 +268,88 @@ namespace TalesGenerator.UI.Windows
 
 		private void RenameNode_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
+			e.CanExecute =_project != null && _project.Network!= null &&
+				DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
 				DiagramNetwork.Selection.Items[0] as ShapeNode != null;
 		}
 
 		private void RenameNode_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
+			ShapeNode node = DiagramNetwork.Selection.Items[0] as ShapeNode;
+			if (node == null)
+				return;
 
+			NetworkNode netNode = _project.Network.Nodes.FindById(Int32.Parse(node.Uid));
+			if (netNode == null)
+				return;
+
+			StringEditWindow edit = new StringEditWindow(netNode.Name);
+			edit.ShowDialog();
+			bool? res = edit.DialogResult;
+			if (res == true)
+			{
+				netNode.Name = edit.Value;
+			}
 		}
 
 		private void DeleteNode_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
+			e.CanExecute = _project != null && _project.Network != null &&
+				DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
 				DiagramNetwork.Selection.Items[0] as ShapeNode != null;
 		}
 
 		private void DeleteNode_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-
+			DiagramNetwork.Items.Remove(DiagramNetwork.Selection.Items[0]);
 		}
 
 		private void DeleteLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-			e.CanExecute = DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
+			e.CanExecute = _project != null && _project.Network != null &&
+				DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
 				DiagramNetwork.Selection.Items[0] as DiagramLink != null;
 		}
 
 		private void DeleteLink_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-
+			DiagramNetwork.Items.Remove(DiagramNetwork.Selection.Items[0]);
 		}
 
 		private void ZoomOut_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-
+			e.CanExecute = _project != null && _project.Network != null;
 		}
 
 		private void ZoomOut_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-
+			this.DoZoom(true);
 		}
 
 		private void ZoomIn_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
-
+			e.CanExecute = _project != null && _project.Network != null;
 		}
 
 		private void ZoomIn_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
+			this.DoZoom(false);
+		}
 
+		private void StartEdit_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _project != null && _project.Network != null &&
+				DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
+				DiagramNetwork.Selection.Items[0] as ShapeNode != null;
+		}
+
+		private void StartEdit_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			ShapeNode node = DiagramNetwork.Selection.Items[0] as ShapeNode;
+			if (node == null)
+				return;
+
+			_project.StartEdit(node);
 		}
 
 		#endregion
@@ -345,20 +377,10 @@ namespace TalesGenerator.UI.Windows
 			bool zoomOut = e.Delta < 0;
 			if ((Keyboard.Modifiers & ModifierKeys.Control) > 0)
 			{
-				try
+				for (int i = 0; i < count; i++)
 				{
-					for (int i = 0; i < count; i++)
-					{
-						if (zoomOut)
-						{
-							DiagramNetwork.ZoomOut();
-							ResizeDiagram();
-						}
-						else DiagramNetwork.ZoomIn();
-					}
-
+					DoZoom(zoomOut);
 				}
-				catch (Exception ex) { }
 				e.Handled = true;
 			}
 		}
@@ -373,26 +395,9 @@ namespace TalesGenerator.UI.Windows
 
 			Network network = _project.Network;
 			NetworkNode netNode = network.Nodes.Add();
-			newNode.Uid = netNode.Id.ToString();
-			newNode.ContextMenu = FindResource("NodeContextMenuKey") as ContextMenu;
-			// биндинг
-			Binding binding = new Binding();
-			binding.Path = new PropertyPath("Name");
-			binding.Mode = BindingMode.TwoWay;
-			binding.Source = netNode;
-			newNode.SetBinding(DiagramItem.TextProperty, binding);
-			newNode.MouseLeftButtonDown += new MouseButtonEventHandler(newNode_MouseLeftButtonDown);
-		}
 
-		void newNode_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			if (e.ClickCount == 2)
-			{
-				DiagramNode node = sender as DiagramNode;
+			_project.NodeAdded(newNode, netNode);
 
-				StartEdit(node);
-
-			}
 		}
 
 		private void DiagramNetwork_NodeDeleted(object sender, NodeEventArgs e)
@@ -500,22 +505,21 @@ namespace TalesGenerator.UI.Windows
 			try
 			{
 				NetworkEdge edge = network.Edges.Add(origin, destination, _currentType);
-				link.Uid = edge.Id.ToString();
-				link.Text = Utils.ConvertType(edge.Type);
-				//yay, the king has returned!
-				Binding binding = new Binding();
-				binding.Path = new PropertyPath("Type");
-				binding.Converter = new NetworkEdgeTypeStringConverter();
-				binding.Source = edge;
-				binding.Mode = BindingMode.TwoWay;
-				binding.NotifyOnSourceUpdated = true;
-				binding.NotifyOnTargetUpdated = true;
-				binding.ConverterParameter = link;
-				link.SetBinding(DiagramLink.TextProperty, binding);
+				//link.Uid = edge.Id.ToString();
+				//link.Text = Utils.ConvertType(edge.Type);
+				////yay, the king has returned!
+				//Binding binding = new Binding();
+				//binding.Path = new PropertyPath("Type");
+				//binding.Converter = new NetworkEdgeTypeStringConverter();
+				//binding.Source = edge;
+				//binding.Mode = BindingMode.TwoWay;
+				//binding.NotifyOnSourceUpdated = true;
+				//binding.NotifyOnTargetUpdated = true;
+				//binding.ConverterParameter = link;
+				//link.SetBinding(DiagramLink.TextProperty, binding);
+				_project.LinkAdded(link, edge);
 
-				link.ContextMenu = FindResource("LinkContextMenuKey") as ContextMenu;
-				link.HeadShape = ArrowHeads.PointerArrow;
-				link.InvalidateVisual();
+				
 			}
 			catch (Exception ex)
 			{
@@ -748,6 +752,20 @@ namespace TalesGenerator.UI.Windows
 			DiagramNetwork.BeginEdit(nodeEx);
 		}
 
+		protected void DoZoom(bool direction)
+		{
+			try
+			{
+				if (direction)
+				{
+					DiagramNetwork.ZoomOut();
+					ResizeDiagram();
+				}
+				else DiagramNetwork.ZoomIn();
+			}
+			catch { }
+		}
+
 		#endregion
 
 		#region ContextMenus
@@ -874,9 +892,5 @@ namespace TalesGenerator.UI.Windows
 		}
 
 		#endregion
-
-
-
-
 	}
 }

@@ -12,6 +12,8 @@ using MindFusion.Diagramming.Wpf;
 using System.Xml.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows;
+using System.Windows.Controls;
 
 
 namespace TalesGenerator.UI.Classes
@@ -149,7 +151,78 @@ namespace TalesGenerator.UI.Classes
 
 			_network = Network.LoadFromXml(xDoc);
 			DiagramSerializer diagSr = new DiagramSerializer(_diagram);
+			diagSr.NodeAdded += new DiagramItemEventHandler(NodeAdded);
+			diagSr.LinkAdded += new DiagramItemEventHandler(LinkAdded);
 			diagSr.LoadFromXDocument(xDoc, _network);
+		}
+
+		public void NodeAdded(DiagramItem item, NetworkObject obj)
+		{
+			NetworkNode node = obj as NetworkNode;
+			if (node == null)
+				return;
+
+			Binding binding = new Binding();
+			binding.Path = new PropertyPath("Name");
+			binding.Source = node;
+			item.SetBinding(DiagramItem.TextProperty, binding);
+
+			//newNode.SetBinding(DiagramItem.TextProperty, binding);
+			item.Uid = node.Id.ToString();
+			item.ContextMenu = item.TryFindResource("NodeContextMenuKey") as ContextMenu;
+
+			item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
+		}
+
+		void item_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			if (e.ClickCount == 2)
+			{
+				DiagramNode node = sender as DiagramNode;
+
+				StartEdit(node);
+
+				e.Handled = true;
+			}
+		}
+
+		public void StartEdit(DiagramNode node)
+		{
+			Network network = this.Network;
+			if (network == null)
+				return;
+
+			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(node.Uid));
+
+			DiagramNodeEx nodeEx = new DiagramNodeEx(node, netNode);
+
+			Diagram.BeginEdit(nodeEx);
+		}
+
+
+		public void LinkAdded(DiagramItem item, NetworkObject obj)
+		{
+			DiagramLink link = item as DiagramLink;
+			if (link == null)
+				return;
+
+			NetworkEdge edge = obj as NetworkEdge;
+			if (edge == null)
+				return;
+
+			link.HeadShape = ArrowHeads.PointerArrow;
+
+			Binding binding = new Binding();
+			binding.Path = new PropertyPath("Type");
+			binding.Converter = new NetworkEdgeTypeStringConverter();
+			binding.Source = edge;
+			binding.ConverterParameter = link;
+			binding.Mode = BindingMode.TwoWay;
+			link.SetBinding(DiagramLink.TextProperty, binding);
+
+			link.Uid = edge.Id.ToString();
+			link.ContextMenu = link.TryFindResource("LinkContextMenuKey") as ContextMenu;
+			link.HeadShape = ArrowHeads.PointerArrow;
 		}
 
 		private void CheckObjects()

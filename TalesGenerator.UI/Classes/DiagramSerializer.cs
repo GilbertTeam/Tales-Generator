@@ -15,9 +15,19 @@ namespace TalesGenerator.UI.Classes
 {
 	class DiagramSerializer
 	{
+		#region Fields
+
 		Diagram _diagram;
 
+		public event DiagramItemEventHandler NodeAdded;
+
+		public event DiagramItemEventHandler LinkAdded;
+
 		const int _version = 2;
+
+		#endregion
+
+		#region Constructors
 
 		public DiagramSerializer(Diagram diagram)
 		{
@@ -26,6 +36,10 @@ namespace TalesGenerator.UI.Classes
 
 			_diagram = diagram;
 		}
+
+		#endregion
+
+		#region Methods
 
 		/// <summary>
 		/// Сохраняет диаграмму в XElement
@@ -117,14 +131,11 @@ namespace TalesGenerator.UI.Classes
 				ShapeNode node = _diagram.Factory.CreateShapeNode(rect);
 
 				int id = Int32.Parse(xNode.Attribute("Id").Value);
-				node.Uid = id.ToString();
 				NetworkNode netNode = network.Nodes.FindById(id);
 
-				Binding binding = new Binding();
-				binding.Path = new PropertyPath("Name");
-				binding.Source = netNode;
-				node.SetBinding(DiagramItem.TextProperty, binding);
+				RaiseNodeAdded(node, netNode);
 			}
+
 			XElement xLinks = xEl.Element("Links");
 			foreach (XElement xLink in xLinks.Elements("DiagramLink"))
 			{
@@ -147,15 +158,9 @@ namespace TalesGenerator.UI.Classes
 				}
 
 				link.UpdateFromPoints();
-				link.HeadShape = ArrowHeads.PointerArrow;
 
-				Binding binding = new Binding();
-				binding.Path = new PropertyPath("Type");
-				binding.Converter = new NetworkEdgeTypeStringConverter();
-				binding.Source = edge;
-				binding.ConverterParameter = link;
-				binding.Mode = BindingMode.TwoWay;
-				link.SetBinding(DiagramLink.TextProperty, binding);
+				RaiseLinkAdded(link, edge);
+				
 			}
 
 			XAttribute xVersion = xEl.Attribute("Version");
@@ -169,5 +174,19 @@ namespace TalesGenerator.UI.Classes
 				}
 			}
 		}
+
+		protected void RaiseNodeAdded(ShapeNode node, NetworkObject obj)
+		{
+			if (NodeAdded != null)
+				NodeAdded(node, obj);
+		}
+
+		protected void RaiseLinkAdded(DiagramLink link, NetworkObject obj)
+		{
+			if (LinkAdded != null)
+				LinkAdded(link, obj);
+		}
+
+		#endregion
 	}
 }

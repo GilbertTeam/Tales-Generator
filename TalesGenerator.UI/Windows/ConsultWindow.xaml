@@ -2,11 +2,13 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:p="clr-namespace:TalesGenerator.UI.Properties"
-        Title="{x:Static p:Resources.ConsultWindowCaption}" ResizeMode="NoResize"
-		WindowStyle="ToolWindow"
+        Title="{x:Static p:Resources.ConsultWindowCaption}"
+		ResizeMode="NoResize"
+		WindowStyle="SingleBorderWindow"
 		WindowStartupLocation="CenterScreen" 
 		Width="300"
-		Height="220">
+		Height="220"
+		Icon="/TalesGenerator;component/AppIcon.ico">
 	<StackPanel>
 		<Border Style="{StaticResource BorderStyleKey}" Margin="5"
 				Background="{StaticResource BackgroundBrushKey}">
