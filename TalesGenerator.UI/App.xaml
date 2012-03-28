@@ -69,6 +69,7 @@
 		<SolidColorBrush x:Key="BorderBrushKey" Color="#FFB9C9DA" />
 		<SolidColorBrush x:Key="ForegroundBrushKey" Color="Black" />
 		<SolidColorBrush x:Key="Background2BrushKey" Color="#FF114EAF" />
+		<SolidColorBrush x:Key="DefaultBackBrush" Color="White" />
 		<Style x:Key="PanelHeaderStyleKey">
 			<Setter Property="Control.FontWeight" Value="Bold"/>
 			<Setter Property="TextBlock.Background" Value="{StaticResource BackgroundBrushKey}"/>

@@ -214,21 +214,22 @@ namespace TalesGenerator.UI.Windows
 					button.IsChecked = true;
 			}
 			e.CanExecute = canExecute;
-			LinkTypeButton.IsEnabled = canExecute;
+			//LinkTypeButton.IsEnabled = canExecute;
 		}
 
 		private RibbonRadioButton GetButton(string p)
 		{
-			RibbonRadioButton button = null;
-			foreach (RibbonRadioButton item in LinkTypeButton.Items)
-			{
-				if (item.Label == p)
-				{
-					button = item;
-					return button;
-				}
-			}
-			return button;
+			//RibbonRadioButton button = null;
+			//foreach (RibbonRadioButton item in LinkTypeButton.Items)
+			//{
+			//    if (item.Label == p)
+			//    {
+			//        button = item;
+			//        return button;
+			//    }
+			//}
+			//return button;
+			return null;
 		}
 
 		private void ChooseLinkType_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -263,6 +264,40 @@ namespace TalesGenerator.UI.Windows
 		{
 			ConsultWindow consultWnd = new ConsultWindow(_project.Network);
 			consultWnd.ShowDialog();
+		}
+
+
+		private void RenameNode_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
+				DiagramNetwork.Selection.Items[0] as ShapeNode != null;
+		}
+
+		private void RenameNode_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+
+		}
+
+		private void DeleteNode_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
+				DiagramNetwork.Selection.Items[0] as ShapeNode != null;
+		}
+
+		private void DeleteNode_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+
+		}
+
+		private void DeleteLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
+				DiagramNetwork.Selection.Items[0] as DiagramLink != null;
+		}
+
+		private void DeleteLink_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+
 		}
 
 		#endregion
@@ -819,6 +854,7 @@ namespace TalesGenerator.UI.Windows
 		}
 
 		#endregion
+
 
 	}
 }

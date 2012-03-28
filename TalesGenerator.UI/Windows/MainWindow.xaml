@@ -10,7 +10,7 @@
 					 ResizeMode="CanResizeWithGrip"
 					 WindowStartupLocation="CenterScreen"
 					 SizeChanged="RibbonWindow_SizeChanged"
-					 Closing="RibbonWindow_Closing">
+					 Closing="RibbonWindow_Closing" Icon="/TalesGenerator;component/AppIcon.ico">
 	
 	<Window.Resources>
 		<RoutedUICommand x:Key="CloseProject"/>
@@ -21,6 +21,9 @@
 		<RoutedUICommand x:Key="ShowDispatcherKey"/>
 		<RoutedUICommand x:Key="SetLinkTypeKey"/>
 		<RoutedUICommand x:Key="StartConsultKey"/>
+		<RoutedUICommand x:Key="RenameNodeKey"/>
+		<RoutedUICommand x:Key="DeleteNodeKey"/>
+		<RoutedUICommand x:Key="DeleteLinkKey"/>
 		<!--ContextMenu-->
 		<Style x:Key="ContextMenuLinkTypeStyle">
 			<Setter Property="MenuItem.IsCheckable" Value="True"/>
@@ -91,6 +94,12 @@
 						Executed="ChooseLinkType_Executed"/>
 		<CommandBinding Command="{StaticResource StartConsultKey}" CanExecute="StartConsult_CanExecute"
 						Executed="StartConsult_Executed"/>
+		<CommandBinding Command="{StaticResource RenameNodeKey}" CanExecute="RenameNode_CanExecute"
+						Executed="RenameNode_Executed"/>
+		<CommandBinding Command="{StaticResource DeleteNodeKey}" CanExecute="DeleteNode_CanExecute"
+						Executed="DeleteNode_Executed"/>
+		<CommandBinding Command="{StaticResource DeleteLinkKey}" CanExecute="DeleteLink_CanExecute"
+						Executed="DeleteLink_Executed"/>
 	</Window.CommandBindings>
 	
 	<Grid x:Name="LayoutGrid" ShowGridLines="False">
@@ -144,7 +153,8 @@
 			<!--Tab Main-->
 			<ribbon:RibbonTab x:Name="TabMain"
 							  Header="Главная">
-				<ribbon:RibbonGroup Header="Вид">
+				<ribbon:RibbonGroup Header="Вид"
+									LargeImageSource="..\Images\Ribbon\DispatcherImage.png">
 					<!--Упразднена до лучших времён
 					<ribbon:RibbonToggleButton x:Name="ButtonViewShowPropsPanel"
 											   Label="Показать свойства"
@@ -156,32 +166,51 @@
 											   Command="{StaticResource ShowDispatcherKey}"
 											   LargeImageSource="..\Images\Ribbon\DispatcherImage.png"/>
 				</ribbon:RibbonGroup>
-				<ribbon:RibbonGroup Header="Дуги">
-					<ribbon:RibbonMenuButton x:Name="LinkTypeButton"
-											  Label="{x:Static p:Resources.LinkTypeLabel}"
-											  
-											  LargeImageSource="..\Images\Ribbon\LinkTypeImage.png">
+				<ribbon:RibbonGroup Header="{x:Static p:Resources.NodesLabel}"
+									LargeImageSource="..\Images\Ribbon\Rename.png">
+					<ribbon:RibbonButton x:Name="RenameNodeButton"
+										 Command="{StaticResource RenameNodeKey}"
+										 Label="{x:Static p:Resources.ChangeNodeTextLabel}"
+										 LargeImageSource="..\Images\Ribbon\Rename.png"/>
+					<ribbon:RibbonButton x:Name="DeleteNodeButton"
+										 Command="{StaticResource DeleteNodeKey}"
+										 Label="{x:Static p:Resources.DeleteNodeLabel}"
+										 LargeImageSource="..\Images\Ribbon\Delete.png"/>
+				</ribbon:RibbonGroup>
+				<ribbon:RibbonGroup Header="{x:Static p:Resources.LinksLabel}"
+									LargeImageSource="..\Images\Ribbon\LinkTypeImage.png">
+					<ribbon:RibbonGroup x:Name="LinkTypeGroup">
 						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsALabel}"
-												  Command="{StaticResource SetLinkTypeKey}"
+												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
 												  CommandParameter="{x:Static p:Resources.IsALabel}"/>
 						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.AgentLabel}"
-												  Command="{StaticResource SetLinkTypeKey}"
+												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
 												  CommandParameter="{x:Static p:Resources.AgentLabel}"/>
 						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.RecipientLabel}"
-												  Command="{StaticResource SetLinkTypeKey}"
+												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
 												  CommandParameter="{x:Static p:Resources.RecipientLabel}"/>
 						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.FollowLabel}"
-												  Command="{StaticResource SetLinkTypeKey}"
+												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
 												  CommandParameter="{x:Static p:Resources.FollowLabel}"/>
 						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.GoalLabel}"
-												  Command="{StaticResource SetLinkTypeKey}"
+												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
 												  CommandParameter="{x:Static p:Resources.GoalLabel}"/>
 						<ribbon:RibbonRadioButton Label="{x:Static p:Resources.LocativeLabel}"
-												  Command="{StaticResource SetLinkTypeKey}"
+												  SmallImageSource="..\Images\Ribbon\OrangeArrow.png"
 												  CommandParameter="{x:Static p:Resources.LocativeLabel}"/>
-					</ribbon:RibbonMenuButton>
+					</ribbon:RibbonGroup>
+					<!--
+					<ribbon:RibbonMenuButton  x:Name="LinkTypeButton"
+											  Label="{x:Static p:Resources.LinkTypeLabel}"
+											  LargeImageSource="..\Images\Ribbon\LinkTypeImage.png"
+					</ribbon:RibbonMenuButton>-->
+					<ribbon:RibbonButton x:Name="DeleteLinkButton"
+										 Command="{StaticResource DeleteLinkKey}"
+										 Label="{x:Static p:Resources.DeleteLinkLabel}"
+										 LargeImageSource="..\Images\Ribbon\Delete.png"/>
 				</ribbon:RibbonGroup>
-				<ribbon:RibbonGroup Header="Консультация">
+				<ribbon:RibbonGroup Header="Консультация"
+									LargeImageSource="..\Images\Ribbon\ConsultImage.png">
 					<ribbon:RibbonButton x:Name="ConsultButton"
 										 Label="{x:Static p:Resources.ConsultStartLabel}"
 										 Command="{StaticResource StartConsultKey}"
@@ -220,6 +249,7 @@
 								  AutoResize="AllDirections"
 								  HorizontalContentAlignment="Stretch"
 								  VerticalContentAlignment="Stretch"
+								  BackBrush="{StaticResource DefaultBackBrush}"
 								  MouseWheel="DiagramNetwork_MouseWheel"
 								  NodeSelected="DiagramNetwork_NodeSelected"
 								  NodeDeselected="DiagramNetwork_NodeDeselected"

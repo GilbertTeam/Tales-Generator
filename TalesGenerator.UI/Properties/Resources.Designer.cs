@@ -259,6 +259,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Дуги.
+        /// </summary>
+        public static string LinksLabel {
+            get {
+                return ResourceManager.GetString("LinksLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Тип дуги.
         /// </summary>
         public static string LinkTypeLabel {
@@ -282,6 +291,15 @@ namespace TalesGenerator.UI.Properties {
         public static string NewProject {
             get {
                 return ResourceManager.GetString("NewProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Вершины.
+        /// </summary>
+        public static string NodesLabel {
+            get {
+                return ResourceManager.GetString("NodesLabel", resourceCulture);
             }
         }
         

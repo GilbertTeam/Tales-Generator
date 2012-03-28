@@ -130,6 +130,9 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Windows.Shell">
       <HintPath>..\Dlls\Microsoft.Windows.Shell.dll</HintPath>
@@ -289,6 +292,19 @@
     <Resource Include="Images\Ribbon\ConsultImage.png" />
     <Resource Include="Images\Ribbon\DispatcherImage.png" />
     <Resource Include="Images\Ribbon\LinkTypeImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ribbon\Delete.png" />
+    <Resource Include="Images\Ribbon\Rename.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ribbon\OrangeArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="AppIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\AppIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
