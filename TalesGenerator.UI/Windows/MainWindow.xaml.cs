@@ -193,8 +193,8 @@ namespace TalesGenerator.UI.Windows
 
 		private void ShowProps_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			this.PanelProps.Visibility = this.PanelProps.Visibility == Visibility.Collapsed ?
-				Visibility.Visible : Visibility.Collapsed;
+			//this.PanelProps.Visibility = this.PanelProps.Visibility == Visibility.Collapsed ?
+			//    Visibility.Visible : Visibility.Collapsed;
 		}
 
 		private void ShowDispatcher_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -450,7 +450,7 @@ namespace TalesGenerator.UI.Windows
 				return;
 
 			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(selectedNode.Uid));
-			PanelProps.Node = netNode;
+			//PanelProps.Node = netNode;
 
 			//netNode.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
 
@@ -483,8 +483,8 @@ namespace TalesGenerator.UI.Windows
 
 			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(selectedNode.Uid));
 
-			if (netNode == PanelProps.Node)
-				PanelProps.Node = null;
+			//if (netNode == PanelProps.Node)
+			//    PanelProps.Node = null;
 
 			//if (netNode != null)
 			//    netNode.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(netNode_PropertyChanged);
@@ -580,7 +580,7 @@ namespace TalesGenerator.UI.Windows
 				return;
 
 			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
-			PanelProps.Edge = edge;
+			//PanelProps.Edge = edge;
 
 			_currentType = edge.Type;
 
@@ -601,8 +601,8 @@ namespace TalesGenerator.UI.Windows
 
 			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
 
-			if (PanelProps.Edge == edge)
-				PanelProps.Edge = null;
+			//if (PanelProps.Edge == edge)
+			//    PanelProps.Edge = null;
 			//if (edge != null)
 			//    edge.PropertyChanged -= new System.ComponentModel.PropertyChangedEventHandler(edge_PropertyChanged);
 		}
