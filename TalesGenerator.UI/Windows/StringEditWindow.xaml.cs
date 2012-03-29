@@ -36,6 +36,9 @@ namespace TalesGenerator.UI.Windows
 			StringTextBox.SetBinding(TextBox.TextProperty, binding);
 
 			StringTextBox.Focus();
+			StringTextBox.CaretIndex = StringTextBox.Text.Length;
+			StringTextBox.SelectionStart = 0;
+			StringTextBox.SelectionLength = StringTextBox.Text.Length;
 		}
 
 		public string Value

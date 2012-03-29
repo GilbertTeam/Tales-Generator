@@ -169,9 +169,11 @@
 		<SolidColorBrush x:Key="IsABrush" Color="Black"/>
 		<SolidColorBrush x:Key="AgentBrush" Color="Green"/>
 		<SolidColorBrush x:Key="RecipientBrush" Color="Blue"/>
-		<SolidColorBrush x:Key="GoalBrush" Color="Beige"/>
-		<SolidColorBrush x:Key="LocativeBrush" Color="#5D5D7B"/>
-		<SolidColorBrush x:Key="FollowBrush" Color="#7B7450"/>
+		<SolidColorBrush x:Key="GoalBrush" Color="#FD4B00"/>
+		<SolidColorBrush x:Key="LocativeBrush" Color="#8811FF"/>
+		<SolidColorBrush x:Key="FollowBrush" Color="#A80054"/>
+		<SolidColorBrush x:Key="IsInstanceBrush" Color="#008A8A"/>
+		<SolidColorBrush x:Key="ObjectBrush" Color="#EA0000"/>
 		
 		<Pen x:Key="IsAPen" Brush="{StaticResource IsABrush}" Thickness="3"/>
 		<Pen x:Key="AgentPen" Brush="{StaticResource AgentBrush}" Thickness="3"/>
@@ -179,6 +181,8 @@
 		<Pen x:Key="GoalPen" Brush="{StaticResource GoalBrush}" Thickness="3"/>
 		<Pen x:Key="LocativePen" Brush="{StaticResource LocativeBrush}" Thickness="3"/>
 		<Pen x:Key="FollowPen" Brush="{StaticResource FollowBrush}" Thickness="3"/>
+		<Pen x:Key="IsInstancePen" Brush="{StaticResource IsInstanceBrush}" Thickness="3"/>
+		<Pen x:Key="ObjectPen" Brush="{StaticResource ObjectBrush}" Thickness="3"/>
 
 	</Application.Resources>
 	

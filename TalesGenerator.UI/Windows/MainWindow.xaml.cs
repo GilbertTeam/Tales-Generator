@@ -63,6 +63,8 @@ namespace TalesGenerator.UI.Windows
 
 		#region CommandHandlers
 
+		#region AppMenu Commands
+
 		private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = true;
@@ -155,17 +157,6 @@ namespace TalesGenerator.UI.Windows
 				this.Close();
 		}
 
-		private void ShowProps_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = true;
-		}
-
-		private void ShowProps_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			this.PanelProps.Visibility = this.PanelProps.Visibility == Visibility.Collapsed ?
-				Visibility.Visible : Visibility.Collapsed;
-		}
-
 		private void SaveAsPdf_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = _project != null && _project.Network != null;
@@ -191,6 +182,21 @@ namespace TalesGenerator.UI.Windows
 			e.CanExecute = _project != null && _project.Network != null;
 		}
 
+		#endregion
+
+		#region View category
+
+		private void ShowProps_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = true;
+		}
+
+		private void ShowProps_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			this.PanelProps.Visibility = this.PanelProps.Visibility == Visibility.Collapsed ?
+				Visibility.Visible : Visibility.Collapsed;
+		}
+
 		private void ShowDispatcher_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = true;
@@ -202,33 +208,55 @@ namespace TalesGenerator.UI.Windows
 				Visibility.Collapsed : Visibility.Visible;
 		}
 
+		private void ZoomOut_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _project != null && _project.Network != null;
+		}
+
+		private void ZoomOut_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			this.DoZoom(true);
+		}
+
+		private void ZoomIn_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _project != null && _project.Network != null;
+		}
+
+		private void ZoomIn_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			this.DoZoom(false);
+		}
+
+		#endregion
+
+		#region Links Category
+
 		private void ChooseLinkType_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			bool canExecute = DiagramNetwork != null && DiagramNetwork.IsEnabled;
 			if (e.Parameter != null && Utils.ConvertType(e.Parameter as string) == _currentType)
 			{
 
-				RibbonRadioButton button = GetButton(e.Parameter as string); ;
+				RibbonRadioButton button = GetButton(e.Parameter as string);
 				if (button != null)
 					button.IsChecked = true;
 			}
 			e.CanExecute = canExecute;
-			//LinkTypeButton.IsEnabled = canExecute;
 		}
 
 		private RibbonRadioButton GetButton(string p)
 		{
-			//RibbonRadioButton button = null;
-			//foreach (RibbonRadioButton item in LinkTypeButton.Items)
-			//{
-			//    if (item.Label == p)
-			//    {
-			//        button = item;
-			//        return button;
-			//    }
-			//}
-			//return button;
-			return null;
+			RibbonRadioButton button = null;
+			foreach (RibbonRadioButton item in LinksGroup.Items)
+			{
+				if (item.Label == p)
+				{
+					button = item;
+					break;
+				}
+			}
+			return button;
 		}
 
 		private void ChooseLinkType_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -254,6 +282,22 @@ namespace TalesGenerator.UI.Windows
 			}
 		}
 
+		private void DeleteLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _project != null && _project.Network != null &&
+				DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
+				DiagramNetwork.Selection.Items[0] as DiagramLink != null;
+		}
+
+		private void DeleteLink_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			DiagramNetwork.Items.Remove(DiagramNetwork.Selection.Items[0]);
+		}
+
+		#endregion
+
+		#region Consult category
+
 		private void StartConsult_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
 			e.CanExecute = _project != null && _project.Network != null;
@@ -265,6 +309,9 @@ namespace TalesGenerator.UI.Windows
 			consultWnd.ShowDialog();
 		}
 
+		#endregion
+
+		#region Nodes category
 
 		private void RenameNode_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
@@ -304,37 +351,9 @@ namespace TalesGenerator.UI.Windows
 			DiagramNetwork.Items.Remove(DiagramNetwork.Selection.Items[0]);
 		}
 
-		private void DeleteLink_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _project != null && _project.Network != null &&
-				DiagramNetwork != null && DiagramNetwork.Selection.Items.Count == 1 &&
-				DiagramNetwork.Selection.Items[0] as DiagramLink != null;
-		}
+		#endregion
 
-		private void DeleteLink_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			DiagramNetwork.Items.Remove(DiagramNetwork.Selection.Items[0]);
-		}
-
-		private void ZoomOut_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _project != null && _project.Network != null;
-		}
-
-		private void ZoomOut_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			this.DoZoom(true);
-		}
-
-		private void ZoomIn_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-		{
-			e.CanExecute = _project != null && _project.Network != null;
-		}
-
-		private void ZoomIn_Executed(object sender, ExecutedRoutedEventArgs e)
-		{
-			this.DoZoom(false);
-		}
+		#region NonRibbon Commands
 
 		private void StartEdit_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 		{
@@ -351,6 +370,8 @@ namespace TalesGenerator.UI.Windows
 
 			_project.StartEdit(node);
 		}
+
+		#endregion
 
 		#endregion
 

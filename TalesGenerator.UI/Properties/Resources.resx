@@ -246,4 +246,7 @@
   <data name="ZoomOutLabel" xml:space="preserve">
     <value>Уменьшить</value>
   </data>
+  <data name="IsInstanceLabel" xml:space="preserve">
+    <value>#is_instance</value>
+  </data>
 </root>

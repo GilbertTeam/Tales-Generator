@@ -259,6 +259,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #is_instance.
+        /// </summary>
+        public static string IsInstanceLabel {
+            get {
+                return ResourceManager.GetString("IsInstanceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Дуги.
         /// </summary>
         public static string LinksLabel {

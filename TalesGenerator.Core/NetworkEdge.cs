@@ -13,7 +13,8 @@ namespace TalesGenerator.Core
 		Recipient,
 		Locative,
 		Goal,
-		Follow
+		Follow,
+		IsInstance
 	}
 
 	/// <summary>

@@ -47,6 +47,9 @@ namespace TalesGenerator.UI.Classes
 				case "#цель":
 					result = NetworkEdgeType.Goal;
 					break;
+				case "#is_instance":
+					result = NetworkEdgeType.IsInstance;
+					break;
 			}
 
 			return result;
@@ -80,6 +83,9 @@ namespace TalesGenerator.UI.Classes
 					break;
 				case NetworkEdgeType.Goal:
 					res = Properties.Resources.GoalLabel;
+					break;
+				case NetworkEdgeType.IsInstance:
+					res = Properties.Resources.IsInstanceLabel;
 					break;
 			}
 
@@ -200,6 +206,9 @@ namespace TalesGenerator.UI.Classes
 						break;
 					case NetworkEdgeType.Follow:
 						str = "Follow";
+						break;
+					case NetworkEdgeType.IsInstance:
+						str = "IsInstance";
 						break;
 					default:
 						str = "IsA";
