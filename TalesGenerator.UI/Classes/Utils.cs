@@ -177,6 +177,54 @@ namespace TalesGenerator.UI.Classes
 
 	#region ValueConverters
 
+	[ValueConversion(typeof(DataTemplate), typeof(NetworkEdgeType))]
+	public class NetworkEdgeTypeDataTemplateConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			NetworkEdgeType type = (NetworkEdgeType)value;
+
+			DataTemplate result = null;
+
+			string str;
+			switch (type)
+			{
+				case NetworkEdgeType.Agent:
+					str = "Agent";
+					break;
+				case NetworkEdgeType.Recipient:
+					str = "Recipient";
+					break;
+				case NetworkEdgeType.Goal:
+					str = "Goal";
+					break;
+				case NetworkEdgeType.Locative:
+					str = "Locative";
+					break;
+				case NetworkEdgeType.Follow:
+					str = "Follow";
+					break;
+				case NetworkEdgeType.IsInstance:
+					str = "IsInstance";
+					break;
+				default:
+					str = "IsA";
+					break;
+			}
+
+			str += "TemplateKey";
+
+			result = Application.Current.TryFindResource(str) as DataTemplate;
+
+			return result;
+		}
+
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+		{
+			return null;
+		}
+	}
+
 	[ValueConversion(typeof(String), typeof(NetworkEdgeType))]
 	public class NetworkEdgeTypeStringConverter : IValueConverter
 	{
@@ -231,7 +279,6 @@ namespace TalesGenerator.UI.Classes
 
 		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
-
 			String type = value as String;
 			return Utils.ConvertType(type);
 		}

@@ -59,13 +59,13 @@
 		<Setter Property="TreeViewItem.HeaderTemplate">
 			<Setter.Value>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal">
+					<StackPanel Orientation="Horizontal" Name="st">
 						<Image Name="img"
                                    Width="20"
                                    Height="20"
                                    Stretch="Fill"
                                    Source="/TalesGenerator;component/Images/Tree/links.png"/>
-						<TextBlock Text="{Binding}" Margin="5,0" />
+						<TextBlock Text="{Binding}" Margin="5,0" Name="txt"/>
 					</StackPanel>
 				</DataTemplate>
 			</Setter.Value>
@@ -82,14 +82,4 @@
 		<TextBlock Text="{Binding Path=Type, Converter={StaticResource NetworkEdgeTypeStringConverter}}"
 				   Tag="{Binding Path=Id}"/>
 	</DataTemplate>
-
-	<ControlTemplate x:Key="LinkTemplateKey">
-		<StackPanel Orientation="Horizontal">
-			<Image Name="LinkImage"
-				   Width="16"
-				   Height="16"
-				   Stretch="Fill"/>
-			<TextBlock Text="{Binding}" Margin="5,0"/>
-		</StackPanel>
-	</ControlTemplate>
 </ResourceDictionary>

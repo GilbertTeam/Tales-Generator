@@ -56,6 +56,9 @@
 				<MenuItem Header="{x:Static p:Resources.LocativeLabel}"
 						  Style="{StaticResource ContextMenuLinkTypeStyle}">
 				</MenuItem>
+				<MenuItem Header="{x:Static p:Resources.IsInstanceLabel}"
+						  Style="{StaticResource ContextMenuLinkTypeStyle}">
+				</MenuItem>
 			</MenuItem>
 			<Separator/>
 			<MenuItem Header="{x:Static p:Resources.DeleteLinkLabel}"

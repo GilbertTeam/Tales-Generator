@@ -164,36 +164,6 @@ namespace TalesGenerator.UI.Controls
 			_nodeObjects.IsExpanded = true;
 		}
 
-		//private ObservableCollection<NetworkObjectTreeViewItem> CreateCollectionFromNodes(NetworkNodeCollection networkNodeCollection)
-		//{
-		//    ObservableCollection<NetworkObjectTreeViewItem> collection = new ObservableCollection<NetworkObjectTreeViewItem>();
-
-		//    foreach (NetworkNode node in networkNodeCollection)
-		//    {
-		//        NetworkObjectTreeViewItem item = new NetworkObjectTreeViewItem();
-		//        item.IsExpanded = false;
-		//        item.IsSelected = false;
-		//        item.NetObject = node;
-		//    }
-
-		//    return collection;
-		//}
-
-		//private ObservableCollection<NetworkObjectTreeViewItem> CreateCollectionFromEdges(NetworkEdgeCollection networkNodeCollection)
-		//{
-		//    ObservableCollection<NetworkObjectTreeViewItem> collection = new ObservableCollection<NetworkObjectTreeViewItem>();
-
-		//    foreach (NetworkEdge edge in networkNodeCollection)
-		//    {
-		//        NetworkObjectTreeViewItem item = new NetworkObjectTreeViewItem();
-		//        item.IsExpanded = false;
-		//        item.IsSelected = false;
-		//        item.NetObject = edge;
-		//    }
-
-		//    return collection;
-		//}
-
 		public TreeViewItem FindNode(int id)
 		{
 			if (_network == null)
@@ -248,44 +218,4 @@ namespace TalesGenerator.UI.Controls
 
 		#endregion
 	}
-
-	//public class NetworkObjectTreeViewItem : INotifyPropertyChanged
-	//{
-	//    public event PropertyChangedEventHandler PropertyChanged;
-
-	//    private bool _isSelected;
-	//    private bool _isExpanded;
-	//    private NetworkObject _netObject;
-
-	//    public bool IsExpanded
-	//    {
-	//        get { return _isExpanded; }
-	//        set
-	//        {
-	//            _isExpanded = value;
-	//            this.PropertyChanged(this, new PropertyChangedEventArgs("IsExpanded"));
-	//        }
-	//    }
-
-	//    public bool IsSelected
-	//    {
-	//        get { return _isSelected; }
-	//        set
-	//        {
-	//            _isSelected = value;
-	//            this.PropertyChanged(this, new PropertyChangedEventArgs("IsSelected"));
-	//        }
-	//    }
-
-	//    public NetworkObject NetObject
-	//    {
-	//        get { return _netObject; }
-	//        set
-	//        {
-	//            _netObject = value;
-	//            this.PropertyChanged(this, new PropertyChangedEventArgs("NetObject"));
-	//        }
-	//    }
-
-	//}
 }
