@@ -61,7 +61,7 @@ namespace TalesGenerator.UI.Controls
 
 		#region Fields
 
-		ResourceDictionary _generic;
+		ResourceDictionary _dictionary;
 
 		Network _network;
 
@@ -81,10 +81,13 @@ namespace TalesGenerator.UI.Controls
 			_nodeNodes = null;
 			_nodeLinks = null;
 
-			_generic = new ResourceDictionary();
-			_generic.Source =
-				new Uri("/TalesGenerator;component/Themes/Generic.xaml",
-					UriKind.RelativeOrAbsolute);
+			//_dictionary = new ResourceDictionary();
+			//_dictionary.Source =
+			//    new Uri("/TalesGenerator;component/Themes/Generic.xaml",
+			//        UriKind.RelativeOrAbsolute);
+
+			_dictionary = Application.LoadComponent(new Uri("/TalesGenerator;component/Themes/Generic.xaml", 
+				UriKind.Relative)) as ResourceDictionary;
 		}
 
 		#endregion
@@ -126,14 +129,14 @@ namespace TalesGenerator.UI.Controls
 				//Объекты
 				_nodeObjects = new TreeViewItem();
 				_nodeObjects.Header = Properties.Resources.TreeObjects;
-				style = this.FindResource("TreeHeaderObjectsStyle") as Style;
+				style = _dictionary["TreeHeaderObjectsStyle"] as Style;
 				_nodeObjects.Style = style;
 				this.Items.Add(_nodeObjects);
 
 				//Вершины
 				_nodeNodes = new TreeViewItem();
 				_nodeNodes.Header = Properties.Resources.TreeNodes;
-				style = this.FindResource("TreeHeaderNodesStyle") as Style;
+				style = _dictionary["TreeHeaderNodesStyle"] as Style;
 				_nodeNodes.Style = style;
 				_nodeObjects.Items.Add(_nodeNodes);
 				_nodeNodes.ContextMenu = FindResource("NodeContextMenuKey") as ContextMenu;
@@ -141,7 +144,7 @@ namespace TalesGenerator.UI.Controls
 				//Связи
 				_nodeLinks = new TreeViewItem();
 				_nodeLinks.Header = Properties.Resources.TreeLinks;
-				style = this.FindResource("TreeHeaderLinksStyle") as Style;
+				style = _dictionary["TreeHeaderLinksStyle"] as Style;
 				_nodeLinks.Style = style;
 				_nodeObjects.Items.Add(_nodeLinks);
 			}
@@ -149,10 +152,10 @@ namespace TalesGenerator.UI.Controls
 			DataTemplate template;
 
 			_nodeNodes.ItemsSource = _network.Nodes;
-			template = this.FindResource("TreeItemNodeTemplate") as DataTemplate;
+			template = _dictionary["TreeItemNodeTemplate"] as DataTemplate;
 			_nodeNodes.ItemTemplate = template;
 
-			template = this.FindResource("TreeItemLinkTemplate") as DataTemplate;
+			template = _dictionary["TreeItemLinkTemplate"] as DataTemplate;
 			_nodeLinks.ItemsSource = _network.Edges;
 			_nodeLinks.ItemTemplate = template;
 

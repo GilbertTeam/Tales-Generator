@@ -316,6 +316,17 @@
   <ItemGroup>
     <Resource Include="Images\Ribbon\SmallZoomOut.png" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Links\AgentArrow.png" />
+    <Resource Include="Images\Links\FollowArrow.png" />
+    <Resource Include="Images\Links\GoalArrow.png" />
+    <Resource Include="Images\Links\IsAArrow.png" />
+    <Resource Include="Images\Links\IsInstanceArrow.png" />
+    <Resource Include="Images\Links\LocativeArrow.png" />
+    <Resource Include="Images\Links\ObjectArrow.png" />
+    <Resource Include="Images\Links\RecipientArrow.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

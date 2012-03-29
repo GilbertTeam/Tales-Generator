@@ -27,11 +27,18 @@ namespace TalesGenerator.UI.Windows
 	/// </summary>
 	public partial class MainWindow : RibbonWindow
 	{
+
+		#region Fields
+
 		Project _project;
 
 		bool _updatingDiagramSelection;
 
 		NetworkEdgeType _currentType;
+
+		#endregion
+
+		#region Constructors
 
 		public MainWindow()
 		{
@@ -60,6 +67,8 @@ namespace TalesGenerator.UI.Windows
 				AssignNetwork();
 			}
 		}
+
+		#endregion
 
 		#region CommandHandlers
 
@@ -498,6 +507,7 @@ namespace TalesGenerator.UI.Windows
 			if (DiagramNetwork.Selection.Items.Count == 0)
 			{
 				DispatcherPanel.SetSelection(-1);
+				_updatingDiagramSelection = false;
 				return;
 			}
 			DiagramItem item = DiagramNetwork.Selection.Items[0];

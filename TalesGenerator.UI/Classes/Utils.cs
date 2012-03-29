@@ -214,12 +214,12 @@ namespace TalesGenerator.UI.Classes
 						str = "IsA";
 						break;
 				}
-				SolidColorBrush brush = App.Current.FindResource(str + "Brush") as SolidColorBrush;
+				SolidColorBrush brush = App.Current.TryFindResource(str + "Brush") as SolidColorBrush;
 				Pen pen = App.Current.FindResource(str + "Pen") as Pen;
 
 				link.HeadPen = pen;
 				link.Stroke = brush;
-				link.Brush = App.Current.FindResource("LinkFillBrush") as SolidColorBrush;
+				link.Brush = App.Current.TryFindResource("LinkFillBrush") as SolidColorBrush;
 				//link.StrokeThickness = App.StrokeThickness;
 				link.TextBrush = brush;
 				link.FontWeight = FontWeights.Bold;
