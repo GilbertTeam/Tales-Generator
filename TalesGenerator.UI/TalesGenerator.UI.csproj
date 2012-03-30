@@ -316,7 +316,10 @@
   <ItemGroup>
     <Resource Include="Images\Ribbon\SmallZoomOut.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Tree\IsAArrowUp.png" />
+    <Resource Include="Images\Tree\IsInstanceArrowUp.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Links\AgentArrow.png" />
     <Resource Include="Images\Links\FollowArrow.png" />

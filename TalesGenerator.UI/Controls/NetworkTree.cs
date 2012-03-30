@@ -114,8 +114,14 @@ namespace TalesGenerator.UI.Controls
 				{
 					_network.Nodes.CollectionChanged += new NotifyCollectionChangedEventHandler(Nodes_CollectionChanged);
 					_network.Edges.CollectionChanged += new NotifyCollectionChangedEventHandler(Edges_CollectionChanged);
+					_network.Edges.PropertyChanged += new PropertyChangedEventHandler(Edges_PropertyChanged);
 				}
 			}
+		}
+
+		void Edges_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			RefreshTree();
 		}
 
 		void Edges_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -255,6 +261,7 @@ namespace TalesGenerator.UI.Controls
 			//Корень
 			TreeViewItem rootNode = new TreeViewItem();
 			rootNode.Header = Properties.Resources.TreeObjects;
+			rootNode.Focusable = false;
 			rootNode.Style = _dictionary["TreeHeaderObjectsStyle"] as Style;
 
 			LoadItemState(-1, null, rootNode, Properties.Resources.TreeObjects);
@@ -263,6 +270,9 @@ namespace TalesGenerator.UI.Controls
 
 			if (_network == null)
 				return;
+
+			string str = Utils.ConvertToResourcesType(NetworkEdgeType.IsA) + "ItemTemplateKey";
+			DataTemplate itemTemplate = Application.Current.TryFindResource(str) as DataTemplate;
 
 			List<NetworkNode> primaryNodes = new List<NetworkNode>(_network.GetPrimaryNodes());
 			foreach (NetworkNode node in primaryNodes)
@@ -274,6 +284,7 @@ namespace TalesGenerator.UI.Controls
 				nodeBinding.Path = new PropertyPath("Name");
 				nodeBinding.Converter = new NodeNameConverter();
 				nodeTreeItem.Uid = node.Id.ToString(CultureInfo.InvariantCulture);
+				nodeTreeItem.HeaderTemplate = itemTemplate;
 				nodeTreeItem.SetBinding(TreeViewItem.HeaderProperty, nodeBinding);
 
 				LoadItemState(node.Id, null, nodeTreeItem);
@@ -317,8 +328,12 @@ namespace TalesGenerator.UI.Controls
 				string str = Utils.ConvertToResourcesType(NetworkEdgeType.IsA) + "TemplateKey";
 				DataTemplate template = Application.Current.TryFindResource(str) as DataTemplate;
 
+				str = Utils.ConvertToResourcesType(NetworkEdgeType.IsA) + "ItemTemplateKey";
+				DataTemplate itemTemplate = Application.Current.TryFindResource(str) as DataTemplate;
+
 				TreeViewItem instanceRoot = new TreeViewItem();
 				instanceRoot.Header = Properties.Resources.DescendantsLabel;
+				instanceRoot.Focusable = false;
 				instanceRoot.HeaderTemplate = template;
 
 				LoadItemState(-1, node, instanceRoot, Properties.Resources.DescendantsLabel);
@@ -336,6 +351,7 @@ namespace TalesGenerator.UI.Controls
 					nodeBinding.Converter = new NodeNameConverter();
 					nodeRoot.SetBinding(TreeViewItem.HeaderProperty, nodeBinding);
 					nodeRoot.Uid = endNode.Id.ToString(CultureInfo.InvariantCulture);
+					nodeRoot.HeaderTemplate = itemTemplate;
 
 					LoadItemState(endNode.Id, node, nodeRoot);
 
@@ -354,8 +370,12 @@ namespace TalesGenerator.UI.Controls
 				string str = Utils.ConvertToResourcesType(NetworkEdgeType.IsInstance) + "TemplateKey";
 				DataTemplate template = Application.Current.TryFindResource(str) as DataTemplate;
 
+				str = Utils.ConvertToResourcesType(NetworkEdgeType.IsInstance) + "ItemTemplateKey";
+				DataTemplate itemTemplate = Application.Current.TryFindResource(str) as DataTemplate;
+
 				TreeViewItem instanceRoot = new TreeViewItem();
 				instanceRoot.Header = Properties.Resources.InstancesLabel;
+				instanceRoot.Focusable = false;
 				instanceRoot.HeaderTemplate = template;
 
 				LoadItemState(-1, node, instanceRoot, Properties.Resources.InstancesLabel);
@@ -373,6 +393,7 @@ namespace TalesGenerator.UI.Controls
 					nodeBinding.Converter = new NodeNameConverter();
 					nodeRoot.SetBinding(TreeViewItem.HeaderProperty, nodeBinding);
 					nodeRoot.Uid = endNode.Id.ToString(CultureInfo.InvariantCulture);
+					nodeRoot.HeaderTemplate = itemTemplate;
 
 					LoadItemState(endNode.Id, node, nodeRoot);
 
@@ -391,6 +412,8 @@ namespace TalesGenerator.UI.Controls
 			{
 				string str = Utils.ConvertToResourcesType(currentType) + "TemplateKey";
 				DataTemplate template = Application.Current.TryFindResource(str) as DataTemplate;
+				str = Utils.ConvertToResourcesType(currentType) + "ItemTemplateKey";
+				DataTemplate itemTemplates = Application.Current.TryFindResource(str) as DataTemplate;
 
 				TreeViewItem linkRoot = new TreeViewItem();
 				linkRoot.Header = Utils.ConvertType(edge.Type);
@@ -409,7 +432,7 @@ namespace TalesGenerator.UI.Controls
 				nodeBinding.Converter = new NodeNameConverter();
 				nodeTreeItem.Uid = nodeDesc.Id.ToString(CultureInfo.InvariantCulture);
 				nodeTreeItem.SetBinding(TreeViewItem.HeaderProperty, nodeBinding);
-				nodeTreeItem.HeaderTemplate = template;
+				nodeTreeItem.HeaderTemplate = itemTemplates;
 
 				LoadItemState(nodeDesc.Id, edge, nodeTreeItem);
 

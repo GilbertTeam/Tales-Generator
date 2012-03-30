@@ -121,97 +121,153 @@
 		<!--brand new templates-->
 		<DataTemplate x:Key="IsATemplateKey">
 			<StackPanel Orientation="Horizontal">
-				<Image Name="LinkImage"
-				   Width="16"
-				   Height="16"
-				   Stretch="Fill"
-				   Source="/TalesGenerator;component/Images/Links/IsAArrow.png"/>
 				<TextBlock Text="{Binding}" Margin="5,0"
-					   Foreground="{StaticResource IsABrush}"/>
+						   Foreground="{StaticResource IsABrush}"/>
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Tree/IsAArrowUp.png"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="IsAItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource IsABrush}"/>
 			</StackPanel>
 		</DataTemplate>
 
 		<DataTemplate x:Key="AgentTemplateKey">
 			<StackPanel Orientation="Horizontal">
 				<Image Name="LinkImage"
-				   Width="16"
-				   Height="16"
-				   Stretch="Fill"
-				   Source="/TalesGenerator;component/Images/Links/AgentArrow.png"/>
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/AgentArrow.png"/>
 				<TextBlock Text="{Binding}" Margin="5,0"
 					   Foreground="{StaticResource AgentBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="AgentItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource AgentBrush}"/>
 			</StackPanel>
 		</DataTemplate>
 
 		<DataTemplate x:Key="RecipientTemplateKey">
 			<StackPanel Orientation="Horizontal">
 				<Image Name="LinkImage"
-				   Width="16"
-				   Height="16"
-				   Stretch="Fill"
-				   Source="/TalesGenerator;component/Images/Links/RecipientArrow.png"/>
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/RecipientArrow.png"/>
 				<TextBlock Text="{Binding}" Margin="5,0"
 					   Foreground="{StaticResource RecipientBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="RecipientItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource RecipientBrush}"/>
 			</StackPanel>
 		</DataTemplate>
 
 		<DataTemplate x:Key="GoalTemplateKey">
 			<StackPanel Orientation="Horizontal">
 				<Image Name="LinkImage"
-				   Width="16"
-				   Height="16"
-				   Stretch="Fill"
-				   Source="/TalesGenerator;component/Images/Links/GoalArrow.png"/>
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/GoalArrow.png"/>
 				<TextBlock Text="{Binding}" Margin="5,0"
-					   Foreground="{StaticResource GoalBrush}"/>
+						   Foreground="{StaticResource GoalBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="GoalItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource GoalBrush}"/>
 			</StackPanel>
 		</DataTemplate>
 
 		<DataTemplate x:Key="FollowTemplateKey">
 			<StackPanel Orientation="Horizontal">
 				<Image Name="LinkImage"
-				   Width="16"
-				   Height="16"
-				   Stretch="Fill"
-				   Source="/TalesGenerator;component/Images/Links/FollowArrow.png"/>
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/FollowArrow.png"/>
 				<TextBlock Text="{Binding}" Margin="5,0"
-					   Foreground="{StaticResource FollowBrush}"/>
+						   Foreground="{StaticResource FollowBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="FollowItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource FollowBrush}"/>
 			</StackPanel>
 		</DataTemplate>
 
 		<DataTemplate x:Key="LocativeTemplateKey">
 			<StackPanel Orientation="Horizontal">
 				<Image Name="LinkImage"
-				   Width="16"
-				   Height="16"
-				   Stretch="Fill"
-				   Source="/TalesGenerator;component/Images/Links/LocativeArrow.png"/>
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/LocativeArrow.png"/>
 				<TextBlock Text="{Binding}" Margin="5,0"
-					   Foreground="{StaticResource LocativeBrush}"/>
+						   Foreground="{StaticResource LocativeBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="LocativeItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource LocativeBrush}"/>
 			</StackPanel>
 		</DataTemplate>
 
 		<DataTemplate x:Key="ObjectTemplateKey">
 			<StackPanel Orientation="Horizontal">
 				<Image Name="LinkImage"
-				   Width="16"
-				   Height="16"
-				   Stretch="Fill"
-				   Source="/TalesGenerator;component/Images/Links/ObjectArrow.png"/>
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/ObjectArrow.png"/>
 				<TextBlock Text="{Binding}" Margin="5,0"
-					   Foreground="{StaticResource ObjectBrush}"/>
+						   Foreground="{StaticResource ObjectBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="ObjectItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource ObjectBrush}"/>
 			</StackPanel>
 		</DataTemplate>
 
 		<DataTemplate x:Key="IsInstanceTemplateKey">
 			<StackPanel Orientation="Horizontal">
-				<Image Name="LinkImage"
-				   Width="16"
-				   Height="16"
-				   Stretch="Fill"
-				   Source="/TalesGenerator;component/Images/Links/IsInstanceArrow.png"/>
 				<TextBlock Text="{Binding}" Margin="5,0"
-					   Foreground="{StaticResource IsInstanceBrush}"/>
+						   Foreground="{StaticResource IsInstanceBrush}"/>
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Tree/IsInstanceArrowUp.png"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="IsInstanceItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource IsInstanceBrush}"/>
 			</StackPanel>
 		</DataTemplate>
 
