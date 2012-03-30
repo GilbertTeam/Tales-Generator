@@ -181,6 +181,7 @@
     <Compile Include="Classes\Enums.cs" />
     <Compile Include="Classes\Project.cs" />
     <Compile Include="Classes\Utils.cs" />
+    <Compile Include="Controls\ContextMenus.cs" />
     <Compile Include="Controls\CtrlObjectDispatcher.xaml.cs">
       <DependentUpon>CtrlObjectDispatcher.xaml</DependentUpon>
     </Compile>

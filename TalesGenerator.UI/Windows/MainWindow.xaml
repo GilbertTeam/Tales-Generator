@@ -177,17 +177,20 @@
 											   Command="{StaticResource ShowProps}"
 											   LargeImageSource="..\Images\Ribbon\ShowPropsImage.png"/>
 					-->
+					<!-- Упразднена в связи введением грида
 					<ribbon:RibbonToggleButton x:Name="DispatcherPanelButton"
 											   Label="{x:Static p:Resources.DispatcherLabel}"
 											   Command="{StaticResource ShowDispatcherKey}"
-											   LargeImageSource="..\Images\Ribbon\DispatcherImage.png"/>
+											   LargeImageSource="..\Images\Ribbon\DispatcherImage.png"/>-->
 					<ribbon:RibbonButton x:Name="ZoomInButton"
 										 Label="{x:Static p:Resources.ZoomInLabel}"
 										 Command="{StaticResource ZoomInCommandKey}"
+										 LargeImageSource="..\Images\Ribbon\ZoomIn.png"
 										 SmallImageSource="..\Images\Ribbon\SmallZoomIn.png"/>
 					<ribbon:RibbonButton x:Name="ZoomOutButton"
 										 Label="{x:Static p:Resources.ZoomOutLabel}"
 										 Command="{StaticResource ZoomOutCommandKey}"
+										 LargeImageSource="..\Images\Ribbon\ZoomOut.png"
 										 SmallImageSource="..\Images\Ribbon\SmallZoomOut.png"/>
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="{x:Static p:Resources.NodesLabel}"
@@ -257,20 +260,21 @@
 			</controls:PropsPanel>-->
 		<Grid Grid.Row="1" x:Name="ContentGrid">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="250"/>
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 			<controls:CtrlObjectDispatcher x:Name="DispatcherPanel"
-										   VerticalAlignment="Stretch"
-										   Grid.Column="0"
+										   VerticalAlignment="Stretch" 
 										   Width="{Binding Source=ElementName, Path=Width}"
-										   Margin="5"/>
-			<GridSplitter Grid.Column="1" Width="6"
+										   Margin="5,5,11,5"
+										   Grid.Column="0"/>
+			<GridSplitter Width="6"
 						  HorizontalAlignment="Center"
 						  Margin="0,5,0,5"
 						  Background="{StaticResource BackgroundBrushKey}"
-						  IsTabStop="False"/>
+						  IsTabStop="False"
+						  Grid.Column="1"/>
 			<Border Style="{StaticResource BorderStyleKey}" Margin="5"
 					Grid.Column="2">
 				<ScrollViewer x:Name="ScrollDiagram"

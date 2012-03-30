@@ -68,9 +68,9 @@ namespace TalesGenerator.UI.Controls
 
 		Network _network;
 
-		TreeViewItem _nodeObjects;
-		TreeViewItem _nodeNodes;
-		TreeViewItem _nodeLinks;
+		LinkContextMenu _linkMenu;
+
+		NodeContextMenu _nodeMenu;
 
 		#endregion
 
@@ -80,19 +80,13 @@ namespace TalesGenerator.UI.Controls
 			: base()
 		{
 			_network = null;
-			_nodeObjects = null;
-			_nodeNodes = null;
-			_nodeLinks = null;
-
-			//_dictionary = new ResourceDictionary();
-			//_dictionary.Source =
-			//    new Uri("/TalesGenerator;component/Themes/Generic.xaml",
-			//        UriKind.RelativeOrAbsolute);
 
 			_dictionary = Application.LoadComponent(new Uri("/TalesGenerator;component/Themes/Generic.xaml", 
 				UriKind.Relative)) as ResourceDictionary;
 
 			_infos = new List<TreeItemInfo>();
+			_linkMenu = new LinkContextMenu();
+			_nodeMenu = new NodeContextMenu();
 
 			InUpdate = false;
 		}
@@ -112,6 +106,8 @@ namespace TalesGenerator.UI.Controls
 				RefreshTree();
 				if (_network != null)
 				{
+					_linkMenu.Network = _network;
+					_nodeMenu.Network = _network;
 					_network.Nodes.CollectionChanged += new NotifyCollectionChangedEventHandler(Nodes_CollectionChanged);
 					_network.Edges.CollectionChanged += new NotifyCollectionChangedEventHandler(Edges_CollectionChanged);
 					_network.Edges.PropertyChanged += new PropertyChangedEventHandler(Edges_PropertyChanged);
@@ -144,7 +140,6 @@ namespace TalesGenerator.UI.Controls
 
 			if (_network == null)
 			{
-				_nodeObjects = _nodeLinks = _nodeNodes = null;
 				this.Items.Clear();
 				return;
 			}
@@ -277,18 +272,9 @@ namespace TalesGenerator.UI.Controls
 			List<NetworkNode> primaryNodes = new List<NetworkNode>(_network.GetPrimaryNodes());
 			foreach (NetworkNode node in primaryNodes)
 			{
-				TreeViewItem nodeTreeItem = new TreeViewItem();
-
-				Binding nodeBinding = new Binding();
-				nodeBinding.Source = node;
-				nodeBinding.Path = new PropertyPath("Name");
-				nodeBinding.Converter = new NodeNameConverter();
-				nodeTreeItem.Uid = node.Id.ToString(CultureInfo.InvariantCulture);
-				nodeTreeItem.HeaderTemplate = itemTemplate;
-				nodeTreeItem.SetBinding(TreeViewItem.HeaderProperty, nodeBinding);
+				TreeViewItem nodeTreeItem = CreateNodeItem(node, itemTemplate);
 
 				LoadItemState(node.Id, null, nodeTreeItem);
-
 				CreateDescendants(nodeTreeItem, node);
 
 				rootNode.Items.Add(nodeTreeItem);
@@ -343,25 +329,15 @@ namespace TalesGenerator.UI.Controls
 				foreach (NetworkEdge edge in node.GetTypedIncomingEdges(NetworkEdgeType.IsA))
 				{
 					NetworkNode endNode = edge.StartNode;
+					TreeViewItem nodeItem = CreateNodeItem(endNode, itemTemplate);
 
-					TreeViewItem nodeRoot = new TreeViewItem();
-					Binding nodeBinding = new Binding();
-					nodeBinding.Source = endNode;
-					nodeBinding.Path = new PropertyPath("Name");
-					nodeBinding.Converter = new NodeNameConverter();
-					nodeRoot.SetBinding(TreeViewItem.HeaderProperty, nodeBinding);
-					nodeRoot.Uid = endNode.Id.ToString(CultureInfo.InvariantCulture);
-					nodeRoot.HeaderTemplate = itemTemplate;
+					LoadItemState(endNode.Id, node, nodeItem);
+					CreateDescendants(nodeItem, endNode);
 
-					LoadItemState(endNode.Id, node, nodeRoot);
-
-					CreateDescendants(nodeRoot, endNode);
-
-					instanceRoot.Items.Add(nodeRoot);
+					instanceRoot.Items.Add(nodeItem);
 				}
 			}
 		}
-
 
 		private void CreateInstances(TreeViewItem root, NetworkNode node)
 		{
@@ -385,18 +361,9 @@ namespace TalesGenerator.UI.Controls
 				foreach (NetworkEdge edge in node.GetTypedIncomingEdges(NetworkEdgeType.IsInstance))
 				{
 					NetworkNode endNode = edge.StartNode;
-
-					TreeViewItem nodeRoot = new TreeViewItem();
-					Binding nodeBinding = new Binding();
-					nodeBinding.Source = endNode;
-					nodeBinding.Path = new PropertyPath("Name");
-					nodeBinding.Converter = new NodeNameConverter();
-					nodeRoot.SetBinding(TreeViewItem.HeaderProperty, nodeBinding);
-					nodeRoot.Uid = endNode.Id.ToString(CultureInfo.InvariantCulture);
-					nodeRoot.HeaderTemplate = itemTemplate;
+					TreeViewItem nodeRoot = CreateNodeItem(endNode, itemTemplate);
 
 					LoadItemState(endNode.Id, node, nodeRoot);
-
 					CreateDescendants(nodeRoot, endNode);
 
 					instanceRoot.Items.Add(nodeRoot);
@@ -413,11 +380,12 @@ namespace TalesGenerator.UI.Controls
 				string str = Utils.ConvertToResourcesType(currentType) + "TemplateKey";
 				DataTemplate template = Application.Current.TryFindResource(str) as DataTemplate;
 				str = Utils.ConvertToResourcesType(currentType) + "ItemTemplateKey";
-				DataTemplate itemTemplates = Application.Current.TryFindResource(str) as DataTemplate;
+				DataTemplate itemTemplate = Application.Current.TryFindResource(str) as DataTemplate;
 
 				TreeViewItem linkRoot = new TreeViewItem();
 				linkRoot.Header = Utils.ConvertType(edge.Type);
 				linkRoot.HeaderTemplate = template;
+				linkRoot.ContextMenu = _linkMenu;
 				linkRoot.Uid = edge.Id.ToString();
 
 				LoadItemState(edge.Id, node, linkRoot);
@@ -425,19 +393,26 @@ namespace TalesGenerator.UI.Controls
 				root.Items.Add(linkRoot);
 
 				NetworkNode nodeDesc = edge.EndNode;
-				TreeViewItem nodeTreeItem = new TreeViewItem();
-				Binding nodeBinding = new Binding();
-				nodeBinding.Source = nodeDesc;
-				nodeBinding.Path = new PropertyPath("Name");
-				nodeBinding.Converter = new NodeNameConverter();
-				nodeTreeItem.Uid = nodeDesc.Id.ToString(CultureInfo.InvariantCulture);
-				nodeTreeItem.SetBinding(TreeViewItem.HeaderProperty, nodeBinding);
-				nodeTreeItem.HeaderTemplate = itemTemplates;
+				TreeViewItem nodeTreeItem = CreateNodeItem(nodeDesc, itemTemplate);
 
 				LoadItemState(nodeDesc.Id, edge, nodeTreeItem);
 
 				linkRoot.Items.Add(nodeTreeItem);
 			}
+		}
+
+		private TreeViewItem CreateNodeItem(NetworkNode endNode, DataTemplate itemTemplate)
+		{
+			TreeViewItem nodeRoot = new TreeViewItem();
+			Binding nodeBinding = new Binding();
+			nodeBinding.Source = endNode;
+			nodeBinding.Path = new PropertyPath("Name");
+			nodeBinding.Converter = new NodeNameConverter();
+			nodeRoot.SetBinding(TreeViewItem.HeaderProperty, nodeBinding);
+			nodeRoot.Uid = endNode.Id.ToString(CultureInfo.InvariantCulture);
+			nodeRoot.ContextMenu = _nodeMenu;
+			nodeRoot.HeaderTemplate = itemTemplate;
+			return nodeRoot;
 		}
 
 		public TreeViewItem FindNode(int id, TreeViewItem item = null)
@@ -461,7 +436,8 @@ namespace TalesGenerator.UI.Controls
 						result = treeItem;
 					else
 					{
-						result = FindNode(id, treeItem);
+						if (!ItemInForbiddenTypes(treeItem.Header as string))
+							result = FindNode(id, treeItem);
 					}
 
 				}
@@ -501,25 +477,32 @@ namespace TalesGenerator.UI.Controls
 			//}
 		}
 
+		private bool ItemInForbiddenTypes(string p)
+		{
+			return p == Properties.Resources.AgentLabel || p == Properties.Resources.RecipientLabel ||
+				p == Properties.Resources.GoalLabel || p == Properties.Resources.FollowLabel ||
+				p == Properties.Resources.LocativeLabel;
+		}
+
 		public void ClearSelection()
 		{
-			if (_nodeLinks != null)
-			{
-				foreach (object item in _nodeLinks.Items)
-				{
-					TreeViewItem treeItem = _nodeLinks.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
-					if (treeItem != null) treeItem.IsSelected = false;
-				}
-			}
+			//if (_nodeLinks != null)
+			//{
+			//    foreach (object item in _nodeLinks.Items)
+			//    {
+			//        TreeViewItem treeItem = _nodeLinks.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+			//        if (treeItem != null) treeItem.IsSelected = false;
+			//    }
+			//}
 
-			if (_nodeNodes != null)
-			{
-				foreach (object item in _nodeNodes.Items)
-				{
-					TreeViewItem treeItem = _nodeNodes.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
-					if (treeItem != null) treeItem.IsSelected = false;
-				}
-			}
+			//if (_nodeNodes != null)
+			//{
+			//    foreach (object item in _nodeNodes.Items)
+			//    {
+			//        TreeViewItem treeItem = _nodeNodes.ItemContainerGenerator.ContainerFromItem(item) as TreeViewItem;
+			//        if (treeItem != null) treeItem.IsSelected = false;
+			//    }
+			//}
 		}
 
 		#endregion

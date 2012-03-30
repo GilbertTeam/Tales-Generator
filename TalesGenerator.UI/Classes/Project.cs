@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls;
+using TalesGenerator.UI.Controls;
 
 
 namespace TalesGenerator.UI.Classes
@@ -30,6 +31,10 @@ namespace TalesGenerator.UI.Classes
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
+		LinkContextMenu _linkMenu;
+
+		NodeContextMenu _nodeMenu;
+
 		#endregion
 
 		#region Contructors
@@ -39,6 +44,9 @@ namespace TalesGenerator.UI.Classes
 			_diagram = null;
 			_network = null;
 			_path = "";
+
+			_linkMenu = new LinkContextMenu();
+			_nodeMenu = new NodeContextMenu();
 		}
 
 		#endregion
@@ -76,6 +84,9 @@ namespace TalesGenerator.UI.Classes
 				if (_network != value)
 				{
 					_network = value;
+
+					_linkMenu.Network = Network;
+					_nodeMenu.Network = Network;
 
 					OnPropertyChanged("Network");
 				}
@@ -121,6 +132,9 @@ namespace TalesGenerator.UI.Classes
 			Diagram = new Diagram();
 			Network = new Network();
 			Path = "";
+
+			_linkMenu.Network = Network;
+			_nodeMenu.Network = Network;
 		}
 
 		/// <summary>
@@ -150,6 +164,10 @@ namespace TalesGenerator.UI.Classes
 			XDocument xDoc = XDocument.Load(_path);
 
 			_network = Network.LoadFromXml(xDoc);
+
+			_linkMenu.Network = Network;
+			_nodeMenu.Network = Network;
+
 			DiagramSerializer diagSr = new DiagramSerializer(_diagram);
 			diagSr.NodeAdded += new DiagramItemEventHandler(NodeAdded);
 			diagSr.LinkAdded += new DiagramItemEventHandler(LinkAdded);
@@ -169,7 +187,7 @@ namespace TalesGenerator.UI.Classes
 
 			//newNode.SetBinding(DiagramItem.TextProperty, binding);
 			item.Uid = node.Id.ToString();
-			item.ContextMenu = item.TryFindResource("NodeContextMenuKey") as ContextMenu;
+			item.ContextMenu = _nodeMenu;
 
 			item.MouseLeftButtonDown += new MouseButtonEventHandler(item_MouseLeftButtonDown);
 		}
@@ -221,7 +239,7 @@ namespace TalesGenerator.UI.Classes
 			link.SetBinding(DiagramLink.TextProperty, binding);
 
 			link.Uid = edge.Id.ToString();
-			link.ContextMenu = link.TryFindResource("LinkContextMenuKey") as ContextMenu;
+			link.ContextMenu = _linkMenu;
 			link.HeadShape = ArrowHeads.PointerArrow;
 		}
 

@@ -19,6 +19,7 @@ using TalesGenerator.UI.Properties;
 
 using MindFusion.Diagramming.Wpf;
 using MindFusion.Diagramming.Wpf.Export;
+using TalesGenerator.UI.Controls;
 
 namespace TalesGenerator.UI.Windows
 {
@@ -50,7 +51,7 @@ namespace TalesGenerator.UI.Windows
 
 			DiagramNetwork.IsEnabled = _project.Network != null;
 			//ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
-			DispatcherPanelButton.IsChecked = this.DispatcherPanel.Visibility == System.Windows.Visibility.Visible;
+			//DispatcherPanelButton.IsChecked = this.DispatcherPanel.Visibility == System.Windows.Visibility.Visible;
 
 			DispatcherPanel.SelectionChanged += new OnSelectionChanged(DispatcherPanel_SelectionChanged);
 			_updatingDiagramSelection = false;
@@ -213,7 +214,7 @@ namespace TalesGenerator.UI.Windows
 
 		private void ShowDispatcher_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			ContentGrid.ColumnDefinitions[0].Width = GridLength.Auto;
+			//ContentGrid.ColumnDefinitions[0].Width = GridLength.Auto;
 			DispatcherPanel.Visibility = DispatcherPanel.Visibility == System.Windows.Visibility.Visible ?
 				Visibility.Collapsed : Visibility.Visible;
 			this.InvalidateArrange();
@@ -443,7 +444,8 @@ namespace TalesGenerator.UI.Windows
 				return;
 
 			NetworkNode netNode = network.Nodes.FindById(Int32.Parse(deletedNode.Uid));
-			network.Nodes.Remove(netNode);
+			if (netNode != null)
+				network.Nodes.Remove(netNode);
 
 		}
 
@@ -574,7 +576,8 @@ namespace TalesGenerator.UI.Windows
 			if (link.Uid != "")
 			{
 				NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
-				network.Edges.Remove(edge);
+				if (edge != null)
+					network.Edges.Remove(edge);
 			}
 		}
 
@@ -593,6 +596,8 @@ namespace TalesGenerator.UI.Windows
 
 			NetworkEdge edge = network.Edges.FindById(Int32.Parse(link.Uid));
 			//PanelProps.Edge = edge;
+			if (edge == null)
+				return;
 
 			_currentType = edge.Type;
 
@@ -719,7 +724,39 @@ namespace TalesGenerator.UI.Windows
 		{
 			DispatcherPanel.SetNetwork(_project.Network);
 			this.DiagramNetwork.IsEnabled = _project.Network != null;
+			if (_project.Network != null)
+			{
+				_project.Network.Edges.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Edges_CollectionChanged);
+				_project.Network.Nodes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Nodes_CollectionChanged);
+			}
+
 			RefreshFrame();
+		}
+
+		void Nodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+			{
+				foreach (NetworkNode node in e.OldItems)
+				{
+					DiagramNode digramNode = Utils.FindItemByUid(DiagramNetwork, node.Id) as DiagramNode;
+					if (digramNode != null)
+						DiagramNetwork.Items.Remove(digramNode);
+				}
+			}
+		}
+
+		void Edges_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+			{
+				foreach (NetworkEdge node in e.OldItems)
+				{
+					DiagramLink digramNode = Utils.FindItemByUid(DiagramNetwork, node.Id) as DiagramLink;
+					if (digramNode != null)
+						DiagramNetwork.Items.Remove(digramNode);
+				}
+			}
 		}
 
 		protected void RefreshFrame()

@@ -340,7 +340,7 @@ namespace TalesGenerator.Core
 			NetworkObject obj = null;
 			obj = Nodes.FindById(id);
 			if (obj == null)
-				Edges.FindById(id);
+				obj = Edges.FindById(id);
 			return obj;
 		}
 
