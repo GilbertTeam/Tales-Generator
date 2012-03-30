@@ -213,8 +213,10 @@ namespace TalesGenerator.UI.Windows
 
 		private void ShowDispatcher_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
+			ContentGrid.ColumnDefinitions[0].Width = GridLength.Auto;
 			DispatcherPanel.Visibility = DispatcherPanel.Visibility == System.Windows.Visibility.Visible ?
 				Visibility.Collapsed : Visibility.Visible;
+			this.InvalidateArrange();
 		}
 
 		private void ZoomOut_CanExecute(object sender, CanExecuteRoutedEventArgs e)

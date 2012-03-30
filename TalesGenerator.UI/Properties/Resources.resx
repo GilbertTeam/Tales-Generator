@@ -249,4 +249,31 @@
   <data name="IsInstanceLabel" xml:space="preserve">
     <value>#is_instance</value>
   </data>
+  <data name="AgentResourceLabel" xml:space="preserve">
+    <value>Agent</value>
+  </data>
+  <data name="DescendantsLabel" xml:space="preserve">
+    <value>Потомки</value>
+  </data>
+  <data name="FollowResourceLabel" xml:space="preserve">
+    <value>Follow</value>
+  </data>
+  <data name="GoalResourceLabel" xml:space="preserve">
+    <value>Goal</value>
+  </data>
+  <data name="InstancesLabel" xml:space="preserve">
+    <value>Экземпляры</value>
+  </data>
+  <data name="IsAResourceLabel" xml:space="preserve">
+    <value>IsA</value>
+  </data>
+  <data name="IsInstanceResourceLabel" xml:space="preserve">
+    <value>IsInstance</value>
+  </data>
+  <data name="LocativeResourceLabel" xml:space="preserve">
+    <value>Locative</value>
+  </data>
+  <data name="RecipientResourceLabel" xml:space="preserve">
+    <value>Recipient</value>
+  </data>
 </root>

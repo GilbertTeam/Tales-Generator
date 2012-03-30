@@ -196,6 +196,103 @@ namespace TalesGenerator.Core
 		{
 			return Name;
 		}
+
+		public IEnumerable<NetworkNode> GetTypedIncomingLinkedNodes(NetworkEdgeType type)
+		{
+			return GetTypedLinkedNodes(type, IncomingEdges);
+		}
+
+		public IEnumerable<NetworkNode> GetTypedOutgoingLinkedNodes(NetworkEdgeType type)
+		{
+			return GetTypedLinkedNodes(type, OutgoingEdges);
+		}
+
+		internal static IEnumerable<NetworkNode> GetTypedLinkedNodes(NetworkEdgeType type,
+			IEnumerable<NetworkEdge> colletion)
+		{
+			List<NetworkNode> result = new List<NetworkNode>();
+
+			foreach (NetworkEdge edge in colletion)
+			{
+				if (edge.Type == type)
+					result.Add(edge.StartNode);
+			}
+
+			return result;
+		}
+
+		public bool HasTypedOutgoingEdges(NetworkEdgeType type)
+		{
+			return HasTypedEdges(type, OutgoingEdges);
+		}
+
+		public bool HasTypedIncomingEdges(NetworkEdgeType type)
+		{
+			return HasTypedEdges(type, IncomingEdges);
+		}
+
+		internal static bool HasTypedEdges(NetworkEdgeType type, IEnumerable<NetworkEdge> collection)
+		{
+			bool result = false;
+
+			foreach (NetworkEdge edge in collection)
+			{
+				if (edge.Type == type)
+					result = true;
+			}
+
+			return result;
+		}
+
+		public IEnumerable<NetworkEdge> GetTypedOutGoingEdges(NetworkEdgeType type)
+		{
+			return GetTypedEdges(type, OutgoingEdges);
+		}
+
+		public IEnumerable<NetworkEdge> GetTypedIncomingEdges(NetworkEdgeType type)
+		{
+			return GetTypedEdges(type, IncomingEdges);
+		}
+
+		internal static IEnumerable<NetworkEdge> GetTypedEdges(NetworkEdgeType type, IEnumerable<NetworkEdge> edges)
+		{
+			List<NetworkEdge> result = new List<NetworkEdge>();
+
+			foreach (NetworkEdge edge in edges)
+			{
+				if (edge.Type == type)
+					result.Add(edge);
+			}
+
+			return result;
+		}
+
+		public NetworkEdge GetTypedOutgoingEdge(NetworkEdgeType type)
+		{
+			return GetTypedEdge(type, OutgoingEdges);
+		}
+
+		public NetworkEdge GetTypedIncomingEdge(NetworkEdgeType type)
+		{
+			return GetTypedEdge(type, IncomingEdges);
+		}
+
+		internal static NetworkEdge GetTypedEdge(NetworkEdgeType type, IEnumerable<NetworkEdge> edges)
+		{
+			NetworkEdge result = null;
+
+			foreach(NetworkEdge edge in edges)
+			{
+				if (type == edge.Type)
+				{
+					result = edge;
+					break;
+				}
+			}
+
+			return result;
+		}
+
 		#endregion
 	}
 }

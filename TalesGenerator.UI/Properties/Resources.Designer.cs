@@ -70,6 +70,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agent.
+        /// </summary>
+        public static string AgentResourceLabel {
+            get {
+                return ResourceManager.GetString("AgentResourceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ответ:.
         /// </summary>
         public static string AnswerLabel {
@@ -169,6 +178,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Потомки.
+        /// </summary>
+        public static string DescendantsLabel {
+            get {
+                return ResourceManager.GetString("DescendantsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Объекты сети.
         /// </summary>
         public static string DispatcherLabel {
@@ -241,11 +259,38 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Follow.
+        /// </summary>
+        public static string FollowResourceLabel {
+            get {
+                return ResourceManager.GetString("FollowResourceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #цель.
         /// </summary>
         public static string GoalLabel {
             get {
                 return ResourceManager.GetString("GoalLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Goal.
+        /// </summary>
+        public static string GoalResourceLabel {
+            get {
+                return ResourceManager.GetString("GoalResourceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Экземпляры.
+        /// </summary>
+        public static string InstancesLabel {
+            get {
+                return ResourceManager.GetString("InstancesLabel", resourceCulture);
             }
         }
         
@@ -259,11 +304,29 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to IsA.
+        /// </summary>
+        public static string IsAResourceLabel {
+            get {
+                return ResourceManager.GetString("IsAResourceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #is_instance.
         /// </summary>
         public static string IsInstanceLabel {
             get {
                 return ResourceManager.GetString("IsInstanceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to IsInstance.
+        /// </summary>
+        public static string IsInstanceResourceLabel {
+            get {
+                return ResourceManager.GetString("IsInstanceResourceLabel", resourceCulture);
             }
         }
         
@@ -291,6 +354,15 @@ namespace TalesGenerator.UI.Properties {
         public static string LocativeLabel {
             get {
                 return ResourceManager.GetString("LocativeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locative.
+        /// </summary>
+        public static string LocativeResourceLabel {
+            get {
+                return ResourceManager.GetString("LocativeResourceLabel", resourceCulture);
             }
         }
         
@@ -336,6 +408,15 @@ namespace TalesGenerator.UI.Properties {
         public static string RecipientLabel {
             get {
                 return ResourceManager.GetString("RecipientLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recipient.
+        /// </summary>
+        public static string RecipientResourceLabel {
+            get {
+                return ResourceManager.GetString("RecipientResourceLabel", resourceCulture);
             }
         }
         

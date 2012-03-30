@@ -92,6 +92,38 @@ namespace TalesGenerator.UI.Classes
 			return res;
 		}
 
+		public static string ConvertToResourcesType(NetworkEdgeType type)
+		{
+			string res = "";
+
+			switch (type)
+			{
+				case NetworkEdgeType.IsA:
+					res = Properties.Resources.IsAResourceLabel;
+					break;
+				case NetworkEdgeType.Agent:
+					res = Properties.Resources.AgentResourceLabel;
+					break;
+				case NetworkEdgeType.Recipient:
+					res = Properties.Resources.RecipientResourceLabel;
+					break;
+				case NetworkEdgeType.Locative:
+					res = Properties.Resources.LocativeResourceLabel;
+					break;
+				case NetworkEdgeType.Follow:
+					res = Properties.Resources.FollowResourceLabel;
+					break;
+				case NetworkEdgeType.Goal:
+					res = Properties.Resources.GoalResourceLabel;
+					break;
+				case NetworkEdgeType.IsInstance:
+					res = Properties.Resources.IsInstanceResourceLabel;
+					break;
+			}
+
+			return res;
+		}
+
 		public static ShapeNode FindNodeByUid(Diagram diagram, int id)
 		{
 			ShapeNode result = null;
@@ -177,53 +209,53 @@ namespace TalesGenerator.UI.Classes
 
 	#region ValueConverters
 
-	[ValueConversion(typeof(DataTemplate), typeof(NetworkEdgeType))]
-	public class NetworkEdgeTypeDataTemplateConverter : IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			NetworkEdgeType type = (NetworkEdgeType)value;
+	//[ValueConversion(typeof(DataTemplate), typeof(NetworkEdgeType))]
+	//public class NetworkEdgeTypeDataTemplateConverter : IValueConverter
+	//{
+	//    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+	//    {
+	//        NetworkEdgeType type = (NetworkEdgeType)value;
 
-			DataTemplate result = null;
+	//        DataTemplate result = null;
 
-			string str;
-			switch (type)
-			{
-				case NetworkEdgeType.Agent:
-					str = "Agent";
-					break;
-				case NetworkEdgeType.Recipient:
-					str = "Recipient";
-					break;
-				case NetworkEdgeType.Goal:
-					str = "Goal";
-					break;
-				case NetworkEdgeType.Locative:
-					str = "Locative";
-					break;
-				case NetworkEdgeType.Follow:
-					str = "Follow";
-					break;
-				case NetworkEdgeType.IsInstance:
-					str = "IsInstance";
-					break;
-				default:
-					str = "IsA";
-					break;
-			}
+	//        string str;
+	//        switch (type)
+	//        {
+	//            case NetworkEdgeType.Agent:
+	//                str = "Agent";
+	//                break;
+	//            case NetworkEdgeType.Recipient:
+	//                str = "Recipient";
+	//                break;
+	//            case NetworkEdgeType.Goal:
+	//                str = "Goal";
+	//                break;
+	//            case NetworkEdgeType.Locative:
+	//                str = "Locative";
+	//                break;
+	//            case NetworkEdgeType.Follow:
+	//                str = "Follow";
+	//                break;
+	//            case NetworkEdgeType.IsInstance:
+	//                str = "IsInstance";
+	//                break;
+	//            default:
+	//                str = "IsA";
+	//                break;
+	//        }
 
-			str += "TemplateKey";
+	//        str += "TemplateKey";
 
-			result = Application.Current.TryFindResource(str) as DataTemplate;
+	//        result = Application.Current.TryFindResource(str) as DataTemplate;
 
-			return result;
-		}
+	//        return result;
+	//    }
 
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			return null;
-		}
-	}
+	//    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+	//    {
+	//        return null;
+	//    }
+	//}
 
 	[ValueConversion(typeof(String), typeof(NetworkEdgeType))]
 	public class NetworkEdgeTypeStringConverter : IValueConverter

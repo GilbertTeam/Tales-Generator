@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml.Linq;
 using TalesGenerator.Core.Collections;
 using TalesGenerator.Core.Serialization;
+using System.Collections.Generic;
 
 namespace TalesGenerator.Core
 {
@@ -319,6 +320,21 @@ namespace TalesGenerator.Core
 
 			return network;
 		}
+
+		public IEnumerable<NetworkNode> GetPrimaryNodes()
+		{
+			List<NetworkNode> result = new List<NetworkNode>();
+
+			foreach (NetworkNode node in Nodes)
+			{
+				if (!node.HasTypedOutgoingEdges(NetworkEdgeType.IsInstance) &&
+					!node.HasTypedOutgoingEdges(NetworkEdgeType.IsA))
+					result.Add(node);
+			}
+
+			return result;
+		}
+
 		#endregion
 	}
 }

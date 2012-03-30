@@ -46,15 +46,17 @@ namespace TalesGenerator.UI.Controls
 
 		public void SetSelection(int id)
 		{
+			if (NetworkObjectsTree.InUpdate)
+				return;
 			if (id == -1)
 			{
 				NetworkObjectsTree.ClearSelection();
 			}
 			else
 			{
-				TreeViewItem item = NetworkObjectsTree.FindNode(id);
-				if (item != null)
-					item.IsSelected = true;
+				//TreeViewItem item = NetworkObjectsTree.FindNode(id);
+				//if (item != null)
+				//    item.IsSelected = true;
 			}
 		}
 
