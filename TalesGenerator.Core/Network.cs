@@ -335,6 +335,15 @@ namespace TalesGenerator.Core
 			return result;
 		}
 
+		public NetworkObject FindById(int id)
+		{
+			NetworkObject obj = null;
+			obj = Nodes.FindById(id);
+			if (obj == null)
+				Edges.FindById(id);
+			return obj;
+		}
+
 		#endregion
 	}
 }

@@ -440,10 +440,46 @@ namespace TalesGenerator.UI.Controls
 			}
 		}
 
-		public TreeViewItem FindNode(int id)
+		public TreeViewItem FindNode(int id, TreeViewItem item = null)
 		{
-			//if (_network == null)
-			//    return null;
+			TreeViewItem result = null;
+
+			if (_network == null)
+				return null;
+
+			if (item == null)
+			{
+				item = this.Items[0] as TreeViewItem;
+			}
+
+			foreach (TreeViewItem treeItem in item.Items)
+			{
+				if (treeItem.Uid != "")
+				{
+					int itemId = Convert.ToInt32(treeItem.Uid);
+					if (itemId == id)
+						result = treeItem;
+					else
+					{
+						result = FindNode(id, treeItem);
+					}
+
+				}
+				else
+				{
+					string header = treeItem.Header as string;
+					if (header == Properties.Resources.InstancesLabel ||
+						header == Properties.Resources.DescendantsLabel)
+					{
+						result = FindNode(id, treeItem);
+					}
+				}
+				if (result != null)
+					break;
+			}
+
+			return result;
+
 
 			//foreach (object item in _nodeLinks.Items)
 			//{
@@ -463,8 +499,6 @@ namespace TalesGenerator.UI.Controls
 			//        return obj as TreeViewItem;
 			//    }
 			//}
-
-			return null;
 		}
 
 		public void ClearSelection()

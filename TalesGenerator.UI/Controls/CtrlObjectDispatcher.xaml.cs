@@ -54,9 +54,17 @@ namespace TalesGenerator.UI.Controls
 			}
 			else
 			{
-				//TreeViewItem item = NetworkObjectsTree.FindNode(id);
-				//if (item != null)
-				//    item.IsSelected = true;
+				TreeViewItem item = NetworkObjectsTree.FindNode(id);
+				if (item != null)
+				{
+					item.IsSelected = true;
+					TreeViewItem parent = item.Parent as TreeViewItem;
+					while (parent != null)
+					{
+						parent.IsExpanded = true;
+						parent = parent.Parent as TreeViewItem;
+					}
+				}
 			}
 		}
 
@@ -66,11 +74,16 @@ namespace TalesGenerator.UI.Controls
 
 		private void NetworkObjectsTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
-			NetworkObject netObject = e.NewValue as NetworkObject;
-			if (netObject == null)
+			TreeViewItem item = e.NewValue as TreeViewItem;
+			if (item == null)
 				return;
 
-			SelectionChanged(netObject.Id);
+			if (NetworkObjectsTree.CurrentNetwork != null && item.Uid != "")
+			{
+				int id = Convert.ToInt32(item.Uid);
+
+				SelectionChanged(id);
+			}
 		}
 
 		#endregion
