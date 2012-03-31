@@ -35,6 +35,10 @@ namespace TalesGenerator.UI.Classes
 
 		NodeContextMenu _nodeMenu;
 
+		public const int DefaultNodeWidth = 50;
+
+		public const int DefaultNodeHeight = 50;
+
 		#endregion
 
 		#region Contructors

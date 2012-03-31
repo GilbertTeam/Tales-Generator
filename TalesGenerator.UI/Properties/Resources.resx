@@ -276,4 +276,7 @@
   <data name="RecipientResourceLabel" xml:space="preserve">
     <value>Recipient</value>
   </data>
+  <data name="CreateNewNodeLabel" xml:space="preserve">
+    <value>Создать новую вершину</value>
+  </data>
 </root>

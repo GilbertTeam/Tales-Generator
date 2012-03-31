@@ -961,6 +961,31 @@ namespace TalesGenerator.UI.Windows
 			DiagramNetwork.Items.Remove(diagramItem);
 		}
 
+		private void MenuItem_Click(object sender, RoutedEventArgs e)
+		{
+			MenuItem item = sender as MenuItem;
+			if (item == null)
+				return;
+
+			ContextMenu menu = item.Parent as ContextMenu;
+			if (menu == null)
+				return;
+
+			Diagram diagram = menu.PlacementTarget as Diagram;
+			if (diagram == null)
+				return;
+
+			Point mousePos = Mouse.GetPosition(diagram);
+
+			//подгоним позицию
+			mousePos.X += diagram.Viewport.X;
+			mousePos.Y += diagram.Viewport.Y;
+
+			ShapeNode node = diagram.Factory.CreateShapeNode(mousePos, new Size(Project.DefaultNodeWidth, Project.DefaultNodeHeight));
+			DiagramNetwork_NodeCreated(null, new NodeEventArgs(node));
+		}
+
 		#endregion
+
 	}
 }

@@ -245,7 +245,7 @@ namespace TalesGenerator.UI.Controls
 
 			if (info != null)
 			{
-				nodeRoot.IsSelected = info.IsSelected;
+				//nodeRoot.IsSelected = info.IsSelected;
 				nodeRoot.IsExpanded = info.IsExpanded;
 			}
 		}

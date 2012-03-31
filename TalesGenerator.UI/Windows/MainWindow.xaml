@@ -33,44 +33,10 @@
 			<Setter Property="MenuItem.IsCheckable" Value="True"/>
 			<EventSetter Event="MenuItem.Click" Handler="MenuItemType_Click"/>
 		</Style>
-		<!--Links-->
-		<ContextMenu x:Key="LinkContextMenuKey">
-			<MenuItem Header="Тип дуги"
-					  SubmenuOpened="MenuItem_SubmenuOpened">
-				<MenuItem Header="{x:Static p:Resources.IsALabel}"
-						  Style="{StaticResource ContextMenuLinkTypeStyle}">
-				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.AgentLabel}"
-						  Style="{StaticResource ContextMenuLinkTypeStyle}">
-
-				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.RecipientLabel}"
-						  Style="{StaticResource ContextMenuLinkTypeStyle}">
-				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.FollowLabel}"
-						  Style="{StaticResource ContextMenuLinkTypeStyle}">
-				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.GoalLabel}"
-						  Style="{StaticResource ContextMenuLinkTypeStyle}">
-				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.LocativeLabel}"
-						  Style="{StaticResource ContextMenuLinkTypeStyle}">
-				</MenuItem>
-				<MenuItem Header="{x:Static p:Resources.IsInstanceLabel}"
-						  Style="{StaticResource ContextMenuLinkTypeStyle}">
-				</MenuItem>
-			</MenuItem>
-			<Separator/>
-			<MenuItem Header="{x:Static p:Resources.DeleteLinkLabel}"
-					  Click="MenuItemDeleteLink_Click"/>
-		</ContextMenu>
-		<!--Nodes-->
-		<ContextMenu x:Key="NodeContextMenuKey">
-			<MenuItem Header="{x:Static p:Resources.ChangeNodeTextLabel}"
-					  Click="MenuItemNodeChangeText_Click"/>
-			<Separator/>
-			<MenuItem Header="{x:Static p:Resources.DeleteNodeLabel}"
-					  Click="MenuItemNodeDelete_Click"/>
+		<ContextMenu x:Key="DiagramContextMenu">
+			<MenuItem x:Name="CreateNewNode"
+					  Header="{x:Static p:Resources.CreateNewNodeLabel}"
+					  Click="MenuItem_Click"/>
 		</ContextMenu>
 	</Window.Resources>
 
@@ -307,7 +273,8 @@
 								  SelectionChanged="DiagramNetwork_SelectionChanged"
 								  AllowInplaceEdit="False"
 								  InplaceEditAcceptOnEnter="True"
-								  AutoScroll="True">
+								  AutoScroll="True"
+								  ContextMenu="{StaticResource DiagramContextMenu}">
 					</diag:Diagram>
 				</ScrollViewer>
 			</Border>
