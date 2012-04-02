@@ -74,6 +74,8 @@ namespace TalesGenerator.UI.Controls
 
 		private void NetworkObjectsTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
+			if (NetworkObjectsTree.InUpdate)
+				return;
 			TreeViewItem item = e.NewValue as TreeViewItem;
 			if (item == null)
 				return;

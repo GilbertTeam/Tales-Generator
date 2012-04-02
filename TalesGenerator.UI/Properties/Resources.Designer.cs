@@ -160,6 +160,15 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Создать новую вершину.
+        /// </summary>
+        public static string CreateNewNodeLabel {
+            get {
+                return ResourceManager.GetString("CreateNewNodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Удалить дугу.
         /// </summary>
         public static string DeleteLinkLabel {
