@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using System.Text.RegularExpressions;
+using TalesGenerator.Core.Collections;
 
 namespace TalesGenerator.Core
 {
@@ -38,11 +40,21 @@ namespace TalesGenerator.Core
 		/// </summary>
 		public NetworkNode BaseNode
 		{
-			get { return _baseNode; }
-
-			internal set
+			get
 			{
-				_baseNode = value;
+				NetworkEdge isAEdge = OutgoingEdges.GetEdge(NetworkEdgeType.IsA);
+
+				return isAEdge != null ? isAEdge.EndNode : null;
+			}
+		}
+
+		public NetworkNode InstanceNode
+		{
+			get
+			{
+				NetworkEdge isInstanceEdge = OutgoingEdges.GetEdge(NetworkEdgeType.IsInstance);
+
+				return isInstanceEdge != null ? isInstanceEdge.EndNode : null;
 			}
 		}
 
@@ -94,7 +106,7 @@ namespace TalesGenerator.Core
 				throw new ArgumentNullException("name");
 			}
 
-			_name = name;
+			_name = Regex.Replace(name, @"\s+", " ");
 		}
 
 		/// <summary>
@@ -120,18 +132,13 @@ namespace TalesGenerator.Core
 		/// <param name="name">Имя новой вершины.</param>
 		/// <param name="baseNode">Базовая вершина.</param>
 		internal NetworkNode(Network network, string name, NetworkNode baseNode)
-			: base(network)
+			: this(network, name)
 		{
-			if (name == null)
-			{
-				throw new ArgumentNullException("name");
-			}
 			if (baseNode == null)
 			{
 				throw new ArgumentNullException("baseNode");
 			}
 
-			_name = name;
 			_baseNode = baseNode;
 		}
 		#endregion
@@ -161,35 +168,41 @@ namespace TalesGenerator.Core
 			Name = xElement.Attribute("name").Value;
 		}
 
-		public bool IsInherit(NetworkNode networkNode)
+		public bool IsInherit(NetworkNode networkNode, bool useIsInstance)
 		{
 			if (networkNode == null)
 			{
 				throw new ArgumentNullException("networkNode");
 			}
 
-			bool inherit = false;
+			bool isInherit = false;
 
 			if (networkNode == this)
 			{
-				inherit = true;
+				isInherit = true;
 			}
 			else
 			{
-				NetworkNode baseNode = networkNode.BaseNode;
+				NetworkNode baseNode = BaseNode;
 
-				while (!inherit && baseNode != null)
+				if (useIsInstance &&
+					baseNode == null)
 				{
-					if (baseNode == this)
+					baseNode = InstanceNode;
+				}
+
+				while (!isInherit && baseNode != null)
+				{
+					if (baseNode == networkNode)
 					{
-						inherit = true;
+						isInherit = true;
 					}
 
 					baseNode = baseNode.BaseNode;
 				}
 			}
 
-			return inherit;
+			return isInherit;
 		}
 
 		public override string ToString()

@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows;
 using System.Xml.Linq;
 using System.Windows.Media;
+using System.Globalization;
 
 namespace TalesGenerator.UI.Classes
 {

@@ -52,14 +52,24 @@ namespace TalesGenerator.Core.Collections
 				throw new ArgumentException(Properties.Resources.NetworkEdgeCreateError);
 			}
 
-			if (edgeType == NetworkEdgeType.IsA)
+			if (edgeType == NetworkEdgeType.IsA ||
+				edgeType == NetworkEdgeType.IsInstance)
 			{
-				if (startNode.BaseNode != null)
+				if (startNode.BaseNode != null ||
+					startNode.InstanceNode != null)
 				{
-					throw new ArgumentException(Properties.Resources.NetworkIsAEdgeError);
+					throw new ArgumentException(Properties.Resources.NetworkIsInstanceEdgeError);
 				}
 
-				startNode.BaseNode = endNode;
+				if (endNode.InstanceNode != null)
+				{
+					throw new ArgumentException(Properties.Resources.NetworkIsInstanceEdgeError2);
+				}
+			}
+
+			if (startNode.OutgoingEdges.GetEdge(edgeType) != null)
+			{
+				throw new ArgumentException(Properties.Resources.NetworkSameEdgesError);
 			}
 
 			NetworkEdge networkEdge = new NetworkEdge(_network, startNode, endNode, edgeType);
@@ -74,11 +84,6 @@ namespace TalesGenerator.Core.Collections
 			if (networkEdge == null)
 			{
 				throw new ArgumentNullException("networkEdge");
-			}
-
-			if (networkEdge.Type == NetworkEdgeType.IsA)
-			{
-				networkEdge.StartNode.BaseNode = null;
 			}
 
 			return base.Remove(networkEdge);

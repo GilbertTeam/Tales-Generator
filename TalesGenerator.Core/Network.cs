@@ -171,7 +171,7 @@ namespace TalesGenerator.Core
 			//TODO Необходимо доработать логику десериализации.
 			if (network._nodes.Count == 0)
 			{
-				network._nextId = 0;
+				network._nextId = network._edges.Max(edge => edge.Id) + 1;
 			}
 			else if (network._edges.Count == 0)
 			{

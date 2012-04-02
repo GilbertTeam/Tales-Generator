@@ -126,4 +126,43 @@
   <data name="NetworkIsAEdgeError" xml:space="preserve">
     <value>Невозможно создание нескольких дуг типа is-a для одной вершины.</value>
   </data>
+  <data name="NetworkIsInstanceEdgeError" xml:space="preserve">
+    <value>Каждая вершина может иметь только одну из дуг: is-a и is-instance.</value>
+  </data>
+  <data name="NetworkIsInstanceEdgeError2" xml:space="preserve">
+    <value>Создание дуг типа is-instance допускается только для вершин класса.</value>
+  </data>
+  <data name="NetworkSameEdgesError" xml:space="preserve">
+    <value>Невозможно создать две дуги одинакового типа.</value>
+  </data>
+  <data name="ReasonerAgentQueryError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ReasonerDontKnowAnswer" xml:space="preserve">
+    <value>Не знаю</value>
+  </data>
+  <data name="ReasonerEmptyQueryError" xml:space="preserve">
+    <value>Пустой запрос.</value>
+  </data>
+  <data name="ReasonerGoalQueryError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ReasonerIsQueryError" xml:space="preserve">
+    <value>Форма запроса "S1 это S2?": &lt;имя вершины&gt; это &lt;имя вершины&gt;.</value>
+  </data>
+  <data name="ReasonerNoAnswer" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="ReasonerRecipientQueryError" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ReasonerWhereQueryError" xml:space="preserve">
+    <value>Форма запроса "Где V?": где &lt;имя падежной рамки&gt;.</value>
+  </data>
+  <data name="ReasonerWhoQueryError" xml:space="preserve">
+    <value>Форма запроса "Кто S?": кто &lt;имя сущ.&gt;.</value>
+  </data>
+  <data name="ReasonerYesAnswer" xml:space="preserve">
+    <value>Да</value>
+  </data>
 </root>

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using TalesGenerator.Core.Serialization;
+using TalesGenerator.Core.Collections;
 
 namespace TalesGenerator.Core
 {
@@ -42,9 +43,12 @@ namespace TalesGenerator.Core
 
 			set
 			{
-				_edgeType = value;
+				if (_edgeType != value)
+				{
+					_edgeType = value;
 
-				OnPropertyChanged("Type");
+					OnPropertyChanged("Type");
+				}
 			}
 		}
 
@@ -200,9 +204,9 @@ namespace TalesGenerator.Core
 				throw new SerializationException();
 			}
 
-			if (_edgeType == NetworkEdgeType.IsA)
+			if (_startNode.OutgoingEdges.GetEdge(edgeType) != null)
 			{
-				_startNode.BaseNode = _endNode;
+				throw new SerializationException();
 			}
 		}
 		#endregion

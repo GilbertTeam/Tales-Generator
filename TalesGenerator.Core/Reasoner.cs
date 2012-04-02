@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TalesGenerator.Core.Collections;
 using System.Text.RegularExpressions;
+using TalesGenerator.TextAnalyzer;
 
 namespace TalesGenerator.Core
 {
@@ -11,16 +12,19 @@ namespace TalesGenerator.Core
 	{
 		#region Fields
 
-		private Network _network;
+		private const string WhoWord = "кто";
 
-		private readonly Dictionary<string, NetworkEdgeType> _dictionary = new Dictionary<string, NetworkEdgeType>()
-		{
-			{ "есть", NetworkEdgeType.IsA },
-			{ "агент", NetworkEdgeType.Agent },
-			{ "реципиент", NetworkEdgeType.Recipient },
-			{ "цель", NetworkEdgeType.Goal },
-			{ "локатив", NetworkEdgeType.Locative }
-		};
+		private const string WhereWord = "где";
+
+		private const string GoalWord = "цель";
+
+		private const string IsWord = "это";
+
+		private const string AgentWord = "агент";
+
+		private const string RecipientWord = "реципиент";
+
+		private readonly Network _network;
 		#endregion
 
 		#region Properties
@@ -28,15 +32,6 @@ namespace TalesGenerator.Core
 		public Network Network
 		{
 			get { return _network; }
-			set
-			{
-				if (value == null)
-				{
-					throw new ArgumentNullException("value");
-				}
-
-				_network = value;
-			}
 		}
 		#endregion
 
@@ -55,79 +50,79 @@ namespace TalesGenerator.Core
 
 		#region Methods
 
-		private string[] PrepareQuestion(string text)
+		private bool IsInherit(NetworkNode firstNode, NetworkNode secondNode)
 		{
-			text = text.ToLower();
-
-			string[] words;
-			if (text.Contains('\"'))
-			{
-				var matches = Regex.Matches(text, @"""((?:[^\\""]|\\.)*)""");
-
-				if (matches.Count != 3)
-				{
-					throw new ArgumentException(Properties.Resources.InvalidFormatError, "text");
-				}
-
-				words = matches.Cast<Match>().Where(m => m.Success).Select(m => m.Value).ToArray();
-			}
-			else
-			{
-				words = text.Split(' ');
-			}
-
-			if (words.Length != 3)
-			{
-				throw new ArgumentException(Properties.Resources.InvalidFormatError, "text");
-			}
-
-			return words;
+			return firstNode.IsInherit(secondNode, false) || secondNode.IsInherit(firstNode, false);
 		}
 
-		private bool FindUpcastNode(NetworkNode startCaseFrameNode, NetworkNode targetCaseFrameNode)
+		private NetworkNode GetNode(NetworkNode caseFrameNode, NetworkEdgeType edgeType)
+		{
+			NetworkNode networkNode = null;
+			NetworkEdge networkEdge = caseFrameNode.OutgoingEdges.GetEdge(edgeType);
+
+			if (networkEdge != null)
+			{
+				networkNode = networkEdge.EndNode;
+			}
+
+			return networkNode;
+		}
+
+		private bool FindEdge(NetworkNode caseFrameNode, NetworkEdgeType edgeType, NetworkNode targetNode, NetworkNode firstNode)
+		{
+			bool found = false;
+			NetworkNode endNode = GetNode(caseFrameNode, edgeType);
+
+			if (endNode != null)
+			{
+				found =
+					IsInherit(targetNode, endNode) &&
+					(firstNode != null && targetNode.IsInherit(firstNode, true));
+			}
+
+			return found;
+		}
+
+		private bool FindUpcastNode(NetworkNode startCaseFrameNode, NetworkEdgeType edgeType, NetworkNode targetNode)
 		{
 			bool found = false;
 			NetworkNode currentCaseFrameNode = startCaseFrameNode;
+			NetworkNode currentNode = GetNode(currentCaseFrameNode, edgeType);
+
+			if (currentNode != null &&
+				IsInherit(targetNode, currentNode))
+			{
+				found = true;
+			}
 
 			while (!found &&
 				currentCaseFrameNode != null)
 			{
-				if (currentCaseFrameNode == targetCaseFrameNode)
-				{
-					found = true;
-				}
-
+				found = FindEdge(currentCaseFrameNode, edgeType, targetNode, currentNode);
 				currentCaseFrameNode = currentCaseFrameNode.BaseNode;
 			}
 
 			return found;
 		}
 
-		private bool FindDowncastNode(NetworkNode startCaseFrameNode, NetworkNode targetCaseFrameNode, NetworkEdgeType edgeType)
+		private bool FindDowncastNode(NetworkNode startCaseFrameNode, NetworkEdgeType edgeType, NetworkNode targetNode)
 		{
 			bool found = false;
-
 			NetworkNode currentCaseFrameNode = startCaseFrameNode;
-			if (currentCaseFrameNode != null)
+			NetworkNode currentNode = GetNode(currentCaseFrameNode, edgeType);
+
+			if (currentNode != null &&
+				IsInherit(targetNode, currentNode))
 			{
-				if (currentCaseFrameNode == targetCaseFrameNode)
-				{
-					found = true;
-				}
+				found = true;
+			}
 
-				if (found)
-				{
-					NetworkEdge tempEdge = currentCaseFrameNode.OutgoingEdges.GetEdge(edgeType);
+			if (!found &&
+				currentCaseFrameNode != null)
+			{
+				found = FindEdge(currentCaseFrameNode, edgeType, targetNode, currentNode);
 
-					if (tempEdge != null)
-					{
-						NetworkNode tempNode = tempEdge.EndNode;
-						NetworkNode targetNode = targetCaseFrameNode.OutgoingEdges.GetEdge(edgeType).EndNode;
-
-						found = tempNode.IsInherit(targetNode);
-					}
-				}
-				else
+				if (!found)
 				{
 					var isAEdges = currentCaseFrameNode.IncomingEdges.GetEdges(NetworkEdgeType.IsA);
 					var enumerator = isAEdges.GetEnumerator();
@@ -135,7 +130,7 @@ namespace TalesGenerator.Core
 					while (!found &&
 						enumerator.MoveNext())
 					{
-						found = FindDowncastNode(enumerator.Current.StartNode, targetCaseFrameNode, edgeType);
+						found = FindDowncastNode(enumerator.Current.StartNode, edgeType, targetNode);
 					}
 				}
 			}
@@ -143,59 +138,257 @@ namespace TalesGenerator.Core
 			return found;
 		}
 
-		private bool FindNode(NetworkNode targetNode, NetworkNode targetCaseFrameNode, NetworkEdgeType edgeType)
+		private bool FindNode(NetworkNode startCaseFrameNode, NetworkEdgeType edgeType, NetworkNode targetNode)
 		{
-			bool found = false;
-			var targetEdges = targetNode.IncomingEdges.GetEdges(edgeType);
+			bool found = FindUpcastNode(startCaseFrameNode, edgeType, targetNode);
 
-			foreach (var targetEdge in targetEdges)
+			if (!found)
 			{
-				NetworkNode startCaseFrameNode = targetEdge.StartNode;
-
-				found = FindUpcastNode(startCaseFrameNode, targetCaseFrameNode);
-
-				if (!found)
-				{
-					found = FindDowncastNode(startCaseFrameNode, targetCaseFrameNode, edgeType);
-				}
-
-				if (found)
-				{
-					break;
-				}
+				found = FindDowncastNode(startCaseFrameNode, edgeType, targetNode);
 			}
 
 			return found;
 		}
 
-		public bool Confirm(string question)
+		private string ProcessQueryWithKeyWordInTheBeginning(List<WordInfo> wordsInfo, NetworkEdgeType edgeType, string errorMessage)
+		{
+			if (wordsInfo.Count <= 1)
+			{
+				throw new ReasonerException(errorMessage);
+			}
+
+			string result = Properties.Resources.ReasonerDontKnowAnswer;
+			string caseFrameNodeName = string.Empty;
+
+			foreach (WordInfo wordInfo in wordsInfo.Skip(1))
+			{
+				caseFrameNodeName += wordInfo.Word + " ";
+			}
+
+			NetworkNode caseFrameNode = _network.Nodes.GetNode(caseFrameNodeName);
+
+			if (caseFrameNode != null)
+			{
+				NetworkEdge locativeEdge = null;
+				NetworkNode currentCaseFrameNode = caseFrameNode;
+
+				while (locativeEdge == null && 
+					currentCaseFrameNode != null)
+				{
+					locativeEdge = currentCaseFrameNode.OutgoingEdges.GetEdge(edgeType);
+					currentCaseFrameNode = currentCaseFrameNode.BaseNode;
+				}
+
+				if (locativeEdge != null)
+				{
+					result = locativeEdge.EndNode.Name;
+				}
+			}
+
+			return result;
+		}
+
+		private void ProcessQueryWithKeywordInTheMiddle(List<WordInfo> wordsInfo, string keyWord, string errorMessage, out NetworkNode firstNode, out NetworkNode secondNode)
+		{
+			string firstNodeName = string.Empty;
+			string secondNodeName = string.Empty;
+			var keyWords = wordsInfo.Where(wordInfo => wordInfo.Word == keyWord).ToList();
+
+			if (keyWords.Count != 1)
+			{
+				throw new ReasonerException(errorMessage);
+			}
+
+			int isWordIndex = wordsInfo.IndexOf(keyWords.First());
+
+			for (int i = 0; i < isWordIndex; i++)
+			{
+				firstNodeName += wordsInfo[i].Word + " ";
+			}
+			for (int i = isWordIndex + 1; i < wordsInfo.Count; i++)
+			{
+				secondNodeName += wordsInfo[i].Word + " ";
+			}
+
+			firstNode = _network.Nodes.GetNode(firstNodeName);
+			secondNode = _network.Nodes.GetNode(secondNodeName);
+		}
+
+		private string ProcessQueryWithKeywordInTheMiddle(List<WordInfo> wordsInfo, string keyWord, string errorMessage, NetworkEdgeType edgeType)
+		{
+			string result = Properties.Resources.ReasonerDontKnowAnswer;
+			NetworkNode firstNode;
+			NetworkNode secondNode;
+
+			ProcessQueryWithKeywordInTheMiddle(wordsInfo, keyWord, errorMessage, out firstNode, out secondNode);
+
+			if (firstNode != null &&
+				secondNode != null)
+			{
+				result =
+					FindNode(secondNode, edgeType, firstNode)
+					? Properties.Resources.ReasonerYesAnswer
+					: Properties.Resources.ReasonerNoAnswer;
+			}
+
+			return result;
+		}
+
+		private string ProcessWhoQuery(List<WordInfo> wordsInfo)
+		{
+			string result = Properties.Resources.ReasonerDontKnowAnswer;
+			string nodeName = string.Empty;
+
+			foreach (WordInfo wordInfo in wordsInfo.Skip(1))
+			{
+				nodeName += wordInfo.Word + " ";
+			}
+
+			NetworkNode personNode = _network.Nodes.GetNode(nodeName);
+
+			if (personNode != null)
+			{
+				if (personNode.BaseNode != null)
+				{
+					result = personNode.BaseNode.Name;
+				}
+				else if (personNode.InstanceNode != null)
+				{
+					result = personNode.InstanceNode.Name;
+				}
+				else
+				{
+					result = personNode.Name;
+				}
+			}
+
+			return result;
+		}
+
+		private string ProcessIsQuery(List<WordInfo> wordsInfo)
+		{
+			string result = Properties.Resources.ReasonerDontKnowAnswer;
+			NetworkNode firstNode;
+			NetworkNode secondNode;
+
+			ProcessQueryWithKeywordInTheMiddle(wordsInfo, IsWord, Properties.Resources.ReasonerIsQueryError, out firstNode, out secondNode);
+
+			if (firstNode != null &&
+				secondNode != null)
+			{
+				result =
+					(firstNode.IsInherit(secondNode, true))
+					? Properties.Resources.ReasonerYesAnswer
+					: Properties.Resources.ReasonerNoAnswer;
+			}
+
+			return result;
+		}
+
+		private string ProcessWhereQuery(List<WordInfo> wordsInfo)
+		{
+			return ProcessQueryWithKeyWordInTheBeginning(wordsInfo, NetworkEdgeType.Locative, Properties.Resources.ReasonerWhereQueryError);
+		}
+
+		private string ProcessFirstGoalQuery(List<WordInfo> wordsInfo)
+		{
+			return ProcessQueryWithKeyWordInTheBeginning(wordsInfo, NetworkEdgeType.Goal, Properties.Resources.ReasonerGoalQueryError);
+		}
+
+		private string ProcessSecondGoalQuery(List<WordInfo> wordsInfo)
+		{
+			return ProcessQueryWithKeywordInTheMiddle(wordsInfo, GoalWord, Properties.Resources.ReasonerGoalQueryError, NetworkEdgeType.Goal);
+		}
+
+		private string ProcessFirstAgentQuery(List<WordInfo> wordsInfo)
+		{
+			return ProcessQueryWithKeyWordInTheBeginning(wordsInfo, NetworkEdgeType.Agent, Properties.Resources.ReasonerAgentQueryError);
+		}
+
+		private string ProcessSecondAgentQuery(List<WordInfo> wordsInfo)
+		{
+			return ProcessQueryWithKeywordInTheMiddle(wordsInfo, AgentWord, Properties.Resources.ReasonerAgentQueryError, NetworkEdgeType.Agent);
+		}
+
+		private string ProcessFirstRecipientQuery(List<WordInfo> wordsInfo)
+		{
+			return ProcessQueryWithKeyWordInTheBeginning(wordsInfo, NetworkEdgeType.Recipient, Properties.Resources.ReasonerRecipientQueryError);
+		}
+
+		private string ProcessSecondRecipientQuery(List<WordInfo> wordsInfo)
+		{
+			return ProcessQueryWithKeywordInTheMiddle(wordsInfo, RecipientWord, Properties.Resources.ReasonerRecipientQueryError, NetworkEdgeType.Recipient);
+		}
+
+		public string Confirm(string question)
 		{
 			if (string.IsNullOrEmpty(question))
 			{
-				throw new ArgumentNullException("text");
+				throw new ReasonerException(Properties.Resources.ReasonerEmptyQueryError);
 			}
 
-			string[] words = PrepareQuestion(question);
+			string result = Properties.Resources.ReasonerDontKnowAnswer;
+			List<WordInfo> wordsInfo = null;
 
-			string agent = words[0].Trim().Replace("\"", "");
-			string caseFrame = words[1].Trim().Replace("\"", "");
-			string recipient = words[2].Trim().Replace("\"", "");
-
-			NetworkNode agentNode = _network.Nodes.GetNode(agent);
-			NetworkNode caseFrameNode = _network.Nodes.GetNode(caseFrame);
-			NetworkNode recipientNode = _network.Nodes.GetNode(recipient);
-
-			if (agentNode == null ||
-				caseFrameNode == null ||
-				recipientNode == null)
+			try
 			{
-				throw new ArgumentException(Properties.Resources.InvalidFormatError, "text");
+				wordsInfo = Mystem.Analyze(question).ToList();
+			}
+			catch { }
+
+			if (wordsInfo != null
+				&& wordsInfo.Count > 0)
+			{
+				WordInfo firstWord = wordsInfo.First();
+
+				if (firstWord.Word == WhoWord)
+				{
+					result = ProcessWhoQuery(wordsInfo);
+				}
+				else if (firstWord.Word == WhereWord)
+				{
+					result = ProcessWhereQuery(wordsInfo);
+				}
+				else if (wordsInfo.Any(wordInfo => wordInfo.Word == IsWord))
+				{
+					result = ProcessIsQuery(wordsInfo);
+				}
+				else if (wordsInfo.Any(wordInfo => wordInfo.Word == GoalWord))
+				{
+					if (firstWord.NormalForm == GoalWord)
+					{
+						result = ProcessFirstGoalQuery(wordsInfo);
+					}
+					else
+					{
+						result = ProcessSecondGoalQuery(wordsInfo);
+					}
+				}
+				else if (wordsInfo.Any(wordInfo => wordInfo.Word == AgentWord))
+				{
+					if (firstWord.NormalForm == AgentWord)
+					{
+						result = ProcessFirstAgentQuery(wordsInfo);
+					}
+					else
+					{
+						result = ProcessSecondAgentQuery(wordsInfo);
+					}
+				}
+				else if (wordsInfo.Any(wordInfo => wordInfo.Word == RecipientWord))
+				{
+					if (firstWord.NormalForm == RecipientWord)
+					{
+						result = ProcessFirstRecipientQuery(wordsInfo);
+					}
+					else
+					{
+						result = ProcessSecondRecipientQuery(wordsInfo);
+					}
+				}
 			}
 
-			bool agentFound = FindNode(agentNode, caseFrameNode, NetworkEdgeType.Agent);;
-			bool recipientFound = FindNode(recipientNode, caseFrameNode, NetworkEdgeType.Recipient);;
-
-			return agentFound && recipientFound;
+			return result;
 		}
 		#endregion
 	}

@@ -38,8 +38,7 @@ namespace TalesGenerator.UI.Windows
 		{
 			try
 			{
-				bool result = _reasoner.Confirm(QuestionTextBox.Text);
-				AnswerTextBox.Text = result ? Properties.Resources.AnswerYes : Properties.Resources.AnswerNo;
+				AnswerTextBox.Text = _reasoner.Confirm(QuestionTextBox.Text);
 			}
 			catch (Exception ex)
 			{

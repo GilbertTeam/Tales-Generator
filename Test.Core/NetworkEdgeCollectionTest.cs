@@ -71,10 +71,9 @@ namespace Test.Core
 		public void AddEdgeWithoutTypeTest()
 		{
 			Network network = new Network();
-			NetworkEdgeCollection target = new NetworkEdgeCollection(network);
 			NetworkNode startNode = network.Nodes.Add();
 			NetworkNode endNode = network.Nodes.Add();
-			NetworkEdge newEdge = target.Add(startNode, endNode);
+			NetworkEdge newEdge = network.Edges.Add(startNode, endNode);
 
 			Assert.AreEqual(NetworkEdgeType.IsA, newEdge.Type);
 			Assert.AreEqual(endNode, startNode.BaseNode);
