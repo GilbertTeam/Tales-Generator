@@ -160,9 +160,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TalesGenerator.TextAnalyzer\TalesGenerator.TextAnalyzer.csproj">
+    <ProjectReference Include="..\TalesGenerator.TextAnalyzer\TalesGenerator.Text.csproj">
       <Project>{11203D53-8DA5-43B8-A8AF-E204DCA9C79A}</Project>
-      <Name>TalesGenerator.TextAnalyzer</Name>
+      <Name>TalesGenerator.Text</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
