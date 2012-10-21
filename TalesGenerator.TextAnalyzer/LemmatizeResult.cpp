@@ -2,6 +2,7 @@
 #include "LemmatizeResult.h"
 #include "TextAnalyzer.h"
 using namespace System;
+using namespace System::Collections::Generic;
 
 namespace TalesGenerator { namespace Text {
 
@@ -58,12 +59,22 @@ namespace TalesGenerator { namespace Text {
 		return m_TextAnalyzer->GetPartOfSpeech(this, formId);
 	}
 
+	Grammem LemmatizeResult::GetGrammem()
+	{
+		return m_TextAnalyzer->GetGrammem(this, 0);
+	}
+
+	Grammem LemmatizeResult::GetGrammem(UInt32 formId)
+	{
+		return m_TextAnalyzer->GetGrammem(this, formId);
+	}
+
 	String^ LemmatizeResult::GetTextByFormId(UInt32 formId)
 	{
 		return m_TextAnalyzer->GetTextByFormId(this, formId);
 	}
 
-	String^ LemmatizeResult::GetTextByGrammem(Grammem grammem)
+	IEnumerable<String^>^ LemmatizeResult::GetTextByGrammem(Grammem grammem)
 	{
 		return m_TextAnalyzer->GetTextByGrammem(this, grammem);
 	}

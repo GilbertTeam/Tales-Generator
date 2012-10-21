@@ -44,9 +44,13 @@ namespace TalesGenerator { namespace Text {
 
 		PartOfSpeech GetPartOfSpeech(System::UInt32 formId);
 
+		Grammem GetGrammem();
+
+		Grammem GetGrammem(System::UInt32 formId);
+
 		System::String^ GetTextByFormId(System::UInt32 formId);
 
-		System::String^ GetTextByGrammem(Grammem grammem);
+		System::Collections::Generic::IEnumerable<System::String^>^ GetTextByGrammem(Grammem grammem);
 	};
 }}
 

@@ -67,10 +67,10 @@ namespace TalesGenerator.Core.Collections
 				}
 			}
 
-			if (startNode.OutgoingEdges.GetEdge(edgeType) != null)
-			{
-				throw new ArgumentException(Properties.Resources.NetworkSameEdgesError);
-			}
+			//if (startNode.OutgoingEdges.GetEdge(edgeType) != null)
+			//{
+			//    throw new ArgumentException(Properties.Resources.NetworkSameEdgesError);
+			//}
 
 			NetworkEdge networkEdge = new NetworkEdge(_network, startNode, endNode, edgeType);
 

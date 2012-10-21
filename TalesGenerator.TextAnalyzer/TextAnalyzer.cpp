@@ -32,9 +32,14 @@ namespace TalesGenerator { namespace Text {
 		}
 	}
 
-	PartOfSpeech TextAnalyzer::GetPartOfSpeech(LemmatizeResult^ result, System::UInt32 formId)
+	PartOfSpeech TextAnalyzer::GetPartOfSpeech(LemmatizeResult^ result, UInt32 formId)
 	{
 		return static_cast<PartOfSpeech>(turglem_paradigms_get_part_of_speech(m_tlem->paradigms, result->Paradigm, formId));
+	}
+
+	Grammem TextAnalyzer::GetGrammem(LemmatizeResult^ result, UInt32 formId)
+	{
+		return static_cast<Grammem>(turglem_paradigms_get_grammem(m_tlem->paradigms, result->Paradigm, formId));
 	}
 
 	String^ TextAnalyzer::GetTextByFormId(LemmatizeResult^ result, UInt32 formId)
@@ -71,9 +76,9 @@ namespace TalesGenerator { namespace Text {
 		return text;
 	}
 
-	String^ TextAnalyzer::GetTextByGrammem(LemmatizeResult^ result, Grammem grammem)
+	IEnumerable<String^>^ TextAnalyzer::GetTextByGrammem(LemmatizeResult^ result, Grammem grammem)
 	{
-		String^ text = String::Empty;
+		List<String^>^ textList = gcnew List<String^>();
 		size_t formCount = turglem_paradigms_get_form_count(m_tlem->paradigms, result->Paradigm);
 		uint64_t grammemValue = static_cast<uint64_t>(grammem);
 
@@ -81,13 +86,13 @@ namespace TalesGenerator { namespace Text {
 		{
 			uint64_t currentGrammem = turglem_paradigms_get_grammem(m_tlem->paradigms, result->Paradigm, formId);
 
-			if (currentGrammem == grammemValue)
+			if (grammemValue == (currentGrammem & grammemValue))
 			{
-				text = GetTextByFormId(result, formId);
+				textList->Add(GetTextByFormId(result, formId));
 			}
 		}
 
-		return text;
+		return textList;
 	}
 
 	void TextAnalyzer::Load(String^ languageDictPath, String^ paradigmsDictPath, String^ predictionDictPath)

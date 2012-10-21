@@ -15,7 +15,9 @@ namespace TalesGenerator.Core
 		Locative,
 		Goal,
 		Follow,
-		IsInstance
+		IsInstance,
+		Template,
+		Action
 	}
 
 	/// <summary>

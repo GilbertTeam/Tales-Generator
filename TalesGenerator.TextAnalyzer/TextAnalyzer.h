@@ -14,9 +14,11 @@ namespace TalesGenerator { namespace Text {
 	internal:
 		PartOfSpeech GetPartOfSpeech(LemmatizeResult^ result, System::UInt32 formId);
 
+		Grammem GetGrammem(LemmatizeResult^ result, System::UInt32 formId);
+
 		System::String^ GetTextByFormId(LemmatizeResult^ result, System::UInt32 formId);
 
-		System::String^ GetTextByGrammem(LemmatizeResult^ result, Grammem grammem);
+		System::Collections::Generic::IEnumerable<System::String^>^ GetTextByGrammem(LemmatizeResult^ result, Grammem grammem);
 
 	public:
 		TextAnalyzer(AdapterKind adapter);
