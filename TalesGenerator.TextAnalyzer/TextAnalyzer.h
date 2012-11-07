@@ -8,6 +8,7 @@ namespace TalesGenerator { namespace Text {
 	public ref class TextAnalyzer
 	{
 	private:
+		bool m_isDisposed;
 		Adapter* m_pAdapter;
 		turglem m_tlem;
 
@@ -23,8 +24,11 @@ namespace TalesGenerator { namespace Text {
 	public:
 		TextAnalyzer(AdapterKind adapter);
 		~TextAnalyzer(void);
+		!TextAnalyzer(void);
 
 		void Load(System::String^ languageDictPath, System::String^ paradigmsDictPath, System::String^ predictionDictPath);
+
+		System::Collections::Generic::IEnumerable<LemmatizeResult^>^ Lemmatize(System::String^ input);
 
 		System::Collections::Generic::IEnumerable<LemmatizeResult^>^ Lemmatize(System::String^ input, bool usePrediction);
 	};

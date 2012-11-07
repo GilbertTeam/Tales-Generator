@@ -26,20 +26,29 @@ namespace TalesGenerator { namespace Text {
 
 	TextAnalyzer::~TextAnalyzer(void)
 	{
-		if (m_pAdapter)
+		if (m_isDisposed)
 		{
-			delete m_pAdapter;
+			return;
 		}
+
+		this->!TextAnalyzer();
+		m_isDisposed = true;
+	}
+
+	TextAnalyzer::!TextAnalyzer(void)
+	{
+		delete m_pAdapter;
+		::turglem_close(m_tlem);
 	}
 
 	PartOfSpeech TextAnalyzer::GetPartOfSpeech(LemmatizeResult^ result, UInt32 formId)
 	{
-		return static_cast<PartOfSpeech>(turglem_paradigms_get_part_of_speech(m_tlem->paradigms, result->Paradigm, formId));
+		return static_cast<PartOfSpeech>(::turglem_paradigms_get_part_of_speech(m_tlem->paradigms, result->Paradigm, formId));
 	}
 
 	Grammem TextAnalyzer::GetGrammem(LemmatizeResult^ result, UInt32 formId)
 	{
-		return static_cast<Grammem>(turglem_paradigms_get_grammem(m_tlem->paradigms, result->Paradigm, formId));
+		return static_cast<Grammem>(::turglem_paradigms_get_grammem(m_tlem->paradigms, result->Paradigm, formId));
 	}
 
 	String^ TextAnalyzer::GetTextByFormId(LemmatizeResult^ result, UInt32 formId)
@@ -55,7 +64,7 @@ namespace TalesGenerator { namespace Text {
 		{
 			MAFSA::l_string sourceText = m_pAdapter->String2Letters(pszSourceText);
 
-			size = turglem_build_form(
+			size = ::turglem_build_form(
 				m_tlem,
 				sourceText.data(),
 				sourceText.size(),
@@ -79,12 +88,12 @@ namespace TalesGenerator { namespace Text {
 	IEnumerable<String^>^ TextAnalyzer::GetTextByGrammem(LemmatizeResult^ result, Grammem grammem)
 	{
 		List<String^>^ textList = gcnew List<String^>();
-		size_t formCount = turglem_paradigms_get_form_count(m_tlem->paradigms, result->Paradigm);
+		size_t formCount = ::turglem_paradigms_get_form_count(m_tlem->paradigms, result->Paradigm);
 		uint64_t grammemValue = static_cast<uint64_t>(grammem);
 
 		for (uint32_t formId = 0; formId < formCount; formId++)
 		{
-			uint64_t currentGrammem = turglem_paradigms_get_grammem(m_tlem->paradigms, result->Paradigm, formId);
+			uint64_t currentGrammem = ::turglem_paradigms_get_grammem(m_tlem->paradigms, result->Paradigm, formId);
 
 			if (grammemValue == (currentGrammem & grammemValue))
 			{
@@ -122,7 +131,7 @@ namespace TalesGenerator { namespace Text {
 
 		try
 		{
-			if (0 == (m_tlem = turglem_load(pszLanguageDictPath, pszPredictionDictPath, pszParadigmsDictPath, &errorStringNumber, &errorDescription)))
+			if (0 == (m_tlem = ::turglem_load(pszLanguageDictPath, pszPredictionDictPath, pszParadigmsDictPath, &errorStringNumber, &errorDescription)))
 			{
 				const char* pszErrorDescription = turglem_error_what_string(errorDescription);
 				const char* pszErrorStringNumber = turglem_error_no_string(errorStringNumber);
@@ -146,6 +155,11 @@ namespace TalesGenerator { namespace Text {
 		}
 	}
 
+	IEnumerable<LemmatizeResult^>^ TextAnalyzer::Lemmatize(String^ input)
+	{
+		return Lemmatize(input, true);
+	}
+
 	IEnumerable<LemmatizeResult^>^ TextAnalyzer::Lemmatize(String^ input, bool usePrediction)
 	{
 		if (String::IsNullOrEmpty(input))
@@ -153,7 +167,7 @@ namespace TalesGenerator { namespace Text {
 			throw gcnew ArgumentException("input");
 		}
 
-		List<LemmatizeResult^>^ results = nullptr;
+		List<LemmatizeResult^>^ results = gcnew List<LemmatizeResult^>();
 		IntPtr pInput = Marshal::StringToHGlobalAnsi(input);
 		const char* pszInput = static_cast<const char*>(pInput.ToPointer());
 
@@ -167,7 +181,7 @@ namespace TalesGenerator { namespace Text {
 				const int bufferSize = 1024;
 				int buffer[2 * bufferSize];
 
-				formCount = turglem_lemmatize(
+				formCount = ::turglem_lemmatize(
 					m_tlem,
 					source.data(),
 					source.size(),
@@ -177,13 +191,11 @@ namespace TalesGenerator { namespace Text {
 					usePrediction
 				);
 
-				results = gcnew List<LemmatizeResult^>(formCount);
-
 				for (size_t i = 0; i < formCount; i++)
 				{
 					uint32_t paradigm = buffer[i * 2];
 					uint32_t sourceForm = buffer[i * 2 + 1];
-					size_t formsCount = turglem_paradigms_get_form_count(m_tlem->paradigms, paradigm);
+					size_t formsCount = ::turglem_paradigms_get_form_count(m_tlem->paradigms, paradigm);
 
 					results->Add(gcnew LemmatizeResult(this, input, static_cast<UInt32>(paradigm), static_cast<UInt32>(sourceForm), static_cast<UInt32>(formsCount)));
 				}
