@@ -211,6 +211,11 @@ namespace TalesGenerator.Core
 				throw new SerializationException();
 			}
 		}
+
+		public override string ToString()
+		{
+			return string.Format("Start node: {0}. End node: {1}. Type: {2}.", _startNode, _endNode, _edgeType);
+		}
 		#endregion
 	}
 }

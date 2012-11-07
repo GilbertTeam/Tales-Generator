@@ -270,7 +270,7 @@ namespace Test
 				{
 					//TODO В случае наличия нескольких подлежащих сказуемое должно быть во множественном числе.
 					Token subject = _context.LastOrDefault(context => context.PartOfSentence == PartOfSentence.Subject);
-					string action = _currentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Action).EndNode.Name;
+					string action = _currentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Action, true).EndNode.Name;
 					string[] words = action.Split(' ');
 					result = ParseGrammemMatch(match, words[0], subject != null ? subject.Text : null);
 
@@ -291,7 +291,7 @@ namespace Test
 
 		private string ParseWord(string word)
 		{
-			string text = string.Empty;
+			string text = word;
 			var results = _textAnalyzer.Lemmatize(word);
 			LemmatizeResult result = results.FirstOrDefault();
 
@@ -309,13 +309,15 @@ namespace Test
 						//Поэтому следующее условие говорит о том, что слово - подлежащее.
 						if (predicate == null)
 						{
+							_context.Add(new Token(word, word, PartOfSentence.Subject));
 							//TODO Возможно, необходимо переводить слово в именительный падеж.
-							text = word;
+							//text = word;
 						}
 						else
 						{
-							var texts = result.GetTextByGrammem(Grammem.Accusativ);
-							text = texts.FirstOrDefault();
+							_context.Add(new Token(word, word, PartOfSentence.Object));
+							//var texts = result.GetTextByGrammem(Grammem.Accusativ);
+							//text = texts.FirstOrDefault();
 						}
 
 						break;
@@ -324,16 +326,17 @@ namespace Test
 					case PartOfSpeech.VERB:
 					case PartOfSpeech.INFINITIVE:
 					{
-						Token subject = _context.FirstOrDefault(token => token.PartOfSentence == PartOfSentence.Subject);
+						_context.Add(new Token(word, word, PartOfSentence.Predicate));
+						//Token subject = _context.FirstOrDefault(token => token.PartOfSentence == PartOfSentence.Subject);
 
-						if (subject != null)
-						{
-							text = ReconcileWord(word, subject.Text);
-						}
-						else
-						{
-							text = word;
-						}
+						//if (subject != null)
+						//{
+						//    text = ReconcileWord(word, subject.Text);
+						//}
+						//else
+						//{
+						//    text = word;
+						//}
 
 						break;
 					}
@@ -363,7 +366,7 @@ namespace Test
 			_currentNode = networkNode;
 			_context.Clear();
 
-			NetworkNode templateNode = _currentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Template).EndNode;
+			NetworkNode templateNode = _currentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Template, true).EndNode;
 			string template = templateNode.Name;
 
 			Lexer lexer = new Lexer(template);

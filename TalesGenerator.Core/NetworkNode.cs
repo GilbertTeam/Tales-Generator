@@ -305,7 +305,6 @@ namespace TalesGenerator.Core
 
 			return result;
 		}
-
 		#endregion
 	}
 }

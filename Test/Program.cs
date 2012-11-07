@@ -18,6 +18,9 @@ namespace Test
 		private static Network CreateNetwork()
 		{
 			Network network = new Network();
+			NetworkNode taleNode = network.Nodes.Add("Сказка");
+			NetworkNode heroNode = network.Nodes.Add("Герой");
+			NetworkNode antagonistNode = network.Nodes.Add("Злодей");
 			NetworkNode grandMotherNode = network.Nodes.Add("Старушка");
 			NetworkNode grandFatherNode = network.Nodes.Add("Старичок");
 			NetworkNode girlNode = network.Nodes.Add("Девочка");
@@ -26,53 +29,136 @@ namespace Test
 			NetworkNode stoveNode = network.Nodes.Add("Печка");
 			NetworkNode appleTreeNode = network.Nodes.Add("Яблоня");
 			NetworkNode riverNode = network.Nodes.Add("Река");
-			NetworkNode hedgehogNode = network.Nodes.Add("Ежик");
 			NetworkNode babaYagaNode = network.Nodes.Add("Баба-Яга");
 			NetworkNode cabinOnChickenLegsNode = network.Nodes.Add("Избушка на курьих ножках");
 
-			//NetworkNode initialStateNode = network.Nodes.Add("Начальная ситуация");
-			//NetworkNode gtInitialStateTemplateNode = network.Nodes.Add("{Action} {agents}.");
-			//NetworkNode gtInitialStateActionNode = network.Nodes.Add("Жили-были");
-			//NetworkNode prohibitionNode = network.Nodes.Add("Запрет");
-			//NetworkNode seniorsDepartureNode = network.Nodes.Add("Уход старших");
-			//NetworkNode prohibitionViolationNode = network.Nodes.Add("Нарушение запрета");
-			//NetworkNode sabotageNode = network.Nodes.Add("Вредительство");
-			//NetworkNode woesPostNode = network.Nodes.Add("Сообщение беды");
-			//NetworkNode searchSubmittingNode = network.Nodes.Add("Отправка на поиски");
-			//NetworkNode firstTesterMeetingNode = network.Nodes.Add("Встреча с испытателем");
-			//NetworkNode firstTestNode = network.Nodes.Add("Испытание");
+			#region Base Network
+
+			NetworkNode initialStateNode = network.Nodes.Add("Начальная ситуация");
+			NetworkNode initialStateTemplateNode = network.Nodes.Add("{Action} {agents}.");
+			NetworkNode initialStateActionNode = network.Nodes.Add("Жили-были");
+			network.Edges.Add(initialStateNode, initialStateTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(initialStateNode, initialStateActionNode, NetworkEdgeType.Action);
+
+			NetworkNode prohibitionNode = network.Nodes.Add("Запрет");
+			NetworkNode prohibitionTemplateNode = network.Nodes.Add("{Agent} {~сказал:agent}: \"{Recipient}, {action}.\"");
+			NetworkNode prohibitionActionNode = network.Nodes.Add("Не уходи со двора");
+			network.Edges.Add(prohibitionNode, prohibitionTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(prohibitionNode, prohibitionActionNode, NetworkEdgeType.Action);
+
+			NetworkNode seniorsDepartureNode = network.Nodes.Add("Уход старших");
+			NetworkNode seniorsDepartureTemplateNode = network.Nodes.Add("{Agents} {action}.");
+			NetworkNode seniorsDepartureActionNode = network.Nodes.Add("Уходить");
+			network.Edges.Add(seniorsDepartureNode, seniorsDepartureTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(seniorsDepartureNode, seniorsDepartureActionNode, NetworkEdgeType.Action);
+
+			NetworkNode prohibitionViolationNode = network.Nodes.Add("Нарушение запрета");
+			NetworkNode prohibitionViolationTemplateNode = network.Nodes.Add("{Agent} {action}.");
+			NetworkNode prohibitionViolationActionNode = network.Nodes.Add("Нарушить запрет");
+			network.Edges.Add(prohibitionViolationNode, prohibitionViolationTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(prohibitionViolationNode, prohibitionViolationActionNode, NetworkEdgeType.Action);
+
+			NetworkNode sabotageNode = network.Nodes.Add("Вредительство");
+			NetworkNode sabotageTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
+			NetworkNode sabotageActionNode = network.Nodes.Add("Похитить");
+			network.Edges.Add(sabotageNode, sabotageTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(sabotageNode, sabotageActionNode, NetworkEdgeType.Action);
+
+			NetworkNode woesPostNode = network.Nodes.Add("Сообщение беды");
+			NetworkNode woesPostTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
+			NetworkNode woesPostActionNode = network.Nodes.Add("Обнаружить пропажу");
+			network.Edges.Add(woesPostNode, woesPostTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(woesPostNode, woesPostActionNode, NetworkEdgeType.Action);
+
+			NetworkNode searchSubmittingNode = network.Nodes.Add("Отправка на поиски");
+			NetworkNode searchSubmittingTemplateNode = network.Nodes.Add("{Agent} {action}.");
+			NetworkNode searchSubmittingActionNode = network.Nodes.Add("Отправилась на поиски");
+			network.Edges.Add(searchSubmittingNode, searchSubmittingTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(searchSubmittingNode, searchSubmittingActionNode, NetworkEdgeType.Action);
+
+			NetworkNode testerMeetingNode = network.Nodes.Add("Встреча с испытателем");
+			NetworkNode testerMeetingTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
+			NetworkNode testerMeetingActionNode = network.Nodes.Add("Встретить");
+			network.Edges.Add(testerMeetingNode, testerMeetingTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(testerMeetingNode, testerMeetingActionNode, NetworkEdgeType.Action);
+
+			NetworkNode testNode = network.Nodes.Add("Испытание");
+			NetworkNode testTemplateNode = network.Nodes.Add("{Agent} {~сказал:agent}: \"Съешь моего ржаного пирожка - скажу\".");
+			NetworkNode testActionNode = network.Nodes.Add("Встретить");
+			network.Edges.Add(testNode, testTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(testNode, testActionNode, NetworkEdgeType.Action);
+
+			NetworkNode testAttemptNode = network.Nodes.Add("Попытка пройти испытание");
+			//TODO В этом случае ответил не определяется как сказуемое.
+			NetworkNode testAttemptTemplateNode = network.Nodes.Add("{Agent} {~ответил:agent} {recipient}: \"О, у моего батюшки пшеничные не едятся\".");
+			NetworkNode testAttemptActionNode = network.Nodes.Add("Встретить");
+			network.Edges.Add(testAttemptNode, testAttemptTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(testAttemptNode, testAttemptActionNode, NetworkEdgeType.Action);
+
+			NetworkNode testResultNode = network.Nodes.Add("Результат испытания");
+			//TODO В этом случае ответил не определяется как сказуемое.
+			NetworkNode testResultTemplateNode = network.Nodes.Add("{Agent} не сказала {recipient}.");
+			NetworkNode testResultActionNode = network.Nodes.Add("Сказать");
+			network.Edges.Add(testResultNode, testResultTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(testResultNode, testResultActionNode, NetworkEdgeType.Action);
+
+			NetworkNode antagonistHomeNode = network.Nodes.Add("Жилище антагониста");
+			NetworkNode antagonistHomeTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
+			NetworkNode antagonistHomeActionNode = network.Nodes.Add("Увидеть");
+			network.Edges.Add(antagonistHomeNode, antagonistHomeTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(antagonistHomeNode, antagonistHomeActionNode, NetworkEdgeType.Action);
+
+			NetworkNode antagonistMeetingNode = network.Nodes.Add("Облик антагониста");
+			NetworkNode antagonistMeetingTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
+			NetworkNode antagonistMeetingActionNode = network.Nodes.Add("Увидеть");
+			network.Edges.Add(antagonistMeetingNode, antagonistMeetingTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(antagonistMeetingNode, antagonistMeetingActionNode, NetworkEdgeType.Action);
+			network.Edges.Add(antagonistMeetingNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(antagonistMeetingNode, babaYagaNode, NetworkEdgeType.Recipient);
+
+			NetworkNode desiredCharacterAppearanceNode = network.Nodes.Add("Появление искомого персонажа");
+			NetworkNode desiredCharacterAppearanceTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
+			NetworkNode desiredCharacterAppearanceActionNode = network.Nodes.Add("Увидеть");
+			network.Edges.Add(desiredCharacterAppearanceNode, desiredCharacterAppearanceTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(desiredCharacterAppearanceNode, desiredCharacterAppearanceActionNode, NetworkEdgeType.Action);
+
+			NetworkNode desiredCharacterLiberationNode = network.Nodes.Add("Добыча искомого персонажа с применением хитрости или силы");
+			NetworkNode desiredCharacterLiberationTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
+			NetworkNode desiredCharacterLiberationActionNode = network.Nodes.Add("Схватить и унести");
+			network.Edges.Add(desiredCharacterLiberationNode, desiredCharacterLiberationTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(desiredCharacterLiberationNode, desiredCharacterLiberationActionNode, NetworkEdgeType.Action);
+
+			NetworkNode persecutionBeginningNode = network.Nodes.Add("Начало преследования");
+			NetworkNode persecutionBeginningTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
+			NetworkNode persecutionBeginningActionNode = network.Nodes.Add("Начать преследовать");
+			network.Edges.Add(persecutionBeginningNode, persecutionBeginningTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(persecutionBeginningNode, persecutionBeginningActionNode, NetworkEdgeType.Action);
+			#endregion
+
+			#region Сказка "Гуси-лебеди"
+
+			NetworkNode geeseTaleNode = network.Nodes.Add("Сказка \"Гуси-лебеди\"");
+			network.Edges.Add(taleNode, geeseTaleNode, NetworkEdgeType.IsA);
 
 			NetworkNode gtInitialStateNode = network.Nodes.Add("Начальная ситуация");
-			NetworkNode gtInitialStateTemplateNode = network.Nodes.Add("{Action} {agents}.");
-			NetworkNode gtInitialStateActionNode = network.Nodes.Add("Жили-были");
-			network.Edges.Add(gtInitialStateNode, gtInitialStateTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(gtInitialStateNode, gtInitialStateActionNode, NetworkEdgeType.Action);
+			network.Edges.Add(gtInitialStateNode, initialStateNode, NetworkEdgeType.IsA);
 			network.Edges.Add(gtInitialStateNode, grandMotherNode, NetworkEdgeType.Agent);
 			network.Edges.Add(gtInitialStateNode, grandFatherNode, NetworkEdgeType.Agent);
 			network.Edges.Add(gtInitialStateNode, girlNode, NetworkEdgeType.Agent);
 			network.Edges.Add(gtInitialStateNode, boyNode, NetworkEdgeType.Agent);
 
 			NetworkNode gtProhibitionNode = network.Nodes.Add("Запрет");
-			NetworkNode gtProhibitionTemplateNode = network.Nodes.Add("{Agent} {~сказал:agent}: \"{Recipient}, {action}.\"");
-			NetworkNode gtProhibitionActionNode = network.Nodes.Add("Не уходи со двора");
-			network.Edges.Add(gtProhibitionNode, gtProhibitionTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(gtProhibitionNode, gtProhibitionActionNode, NetworkEdgeType.Action);
+			network.Edges.Add(gtProhibitionNode, prohibitionNode, NetworkEdgeType.IsA);
 			network.Edges.Add(gtProhibitionNode, grandMotherNode, NetworkEdgeType.Agent);
 			network.Edges.Add(gtProhibitionNode, girlNode, NetworkEdgeType.Recipient);
 
 			NetworkNode gtSeniorsDepartureNode = network.Nodes.Add("Уход старших");
-			NetworkNode gtSeniorsDepartureTemplateNode = network.Nodes.Add("{Agents} {action}.");
-			NetworkNode gtSeniorsDepartureActionNode = network.Nodes.Add("Уходить");
-			network.Edges.Add(gtSeniorsDepartureNode, gtSeniorsDepartureTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(gtSeniorsDepartureNode, gtSeniorsDepartureActionNode, NetworkEdgeType.Action);
+			network.Edges.Add(gtSeniorsDepartureNode, seniorsDepartureNode, NetworkEdgeType.IsA);
 			network.Edges.Add(gtSeniorsDepartureNode, grandMotherNode, NetworkEdgeType.Agent);
 			network.Edges.Add(gtSeniorsDepartureNode, grandFatherNode, NetworkEdgeType.Agent);
 
 			NetworkNode gtProhibitionViolationNode = network.Nodes.Add("Нарушение запрета");
-			NetworkNode gtProhibitionViolationTemplateNode = network.Nodes.Add("{Agent} {action}.");
-			NetworkNode gtProhibitionViolationActionNode = network.Nodes.Add("Нарушить запрет");
-			network.Edges.Add(gtProhibitionViolationNode, gtProhibitionViolationTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(gtProhibitionViolationNode, gtProhibitionViolationActionNode, NetworkEdgeType.Action);
+			network.Edges.Add(gtProhibitionViolationNode, prohibitionViolationNode, NetworkEdgeType.IsA);
 			network.Edges.Add(gtProhibitionViolationNode, girlNode, NetworkEdgeType.Agent);
 
 			NetworkNode gtSabotageNode = network.Nodes.Add("Вредительство");
@@ -83,119 +169,71 @@ namespace Test
 			network.Edges.Add(gtSabotageNode, geeseNode, NetworkEdgeType.Agent);
 			network.Edges.Add(gtSabotageNode, boyNode, NetworkEdgeType.Recipient);
 
-			NetworkNode woesPostNode = network.Nodes.Add("Сообщение беды");
-			NetworkNode woesPostTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode woesPostActionNode = network.Nodes.Add("Обнаружить пропажу");
-			network.Edges.Add(woesPostNode, woesPostTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(woesPostNode, woesPostActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(woesPostNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(woesPostNode, boyNode, NetworkEdgeType.Recipient);
+			NetworkNode gtWoesPostNode = network.Nodes.Add("Сообщение беды");
+			network.Edges.Add(gtWoesPostNode, woesPostNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtWoesPostNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtWoesPostNode, boyNode, NetworkEdgeType.Recipient);
 
-			NetworkNode searchSubmittingNode = network.Nodes.Add("Отправка на поиски");
-			NetworkNode searchSubmittingTemplateNode = network.Nodes.Add("{Agent} {action}.");
-			NetworkNode searchSubmittingActionNode = network.Nodes.Add("Отправилась на поиски");
-			network.Edges.Add(searchSubmittingNode, searchSubmittingTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(searchSubmittingNode, searchSubmittingActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(searchSubmittingNode, girlNode, NetworkEdgeType.Agent);
+			NetworkNode gtSearchSubmittingNode = network.Nodes.Add("Отправка на поиски");
+			network.Edges.Add(gtSearchSubmittingNode, searchSubmittingNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtSearchSubmittingNode, girlNode, NetworkEdgeType.Agent);
 
-			NetworkNode firstTesterMeetingNode = network.Nodes.Add("Встреча с испытателем");
-			NetworkNode firstTesterMeetingTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode firstTesterMeetingActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(firstTesterMeetingNode, firstTesterMeetingTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(firstTesterMeetingNode, firstTesterMeetingActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(firstTesterMeetingNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(firstTesterMeetingNode, stoveNode, NetworkEdgeType.Recipient);
+			NetworkNode gtFirstTesterMeetingNode = network.Nodes.Add("Встреча с испытателем");
+			network.Edges.Add(gtFirstTesterMeetingNode, testerMeetingNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtFirstTesterMeetingNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtFirstTesterMeetingNode, stoveNode, NetworkEdgeType.Recipient);
 
-			NetworkNode firstTestNode = network.Nodes.Add("Испытание");
-			NetworkNode firstTestTemplateNode = network.Nodes.Add("{Agent} {~сказал:agent}: \"Съешь моего ржаного пирожка - скажу\".");
-			NetworkNode firstTestActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(firstTestNode, firstTestTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(firstTestNode, firstTestActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(firstTestNode, stoveNode, NetworkEdgeType.Agent);
+			NetworkNode gtFirstTestNode = network.Nodes.Add("Испытание");
+			network.Edges.Add(gtFirstTestNode, testNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtFirstTestNode, stoveNode, NetworkEdgeType.Agent);
 
-			NetworkNode firstTestAttemptNode = network.Nodes.Add("Попытка пройти испытание");
-			//TODO В этом случае ответил не определяется как сказуемое.
-			NetworkNode firstTestAttemptTemplateNode = network.Nodes.Add("{Agent} {~ответил:agent} {recipient}: \"О, у моего батюшки пшеничные не едятся\".");
-			NetworkNode firstTestAttemptActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(firstTestAttemptNode, firstTestAttemptTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(firstTestAttemptNode, firstTestAttemptActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(firstTestAttemptNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(firstTestAttemptNode, stoveNode, NetworkEdgeType.Recipient);
+			NetworkNode gtFirstTestAttemptNode = network.Nodes.Add("Попытка пройти испытание");
+			network.Edges.Add(gtFirstTestAttemptNode, testAttemptNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtFirstTestAttemptNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtFirstTestAttemptNode, stoveNode, NetworkEdgeType.Recipient);
 
-			NetworkNode firstTestFailNode = network.Nodes.Add("Результат испытания");
-			//TODO В этом случае ответил не определяется как сказуемое.
-			NetworkNode firstTestFailTemplateNode = network.Nodes.Add("{Agent} не сказала {recipient}.");
-			NetworkNode firstTestFailActionNode = network.Nodes.Add("Сказать");
-			network.Edges.Add(firstTestFailNode, firstTestFailTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(firstTestFailNode, firstTestFailActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(firstTestFailNode, stoveNode, NetworkEdgeType.Agent);
-			network.Edges.Add(firstTestFailNode, girlNode, NetworkEdgeType.Recipient);
+			NetworkNode gtFirstTestResultNode = network.Nodes.Add("Результат испытания");
+			network.Edges.Add(gtFirstTestResultNode, testResultNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtFirstTestResultNode, stoveNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtFirstTestResultNode, girlNode, NetworkEdgeType.Recipient);
 
-			NetworkNode secondTesterMeetingNode = network.Nodes.Add("Встреча с испытателем");
-			NetworkNode secondTesterMeetingTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode secondTesterMeetingActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(secondTesterMeetingNode, secondTesterMeetingTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(secondTesterMeetingNode, secondTesterMeetingActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(secondTesterMeetingNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(secondTesterMeetingNode, appleTreeNode, NetworkEdgeType.Recipient);
+			NetworkNode gtSecondTesterMeetingNode = network.Nodes.Add("Встреча с испытателем");
+			network.Edges.Add(gtSecondTesterMeetingNode, testerMeetingNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtSecondTesterMeetingNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtSecondTesterMeetingNode, appleTreeNode, NetworkEdgeType.Recipient);
 
-			NetworkNode secondTestNode = network.Nodes.Add("Испытание");
-			NetworkNode secondTestTemplateNode = network.Nodes.Add("{Agent} {~сказал:agent}: \"Поешь моего лесного яблочка - скажу.\".");
-			NetworkNode secondTestActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(secondTestNode, secondTestTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(secondTestNode, secondTestActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(secondTestNode, appleTreeNode, NetworkEdgeType.Agent);
+			NetworkNode gtSecondTestNode = network.Nodes.Add("Испытание");
+			network.Edges.Add(gtSecondTestNode, testNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtSecondTestNode, appleTreeNode, NetworkEdgeType.Agent);
 
-			NetworkNode secondTestAttemptNode = network.Nodes.Add("Попытка пройти испытание");
-			//TODO В этом случае ответил не определяется как сказуемое.
-			NetworkNode secondTestAttemptTemplateNode = network.Nodes.Add("{Agent} {~ответил:agent} {recipient}: \"У моего батюшки и садовые не едятся...\".");
-			NetworkNode secondTestAttemptActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(secondTestAttemptNode, secondTestAttemptTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(secondTestAttemptNode, secondTestAttemptActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(secondTestAttemptNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(secondTestAttemptNode, appleTreeNode, NetworkEdgeType.Recipient);
+			NetworkNode gtSecondTestAttemptNode = network.Nodes.Add("Попытка пройти испытание");
+			network.Edges.Add(gtSecondTestAttemptNode, testAttemptNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtSecondTestAttemptNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtSecondTestAttemptNode, appleTreeNode, NetworkEdgeType.Recipient);
 
-			NetworkNode secondTestFailNode = network.Nodes.Add("Результат испытания");
-			//TODO В этом случае ответил не определяется как сказуемое.
-			NetworkNode secondTestFailTemplateNode = network.Nodes.Add("{Agent} не сказала {recipient}.");
-			NetworkNode secondTestFailActionNode = network.Nodes.Add("Сказать");
-			network.Edges.Add(secondTestFailNode, secondTestFailTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(secondTestFailNode, secondTestFailActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(secondTestFailNode, appleTreeNode, NetworkEdgeType.Agent);
-			network.Edges.Add(secondTestFailNode, girlNode, NetworkEdgeType.Recipient);
+			NetworkNode gtSecondTestFailNode = network.Nodes.Add("Результат испытания");
+			network.Edges.Add(gtSecondTestFailNode, testResultNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtSecondTestFailNode, appleTreeNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtSecondTestFailNode, girlNode, NetworkEdgeType.Recipient);
 
-			NetworkNode thirdTesterMeetingNode = network.Nodes.Add("Встреча с испытателем");
-			NetworkNode thirdTesterMeetingTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode thirdTesterMeetingActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(thirdTesterMeetingNode, thirdTesterMeetingTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(thirdTesterMeetingNode, thirdTesterMeetingActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(thirdTesterMeetingNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(thirdTesterMeetingNode, riverNode, NetworkEdgeType.Recipient);
+			NetworkNode gtThirdTesterMeetingNode = network.Nodes.Add("Встреча с испытателем");
+			network.Edges.Add(gtThirdTesterMeetingNode, testerMeetingNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtThirdTesterMeetingNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtThirdTesterMeetingNode, riverNode, NetworkEdgeType.Recipient);
 
-			NetworkNode thirdTestNode = network.Nodes.Add("Испытание");
-			NetworkNode thirdTestTemplateNode = network.Nodes.Add("{Agent} {~сказал:agent}: \"Поешь моего простого киселька с молочком - скажу.\".");
-			NetworkNode thirdTestActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(thirdTestNode, thirdTestTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(thirdTestNode, thirdTestActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(thirdTestNode, riverNode, NetworkEdgeType.Agent);
+			NetworkNode gtThirdTestNode = network.Nodes.Add("Испытание");
+			network.Edges.Add(gtThirdTestNode, testNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtThirdTestNode, riverNode, NetworkEdgeType.Agent);
 
-			NetworkNode thirdTestAttemptNode = network.Nodes.Add("Попытка пройти испытание");
-			//TODO В этом случае ответил не определяется как сказуемое.
-			NetworkNode thirdTestAttemptTemplateNode = network.Nodes.Add("{Agent} {~ответил:agent} {recipient}: \"У моего батюшки и сливочки не едятся...\".");
-			NetworkNode thirdTestAttemptActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(thirdTestAttemptNode, thirdTestAttemptTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(thirdTestAttemptNode, thirdTestAttemptActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(thirdTestAttemptNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(thirdTestAttemptNode, riverNode, NetworkEdgeType.Recipient);
+			NetworkNode gtThirdTestAttemptNode = network.Nodes.Add("Попытка пройти испытание");
+			network.Edges.Add(gtThirdTestAttemptNode, testAttemptNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtThirdTestAttemptNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtThirdTestAttemptNode, riverNode, NetworkEdgeType.Recipient);
 
-			NetworkNode thirdTestFailNode = network.Nodes.Add("Результат испытания");
-			//TODO В этом случае ответил не определяется как сказуемое.
-			NetworkNode thirdTestFailTemplateNode = network.Nodes.Add("{Agent} не {action} {recipient}.");
-			NetworkNode thirdTestFailActionNode = network.Nodes.Add("Сказать");
-			network.Edges.Add(thirdTestFailNode, thirdTestFailTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(thirdTestFailNode, thirdTestFailActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(thirdTestFailNode, riverNode, NetworkEdgeType.Agent);
-			network.Edges.Add(thirdTestFailNode, girlNode, NetworkEdgeType.Recipient);
+			NetworkNode gtThirdTestFailNode = network.Nodes.Add("Результат испытания");
+			network.Edges.Add(gtThirdTestFailNode, testResultNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtThirdTestFailNode, riverNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtThirdTestFailNode, girlNode, NetworkEdgeType.Recipient);
 
 			//NetworkNode fourthTesterMeetingNode = network.Nodes.Add("Встреча с испытателем");
 			//NetworkNode fourthTesterMeetingTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
@@ -230,79 +268,54 @@ namespace Test
 			//network.Edges.Add(fourthTestFailNode, riverNode, NetworkEdgeType.Agent);
 			//network.Edges.Add(fourthTestFailNode, girlNode, NetworkEdgeType.Recipient);
 
-			NetworkNode antagonistHomeNode = network.Nodes.Add("Жилище антагониста");
-			NetworkNode antagonistHomeTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode antagonistHomeActionNode = network.Nodes.Add("Увидеть");
-			network.Edges.Add(antagonistHomeNode, antagonistHomeTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(antagonistHomeNode, antagonistHomeActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(antagonistHomeNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(antagonistHomeNode, cabinOnChickenLegsNode, NetworkEdgeType.Recipient);
+			NetworkNode gtAntagonistHomeNode = network.Nodes.Add("Жилище антагониста");
+			network.Edges.Add(gtAntagonistHomeNode, antagonistHomeNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtAntagonistHomeNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtAntagonistHomeNode, cabinOnChickenLegsNode, NetworkEdgeType.Recipient);
 
-			NetworkNode antagonistMeetingNode = network.Nodes.Add("Облик антагониста");
-			NetworkNode antagonistMeetingTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode antagonistMeetingActionNode = network.Nodes.Add("Увидеть");
-			network.Edges.Add(antagonistMeetingNode, antagonistMeetingTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(antagonistMeetingNode, antagonistMeetingActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(antagonistMeetingNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(antagonistMeetingNode, babaYagaNode, NetworkEdgeType.Recipient);
+			NetworkNode gtAntagonistMeetingNode = network.Nodes.Add("Облик антагониста");
+			network.Edges.Add(gtAntagonistMeetingNode, antagonistMeetingNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtAntagonistMeetingNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtAntagonistMeetingNode, babaYagaNode, NetworkEdgeType.Recipient);
 
-			NetworkNode desiredCharacterAppearanceNode = network.Nodes.Add("Появление искомого персонажа");
-			NetworkNode desiredCharacterAppearanceTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode desiredCharacterAppearanceActionNode = network.Nodes.Add("Увидеть");
-			network.Edges.Add(desiredCharacterAppearanceNode, desiredCharacterAppearanceTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(desiredCharacterAppearanceNode, desiredCharacterAppearanceActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(desiredCharacterAppearanceNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(desiredCharacterAppearanceNode, boyNode, NetworkEdgeType.Recipient);
+			NetworkNode gtDesiredCharacterAppearanceNode = network.Nodes.Add("Появление искомого персонажа");
+			network.Edges.Add(gtDesiredCharacterAppearanceNode, desiredCharacterAppearanceNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtDesiredCharacterAppearanceNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtDesiredCharacterAppearanceNode, boyNode, NetworkEdgeType.Recipient);
 
-			NetworkNode desiredCharacterLiberationNode = network.Nodes.Add("Добыча искомого персонажа с применением хитрости или силы");
-			NetworkNode desiredCharacterLiberationTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode desiredCharacterLiberationActionNode = network.Nodes.Add("Схватить и унести");
-			network.Edges.Add(desiredCharacterLiberationNode, desiredCharacterLiberationTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(desiredCharacterLiberationNode, desiredCharacterLiberationActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(desiredCharacterLiberationNode, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(desiredCharacterLiberationNode, boyNode, NetworkEdgeType.Recipient);
+			NetworkNode gtDesiredCharacterLiberationNode = network.Nodes.Add("Добыча искомого персонажа с применением хитрости или силы");
+			network.Edges.Add(gtDesiredCharacterLiberationNode, desiredCharacterLiberationNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtDesiredCharacterLiberationNode, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtDesiredCharacterLiberationNode, boyNode, NetworkEdgeType.Recipient);
 
-			NetworkNode persecutionBeginningNode = network.Nodes.Add("Начало преследования");
-			NetworkNode persecutionBeginningTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode persecutionBeginningActionNode = network.Nodes.Add("Начать преследовать");
-			network.Edges.Add(persecutionBeginningNode, persecutionBeginningTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(persecutionBeginningNode, persecutionBeginningActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(persecutionBeginningNode, geeseNode, NetworkEdgeType.Agent);
-			network.Edges.Add(persecutionBeginningNode, girlNode, NetworkEdgeType.Recipient);
+			NetworkNode gtPersecutionBeginningNode = network.Nodes.Add("Начало преследования");
+			network.Edges.Add(gtPersecutionBeginningNode, persecutionBeginningNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtPersecutionBeginningNode, geeseNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtPersecutionBeginningNode, girlNode, NetworkEdgeType.Recipient);
 
 			//TODO Необходимо дублировать данные вершины, в противном случае будет цикл.
-			NetworkNode thirdTesterMeeting2Node = network.Nodes.Add("Встреча с испытателем");
-			NetworkNode thirdTesterMeeting2TemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
-			NetworkNode thirdTesterMeeting2ActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(thirdTesterMeeting2Node, thirdTesterMeeting2TemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(thirdTesterMeeting2Node, thirdTesterMeeting2ActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(thirdTesterMeeting2Node, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(thirdTesterMeeting2Node, riverNode, NetworkEdgeType.Recipient);
+			NetworkNode gtThirdTesterMeeting2Node = network.Nodes.Add("Встреча с испытателем");
+			network.Edges.Add(gtThirdTesterMeeting2Node, testerMeetingNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtThirdTesterMeeting2Node, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtThirdTesterMeeting2Node, riverNode, NetworkEdgeType.Recipient);
 
-			NetworkNode thirdTest2Node = network.Nodes.Add("Испытание");
-			NetworkNode thirdTest2TemplateNode = network.Nodes.Add("{Agent} {~сказал:agent}: \"Поешь моего простого киселька.\".");
-			NetworkNode thirdTest2ActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(thirdTest2Node, thirdTest2TemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(thirdTest2Node, thirdTest2ActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(thirdTest2Node, riverNode, NetworkEdgeType.Agent);
+			NetworkNode gtThirdTest2Node = network.Nodes.Add("Испытание");
+			network.Edges.Add(gtThirdTest2Node, testNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtThirdTest2Node, riverNode, NetworkEdgeType.Agent);
 
-			NetworkNode thirdTestAttempt2Node = network.Nodes.Add("Попытка пройти испытание");
-			//TODO В этом случае ответил не определяется как сказуемое.
-			NetworkNode thirdTestAttempt2TemplateNode = network.Nodes.Add("{Agent} поела и спасибо сказала.");
-			NetworkNode thirdTestAttempt2ActionNode = network.Nodes.Add("Встретить");
-			network.Edges.Add(thirdTestAttempt2Node, thirdTestAttempt2TemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(thirdTestAttempt2Node, thirdTestAttempt2ActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(thirdTestAttempt2Node, girlNode, NetworkEdgeType.Agent);
-			network.Edges.Add(thirdTestAttempt2Node, riverNode, NetworkEdgeType.Recipient);
+			NetworkNode gtThirdTestAttempt2Node = network.Nodes.Add("Попытка пройти испытание");
+			network.Edges.Add(gtThirdTestAttempt2Node, testAttemptNode, NetworkEdgeType.IsA);
+			network.Edges.Add(gtThirdTestAttempt2Node, girlNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtThirdTestAttempt2Node, riverNode, NetworkEdgeType.Recipient);
 
-			NetworkNode thirdTestSuccessNode = network.Nodes.Add("Результат испытания");
+			NetworkNode gtThirdTestSuccessNode = network.Nodes.Add("Результат испытания");
 			//TODO Непонятно, как представлять данное предложение.
 			NetworkNode thirdTestSuccessTemplateNode = network.Nodes.Add("{Agent} укрыла ее под кисельным бережком. Гуси-лебеди не увидали, пролетели мимо.");
 			NetworkNode thirdTestSuccessActionNode = network.Nodes.Add("Сказать");
-			network.Edges.Add(thirdTestSuccessNode, thirdTestSuccessTemplateNode, NetworkEdgeType.Template);
-			network.Edges.Add(thirdTestSuccessNode, thirdTestSuccessActionNode, NetworkEdgeType.Action);
-			network.Edges.Add(thirdTestSuccessNode, riverNode, NetworkEdgeType.Agent);
-			network.Edges.Add(thirdTestSuccessNode, girlNode, NetworkEdgeType.Recipient);
+			network.Edges.Add(gtThirdTestSuccessNode, thirdTestSuccessTemplateNode, NetworkEdgeType.Template);
+			network.Edges.Add(gtThirdTestSuccessNode, thirdTestSuccessActionNode, NetworkEdgeType.Action);
+			network.Edges.Add(gtThirdTestSuccessNode, riverNode, NetworkEdgeType.Agent);
+			network.Edges.Add(gtThirdTestSuccessNode, girlNode, NetworkEdgeType.Recipient);
 
 			NetworkNode secondTesterMeeting2Node = network.Nodes.Add("Встреча с испытателем");
 			NetworkNode secondTesterMeeting2TemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
@@ -370,33 +383,39 @@ namespace Test
 			network.Edges.Add(firstTestSuccessNode, stoveNode, NetworkEdgeType.Agent);
 			network.Edges.Add(firstTestSuccessNode, girlNode, NetworkEdgeType.Recipient);
 
+			network.Edges.Add(geeseTaleNode, gtInitialStateNode, NetworkEdgeType.Follow);
 			network.Edges.Add(gtInitialStateNode, gtProhibitionNode, NetworkEdgeType.Follow);
 			network.Edges.Add(gtProhibitionNode, gtSeniorsDepartureNode, NetworkEdgeType.Follow);
 			network.Edges.Add(gtSeniorsDepartureNode, gtProhibitionViolationNode, NetworkEdgeType.Follow);
 			network.Edges.Add(gtProhibitionViolationNode, gtSabotageNode, NetworkEdgeType.Follow);
-			network.Edges.Add(gtSabotageNode, woesPostNode, NetworkEdgeType.Follow);
-			network.Edges.Add(woesPostNode, searchSubmittingNode, NetworkEdgeType.Follow);
-			network.Edges.Add(searchSubmittingNode, firstTesterMeetingNode, NetworkEdgeType.Follow);
-			network.Edges.Add(firstTesterMeetingNode, firstTestNode, NetworkEdgeType.Follow);
-			network.Edges.Add(firstTestNode, firstTestAttemptNode, NetworkEdgeType.Follow);
-			network.Edges.Add(firstTestAttemptNode, firstTestFailNode, NetworkEdgeType.Follow);
-			network.Edges.Add(firstTestFailNode, secondTesterMeetingNode, NetworkEdgeType.Follow);
-			network.Edges.Add(secondTesterMeetingNode, secondTestNode, NetworkEdgeType.Follow);
-			network.Edges.Add(secondTestNode, secondTestAttemptNode, NetworkEdgeType.Follow);
-			network.Edges.Add(secondTestAttemptNode, secondTestFailNode, NetworkEdgeType.Follow);
-			network.Edges.Add(secondTestFailNode, thirdTesterMeetingNode, NetworkEdgeType.Follow);
-			network.Edges.Add(thirdTesterMeetingNode, thirdTestNode, NetworkEdgeType.Follow);
-			network.Edges.Add(thirdTestNode, thirdTestAttemptNode, NetworkEdgeType.Follow);
-			network.Edges.Add(thirdTestAttemptNode, thirdTestFailNode, NetworkEdgeType.Follow);
-			network.Edges.Add(thirdTestFailNode, antagonistHomeNode, NetworkEdgeType.Follow);
-			network.Edges.Add(antagonistHomeNode, antagonistMeetingNode, NetworkEdgeType.Follow);
-			network.Edges.Add(antagonistMeetingNode, desiredCharacterAppearanceNode, NetworkEdgeType.Follow);
-			network.Edges.Add(desiredCharacterAppearanceNode, desiredCharacterLiberationNode, NetworkEdgeType.Follow);
-			network.Edges.Add(desiredCharacterLiberationNode, persecutionBeginningNode, NetworkEdgeType.Follow);
-			network.Edges.Add(persecutionBeginningNode, thirdTesterMeeting2Node, NetworkEdgeType.Follow);
-			network.Edges.Add(thirdTesterMeeting2Node, thirdTest2Node, NetworkEdgeType.Follow);
-			network.Edges.Add(thirdTest2Node, thirdTestAttempt2Node, NetworkEdgeType.Follow);
-			network.Edges.Add(thirdTestAttempt2Node, thirdTestSuccessNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtSabotageNode, gtWoesPostNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtWoesPostNode, gtSearchSubmittingNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtSearchSubmittingNode, gtFirstTesterMeetingNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtFirstTesterMeetingNode, gtFirstTestNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtFirstTestNode, gtFirstTestAttemptNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtFirstTestAttemptNode, gtFirstTestResultNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtFirstTestResultNode, gtSecondTesterMeetingNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtSecondTesterMeetingNode, gtSecondTestNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtSecondTestNode, gtSecondTestAttemptNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtSecondTestAttemptNode, gtSecondTestFailNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtSecondTestFailNode, gtThirdTesterMeetingNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtThirdTesterMeetingNode, gtThirdTestNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtThirdTestNode, gtThirdTestAttemptNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtThirdTestAttemptNode, gtThirdTestFailNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtThirdTestFailNode, gtAntagonistHomeNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtAntagonistHomeNode, gtAntagonistMeetingNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtAntagonistMeetingNode, gtDesiredCharacterAppearanceNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtDesiredCharacterAppearanceNode, gtDesiredCharacterLiberationNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtDesiredCharacterLiberationNode, gtPersecutionBeginningNode, NetworkEdgeType.Follow);
+			network.Edges.Add(gtPersecutionBeginningNode, gtThirdTesterMeeting2Node, NetworkEdgeType.Follow);
+			network.Edges.Add(gtThirdTesterMeeting2Node, gtThirdTest2Node, NetworkEdgeType.Follow);
+			network.Edges.Add(gtThirdTest2Node, gtThirdTestAttempt2Node, NetworkEdgeType.Follow);
+			network.Edges.Add(gtThirdTestAttempt2Node, gtThirdTestSuccessNode, NetworkEdgeType.Follow);
+			#endregion
+
+			#region Сказка
+
+			#endregion
 
 			return network;
 		}
@@ -458,19 +477,27 @@ namespace Test
 
 			//AnalyzeText("OriginalText.txt", network);
 
-			using (TextAnalyzer textAnalyzer = new TextAnalyzer(AdapterKind.RussianCp1251Adapter))
+			NetworkNode taleNode = network.Nodes.SingleOrDefault(node => node.Name.Equals("Сказка"));
+
+			if (taleNode != null)
 			{
-				textAnalyzer.Load(
-					@"C:\Projects\Git\libturglem\Dictionaries\dict_russian.auto",
-					@"C:\Projects\Git\libturglem\Dictionaries\paradigms_russian.bin",
-					@"C:\Projects\Git\libturglem\Dictionaries\prediction_russian.auto");
+				using (TextAnalyzer textAnalyzer = new TextAnalyzer(AdapterKind.RussianCp1251Adapter))
+				{
+					textAnalyzer.Load(
+						@"C:\Projects\Git\libturglem\Dictionaries\dict_russian.auto",
+						@"C:\Projects\Git\libturglem\Dictionaries\paradigms_russian.bin",
+						@"C:\Projects\Git\libturglem\Dictionaries\prediction_russian.auto");
 
-				TextGenerator textGenerator = new TextGenerator(textAnalyzer);
+					TextGenerator textGenerator = new TextGenerator(textAnalyzer);
+					var taleNodes = taleNode.OutgoingEdges.GetEdges(NetworkEdgeType.IsA).Select(edge => edge.EndNode);
 
-				//TODO Необходимо определиться с тем, каким образом будет начинаться процесс генерации.
-				NetworkNode startNode = network.Nodes.SingleOrDefault(node => node.Name == "Начальная ситуация");
+					foreach (NetworkNode currentTaleNode in taleNodes)
+					{
+						NetworkNode startNode = currentTaleNode.OutgoingEdges.GetEdge(NetworkEdgeType.Follow).EndNode;
 
-				string text = textGenerator.GenerateText(startNode);
+						string text = textGenerator.GenerateText(startNode);
+					}
+				}
 			}
 		}
 		#endregion
