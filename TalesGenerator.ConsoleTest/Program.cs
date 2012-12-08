@@ -421,9 +421,9 @@ namespace TalesGenerator.ConsoleTest
 		{
 			TextAnalyzer textAnalyzer = new TextAnalyzer(AdapterKind.RussianCp1251Adapter);
 			textAnalyzer.Load(
-				@"C:\Projects\Git\libturglem\Dictionaries\dict_russian.auto",
-				@"C:\Projects\Git\libturglem\Dictionaries\paradigms_russian.bin",
-				@"C:\Projects\Git\libturglem\Dictionaries\prediction_russian.auto");
+				Path.Combine(Environment.CurrentDirectory, "Dictionaries", "Russian", "Dictionary.auto"),
+				Path.Combine(Environment.CurrentDirectory, "Dictionaries", "Russian", "Paradigms.bin"),
+				Path.Combine(Environment.CurrentDirectory, "Dictionaries", "Russian", "PredictionDictionary.auto"));
 
 			List<NetworkNode> context = new List<NetworkNode>();
 			List<NetworkNode> context2 = new List<NetworkNode>();
@@ -481,9 +481,9 @@ namespace TalesGenerator.ConsoleTest
 				using (TextAnalyzer textAnalyzer = new TextAnalyzer(AdapterKind.RussianCp1251Adapter))
 				{
 					textAnalyzer.Load(
-						@"C:\Projects\Git\libturglem\Dictionaries\dict_russian.auto",
-						@"C:\Projects\Git\libturglem\Dictionaries\paradigms_russian.bin",
-						@"C:\Projects\Git\libturglem\Dictionaries\prediction_russian.auto");
+						Path.Combine(Environment.CurrentDirectory, "Dictionaries", "Russian", "Dictionary.auto"),
+						Path.Combine(Environment.CurrentDirectory, "Dictionaries", "Russian", "Paradigms.bin"),
+						Path.Combine(Environment.CurrentDirectory, "Dictionaries", "Russian", "PredictionDictionary.auto"));
 
 					TextGenerator textGenerator = new TextGenerator(textAnalyzer);
 					var taleNodes = taleNode.OutgoingEdges.GetEdges(NetworkEdgeType.IsA).Select(edge => edge.EndNode);
