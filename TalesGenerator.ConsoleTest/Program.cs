@@ -1,15 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using TalesGenerator.Core;
 using TalesGenerator.Core.Collections;
-using System.IO;
-using System.Text.RegularExpressions;
 using TalesGenerator.Text;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
-namespace Test
+namespace TalesGenerator.ConsoleTest
 {
 	public static class Program
 	{

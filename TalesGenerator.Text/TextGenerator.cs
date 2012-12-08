@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using TalesGenerator.Core;
 using TalesGenerator.Core.Collections;
-using TalesGenerator.Text;
 
-namespace Test
+namespace TalesGenerator.Text
 {
 	public class TextGenerator
 	{
@@ -15,7 +11,7 @@ namespace Test
 
 		private readonly TextAnalyzer _textAnalyzer;
 
-		private readonly Parser _parser;
+		private readonly TemplateParser _parser;
 		#endregion
 
 		#region Constructors
@@ -28,7 +24,7 @@ namespace Test
 			}
 
 			_textAnalyzer = textAnalyzer;
-			_parser = new Parser(_textAnalyzer);
+			_parser = new TemplateParser(_textAnalyzer);
 		}
 		#endregion
 
@@ -46,7 +42,7 @@ namespace Test
 
 			while (currentNode != null)
 			{
-				textBuilder.AppendFormat("{0}\n", _parser.Parse(currentNode));
+				textBuilder.AppendFormat("{0}{1}", _parser.Parse(currentNode), Environment.NewLine);
 
 				NetworkEdge followEdge = currentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Follow);
 				currentNode = followEdge != null ? followEdge.EndNode : null;

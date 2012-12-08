@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Test
+namespace TalesGenerator.Text
 {
 	public enum PartOfSentence
 	{
@@ -20,7 +20,7 @@ namespace Test
 		Object
 	}
 
-	public class Token
+	public class TemplateToken
 	{
 		#region Properties
 
@@ -33,7 +33,7 @@ namespace Test
 
 		#region Constructors
 
-		public Token(string templateItem, string text, PartOfSentence partOfSentence)
+		public TemplateToken(string templateItem, string text, PartOfSentence partOfSentence)
 		{
 			if (string.IsNullOrEmpty(templateItem))
 			{
@@ -50,11 +50,11 @@ namespace Test
 		}
 		#endregion
 
-		#region MyRegion
+		#region Methods
 
 		public override string ToString()
 		{
-			return string.Format("TemplateItem = {0}. Text = {1}. PartOfSentence = {2}.", TemplateItem, Text, PartOfSentence);
+			return string.Format("TemplateItem = {0}. Text = \"{1}\". PartOfSentence = {2}.", TemplateItem, Text, PartOfSentence);
 		}
 		#endregion
 	}

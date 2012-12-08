@@ -135,6 +135,9 @@
   <data name="NetworkSameEdgesError" xml:space="preserve">
     <value>Невозможно создать две дуги одинакового типа.</value>
   </data>
+  <data name="PluginNotFoundError" xml:space="preserve">
+    <value>Плагин {0} не найден.</value>
+  </data>
   <data name="ReasonerAgentQueryError" xml:space="preserve">
     <value />
   </data>

@@ -21,7 +21,7 @@ namespace TalesGenerator.UI.Windows
 	public partial class ConsultWindow : Window
 	{
 		Network _network;
-		Reasoner _reasoner;
+		//Reasoner _reasoner;
 
 		public ConsultWindow(Network network)
 		{
@@ -29,7 +29,7 @@ namespace TalesGenerator.UI.Windows
 
 			_network = network;
 
-			_reasoner = new Reasoner(_network);
+			//_reasoner = new Reasoner(_network);
 
 			QuestionTextBox.Focus();
 		}
@@ -38,7 +38,7 @@ namespace TalesGenerator.UI.Windows
 		{
 			try
 			{
-				AnswerTextBox.Text = _reasoner.Confirm(QuestionTextBox.Text);
+				//AnswerTextBox.Text = _reasoner.Confirm(QuestionTextBox.Text);
 			}
 			catch (Exception ex)
 			{

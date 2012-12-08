@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Test
+namespace TalesGenerator.Text
 {
 	public class LexerException : Exception
 	{
