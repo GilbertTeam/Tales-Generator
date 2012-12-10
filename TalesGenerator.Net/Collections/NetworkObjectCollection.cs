@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace TalesGenerator.Core.Collections
+namespace TalesGenerator.Net.Collections
 {
 	public abstract class NetworkObjectCollection<T> : INotifyCollectionChanged, INotifyPropertyChanged, IEnumerable, IEnumerable<T> where T : NetworkObject
 	{
@@ -14,10 +14,15 @@ namespace TalesGenerator.Core.Collections
 
 		private readonly List<T> _items = new List<T>();
 
-		protected readonly Network _network;
+		private readonly Network _network;
 		#endregion
 
 		#region Properties
+
+		protected Network Network
+		{
+			get { return _network; }
+		}
 
 		public int Count
 		{
@@ -60,6 +65,16 @@ namespace TalesGenerator.Core.Collections
 
 		#region Methods
 
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _items.GetEnumerator();
+		}
+
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
+		{
+			return _items.GetEnumerator();
+		}
+
 		protected void OnCollectionChanged(NotifyCollectionChangedAction action, T changedItem)
 		{
 			if (CollectionChanged != null)
@@ -100,33 +115,28 @@ namespace TalesGenerator.Core.Collections
 			}
 		}
 
-		internal void Add(T item)
+		//TODO Не уверен, что метод должен быть открытым.
+		public virtual void Add(T item)
 		{
-			item.PropertyChanged += new PropertyChangedEventHandler(NetworkObjectOnPropertyChanged);
+			if (item == null)
+			{
+				throw new ArgumentNullException("item");
+			}
+
+			item.PropertyChanged += NetworkObjectOnPropertyChanged;
 
 			_items.Add(item);
 
 			OnCollectionChanged(NotifyCollectionChangedAction.Add, item);
 		}
 
-		internal void RemoveAt(int index)
-		{
-			if (index < 0 || index >= _items.Count)
-			{
-				throw new ArgumentException("index");
-			}
-
-			T item = _items[index];
-			item.PropertyChanged -= NetworkObjectOnPropertyChanged;
-
-			bool result = _items.Remove(item);
-
-			//TODO Подумать над этим.
-			OnCollectionChanged(NotifyCollectionChangedAction.Remove, item, index);
-		}
-
 		public virtual bool Remove(T item)
 		{
+			if (item == null)
+			{
+				throw new ArgumentNullException("item");
+			}
+
 			item.PropertyChanged -= NetworkObjectOnPropertyChanged;
 
 			int index = _items.IndexOf(item);
@@ -155,16 +165,6 @@ namespace TalesGenerator.Core.Collections
 			}
 
 			return networkObject;
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return _items.GetEnumerator();
-		}
-
-		IEnumerator<T> IEnumerable<T>.GetEnumerator()
-		{
-			return _items.GetEnumerator();
 		}
 		#endregion
 	}

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using TalesGenerator.Core;
-using TalesGenerator.Core.Collections;
 using TalesGenerator.Core.Plugins;
+using TalesGenerator.Net;
+using TalesGenerator.Net.Collections;
 using TalesGenerator.Text.Plugins;
 
 namespace TalesGenerator.Text
 {
-	internal class TemplateParser : ITemplateParser
+	public class TemplateParser : ITemplateParser
 	{
 		#region Fields
 
@@ -18,17 +18,17 @@ namespace TalesGenerator.Text
 
 		private readonly List<TemplateToken> _context = new List<TemplateToken>();
 
-		private NetworkNode _currentNode;
+		private ITemplateParserContext _parserContext;
 		#endregion
 
 		#region Properties
 
-		public NetworkNode CurrentNode
+		public ITemplateParserContext ParserContext
 		{
-			get { return _currentNode; }
+			get { return _parserContext; }
 		}
 
-		public List<TemplateToken> Context
+		public IList<TemplateToken> Context
 		{
 			get { return _context; }
 		}
@@ -102,9 +102,9 @@ namespace TalesGenerator.Text
 			return text;
 		}
 
-		private string ParseTemplateItem(string templateItem)
+		private TemplateParserResult ParseTemplateItem(string templateItem)
 		{
-			string result = string.Empty;
+			TemplateParserResult result = null;
 			var parserPlugins = PluginManager.GetPlugins<ITemplateParserPlugin>();
 			ITemplateParserPlugin parserPlugin = parserPlugins.FirstOrDefault(plugin => plugin.CanParse(templateItem));
 
@@ -187,6 +187,65 @@ namespace TalesGenerator.Text
 			return text;
 		}
 
+		private TemplateParserResult ParseNode(NetworkNode networkNode)
+		{
+			NetworkNode templateNode = networkNode.OutgoingEdges.GetEdge(NetworkEdgeType.Template, true).EndNode;
+			string template = templateNode.Name;
+			Lexer lexer = new Lexer(template);
+			LexerResult lexerResult = null;
+			StringBuilder stringBuilder = new StringBuilder(1024);
+			List<NetworkEdgeType> unresolvedContext = new List<NetworkEdgeType>();
+
+			while (lexer.GetNextToken(out lexerResult))
+			{
+				switch (lexerResult.Type)
+				{
+					case TokenType.Word:
+						stringBuilder.Append(lexerResult.Token);
+						break;
+
+					case TokenType.Space:
+					case TokenType.Punctuation:
+						stringBuilder.Append(lexerResult.Token);
+						break;
+
+					case TokenType.LeftBrace:
+						StringBuilder templateBuilder = new StringBuilder(128);
+						bool isOk = false;
+
+						while (lexer.GetNextToken(out lexerResult))
+						{
+							if (lexerResult.Type == TokenType.RightBrace)
+							{
+								isOk = true;
+								break;
+							}
+
+							templateBuilder.Append(lexerResult.Token);
+						}
+
+						if (!isOk)
+						{
+							throw new TemplateParserException();
+						}
+
+						TemplateParserResult parserResult = ParseTemplateItem(templateBuilder.ToString());
+
+						if (parserResult.Text == null)
+						{
+							unresolvedContext.AddRange(parserResult.UnresolvedContext);
+						}
+						else
+						{
+							stringBuilder.Append(parserResult.Text);
+						}
+						break;
+				}
+			}
+
+			return new TemplateParserResult(stringBuilder.ToString(), unresolvedContext);
+		}
+
 		public string ReconcileWord(string word, Grammem grammem)
 		{
 			var results = _textAnalyzer.Lemmatize(word);
@@ -232,61 +291,34 @@ namespace TalesGenerator.Text
 			return ReconcileWord(word, resultGrammem);
 		}
 
-		public string Parse(NetworkNode networkNode)
+		public TemplateParserResult Parse(NetworkNode networkNode)
 		{
 			if (networkNode == null)
 			{
 				throw new ArgumentNullException("networkNode");
 			}
 
-			_currentNode = networkNode;
+			_parserContext = new TemplateParserNodeContext(networkNode);
 			_context.Clear();
 
-			NetworkNode templateNode = _currentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Template, true).EndNode;
-			string template = templateNode.Name;
-			Lexer lexer = new Lexer(template);
-			LexerResult lexerResult = null;
-			StringBuilder stringBuilder = new StringBuilder(1024);
+			return ParseNode(networkNode);
+		}
 
-			while (lexer.GetNextToken(out lexerResult))
+		public TemplateParserResult Parse(NetworkNode networkNode, ITemplateParserContext parserContext)
+		{
+			if (networkNode == null)
 			{
-				switch (lexerResult.Type)
-				{
-					case TokenType.Word:
-						stringBuilder.Append(lexerResult.Token);
-						break;
-
-					case TokenType.Space:
-					case TokenType.Punctuation:
-						stringBuilder.Append(lexerResult.Token);
-						break;
-
-					case TokenType.LeftBrace:
-						StringBuilder templateBuilder = new StringBuilder(128);
-						bool isOk = false;
-
-						while (lexer.GetNextToken(out lexerResult))
-						{
-							if (lexerResult.Type == TokenType.RightBrace)
-							{
-								isOk = true;
-								break;
-							}
-
-							templateBuilder.Append(lexerResult.Token);
-						}
-
-						if (!isOk)
-						{
-							throw new InvalidOperationException();
-						}
-
-						stringBuilder.Append(ParseTemplateItem(templateBuilder.ToString()));
-						break;
-				}
+				throw new ArgumentNullException("networkNode");
+			}
+			if (parserContext == null)
+			{
+				throw new ArgumentNullException("parserContext");
 			}
 
-			return stringBuilder.ToString();
+			_parserContext = parserContext;
+			_context.Clear();
+
+			return ParseNode(networkNode);
 		}
 		#endregion
 	}

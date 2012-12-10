@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TalesGenerator.Core.Collections
+namespace TalesGenerator.Net.Collections
 {
 	/// <summary>
 	/// Коллекция дуг сети.
@@ -72,7 +72,7 @@ namespace TalesGenerator.Core.Collections
 			//    throw new ArgumentException(Properties.Resources.NetworkSameEdgesError);
 			//}
 
-			NetworkEdge networkEdge = new NetworkEdge(_network, startNode, endNode, edgeType);
+			NetworkEdge networkEdge = new NetworkEdge(Network, startNode, endNode, edgeType);
 
 			Add(networkEdge);
 

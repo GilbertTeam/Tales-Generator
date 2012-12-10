@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using System.Globalization;
 
-using TalesGenerator.Core;
+using TalesGenerator.Net;
 
 using MindFusion.Diagramming.Wpf;
 using System.Windows;

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TalesGenerator.Core")]
+[assembly: AssemblyTitle("TalesGenerator.TaleNetwork")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TalesGenerator.Core")]
+[assembly: AssemblyProduct("TalesGenerator.TaleNetwork")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e7c8c6b3-2930-43b7-af7d-0b1cad99666d")]
+[assembly: Guid("34dcdcd4-8f98-4701-8e2d-096fde262023")]
 
 // Version information for an assembly consists of the following four values:
 //

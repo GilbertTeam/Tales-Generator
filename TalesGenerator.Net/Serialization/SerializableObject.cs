@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace TalesGenerator.Core.Serialization
+namespace TalesGenerator.Net.Serialization
 {
 	public abstract class SerializableObject
 	{

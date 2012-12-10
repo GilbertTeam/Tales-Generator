@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TalesGenerator.Core.Collections;
 using System.Text.RegularExpressions;
-using TalesGenerator.Core;
+using TalesGenerator.Net;
+using TalesGenerator.Net.Collections;
 using TalesGenerator.Text;
 using TalesGenerator.Text.Plugins;
-using System.Collections.Generic;
 
 namespace TalesGenerator.Plugin
 {
@@ -81,7 +81,7 @@ namespace TalesGenerator.Plugin
 			};
 		}
 
-		public override string Parse(ITemplateParser templateParser, string template)
+		public override TemplateParserResult Parse(ITemplateParser templateParser, string template)
 		{
 			if (templateParser == null)
 			{
@@ -92,82 +92,115 @@ namespace TalesGenerator.Plugin
 				throw new ArgumentException("template");
 			}
 
-			string result = null;
+			string resolvedText = null;
+			List<NetworkEdgeType> unresolvedContext = new List<NetworkEdgeType>();
 
 			for (; ; )
 			{
 				Match match = _agentsRegex.Match(template);
 				if (match.Success)
 				{
-					var agents = templateParser.CurrentNode.OutgoingEdges.GetEdges(NetworkEdgeType.Agent).Select(edge => edge.EndNode.Name);
+					var agentNodes = templateParser.ParserContext[NetworkEdgeType.Agent];
+
+					if (!agentNodes.Any())
+					{
+						unresolvedContext.Add(NetworkEdgeType.Agent);
+						break;
+					}
+
+					var agentNames = agentNodes.Select(node => node.Name);
 					StringBuilder stringBuilder = new StringBuilder();
+					stringBuilder.Append(ParseAgentTemplateItem(templateParser, match, agentNames.First()));
 
-					if (agents.Count() == 0)
+					foreach (var agentName in agentNames.Skip(1))
 					{
-						throw new InvalidOperationException();
+						stringBuilder.AppendFormat(", {0}", ParseAgentTemplateItem(templateParser, match, agentName.ToLower(), true));
 					}
 
-					stringBuilder.Append(ParseAgentTemplateItem(templateParser, match, agents.First()));
-
-					foreach (var agent in agents.Skip(1))
-					{
-						stringBuilder.AppendFormat(", {0}", ParseAgentTemplateItem(templateParser, match, agent.ToLower(), true));
-					}
-
-					result = stringBuilder.ToString();
+					resolvedText = stringBuilder.ToString();
 					break;
 				}
 
 				match = _agentRegex.Match(template);
 				if (match.Success)
 				{
-					result = ParseAgentTemplateItem(templateParser, match, templateParser.CurrentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Agent).EndNode.Name);
+					var agentNodes = templateParser.ParserContext[NetworkEdgeType.Agent];
+
+					if (!agentNodes.Any())
+					{
+						unresolvedContext.Add(NetworkEdgeType.Agent);
+						break;
+					}
+
+					string agentName = agentNodes.First().Name;
+
+					resolvedText = ParseAgentTemplateItem(templateParser, match, agentName);
 					break;
 				}
 
 				match = _recipientsRegex.Match(template);
 				if (match.Success)
 				{
-					var recipients = templateParser.CurrentNode.OutgoingEdges.GetEdges(NetworkEdgeType.Recipient).Select(edge => edge.EndNode.Name);
-					StringBuilder stringBuilder = new StringBuilder();
+					var recipientNodes = templateParser.ParserContext[NetworkEdgeType.Recipient];
 
-					if (recipients.Count() == 0)
+					if (!recipientNodes.Any())
 					{
-						throw new InvalidOperationException();
+						unresolvedContext.Add(NetworkEdgeType.Recipient);
+						break;
 					}
 
-					stringBuilder.Append(ParseRecipientTemplateItem(templateParser, match, recipients.First()));
+					var recipientNames = recipientNodes.Select(node => node.Name);
+					StringBuilder stringBuilder = new StringBuilder();
+					stringBuilder.Append(ParseRecipientTemplateItem(templateParser, match, recipientNames.First()));
 
-					foreach (var recipient in recipients.Skip(1))
+					foreach (var recipient in recipientNames.Skip(1))
 					{
 						stringBuilder.AppendFormat(", {0}", ParseRecipientTemplateItem(templateParser, match, recipient.ToLower(), true));
 					}
 
-					result = stringBuilder.ToString();
+					resolvedText = stringBuilder.ToString();
 					break;
 				}
 
 				match = _recipientRegex.Match(template);
 				if (match.Success)
 				{
-					result = ParseRecipientTemplateItem(templateParser, match, templateParser.CurrentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Recipient).EndNode.Name);
+					var recipientNodes = templateParser.ParserContext[NetworkEdgeType.Recipient];
+
+					if (!recipientNodes.Any())
+					{
+						unresolvedContext.Add(NetworkEdgeType.Recipient);
+						break;
+					}
+
+					string recipientName = recipientNodes.First().Name;
+
+					resolvedText = ParseRecipientTemplateItem(templateParser, match, recipientName);
 					break;
 				}
 
 				match = _actionRegex.Match(template);
 				if (match.Success)
 				{
+					var actionNodes = templateParser.ParserContext[NetworkEdgeType.Action];
+
+					if (!actionNodes.Any())
+					{
+						unresolvedContext.Add(NetworkEdgeType.Action);
+						break;
+					}
+
+					string action = actionNodes.First().Name;
 					//TODO В случае наличия нескольких подлежащих сказуемое должно быть во множественном числе.
 					TemplateToken subject = templateParser.Context.LastOrDefault(context => context.PartOfSentence == PartOfSentence.Subject);
-					string action = templateParser.CurrentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Action, true).EndNode.Name;
 					string[] words = action.Split(' ');
-					result = templateParser.ParseGrammemMatch(match, words[0], subject != null ? subject.Text : null);
+					resolvedText = templateParser.ParseGrammemMatch(match, words[0], subject != null ? subject.Text : null);
 
-					templateParser.Context.Add(new TemplateToken(match.ToString(), result, PartOfSentence.Predicate));
+					templateParser.Context.Add(new TemplateToken(match.ToString(), resolvedText, PartOfSentence.Predicate));
 
 					foreach (string word in words.Skip(1))
 					{
-						result += " " + word;
+						resolvedText += " " + word;
 					}
 					break;
 				}
@@ -175,7 +208,7 @@ namespace TalesGenerator.Plugin
 				break;
 			}
 
-			return result;
+			return new TemplateParserResult(resolvedText, unresolvedContext);
 		}
 		#endregion
 

@@ -93,7 +93,7 @@ namespace TalesGenerator.Text
 		{
 			if (ReadNextChar() == -1)
 			{
-				lexerResult = new LexerResult(null, TokenType.EOF);
+				lexerResult = new LexerResult(null, TokenType.EndOfStream);
 				return false;
 			}
 

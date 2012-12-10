@@ -2,10 +2,10 @@
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
-using TalesGenerator.Core.Serialization;
-using TalesGenerator.Core.Collections;
+using TalesGenerator.Net.Serialization;
+using TalesGenerator.Net.Collections;
 
-namespace TalesGenerator.Core
+namespace TalesGenerator.Net
 {
 	public enum NetworkEdgeType
 	{
@@ -27,11 +27,11 @@ namespace TalesGenerator.Core
 	{
 		#region Fields
 
-		protected NetworkNode _startNode;
+		private NetworkNode _startNode;
 
-		protected NetworkNode _endNode;
+		private NetworkNode _endNode;
 
-		protected NetworkEdgeType _edgeType;
+		private NetworkEdgeType _edgeType;
 		#endregion
 
 		#region Properties
@@ -196,8 +196,8 @@ namespace TalesGenerator.Core
 				throw new SerializationException();
 			}
 
-			_startNode = _network.Nodes.SingleOrDefault(node => node.Id == startNodeId);
-			_endNode= _network.Nodes.SingleOrDefault(node => node.Id == endNodeId);
+			_startNode = Network.Nodes.SingleOrDefault(node => node.Id == startNodeId);
+			_endNode= Network.Nodes.SingleOrDefault(node => node.Id == endNodeId);
 			_edgeType = edgeType;
 
 			if (_startNode == null ||
@@ -214,7 +214,7 @@ namespace TalesGenerator.Core
 
 		public override string ToString()
 		{
-			return string.Format("Start node: {0}. End node: {1}. Type: {2}.", _startNode, _endNode, _edgeType);
+			return string.Format("Start node: \"{0}\". End node: \"{1}\". Type: {2}.", _startNode, _endNode, _edgeType);
 		}
 		#endregion
 	}

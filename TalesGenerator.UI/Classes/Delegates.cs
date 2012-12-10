@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 using MindFusion.Diagramming.Wpf;
-using TalesGenerator.Core;
+using TalesGenerator.Net;
 
 namespace TalesGenerator.UI.Classes
 {

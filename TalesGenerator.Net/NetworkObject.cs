@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Xml.Linq;
-using TalesGenerator.Core.Serialization;
+using TalesGenerator.Net.Serialization;
 
-namespace TalesGenerator.Core
+namespace TalesGenerator.Net
 {
 	public abstract class NetworkObject : SerializableObject, INotifyPropertyChanged
 	{
@@ -18,7 +18,7 @@ namespace TalesGenerator.Core
 		/// <summary>
 		/// Сеть, которой принадлежит объект.
 		/// </summary>
-		protected readonly Network _network;
+		private readonly Network _network;
 		#endregion
 
 		#region Properties

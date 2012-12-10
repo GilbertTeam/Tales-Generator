@@ -4,11 +4,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using TalesGenerator.Core.Collections;
-using TalesGenerator.Core.Serialization;
+using TalesGenerator.Net.Collections;
+using TalesGenerator.Net.Serialization;
 using System.Collections.Generic;
 
-namespace TalesGenerator.Core
+namespace TalesGenerator.Net
 {
 	/// <summary>
 	/// Представляет сеть.
@@ -32,7 +32,7 @@ namespace TalesGenerator.Core
 		/// </summary>
 		private int _nextId;
 
-		private bool _isDirty;
+		protected bool _isDirty;
 		#endregion
 
 		#region Properties
@@ -133,7 +133,6 @@ namespace TalesGenerator.Core
 
 		private XDocument SaveToXDocument()
 		{
-			XNamespace xNamespace = SerializableObject.XNamespace;
 			XDocument xDocument = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 
 			xDocument.Add(SaveToXElement());

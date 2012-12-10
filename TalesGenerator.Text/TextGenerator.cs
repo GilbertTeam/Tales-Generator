@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
-using TalesGenerator.Core;
-using TalesGenerator.Core.Collections;
+using TalesGenerator.Net;
+using TalesGenerator.Net.Collections;
 
 namespace TalesGenerator.Text
 {

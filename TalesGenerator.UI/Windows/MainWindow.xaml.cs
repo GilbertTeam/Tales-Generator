@@ -13,7 +13,7 @@ using System.Windows.Shapes;
 using Microsoft.Windows.Controls.Ribbon;
 using Microsoft.Win32;
 
-using TalesGenerator.Core;
+using TalesGenerator.Net;
 using TalesGenerator.UI.Classes;
 using TalesGenerator.UI.Properties;
 

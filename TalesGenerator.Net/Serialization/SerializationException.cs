@@ -1,7 +1,7 @@
 ﻿using System;
 using RuntimeSerialization = System.Runtime.Serialization;
 
-namespace TalesGenerator.Core.Serialization
+namespace TalesGenerator.Net.Serialization
 {
 	[Serializable]
 	public class SerializationException : Exception
@@ -21,12 +21,6 @@ namespace TalesGenerator.Core.Serialization
 		public SerializationException(string message, Exception innerException)
 			: base(message, innerException)
 		{
-		}
-
-		public SerializationException(RuntimeSerialization.SerializationInfo serializationInfo, RuntimeSerialization.StreamingContext context)
-			: base(serializationInfo, context)
-		{
-
 		}
 		#endregion
 	}

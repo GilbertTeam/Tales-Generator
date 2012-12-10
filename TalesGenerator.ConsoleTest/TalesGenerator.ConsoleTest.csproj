@@ -49,9 +49,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TalesGenerator.Core\TalesGenerator.Core.csproj">
+    <ProjectReference Include="..\TalesGenerator.Net\TalesGenerator.Net.csproj">
       <Project>{E891914B-7804-4874-B084-027C2B3D59F8}</Project>
-      <Name>TalesGenerator.Core</Name>
+      <Name>TalesGenerator.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TalesGenerator.TaleNet\TalesGenerator.TaleNet.csproj">
+      <Project>{11F9FB60-1E60-4BB1-922E-1D39D7BA5404}</Project>
+      <Name>TalesGenerator.TaleNet</Name>
     </ProjectReference>
     <ProjectReference Include="..\TalesGenerator.TextAnalyzer\TalesGenerator.TextAnalyzer.vcxproj">
       <Project>{D92C6786-4A80-4D5B-B1E4-535F39437B94}</Project>

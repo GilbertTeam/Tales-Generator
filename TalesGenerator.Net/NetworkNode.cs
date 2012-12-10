@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
-using TalesGenerator.Core.Collections;
+using TalesGenerator.Net.Collections;
 
-namespace TalesGenerator.Core
+namespace TalesGenerator.Net
 {
 	/// <summary>
 	/// Представляет вершину сети.
@@ -15,8 +15,6 @@ namespace TalesGenerator.Core
 		#region Fields
 
 		private string _name;
-
-		private NetworkNode _baseNode;
 		#endregion
 
 		#region Properties
@@ -46,6 +44,24 @@ namespace TalesGenerator.Core
 
 				return isAEdge != null ? isAEdge.EndNode : null;
 			}
+			set
+			{
+				//TODO Необходимо добавить валидацию по типу вершины.
+
+				if (value == null)
+				{
+					NetworkEdge isAEdge = OutgoingEdges.GetEdge(NetworkEdgeType.IsA);
+
+					if (isAEdge != null)
+					{
+						Network.Edges.Remove(isAEdge);
+					}
+				}
+				else
+				{
+					Network.Edges.Add(this, value);
+				}
+			}
 		}
 
 		public NetworkNode InstanceNode
@@ -65,7 +81,7 @@ namespace TalesGenerator.Core
 		{
 			get
 			{
-				return _network.Edges.Where(edge => edge.EndNode == this);
+				return Network.Edges.Where(edge => edge.EndNode == this);
 			}
 		}
 
@@ -76,7 +92,7 @@ namespace TalesGenerator.Core
 		{
 			get
 			{
-				return _network.Edges.Where(edge => edge.StartNode == this);
+				return Network.Edges.Where(edge => edge.StartNode == this);
 			}
 		}
 		#endregion
@@ -87,7 +103,7 @@ namespace TalesGenerator.Core
 		/// Создает новую вершину сети.
 		/// </summary>
 		/// <param name="network">Сеть, которой принадлежит вершина.</param>
-		internal NetworkNode(Network network)
+		protected internal NetworkNode(Network network)
 			: base(network)
 		{
 			_name = string.Empty;
@@ -98,7 +114,7 @@ namespace TalesGenerator.Core
 		/// </summary>
 		/// <param name="network">Сеть, которой должна принадлежать вершина.</param>
 		/// <param name="name">Имя новой вершины.</param>
-		internal NetworkNode(Network network, string name)
+		protected internal NetworkNode(Network network, string name)
 			: base(network)
 		{
 			if (name == null)
@@ -114,7 +130,7 @@ namespace TalesGenerator.Core
 		/// </summary>
 		/// <param name="network">Сеть, которой должна принадлежать вершина.</param>
 		/// <param name="baseNode">Базовая вершина.</param>
-		internal NetworkNode(Network network, NetworkNode baseNode)
+		protected internal NetworkNode(Network network, NetworkNode baseNode)
 			: base(network)
 		{
 			if (baseNode == null)
@@ -122,7 +138,7 @@ namespace TalesGenerator.Core
 				throw new ArgumentNullException("baseNode");
 			}
 
-			_baseNode = baseNode;
+			BaseNode = baseNode;
 		}
 
 		/// <summary>
@@ -131,7 +147,7 @@ namespace TalesGenerator.Core
 		/// <param name="network">Сеть, которой должна принадлежать вершина.</param>
 		/// <param name="name">Имя новой вершины.</param>
 		/// <param name="baseNode">Базовая вершина.</param>
-		internal NetworkNode(Network network, string name, NetworkNode baseNode)
+		protected internal NetworkNode(Network network, string name, NetworkNode baseNode)
 			: this(network, name)
 		{
 			if (baseNode == null)
@@ -139,7 +155,7 @@ namespace TalesGenerator.Core
 				throw new ArgumentNullException("baseNode");
 			}
 
-			_baseNode = baseNode;
+			BaseNode = baseNode;
 		}
 		#endregion
 

@@ -1,5 +1,5 @@
 ﻿
-namespace TalesGenerator.Core.Collections
+namespace TalesGenerator.Net.Collections
 {
 	public class NetworkNodeCollection : NetworkObjectCollection<NetworkNode>
 	{
@@ -15,7 +15,7 @@ namespace TalesGenerator.Core.Collections
 
 		public NetworkNode Add()
 		{
-			NetworkNode networkNode = new NetworkNode(_network);
+			NetworkNode networkNode = new NetworkNode(Network);
 
 			Add(networkNode);
 
@@ -24,7 +24,7 @@ namespace TalesGenerator.Core.Collections
 
 		public NetworkNode Add(string name)
 		{
-			NetworkNode networkNode = new NetworkNode(_network, name);
+			NetworkNode networkNode = new NetworkNode(Network, name);
 
 			Add(networkNode);
 
@@ -33,7 +33,7 @@ namespace TalesGenerator.Core.Collections
 
 		public NetworkNode Add(string name, NetworkNode baseNode)
 		{
-			NetworkNode networkNode = new NetworkNode(_network, name, baseNode);
+			NetworkNode networkNode = new NetworkNode(Network, name, baseNode);
 
 			Add(networkNode);
 

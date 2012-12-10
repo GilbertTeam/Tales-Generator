@@ -13,8 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TalesGenerator.Core;
-using TalesGenerator.Core.Collections;
+using TalesGenerator.Net;
+using TalesGenerator.Net.Collections;
 using TalesGenerator.UI.Classes;
 using TalesGenerator.UI.Properties;
 using System.ComponentModel;

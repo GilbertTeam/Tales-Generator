@@ -10,7 +10,7 @@ namespace TalesGenerator.Text
 		SpecialSymbol,
 		LeftBrace,
 		RightBrace,
-		EOF
+		EndOfStream
 	}
 
 	internal class LexerResult

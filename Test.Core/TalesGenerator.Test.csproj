@@ -147,20 +147,6 @@
     <Compile Include="NetworkNodeCollectionTest.cs" />
     <Compile Include="NetworkTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReasonerTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Shadow Include="Test References\TalesGenerator.Core.accessor" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TalesGenerator.Core\TalesGenerator.Core.csproj">
-      <Project>{E891914B-7804-4874-B084-027C2B3D59F8}</Project>
-      <Name>TalesGenerator.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TalesGenerator.TextAnalyzer\TalesGenerator.TextAnalyzer.vcxproj">
-      <Project>{D92C6786-4A80-4D5B-B1E4-535F39437B94}</Project>
-      <Name>TalesGenerator.TextAnalyzer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

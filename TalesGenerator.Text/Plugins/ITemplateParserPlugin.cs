@@ -6,6 +6,6 @@ namespace TalesGenerator.Text.Plugins
 	{
 		bool CanParse(string template);
 
-		string Parse(ITemplateParser parser, string template);
+		TemplateParserResult Parse(ITemplateParser parser, string template);
 	}
 }

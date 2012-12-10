@@ -80,7 +80,12 @@
     <Compile Include="Lexer\LexerException.cs" />
     <Compile Include="Lexer\LexerResult.cs" />
     <Compile Include="Lexer\Lexer.cs" />
+    <Compile Include="Parser\ITemplateParserContext.cs" />
+    <Compile Include="Parser\TemplateParserDictionaryContext.cs" />
+    <Compile Include="Parser\TemplateParserException.cs" />
     <Compile Include="Parser\TemplateParser.cs" />
+    <Compile Include="Parser\TemplateParserNodeContext.cs" />
+    <Compile Include="Parser\TemplateParserResult.cs" />
     <Compile Include="Plugins\ITemplateParserPlugin.cs" />
     <Compile Include="Plugins\TemplateParserPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,8 +99,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TalesGenerator.Core\TalesGenerator.Core.csproj">
-      <Project>{E891914B-7804-4874-B084-027C2B3D59F8}</Project>
+      <Project>{703D8C0C-6F7F-4F71-BB83-1A3E8D478522}</Project>
       <Name>TalesGenerator.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TalesGenerator.Net\TalesGenerator.Net.csproj">
+      <Project>{E891914B-7804-4874-B084-027C2B3D59F8}</Project>
+      <Name>TalesGenerator.Net</Name>
     </ProjectReference>
     <ProjectReference Include="..\TalesGenerator.TextAnalyzer\TalesGenerator.TextAnalyzer.vcxproj">
       <Project>{D92C6786-4A80-4D5B-B1E4-535F39437B94}</Project>

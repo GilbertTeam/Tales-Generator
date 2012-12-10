@@ -5,7 +5,7 @@
 					 xmlns:p="clr-namespace:TalesGenerator.UI.Properties"
 					 xmlns:controls="clr-namespace:TalesGenerator.UI.Controls"
 					 xmlns:diag="http://mindfusion.eu/diagramming/wpf"
-					 xmlns:core="clr-namespace:TalesGenerator.Core;assembly=TalesGenerator.Core"
+					 xmlns:core="clr-namespace:TalesGenerator.Net;assembly=TalesGenerator.Net"
 					 Title="MainWindow" Height="600" Width="800"
 					 ResizeMode="CanResizeWithGrip"
 					 WindowStartupLocation="CenterScreen"

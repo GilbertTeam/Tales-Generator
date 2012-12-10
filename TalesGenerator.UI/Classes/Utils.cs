@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 
-using TalesGenerator.Core;
+using TalesGenerator.Net;
 using MindFusion.Diagramming.Wpf;
 using System.Windows.Data;
 using System.Windows;

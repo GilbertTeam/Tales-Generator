@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using TalesGenerator.Core;
-using TalesGenerator.Core.Collections;
+using TalesGenerator.Net;
+using TalesGenerator.Net.Collections;
 
 namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 {
@@ -33,7 +34,7 @@ namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 			};
 		}
 
-		public override string Parse(ITemplateParser templateParser, string template)
+		public override TemplateParserResult Parse(ITemplateParser templateParser, string template)
 		{
 			if (templateParser == null)
 			{
@@ -44,35 +45,64 @@ namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 				throw new ArgumentException("template");
 			}
 
-			string result = string.Empty;
+			List<NetworkEdgeType> unresolvedContext = new List<NetworkEdgeType>();
+			string resolvedText = null;
 			Match match = _wordRegex.Match(template);
 
 			if (match.Success)
 			{
-				string wordSample = match.Groups[2].Value.ToLower();
+				string templateItemType = match.Groups[2].Value.ToLower();
+				string wordSample = null;
 
-				switch (wordSample)
+				switch (templateItemType)
 				{
 					case "agent":
-						wordSample = templateParser.CurrentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Agent).EndNode.Name;
+						var agentNodes = templateParser.ParserContext[NetworkEdgeType.Agent];
+
+						if (!agentNodes.Any())
+						{
+							unresolvedContext.Add(NetworkEdgeType.Agent);
+							break;
+						}
+
+						wordSample = agentNodes.First().Name;
 						break;
 
 					case "recipient":
-						wordSample = templateParser.CurrentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Recipient).EndNode.Name;
+						var recipientNodes = templateParser.ParserContext[NetworkEdgeType.Recipient];
+
+						if (!recipientNodes.Any())
+						{
+							unresolvedContext.Add(NetworkEdgeType.Recipient);
+							break;
+						}
+
+						wordSample = recipientNodes.First().Name;
 						break;
 
 					case "action":
-						wordSample = templateParser.CurrentNode.OutgoingEdges.GetEdge(NetworkEdgeType.Action).EndNode.Name;
+						var actionNodes = templateParser.ParserContext[NetworkEdgeType.Action];
+
+						if (!actionNodes.Any())
+						{
+							unresolvedContext.Add(NetworkEdgeType.Action);
+							break;
+						}
+
+						wordSample = actionNodes.First().Name;
 						break;
 
 					default:
-						throw new InvalidOperationException();
+						throw new NotSupportedException();
 				}
 
-				result = templateParser.ReconcileWord(match.Groups[1].Value.Trim('~', ':'), wordSample);
+				if (!string.IsNullOrEmpty(wordSample))
+				{
+					resolvedText = templateParser.ReconcileWord(match.Groups[1].Value.Trim('~', ':'), wordSample);
+				}
 			}
 
-			return result;
+			return new TemplateParserResult(resolvedText, unresolvedContext);
 		}
 		#endregion
 	}

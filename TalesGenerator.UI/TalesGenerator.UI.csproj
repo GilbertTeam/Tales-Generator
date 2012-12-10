@@ -164,9 +164,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TalesGenerator.Core\TalesGenerator.Core.csproj">
+    <ProjectReference Include="..\TalesGenerator.Net\TalesGenerator.Net.csproj">
       <Project>{E891914B-7804-4874-B084-027C2B3D59F8}</Project>
-      <Name>TalesGenerator.Core</Name>
+      <Name>TalesGenerator.Net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

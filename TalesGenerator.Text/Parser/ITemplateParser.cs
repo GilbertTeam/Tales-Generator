@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using TalesGenerator.Core;
+using TalesGenerator.Net;
 
 namespace TalesGenerator.Text
 {
@@ -8,9 +8,9 @@ namespace TalesGenerator.Text
 	{
 		#region Properties
 
-		NetworkNode CurrentNode { get; }
+		ITemplateParserContext ParserContext { get; }
 
-		List<TemplateToken> Context { get; }
+		IList<TemplateToken> Context { get; }
 		#endregion
 
 		#region Methods
@@ -33,7 +33,7 @@ namespace TalesGenerator.Text
 
 		string ParseGrammemMatch(Match match, string value, string baseWord = null, bool ignoreCase = false);
 
-		string Parse(NetworkNode networkNode);
+		TemplateParserResult Parse(NetworkNode networkNode);
 		#endregion
 	}
 }

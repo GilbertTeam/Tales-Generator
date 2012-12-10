@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TalesGenerator.Core;
+using TalesGenerator.Net;
 using TalesGenerator.UI.Classes;
 
 namespace TalesGenerator.UI.Controls

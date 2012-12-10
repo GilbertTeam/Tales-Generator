@@ -29,7 +29,7 @@ namespace TalesGenerator.Text.Plugins
 
 		protected abstract IEnumerable<Regex> GetAvailableRegexes();
 
-		public abstract string Parse(ITemplateParser parser, string template);
+		public abstract TemplateParserResult Parse(ITemplateParser parser, string template);
 
 		public bool CanParse(string template)
 		{

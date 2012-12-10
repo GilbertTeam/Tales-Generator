@@ -7,7 +7,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Xml;
 
-using TalesGenerator.Core;
+using TalesGenerator.Net;
 using MindFusion.Diagramming.Wpf;
 using System.Xml.Linq;
 using System.Windows.Data;
