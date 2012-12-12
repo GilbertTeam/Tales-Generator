@@ -8,8 +8,10 @@ using System.Globalization;
 using TalesGenerator.Net;
 
 using MindFusion.Diagramming.Wpf;
+using MindFusion.Diagramming.Wpf.Layout;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace TalesGenerator.UI.Classes
 {
@@ -116,7 +118,55 @@ namespace TalesGenerator.UI.Classes
 		public void LoadFromXDocument(XDocument xDoc, Network network)
 		{
 			XElement xDiagram = xDoc.Root.Element("Diagram");
-			LoadFromXElement(xDiagram, network);
+			if (xDiagram != null)
+			{
+				LoadFromXElement(xDiagram, network);
+			}
+			else
+			{
+				CreateVisual(network);
+
+				ArrangeVisual();
+			}
+		}
+
+		protected void CreateVisual(Network network)
+		{
+			foreach (var netNode in network.Nodes)
+			{
+				ShapeNode diagramNode = _diagram.Factory.CreateShapeNode(new Point(0, 0), new Size(1, 1));
+				RaiseNodeAdded(diagramNode, netNode);
+				diagramNode.ResizeToFitText(FitSize.KeepRatio);
+
+				{
+					// hacks incomin! + magic constants
+					FormattedText fText = new FormattedText(diagramNode.Text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+						new Typeface(diagramNode.FontFamily, diagramNode.FontStyle, diagramNode.FontWeight, diagramNode.FontStretch), diagramNode.FontSize, diagramNode.Brush);
+					diagramNode.Bounds = new Rect(0, 0, fText.Width + 10, fText.Height + 5);
+				}
+				//diagramNode.ClipText = false;
+				//res = res;
+			}
+
+			foreach (var netEdge in network.Edges)
+			{
+				ShapeNode origin = Utils.FindNodeByUid(_diagram, netEdge.StartNode.Id);
+				ShapeNode destination = Utils.FindNodeByUid(_diagram, netEdge.EndNode.Id);
+
+				DiagramLink diagramLink = _diagram.Factory.CreateDiagramLink(origin, destination);
+
+				RaiseLinkAdded(diagramLink, netEdge);
+			}
+		}
+
+		protected void ArrangeVisual()
+		{
+			Layout layout = new FractalLayout();
+
+			layout.Arrange(_diagram);
+
+
+			_diagram.ResizeToFitItems(50); // TODO create constant somewhere
 		}
 
 		public void LoadFromXElement(XElement xEl, Network network)
