@@ -1,0 +1,283 @@
+﻿<Application x:Class="TalesGenerator.UI.App"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:ribbon="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
+			 xmlns:diag="http://mindfusion.eu/diagramming/wpf"
+			 xmlns:windows="clr-namespase:TalesGenerator.UI.Windows"
+			 xmlns:classes="clr-namespace:TalesGenerator.UI.Classes"
+			 StartupUri="Windows/MainWindow.xaml">
+	<Application.Resources>
+		<!--BrandNewColors-->
+		<!--http://colorschemedesigner.com/#1U51T7F-удалить текст-w0w0-->
+		<!--Primary Color-->
+		<SolidColorBrush x:Key="BrushPrimary1" Color="#FEFFC2"/>
+		<SolidColorBrush x:Key="BrushPrimary2" Color="#BFBF9D"/> <!--Dark-->
+		<SolidColorBrush x:Key="BrushPrimary3" Color="#A4A63F"/> <!--DarkDark-->
+		<SolidColorBrush x:Key="BrushPrimary4" Color="#FEFFD1"/> <!--Light-->
+		<SolidColorBrush x:Key="BrushPrimary5" Color="#FFFFDD"/> <!--LightLight-->
+		<!--Secondary Color A-->
+		<SolidColorBrush x:Key="BrushSecondaryA1" Color="#EAFFC2"/>
+		<SolidColorBrush x:Key="BrushSecondaryA2" Color="#B3BF9D"/> <!--Dark-->
+		<SolidColorBrush x:Key="BrushSecondaryA3" Color="#82A63F"/> <!--DarkDark-->
+		<SolidColorBrush x:Key="BrushSecondaryA4" Color="#EFFFD1"/> <!--Light-->
+		<SolidColorBrush x:Key="BrushSecondaryA5" Color="#F3FFDD"/> <!--LightLight-->
+		<!--Secondary Color B-->
+		<SolidColorBrush x:Key="BrushSecondaryB1" Color="#FFF5C2"/>
+		<SolidColorBrush x:Key="BrushSecondaryB2" Color="#BFBA9D"/> <!--Dark-->
+		<SolidColorBrush x:Key="BrushSecondaryB3" Color="#A6953F"/> <!--DarkDark-->
+		<SolidColorBrush x:Key="BrushSecondaryB4" Color="#FFF7D1"/> <!--Light-->
+		<SolidColorBrush x:Key="BrushSecondaryB5" Color="#FFF9DD"/> <!--LightLight-->
+		<!--Secondary Color B-->
+		<!--Styles-->
+		<!--Этот стиль используется-->
+		<Style x:Key="MainStyleEx">
+			<!--Controls -->
+			<Setter Property="Control.Background" Value="{StaticResource BrushPrimary1}"/>
+			<Setter Property="Control.BorderBrush" Value="{StaticResource BrushPrimary2}"/>
+			<!--Ribbon Colors-->
+			<Setter Property="ribbon:Ribbon.MouseOverBackground" Value="{StaticResource BrushPrimary2}"/>
+			<Setter Property="ribbon:Ribbon.MouseOverBorderBrush" Value="#00000000"/>
+			<Setter Property="ribbon:Ribbon.CheckedBackground" Value="{StaticResource BrushPrimary2}"/>
+			<Setter Property="ribbon:Ribbon.CheckedBorderBrush" Value="#00000000"/>
+			<Setter Property="ribbon:Ribbon.PressedBackground" Value="{StaticResource BrushPrimary3}"/>
+			<Setter Property="ribbon:Ribbon.PressedBorderBrush" Value="#00000000"/>
+			<Setter Property="ribbon:Ribbon.FocusedBorderBrush" Value="Black"/>
+			<!--MindFusion-->
+			<Setter Property="diag:Diagram.BorderBrush" Value="{StaticResource BrushPrimary3}"/>
+		</Style>
+		<Style x:Key="HeaderStyle">
+			<Setter Property="Control.Background" Value="{StaticResource BrushPrimary3}"/>
+			<Setter Property="Control.Foreground" Value="{StaticResource BrushPrimary5}"/>
+		</Style>
+		<!--Старый стиль-->
+		<Style x:Key="MainStyle">
+			<Setter Property="Control.Background" Value="{StaticResource BrushPrimary4}"/>
+			<Setter Property="Control.BorderBrush" Value="{StaticResource BrushPrimary3}"/>
+			<!--Ribbon Colors-->
+			<Setter Property="ribbon:Ribbon.MouseOverBackground" Value="{StaticResource BrushSecondaryA5}"/>
+			<Setter Property="ribbon:Ribbon.MouseOverBorderBrush" Value="{StaticResource BrushSecondaryA5}"/>
+			<Setter Property="ribbon:Ribbon.CheckedBackground" Value="{StaticResource BrushSecondaryA1}"/>
+			<Setter Property="ribbon:Ribbon.CheckedBackground" Value="{StaticResource BrushSecondaryA1}"/>
+			<Setter Property="ribbon:Ribbon.PressedBackground" Value="{StaticResource BrushPrimary2}"/>
+			<Setter Property="ribbon:Ribbon.PressedBorderBrush" Value="{StaticResource BrushPrimary2}"/>
+			<Setter Property="ribbon:Ribbon.FocusedBorderBrush" Value="Black"/>
+			<!--MindFusion-->
+			<Setter Property="diag:Diagram.BorderBrush" Value="{StaticResource BrushPrimary3}"/>
+		</Style>
+		<!--Новые цвета-->
+		<SolidColorBrush x:Key="BackgroundBrushKey" Color="#FFDFE9F5" />
+		<SolidColorBrush x:Key="BorderBrushKey" Color="#FFB9C9DA" />
+		<SolidColorBrush x:Key="ForegroundBrushKey" Color="Black" />
+		<SolidColorBrush x:Key="Background2BrushKey" Color="#FF114EAF" />
+		<SolidColorBrush x:Key="DefaultBackBrush" Color="White" />
+		<Style x:Key="PanelHeaderStyleKey">
+			<Setter Property="Control.FontWeight" Value="Bold"/>
+			<Setter Property="TextBlock.Background" Value="{StaticResource BackgroundBrushKey}"/>
+		</Style>
+		<Style x:Key="BorderStyleKey">
+			<Setter Property="Border.BorderThickness" Value="2"/>
+			<Setter Property="Border.CornerRadius" Value="5"/>
+			<Setter Property="Border.Padding" Value="1"/>
+			<Setter Property="Border.BorderBrush" Value="{StaticResource BorderBrushKey}"/>
+		</Style>
+		<!--Конвертеры-->
+		<classes:NetworkEdgeTypeStringConverter x:Key="NetworkEdgeTypeStringConverter"/>
+		<classes:NodeNameConverter x:Key="NodeNameConverterKey"/>
+		
+		<!--UiElementStyle-->
+		<Style x:Key="WindowElementStyle">
+			<Setter Property="FrameworkElement.Margin" Value="5,5,5,5"/>
+		</Style>
+		
+		<!--Button style-->
+		<Style x:Key="CommandButtonStyle" BasedOn="{StaticResource WindowElementStyle}">
+			<Setter Property="Button.Width" Value="75"/>
+			<Setter Property="Button.Height" Value="23"/>
+			<Setter Property="Button.HorizontalAlignment" Value="Right"/>
+			<Setter Property="Button.VerticalAlignment" Value="Center"/>
+		</Style>
+		
+		<!-- Node default style -->
+		
+		<SolidColorBrush x:Key="DefaultNodeBackgorundBrush" Color="AntiqueWhite"/>
+		<SolidColorBrush x:Key="DefaultNodeBorderBrush" Color="Black"/>
+		
+		<Pen x:Key="DefaultNodeBorderPen" Brush="{StaticResource DefaultNodeBorderBrush}" Thickness="2"/>
+		
+		<!--Link pen-->
+		<SolidColorBrush x:Key="LinkFillBrush" Color="Orange"/>
+		
+		<SolidColorBrush x:Key="IsABrush" Color="Black"/>
+		<SolidColorBrush x:Key="AgentBrush" Color="Green"/>
+		<SolidColorBrush x:Key="RecipientBrush" Color="Blue"/>
+		<SolidColorBrush x:Key="GoalBrush" Color="#FD4B00"/>
+		<SolidColorBrush x:Key="LocativeBrush" Color="#8811FF"/>
+		<SolidColorBrush x:Key="FollowBrush" Color="#A80054"/>
+		<SolidColorBrush x:Key="IsInstanceBrush" Color="#008A8A"/>
+		<SolidColorBrush x:Key="ObjectBrush" Color="#EA0000"/>
+		
+		<Pen x:Key="IsAPen" Brush="{StaticResource IsABrush}" Thickness="2"/>
+		<Pen x:Key="AgentPen" Brush="{StaticResource AgentBrush}" Thickness="2"/>
+		<Pen x:Key="RecipientPen" Brush="{StaticResource RecipientBrush}" Thickness="2"/>
+		<Pen x:Key="GoalPen" Brush="{StaticResource GoalBrush}" Thickness="2"/>
+		<Pen x:Key="LocativePen" Brush="{StaticResource LocativeBrush}" Thickness="2"/>
+		<Pen x:Key="FollowPen" Brush="{StaticResource FollowBrush}" Thickness="2"/>
+		<Pen x:Key="IsInstancePen" Brush="{StaticResource IsInstanceBrush}" Thickness="2"/>
+		<Pen x:Key="ObjectPen" Brush="{StaticResource ObjectBrush}" Thickness="2"/>
+
+		<!--brand new templates-->
+		<DataTemplate x:Key="IsATemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource IsABrush}"/>
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Tree/IsAArrowUp.png"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="IsAItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource IsABrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="AgentTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/AgentArrow.png"/>
+				<TextBlock Text="{Binding}" Margin="5,0"
+					   Foreground="{StaticResource AgentBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="AgentItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource AgentBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="RecipientTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/RecipientArrow.png"/>
+				<TextBlock Text="{Binding}" Margin="5,0"
+					   Foreground="{StaticResource RecipientBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="RecipientItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource RecipientBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="GoalTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/GoalArrow.png"/>
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource GoalBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="GoalItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource GoalBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="FollowTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/FollowArrow.png"/>
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource FollowBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="FollowItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource FollowBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="LocativeTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/LocativeArrow.png"/>
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource LocativeBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="LocativeItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource LocativeBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="ObjectTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Links/ObjectArrow.png"/>
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource ObjectBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="ObjectItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource ObjectBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="IsInstanceTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource IsInstanceBrush}"/>
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Tree/IsInstanceArrowUp.png"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="IsInstanceItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource IsInstanceBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+
+	</Application.Resources>
+	
+</Application>

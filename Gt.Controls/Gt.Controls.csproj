@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{09640460-08F9-4434-A313-0CF99F22E6D3}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gt.Controls</RootNamespace>
+    <AssemblyName>Gt.Controls</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Actual Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Actual Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BaseSerializer.cs" />
+    <Compile Include="Diagramming\DiagramDelegates.cs" />
+    <Compile Include="Diagramming\DiagramEventArgs.cs" />
+    <Compile Include="Diagramming\DiagramRecalcLock.cs" />
+    <Compile Include="Diagramming\DiagramSelectionBorder.cs" />
+    <Compile Include="Diagramming\DiagramSerializer.cs" />
+    <Compile Include="Diagramming\DiagramTextBox.cs" />
+    <Compile Include="Diagramming\DiagramUpdateLock.cs" />
+    <Compile Include="Diagramming\DiagramViewer.cs" />
+    <Compile Include="Diagramming\EdgeEventArgs.cs" />
+    <Compile Include="Diagramming\IDiagramPlacedItem.cs" />
+    <Compile Include="Diagramming\LabelEventArgs.cs" />
+    <Compile Include="Diagramming\NodeDrawers\DiamondNodeDrawer.cs" />
+    <Compile Include="Diagramming\NodeDrawers\EllipseNodeDrawer.cs" />
+    <Compile Include="Diagramming\NodeDrawers\RoundedRectangleItemDrawer.cs" />
+    <Compile Include="Diagramming\NodeEventArgs.cs" />
+    <Compile Include="GeometryTranslater.cs" />
+    <Compile Include="GlobalData.cs" />
+    <Compile Include="Diagramming\ResizeInfo.cs" />
+    <Compile Include="SerializationUtils.cs" />
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Diagramming\BaseDrawer.cs" />
+    <Compile Include="Diagramming\DiagramMouseManager.cs" />
+    <Compile Include="Diagramming\DiagramRenderLock.cs" />
+    <Compile Include="Diagramming\EdgeDrawers\ArrowEdgeDrawer.cs" />
+    <Compile Include="Diagramming\EdgeDrawers\BaseEdgeDrawer.cs" />
+    <Compile Include="Diagramming\DiagramEdge.cs" />
+    <Compile Include="Diagramming\DiagramEdges.cs" />
+    <Compile Include="Diagramming\DiagramException.cs" />
+    <Compile Include="Diagramming\DiagramItemCollection.cs" />
+    <Compile Include="Diagramming\DiagramLabel.cs" />
+    <Compile Include="Diagramming\DiagramItem.cs" />
+    <Compile Include="Diagramming\Diagram.cs" />
+    <Compile Include="Diagramming\DiagramNode.cs" />
+    <Compile Include="Diagramming\DiagramNodes.cs" />
+    <Compile Include="Diagramming\EdgeAnchoringMode.cs" />
+    <Compile Include="Diagramming\EdgeDrawers\LineEdgeDrawer.cs" />
+    <Compile Include="Diagramming\IDiagramItemDrawer.cs" />
+    <Compile Include="Diagramming\LabelDrawers\BaseLabelDrawer.cs" />
+    <Compile Include="Diagramming\MouseAction.cs" />
+    <Compile Include="Diagramming\NodeDrawers\BaseNodeDrawer.cs" />
+    <Compile Include="Diagramming\NodeDrawers\RectangleNodeDrawer.cs" />
+    <Compile Include="Diagramming\ResizeDirection.cs" />
+    <Compile Include="Diagramming\Utils.cs" />
+    <Compile Include="Diagramming\ViewConversions.cs" />
+    <Compile Include="GeometryUtils.cs" />
+    <Compile Include="MathUtils.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Diagramming\DiagramCD.cd" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

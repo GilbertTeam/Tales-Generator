@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AgentLabel" xml:space="preserve">
+    <value>#агент</value>
+  </data>
+  <data name="AnswerLabel" xml:space="preserve">
+    <value>Ответ:</value>
+  </data>
+  <data name="AnswerNo" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="AnswerYes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>TalesGenerator</value>
+  </data>
+  <data name="ChangeNodeTextLabel" xml:space="preserve">
+    <value>Переименовать вершину</value>
+  </data>
+  <data name="CloseProject" xml:space="preserve">
+    <value>Закрыть проект</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>Подтверждение</value>
+  </data>
+  <data name="ConsultStartLabel" xml:space="preserve">
+    <value>Начать консультацию</value>
+  </data>
+  <data name="ConsultWindowCaption" xml:space="preserve">
+    <value>Консультация</value>
+  </data>
+  <data name="DeleteLinkLabel" xml:space="preserve">
+    <value>Удалить дугу</value>
+  </data>
+  <data name="DeleteNodeLabel" xml:space="preserve">
+    <value>Удалить вершину</value>
+  </data>
+  <data name="DispatcherLabel" xml:space="preserve">
+    <value>Объекты сети</value>
+  </data>
+  <data name="EditLabel" xml:space="preserve">
+    <value>Редактирование</value>
+  </data>
+  <data name="EnterQuestionLabel" xml:space="preserve">
+    <value>Введите вопрос:</value>
+  </data>
+  <data name="ErrorMsgCaption" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="ExitLabel" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="ExportProject" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="FollowLabel" xml:space="preserve">
+    <value>#следовать</value>
+  </data>
+  <data name="GoalLabel" xml:space="preserve">
+    <value>#цель</value>
+  </data>
+  <data name="IsALabel" xml:space="preserve">
+    <value>#is_a</value>
+  </data>
+  <data name="LinksLabel" xml:space="preserve">
+    <value>Дуги</value>
+  </data>
+  <data name="LinkTypeLabel" xml:space="preserve">
+    <value>Тип дуги</value>
+  </data>
+  <data name="LocativeLabel" xml:space="preserve">
+    <value>#локатив</value>
+  </data>
+  <data name="NewProject" xml:space="preserve">
+    <value>Новый проект</value>
+  </data>
+  <data name="NodesLabel" xml:space="preserve">
+    <value>Вершины</value>
+  </data>
+  <data name="ObjectDispatcher" xml:space="preserve">
+    <value>ДиспетчерОбъектов</value>
+  </data>
+  <data name="OpenProject" xml:space="preserve">
+    <value>Открыть проект</value>
+  </data>
+  <data name="RecipientLabel" xml:space="preserve">
+    <value>#реципиент</value>
+  </data>
+  <data name="SaveAsPdf" xml:space="preserve">
+    <value>Экспортировать в PDF</value>
+  </data>
+  <data name="SaveAsProject" xml:space="preserve">
+    <value>Сохранить как</value>
+  </data>
+  <data name="SaveAsSvg" xml:space="preserve">
+    <value>Экспортировать в SVG</value>
+  </data>
+  <data name="SaveProject" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="SaveWarning" xml:space="preserve">
+    <value>Текущий проект содержит изменения. Желаете сохранить его перед закрытием?</value>
+  </data>
+  <data name="StartLabel" xml:space="preserve">
+    <value>Запуск</value>
+  </data>
+  <data name="StringEditWndEnterLabel" xml:space="preserve">
+    <value>Введите новое значение:</value>
+  </data>
+  <data name="TreeLinks" xml:space="preserve">
+    <value>Связи</value>
+  </data>
+  <data name="TreeNodes" xml:space="preserve">
+    <value>Вершины</value>
+  </data>
+  <data name="TreeObjects" xml:space="preserve">
+    <value>Объекты сети</value>
+  </data>
+  <data name="UnnamedLinkLabel" xml:space="preserve">
+    <value>&lt;Неименованная вершина&gt;</value>
+  </data>
+  <data name="ZoomInLabel" xml:space="preserve">
+    <value>Увеличить</value>
+  </data>
+  <data name="ZoomOutLabel" xml:space="preserve">
+    <value>Уменьшить</value>
+  </data>
+  <data name="IsInstanceLabel" xml:space="preserve">
+    <value>#is_instance</value>
+  </data>
+  <data name="AgentResourceLabel" xml:space="preserve">
+    <value>Agent</value>
+  </data>
+  <data name="DescendantsLabel" xml:space="preserve">
+    <value>Потомки</value>
+  </data>
+  <data name="FollowResourceLabel" xml:space="preserve">
+    <value>Follow</value>
+  </data>
+  <data name="GoalResourceLabel" xml:space="preserve">
+    <value>Goal</value>
+  </data>
+  <data name="InstancesLabel" xml:space="preserve">
+    <value>Экземпляры</value>
+  </data>
+  <data name="IsAResourceLabel" xml:space="preserve">
+    <value>IsA</value>
+  </data>
+  <data name="IsInstanceResourceLabel" xml:space="preserve">
+    <value>IsInstance</value>
+  </data>
+  <data name="LocativeResourceLabel" xml:space="preserve">
+    <value>Locative</value>
+  </data>
+  <data name="RecipientResourceLabel" xml:space="preserve">
+    <value>Recipient</value>
+  </data>
+  <data name="CreateNewNodeLabel" xml:space="preserve">
+    <value>Создать новую вершину</value>
+  </data>
+</root>

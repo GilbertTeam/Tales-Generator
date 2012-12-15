@@ -1,0 +1,30 @@
+﻿<Window x:Class="TalesGenerator.UI.Windows.StringEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:p="clr-namespace:TalesGenerator.UI.Properties"
+        Title="{x:Static p:Resources.EditLabel}" Height="140" Width="300"
+		WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" Icon="/TalesGenerator;component/AppIcon.ico">
+	<StackPanel>
+		<Border Style="{StaticResource BorderStyleKey}"
+				Background="{StaticResource BackgroundBrushKey}"
+				Margin="5">
+			<TextBlock Text="{x:Static p:Resources.StringEditWndEnterLabel}"
+					   Style="{StaticResource PanelHeaderStyleKey}"/>
+		</Border>
+		<TextBox x:Name="StringTextBox"
+				 Style="{StaticResource WindowElementStyle}"/>
+		<Separator HorizontalAlignment="Stretch"/>
+		<DockPanel>
+			<Button Style="{StaticResource CommandButtonStyle}"
+					DockPanel.Dock="Right"
+					IsCancel="True">
+				Отмена
+			</Button>
+			<Button Style="{StaticResource CommandButtonStyle}"
+					DockPanel.Dock="Right"
+					IsDefault="True" Click="Button_Click">
+				OK
+			</Button>
+		</DockPanel>
+	</StackPanel>
+</Window>

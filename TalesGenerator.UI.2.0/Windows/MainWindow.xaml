@@ -1,0 +1,292 @@
+﻿<ribbon:RibbonWindow x:Class="TalesGenerator.UI.Windows.MainWindow"
+					 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					 xmlns:ribbon="clr-namespace:Microsoft.Windows.Controls.Ribbon;assembly=RibbonControlsLibrary"
+					 xmlns:p="clr-namespace:TalesGenerator.UI.Properties"
+					 xmlns:controls="clr-namespace:TalesGenerator.UI.Controls"
+					 xmlns:diag="http://mindfusion.eu/diagramming/wpf"
+					 xmlns:core="clr-namespace:TalesGenerator.Net;assembly=TalesGenerator.Net"
+					 xmlns:c="clr-namespace:Gt.Controls.Diagramming;assembly=Gt.Controls"
+					 Title="MainWindow" Height="600" Width="800"
+					 ResizeMode="CanResizeWithGrip"
+					 WindowStartupLocation="CenterScreen"
+					 SizeChanged="RibbonWindow_SizeChanged"
+					 Closing="RibbonWindow_Closing"
+					 Icon="/TalesGenerator;component/AppIcon.ico" WindowStyle="SingleBorderWindow" WindowState="Maximized">
+	
+	<Window.Resources>
+		<RoutedUICommand x:Key="CloseProject"/>
+		<RoutedUICommand x:Key="ShowProps"/>
+		<RoutedUICommand x:Key="SaveAsPdf"/>
+		<RoutedUICommand x:Key="SaveAsSvg"/>
+		<RoutedUICommand x:Key="Export"/>
+		<RoutedUICommand x:Key="ShowDispatcherKey"/>
+		<RoutedUICommand x:Key="SetLinkTypeKey"/>
+		<RoutedUICommand x:Key="StartConsultKey"/>
+		<RoutedUICommand x:Key="RenameNodeKey"/>
+		<RoutedUICommand x:Key="DeleteNodeKey"/>
+		<RoutedUICommand x:Key="DeleteLinkKey"/>
+		<RoutedUICommand x:Key="ZoomInCommandKey"/>
+		<RoutedUICommand x:Key="ZoomOutCommandKey"/>
+		<RoutedUICommand x:Key="StartEditCommandKey"/>
+		<!--ContextMenu-->
+		<Style x:Key="ContextMenuLinkTypeStyle">
+			<Setter Property="MenuItem.IsCheckable" Value="True"/>
+			<EventSetter Event="MenuItem.Click" Handler="MenuItemType_Click"/>
+		</Style>
+		<ContextMenu x:Key="DiagramContextMenu">
+			<MenuItem x:Name="CreateNewNode"
+					  Header="{x:Static p:Resources.CreateNewNodeLabel}"
+					  Click="MenuItem_Click"/>
+		</ContextMenu>
+	</Window.Resources>
+
+	<Window.InputBindings>
+		<KeyBinding Command="New" Key="N" Modifiers="Ctrl"/>
+		<KeyBinding Command="Open" Key="O" Modifiers="Ctrl"/>
+		<KeyBinding Command="Save" Key="S" Modifiers="Ctrl"/>
+		<KeyBinding Command="{StaticResource ZoomInCommandKey}" Key="OemPlus"/>
+		<KeyBinding Command="{StaticResource ZoomOutCommandKey}" Key="OemMinus"/>
+		<KeyBinding Command="{StaticResource StartEditCommandKey}" Key="F2"/>
+	</Window.InputBindings>
+	
+	<Window.CommandBindings>
+		<CommandBinding Command="New" CanExecute="New_CanExecute" Executed="New_Executed"/>
+		<CommandBinding Command="Open" CanExecute="Open_CanExecute" Executed="Open_Executed"/>
+		<CommandBinding Command="Save" CanExecute="Save_CanExecute" Executed="Save_Executed"/>
+		<CommandBinding Command="SaveAs" CanExecute="SaveAs_CanExecute" Executed="Save_AsExecuted"/>
+		<CommandBinding Command="{StaticResource CloseProject}" CanExecute="CloseProject_CanExecute"
+						Executed="CloseProject_Executed"/>
+		<CommandBinding Command="Close" CanExecute="Close_CanExecute" Executed="Close_Executed"/>
+		<CommandBinding Command="{StaticResource ShowProps}" CanExecute="ShowProps_CanExecute"
+						Executed="ShowProps_Executed"/>
+		<CommandBinding Command="{StaticResource SaveAsPdf}" CanExecute="SaveAsPdf_CanExecute"
+						Executed="SaveAsPdf_Executed"/>
+		<CommandBinding Command="{StaticResource SaveAsSvg}" CanExecute="SaveAsSvg_CanExecute"
+						Executed="SaveAsSvg_Executed"/>
+		<CommandBinding Command="{StaticResource Export}" CanExecute="Export_CanExecute"/>
+		<CommandBinding Command="{StaticResource ShowDispatcherKey}" CanExecute="ShowDispatcher_CanExecute"
+						Executed="ShowDispatcher_Executed"/>
+		<CommandBinding Command="{StaticResource SetLinkTypeKey}" CanExecute="ChooseLinkType_CanExecute"
+						Executed="ChooseLinkType_Executed"/>
+		<CommandBinding Command="{StaticResource StartConsultKey}" CanExecute="StartConsult_CanExecute"
+						Executed="StartConsult_Executed"/>
+		<CommandBinding Command="{StaticResource RenameNodeKey}" CanExecute="RenameNode_CanExecute"
+						Executed="RenameNode_Executed"/>
+		<CommandBinding Command="{StaticResource DeleteNodeKey}" CanExecute="DeleteNode_CanExecute"
+						Executed="DeleteNode_Executed"/>
+		<CommandBinding Command="{StaticResource DeleteLinkKey}" CanExecute="DeleteLink_CanExecute"
+						Executed="DeleteLink_Executed"/>
+		<CommandBinding Command="{StaticResource ZoomInCommandKey}" CanExecute="ZoomIn_CanExecute"
+						Executed="ZoomIn_Executed"/>
+		<CommandBinding Command="{StaticResource ZoomOutCommandKey}" CanExecute="ZoomOut_CanExecute"
+						Executed="ZoomOut_Executed"/>
+		<CommandBinding Command="{StaticResource StartEditCommandKey}" CanExecute="StartEdit_CanExecute"
+						Executed="StartEdit_Executed"/>
+	</Window.CommandBindings>
+	
+	<Grid x:Name="LayoutGrid" ShowGridLines="False">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="306*"/>
+		</Grid.RowDefinitions>
+		<!--Ribbon-->
+		<ribbon:Ribbon x:Name="Ribbon" Grid.Row="0"
+					   Background="{StaticResource BackgroundBrushKey}"
+					   BorderBrush="{StaticResource BorderBrushKey}"
+					   Foreground="{StaticResource ForegroundBrushKey}">
+			<!--Main Menu-->
+			<ribbon:Ribbon.ApplicationMenu>
+				<ribbon:RibbonApplicationMenu Background="{StaticResource Background2BrushKey}">
+					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.NewProject}"
+													  Command="New"
+													  ImageSource="..\Images\Ribbon\NewImage.png"/>
+					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.OpenProject}"
+													  Command="Open"
+													  ImageSource="..\Images\Ribbon\OpenImage.png"/>
+					<ribbon:RibbonSeparator/>
+					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveProject}"
+													  Command="Save"
+													  ImageSource="..\Images\Ribbon\SaveImage.png"/>
+					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveAsProject}"
+													  Command="SaveAs"
+													  ImageSource="..\Images\Ribbon\SaveImage.png">
+					</ribbon:RibbonApplicationMenuItem>
+					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.ExportProject}"
+													  Command="{StaticResource Export}"
+													  ImageSource="..\Images\Ribbon\SaveImage.png">
+						<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveAsPdf}"
+														  Command="{StaticResource SaveAsPdf}"
+														  ImageSource="..\Images\Ribbon\SaveAsPngImage.png"
+														  />
+						<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.SaveAsSvg}"
+														  Command="{StaticResource SaveAsSvg}"
+														  ImageSource="..\Images\Ribbon\SaveAsSvgImage.png"/>
+					</ribbon:RibbonApplicationMenuItem>
+					<ribbon:RibbonSeparator/>
+					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.CloseProject}"
+													  Command="{StaticResource CloseProject}"
+													  ImageSource="..\Images\Ribbon\CloseImage.png"/>
+					<ribbon:RibbonSeparator/>
+					<ribbon:RibbonApplicationMenuItem Header="{x:Static p:Resources.Exit}"
+													  Command="Close"
+													  ImageSource="..\Images\Ribbon\ExitImage.png"/>
+				</ribbon:RibbonApplicationMenu>
+			</ribbon:Ribbon.ApplicationMenu>
+			<!--Tab Main-->
+			<ribbon:RibbonTab x:Name="TabMain"
+							  Header="Главная">
+				<ribbon:RibbonGroup Header="Вид"
+									LargeImageSource="..\Images\Ribbon\DispatcherImage.png">
+					<!--Упразднена до лучших времён
+					<ribbon:RibbonToggleButton x:Name="ButtonViewShowPropsPanel"
+											   Label="Показать свойства"
+											   Command="{StaticResource ShowProps}"
+											   LargeImageSource="..\Images\Ribbon\ShowPropsImage.png"/>
+					-->
+					<!-- Упразднена в связи введением грида
+					<ribbon:RibbonToggleButton x:Name="DispatcherPanelButton"
+											   Label="{x:Static p:Resources.DispatcherLabel}"
+											   Command="{StaticResource ShowDispatcherKey}"
+											   LargeImageSource="..\Images\Ribbon\DispatcherImage.png"/>-->
+					<ribbon:RibbonButton x:Name="ZoomInButton"
+										 Label="{x:Static p:Resources.ZoomInLabel}"
+										 Command="{StaticResource ZoomInCommandKey}"
+										 LargeImageSource="..\Images\Ribbon\ZoomIn.png"
+										 SmallImageSource="..\Images\Ribbon\SmallZoomIn.png"/>
+					<ribbon:RibbonButton x:Name="ZoomOutButton"
+										 Label="{x:Static p:Resources.ZoomOutLabel}"
+										 Command="{StaticResource ZoomOutCommandKey}"
+										 LargeImageSource="..\Images\Ribbon\ZoomOut.png"
+										 SmallImageSource="..\Images\Ribbon\SmallZoomOut.png"/>
+				</ribbon:RibbonGroup>
+				<ribbon:RibbonGroup Header="{x:Static p:Resources.NodesLabel}"
+									LargeImageSource="..\Images\Ribbon\Rename.png">
+					<ribbon:RibbonButton x:Name="RenameNodeButton"
+										 Command="{StaticResource RenameNodeKey}"
+										 Label="{x:Static p:Resources.ChangeNodeTextLabel}"
+										 LargeImageSource="..\Images\Ribbon\Rename.png"/>
+					<ribbon:RibbonButton x:Name="DeleteNodeButton"
+										 Command="{StaticResource DeleteNodeKey}"
+										 Label="{x:Static p:Resources.DeleteNodeLabel}"
+										 LargeImageSource="..\Images\Ribbon\Delete.png"/>
+				</ribbon:RibbonGroup>
+				<ribbon:RibbonGroup x:Name="LinksGroup"
+									Header="{x:Static p:Resources.LinksLabel}"
+									LargeImageSource="..\Images\Ribbon\LinkTypeImage.png">
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsALabel}"
+											  SmallImageSource="..\Images\Links\IsAArrow.png"
+											  Command="{StaticResource SetLinkTypeKey}"
+											  CommandParameter="{x:Static p:Resources.IsALabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.AgentLabel}"
+											  SmallImageSource="..\Images\Links\AgentArrow.png"
+											  Command="{StaticResource SetLinkTypeKey}"
+											  CommandParameter="{x:Static p:Resources.AgentLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.RecipientLabel}"
+											  SmallImageSource="..\Images\Links\RecipientArrow.png"
+											  Command="{StaticResource SetLinkTypeKey}"
+											  CommandParameter="{x:Static p:Resources.RecipientLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.FollowLabel}"
+											  SmallImageSource="..\Images\Links\FollowArrow.png"
+											  Command="{StaticResource SetLinkTypeKey}"
+											  CommandParameter="{x:Static p:Resources.FollowLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.GoalLabel}"
+											  SmallImageSource="..\Images\Links\GoalArrow.png"
+											  Command="{StaticResource SetLinkTypeKey}"
+											  CommandParameter="{x:Static p:Resources.GoalLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.LocativeLabel}"
+											  SmallImageSource="..\Images\Links\LocativeArrow.png"
+											  Command="{StaticResource SetLinkTypeKey}"
+											  CommandParameter="{x:Static p:Resources.LocativeLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsInstanceLabel}"
+											  SmallImageSource="..\Images\Links\IsInstanceArrow.png"
+											  Command="{StaticResource SetLinkTypeKey}"
+											  CommandParameter="{x:Static p:Resources.IsInstanceLabel}"/>
+					<ribbon:RibbonButton x:Name="DeleteLinkButton"
+										 Command="{StaticResource DeleteLinkKey}"
+										 Label="{x:Static p:Resources.DeleteLinkLabel}"
+										 LargeImageSource="..\Images\Ribbon\Delete.png"/>
+				</ribbon:RibbonGroup>
+				<ribbon:RibbonGroup Header="Консультация"
+									LargeImageSource="..\Images\Ribbon\ConsultImage.png">
+					<ribbon:RibbonButton x:Name="ConsultButton"
+										 Label="{x:Static p:Resources.ConsultStartLabel}"
+										 Command="{StaticResource StartConsultKey}"
+										 LargeImageSource="..\Images\Ribbon\ConsultImage.png"/>
+				</ribbon:RibbonGroup>
+			</ribbon:RibbonTab>
+		</ribbon:Ribbon>
+		<!--Content-->
+		<!--
+		<DockPanel x:Name="DockContent" Grid.Row="1">
+			<controls:PropsPanel x:Name="PanelProps"
+								 VerticalAlignment="Stretch"
+								 HorizontalAlignment="Left"
+								 Visibility="Collapsed"
+								 Margin="5">
+			</controls:PropsPanel>-->
+		<Grid Grid.Row="1" x:Name="ContentGrid">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="250"/>
+				<ColumnDefinition Width="Auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<controls:CtrlObjectDispatcher x:Name="DispatcherPanel"
+										   VerticalAlignment="Stretch" 
+										   Width="{Binding Source=ElementName, Path=Width}"
+										   Margin="5,5,11,5"
+										   Grid.Column="0"/>
+			<GridSplitter Width="6"
+						  HorizontalAlignment="Center"
+						  Margin="0,5,0,5"
+						  Background="{StaticResource BackgroundBrushKey}"
+						  IsTabStop="False"
+						  Grid.Column="1"/>
+			<Border Style="{StaticResource BorderStyleKey}" Margin="5"
+					Grid.Column="2">
+				<ScrollViewer x:Name="ScrollDiagram"
+						  HorizontalScrollBarVisibility="Auto"
+						  VerticalScrollBarVisibility="Auto"
+						  MouseWheel="DiagramNetwork_MouseWheel"
+						  KeyDown="ScrollDiagram_KeyDown">
+					<!--<diag:Diagram x:Name="DiagramNetwork"
+								  DockPanel.Dock="Right"
+								  VerticalAlignment="Stretch"
+								  HorizontalAlignment="Stretch"
+								  Margin="5"
+								  Behavior="LinkShapes"
+								  DefaultShape="Ellipse"
+								  ZoomFactor="100"
+								  AutoResize="AllDirections"
+								  HorizontalContentAlignment="Stretch"
+								  VerticalContentAlignment="Stretch"
+								  BackBrush="{StaticResource DefaultBackBrush}"
+								  MouseWheel="DiagramNetwork_MouseWheel"
+								  NodeSelected="DiagramNetwork_NodeSelected"
+								  NodeDeselected="DiagramNetwork_NodeDeselected"
+								  NodeDeleted="DiagramNetwork_NodeDeleted"
+								  NodeCreated="DiagramNetwork_NodeCreated"
+								  LinkSelected="DiagramNetwork_LinkSelected"
+								  LinkDeselected="DiagramNetwork_LinkDeselected"
+								  LinkDeleted="DiagramNetwork_LinkDeleted"
+								  LinkCreated="DiagramNetwork_LinkCreated"
+								  DelKeyAction="DeleteSelectedItems"
+								  SelectionChanged="DiagramNetwork_SelectionChanged"
+								  AllowInplaceEdit="False"
+								  InplaceEditAcceptOnEnter="True"
+								  AutoScroll="True"
+								  ContextMenu="{StaticResource DiagramContextMenu}"
+								  Visibility="Hidden">
+					</diag:Diagram>-->
+					<c:Diagram x:Name="NetworkVisual"
+							   DockPanel.Dock="Right"
+							   VerticalAlignment="Stretch"
+							   HorizontalAlignment="Stretch"
+							   Margin="5">
+					</c:Diagram>
+							   
+				</ScrollViewer>
+			</Border>
+		</Grid>
+	</Grid>
+</ribbon:RibbonWindow>

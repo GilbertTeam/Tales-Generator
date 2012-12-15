@@ -569,7 +569,7 @@ namespace TalesGenerator.ConsoleTest
 									//baseFunctionNode.Agents
 
 									NetworkNode agentNode = baseFunctionNode.Agents.First();
-									bool found = false;
+									//bool found = false;
 
 									NetworkEdge isAEdge = agentNode.IncomingEdges.GetEdge(NetworkEdgeType.IsA);
 									//NetworkEdge 
