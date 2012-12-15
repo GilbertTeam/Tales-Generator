@@ -186,21 +186,24 @@ namespace TalesGenerator.UI.Classes
 
 		void UpdateDiagramStyle()
 		{
-			foreach (var node in _diagram.Nodes)
+			using (DiagramUpdateLock locker = new DiagramUpdateLock(_diagram))
 			{
-				var networkNode = _network.FindById(Convert.ToInt32(node.UserData)) as NetworkNode;
-				if (networkNode != null)
+				foreach (var node in _diagram.Nodes)
 				{
-					NodeAdded(node, networkNode);
+					var networkNode = _network.FindById(Convert.ToInt32(node.UserData)) as NetworkNode;
+					if (networkNode != null)
+					{
+						NodeAdded(node, networkNode);
+					}
 				}
-			}
 
-			foreach (var edge in _diagram.Edges)
-			{
-				var networkEdge = _network.Edges.FindById(Convert.ToInt32(edge.UserData)) as NetworkEdge;
-				if (networkEdge != null)
+				foreach (var edge in _diagram.Edges)
 				{
-					LinkAdded(edge, networkEdge);
+					var networkEdge = _network.Edges.FindById(Convert.ToInt32(edge.UserData)) as NetworkEdge;
+					if (networkEdge != null)
+					{
+						LinkAdded(edge, networkEdge);
+					}
 				}
 			}
 		}

@@ -67,7 +67,10 @@ namespace Gt.Controls.Diagramming
 			if (xDiag == null)
 				return;
 
-			LoadFromXElement(xDiag);
+			using (DiagramUpdateLock locker = new DiagramUpdateLock(_diagram))
+			{
+				LoadFromXElement(xDiag);
+			}
 		}
 
 		public void SaveToXElement(XElement xDiag)
