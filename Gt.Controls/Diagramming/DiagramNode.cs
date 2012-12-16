@@ -41,6 +41,7 @@ namespace Gt.Controls.Diagramming
 			: base(diagram)
 		{
 			_label = new DiagramLabel(diagram, this);
+			_label.NeedRecalc = true;
 
 			_edges = new DiagramItemCollection<DiagramEdge>(diagram);
 

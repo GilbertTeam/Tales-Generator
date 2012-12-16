@@ -98,8 +98,8 @@
 		</Style>
 		
 		<!-- Node default style -->
-		
-		<SolidColorBrush x:Key="DefaultNodeBackgorundBrush" Color="AntiqueWhite"/>
+
+		<SolidColorBrush x:Key="DefaultNodeBackgroundBrush" Color="AntiqueWhite"/>
 		<SolidColorBrush x:Key="DefaultNodeBorderBrush" Color="Black"/>
 		
 		<Pen x:Key="DefaultNodeBorderPen" Brush="{StaticResource DefaultNodeBorderBrush}" Thickness="2"/>

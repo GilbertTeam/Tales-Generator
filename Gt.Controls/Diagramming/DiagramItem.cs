@@ -56,6 +56,8 @@ namespace Gt.Controls.Diagramming
 			_drawer = null;
 			_geometry = null;
 			_border = null;
+
+			NeedRecalc = true;
 		}
 
 		#endregion
@@ -116,6 +118,8 @@ namespace Gt.Controls.Diagramming
 			get { return _geometry; }
 		}
 
+		internal bool NeedRecalc { get; set; }
+
 		#endregion
 
 		#region Methods
@@ -155,6 +159,10 @@ namespace Gt.Controls.Diagramming
 			if (item == null)
 				return;
 
+			item.NeedRecalc = true;
+			if (item.Label != null)
+				item.Label.NeedRecalc = true;
+
 			if (item.Diagram != null)
 				item.Diagram.InvalidateDiagram();
 		}
@@ -171,8 +179,13 @@ namespace Gt.Controls.Diagramming
 			if (drawer == null)
 				return;
 
+			if (NeedRecalc == false)
+				return;
+
 			_geometry = drawer.CalculateGeometry(this);
 			_border = drawer.CalculateBorder(this);
+
+			NeedRecalc = false;
 		}
 
 		public abstract void Draw(DrawingContext dc);

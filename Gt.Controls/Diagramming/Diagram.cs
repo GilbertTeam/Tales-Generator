@@ -419,7 +419,7 @@ namespace Gt.Controls.Diagramming
 
 		#endregion
 
-		#region Invalidating size
+		#region Recalcuation
 
 		public void InvalidateShapes()
 		{
@@ -438,6 +438,16 @@ namespace Gt.Controls.Diagramming
 		{
 			foreach (var node in Nodes)
 			{
+				if (node.NeedRecalc == true)
+				{
+					foreach (var edge in node.Edges)
+					{
+						edge.NeedRecalc = true;
+						if (edge.Label != null)
+							edge.Label.NeedRecalc = true;
+					}
+				}
+
 				node.CalculateGeometry();
 				if (node.Label != null)
 					node.Label.CalculateGeometry();
@@ -797,10 +807,28 @@ namespace Gt.Controls.Diagramming
 
 		public void ClearAll()
 		{
-			var diagramLock = new DiagramUpdateLock(this);
-			_nodes.Clear();
-			_edges.Clear();
-			_selection.Clear();
+			using (var diagramLock = new DiagramUpdateLock(this))
+			{
+				_nodes.Clear();
+				_edges.Clear();
+				_selection.Clear();
+			}
+		}
+
+		public void GoToItem(DiagramItem item)
+		{
+			if (item.Geometry == null)
+				return;
+
+			Point center = new Point((item.Geometry.Bounds.Left + item.Geometry.Bounds.Right) / 2, (item.Geometry.Bounds.Top + item.Geometry.Bounds.Bottom) / 2);
+			Rect viewport = Viewport;
+
+			center.X -= viewport.Width / 2;
+			center.Y -= viewport.Height / 2;
+
+			this.XViewOffset = -center.X;
+			this.YViewOffset = -center.Y;
+
 		}
 
 		#endregion

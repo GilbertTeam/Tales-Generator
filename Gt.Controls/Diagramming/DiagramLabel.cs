@@ -78,6 +78,7 @@ namespace Gt.Controls.Diagramming
 			_owner = owner;
 
 			BorderPen = new Pen(new SolidColorBrush(Colors.Transparent), 0);
+			AllowInPlaceEdit = true;
 		}
 
 		#endregion
@@ -145,6 +146,8 @@ namespace Gt.Controls.Diagramming
 			get { return _owner; }
 		}
 
+		public bool AllowInPlaceEdit { get; set; }
+
 		#endregion
 
 		#region Methods
@@ -208,6 +211,9 @@ namespace Gt.Controls.Diagramming
 
 		public void BeginEdit()
 		{
+			if (!AllowInPlaceEdit)
+				return;
+
 			DiagramTextBox textBox = new DiagramTextBox();
 
 			//ScaleTransform scaleTransform = new ScaleTransform(Diagram.Scale, Diagram.Scale);

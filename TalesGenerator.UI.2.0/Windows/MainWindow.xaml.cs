@@ -705,6 +705,8 @@ namespace TalesGenerator.UI.Windows
 					OnItemSelected(item);
 				}
 			}
+
+			OnSelectionChanged();
 		}
 
 		private void OnItemDeselected(DiagramItem item)
@@ -785,13 +787,12 @@ namespace TalesGenerator.UI.Windows
 
 			// TODO
 
-			//_updatingDiagramSelection = true;
-			//this.DiagramNetwork.Selection.Clear();
-			//DiagramItem item = Utils.FindItemByUid(DiagramNetwork, id);
-			//item.Selected = true;
-			//DiagramNetwork.ScrollTo(new Point(item.GetBounds().X - DiagramNetwork.Viewport.Width / 2,
-			//    item.GetBounds().Y - DiagramNetwork.Viewport.Height / 2));
-			//_updatingDiagramSelection = false;
+			_updatingDiagramSelection = true;
+			NetworkVisual.Selection.Clear();
+			DiagramItem item = Utils.FindItemByUserData(NetworkVisual, id);
+			NetworkVisual.Selection.Add(item);
+			NetworkVisual.GoToItem(item);
+			_updatingDiagramSelection = false;
 		}
 
 		#endregion
@@ -938,31 +939,16 @@ namespace TalesGenerator.UI.Windows
 			return true;
 		}
 
-		private void StartEdit(DiagramNode node)
-		{
-			//Network network = _project.Network;
-			//if (network == null)
-			//    return;
-
-			//NetworkNode netNode = network.Nodes.FindById(Int32.Parse(node.Uid));
-
-			//DiagramNodeEx nodeEx = new DiagramNodeEx(node, netNode);
-
-			//DiagramNetwork.BeginEdit(nodeEx);
-		}
-
 		protected void DoZoom(bool direction)
 		{
-			//try
-			//{
-			//    if (direction)
-			//    {
-			//        DiagramNetwork.ZoomOut();
-			//        ResizeDiagram();
-			//    }
-			//    else DiagramNetwork.ZoomIn();
-			//}
-			//catch { }
+			if (direction)
+			{
+				NetworkVisual.ZoomIn();
+			}
+			else
+			{
+				NetworkVisual.ZoomOut();
+			}
 		}
 
 		#endregion

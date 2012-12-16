@@ -59,65 +59,6 @@ namespace TalesGenerator.UI.Classes
 			serializer.SaveToXDocument(xDoc);
 		}
 
-		/// <summary>
-		/// Сохранение диаграммы в элемент
-		/// </summary>
-		/// <param name="xEl"></param>
-		public void SaveToXElement(XElement xEl)
-		{
-			//xEl.Add(new XAttribute("Version", _version));
-
-			//XElement xDiagBounds = new XElement("Bounds");
-			//Utils.SaveRectToXElement(_diagram.Bounds, xDiagBounds);
-			//xEl.Add(xDiagBounds);
-
-			//XElement xDiagZoom = new XElement("ZoomFactor");
-			//xDiagZoom.Add(Convert.ToString(_diagram.ZoomFactor));
-			//xEl.Add(xDiagZoom);
-
-			//XElement xDiagScrollX = new XElement("ScrollX");
-			//xDiagScrollX.Add(Convert.ToString(_diagram.ScrollX, CultureInfo.InvariantCulture));
-			//xEl.Add(xDiagScrollX);
-
-			//XElement xDiagScrollY = new XElement("ScrollY");
-			//xDiagScrollY.Add(Convert.ToString(_diagram.ScrollY, CultureInfo.InvariantCulture));
-			//xEl.Add(xDiagScrollY);
-			
-			//XElement xNodes = new XElement("Nodes");
-			//foreach (ShapeNode node in _diagram.Nodes)
-			//{
-			//    XElement xNode = new XElement("ShapeNode");
-			//    xNode.Add(new XAttribute("Id", node.Uid));
-
-			//    XElement xBounds = new XElement("Bounds");
-			//    Utils.SaveRectToXElement(node.Bounds, xBounds);
-			//    xNode.Add(xBounds);
-
-			//    xNodes.Add(xNode);
-			//}
-			//xEl.Add(xNodes);
-
-			//XElement xLinks = new XElement("Links");
-			//foreach (DiagramLink link in _diagram.Links)
-			//{
-			//    XElement xLink = new XElement("DiagramLink");
-			//    xLink.Add(new XAttribute("Id", link.Uid));
-
-			//    XElement xPoints = new XElement("Points");
-			//    foreach (Point point in link.ControlPoints)
-			//    {
-			//        XElement xPoint = new XElement("Point");
-			//        Utils.SavePointToXElement(point, xPoint);
-			//        xPoints.Add(xPoint);
-			//    }
-
-			//    xLink.Add(xPoints);
-
-			//    xLinks.Add(xLink);
-			//}
-			//xEl.Add(xLinks);
-		}
-
 		public void LoadFromXDocument(XDocument xDoc, Network network)
 		{
 			Gt.Controls.Diagramming.DiagramSerializer serializer =
@@ -149,6 +90,13 @@ namespace TalesGenerator.UI.Classes
 				if (node.Bounds.Width == 0 || node.Bounds.Height == 0)
 				{
 					node.Bounds = new Rect(0, 0, 25, 25);
+				}
+				else
+				{
+					Rect nodeBounds = node.Bounds;
+					nodeBounds.Width = nodeBounds.Width + 20;
+					nodeBounds.Height = nodeBounds.Height + 12;
+					node.Bounds = nodeBounds;
 				}
 			}
 
@@ -219,62 +167,6 @@ namespace TalesGenerator.UI.Classes
 				}
 			}
 			return null;
-		}
-
-		public void LoadFromXElement(XElement xEl, Network network)
-		{
-			//_diagram.Bounds = Utils.LoadRectFromXElement(xEl.Element("Bounds"));
-			//_diagram.ZoomFactor = Convert.ToDouble(xEl.Element("ZoomFactor").Value);
-
-			//XElement xNodes = xEl.Element("Nodes");
-			//foreach (XElement xNode in xNodes.Elements("ShapeNode"))
-			//{
-			//    Rect rect = Utils.LoadRectFromXElement(xNode.Element("Bounds"));
-			//    ShapeNode node = _diagram.Factory.CreateShapeNode(rect);
-
-			//    int id = Int32.Parse(xNode.Attribute("Id").Value);
-			//    NetworkNode netNode = network.Nodes.FindById(id);
-
-			//    RaiseNodeAdded(node, netNode);
-			//}
-
-			//XElement xLinks = xEl.Element("Links");
-			////foreach (XElement xLink in xLinks.Elements("DiagramLink"))
-			////{
-			////    int linkId = Convert.ToInt32(xLink.Attribute("Id").Value);
-			////    NetworkEdge edge = network.Edges.FindById(linkId);
-
-			////    ShapeNode origin = Utils.FindItemByUserData(_diagram, edge.StartNode.Id);
-			////    ShapeNode destination = Utils.FindItemByUserData(_diagram, edge.EndNode.Id);
-
-			////    DiagramLink link = _diagram.Factory.CreateDiagramLink(origin, destination);
-			////    link.Uid = linkId.ToString();
-
-			////    link.ControlPoints.Clear();
-
-			////    XElement xPoints = xLink.Element("Points");
-			////    foreach (XElement xPoint in xPoints.Elements("Point"))
-			////    {
-			////        Point point = Utils.LoadPointFromXElement(xPoint);
-			////        link.ControlPoints.Add(point);
-			////    }
-
-			////    link.UpdateFromPoints();
-
-			////    RaiseLinkAdded(link, edge);
-				
-			////}
-
-			//XAttribute xVersion = xEl.Attribute("Version");
-			//if (xVersion != null)
-			//{
-			//    double version = Convert.ToDouble(xEl.Attribute("Version").Value, CultureInfo.InvariantCulture);
-			//    if (version == 2)
-			//    {
-			//        _diagram.ScrollX = Convert.ToDouble(xEl.Element("ScrollX").Value, CultureInfo.InvariantCulture);
-			//        _diagram.ScrollY = Convert.ToDouble(xEl.Element("ScrollY").Value, CultureInfo.InvariantCulture);
-			//    }
-			//}
 		}
 
 		protected void RaiseNodeAdded(DiagramNode node, NetworkObject obj)

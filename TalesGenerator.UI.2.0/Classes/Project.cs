@@ -265,31 +265,6 @@ namespace TalesGenerator.UI.Classes
 			node.Label.Text = netNode.Name;
 		}
 
-		void item_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			if (e.ClickCount == 2)
-			{
-				DiagramNode node = sender as DiagramNode;
-
-				StartEdit(node);
-
-				e.Handled = true;
-			}
-		}
-
-		public void StartEdit(DiagramNode node)
-		{
-			//Network network = this.Network;
-			//if (network == null)
-			//    return;
-
-			//NetworkNode netNode = network.Nodes.FindById(Int32.Parse(node.Uid));
-
-			//DiagramNodeEx nodeEx = new DiagramNodeEx(node, netNode);
-
-			//Diagram.BeginEdit(nodeEx);
-		}
-
 
 		public void LinkAdded(DiagramItem item, NetworkObject obj)
 		{

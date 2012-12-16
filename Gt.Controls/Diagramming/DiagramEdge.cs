@@ -55,6 +55,7 @@ namespace Gt.Controls.Diagramming
 			_destinationNode = null;
 
 			_label = new DiagramLabel(diagram, this);
+			_label.NeedRecalc = true;
 
 			if (!diagram.Edges.Contains(this))
 				diagram.Edges.Add(this);
