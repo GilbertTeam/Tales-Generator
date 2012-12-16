@@ -1,6 +1,8 @@
 ﻿using TalesGenerator.Net;
 using TalesGenerator.Net.Collections;
 using TalesGenerator.TaleNet.Collections;
+using System.Diagnostics.Contracts;
+using System;
 
 namespace TalesGenerator.TaleNet
 {
@@ -14,27 +16,52 @@ namespace TalesGenerator.TaleNet
 		/// <summary>
 		/// Запрет.
 		/// </summary>
-		Prohibition,
+		Interdiction,
 
 		/// <summary>
 		/// Отлучка старших.
 		/// </summary>
-		SeniorsDeparture,
+		Absentation,
 
 		/// <summary>
 		/// Нарушение запрета.
 		/// </summary>
-		ProhibitionViolation,
+		ViolationOfInterdiction,
 
 		/// <summary>
 		/// Вредительство.
 		/// </summary>
-		Sabotage,
+		Villainy,
 
 		/// <summary>
 		/// Сообщение беды.
 		/// </summary>
-		WoesPost
+		Mediation,
+
+		/// <summary>
+		/// Отправка на поиски.
+		/// </summary>
+		Departure,
+
+		/// <summary>
+		/// Встреча с испытателем.
+		/// </summary>
+		DonorMeeting,
+
+		/// <summary>
+		/// Испытание
+		/// </summary>
+		Test,
+
+		/// <summary>
+		/// Попытка пройти испытание.
+		/// </summary>
+		TestAttempt,
+
+		/// <summary>
+		/// Результат испытания.
+		/// </summary>
+		TestResult
 	}
 
 	public class FunctionNode : NetworkNode
@@ -49,9 +76,9 @@ namespace TalesGenerator.TaleNet
 
 		private readonly FunctionNodeActorCollection _recipientNodes;
 
-		private NetworkNode _templateNode;
+		//private NetworkNode _templateNode;
 
-		private NetworkNode _actionNode;
+		//private NetworkNode _actionNode;
 		#endregion
 
 		#region Properties
@@ -80,27 +107,49 @@ namespace TalesGenerator.TaleNet
 		{
 			get
 			{
-				return _templateNode != null ? _templateNode.Name : null;
+				NetworkEdge templateEdge = OutgoingEdges.GetEdge(NetworkEdgeType.Template, true);
+
+				return templateEdge != null ? templateEdge.EndNode.Name : null;
 			}
 			set
 			{
-				UpdateContextNode(ref _templateNode, NetworkEdgeType.Template, value);
+				UpdateContextNode(NetworkEdgeType.Template, value);
 
 				OnPropertyChanged("Template");
 			}
 		}
 
-		public string Action
+		//public string Action
+		//{
+		//    get
+		//    {
+		//        NetworkEdge actionEdge = OutgoingEdges.GetEdge(NetworkEdgeType.Action, true);
+
+		//        return actionEdge != null ? actionEdge.EndNode.Name : null;
+		//    }
+		//    set
+		//    {
+		//        UpdateContextNode(NetworkEdgeType.Action, value);
+
+		//        OnPropertyChanged("Action");
+		//    }
+		//}
+
+		public TaleItemNode Action
 		{
 			get
 			{
-				return _actionNode != null ? _actionNode.Name : null;
+				NetworkEdge actionEdge = OutgoingEdges.GetEdge(NetworkEdgeType.Action, true);
+
+				return actionEdge != null ? (TaleItemNode)actionEdge.EndNode : null;
 			}
+
 			set
 			{
-				UpdateContextNode(ref _actionNode, NetworkEdgeType.Action, value);
+				Contract.Requires<ArgumentNullException>(value != null);
+				Contract.Assume(OutgoingEdges.GetEdge(NetworkEdgeType.Action, false) == null);
 
-				OnPropertyChanged("Action");
+				Network.Edges.Add(this, value, NetworkEdgeType.Action);
 			}
 		}
 		#endregion
@@ -123,37 +172,48 @@ namespace TalesGenerator.TaleNet
 			_functionType = baseNode._functionType;
 			_agentNodes = new FunctionNodeActorCollection(this, NetworkEdgeType.Agent);
 			_recipientNodes = new FunctionNodeActorCollection(this, NetworkEdgeType.Recipient);
-			_templateNode = baseNode._templateNode;
-			_actionNode = baseNode._actionNode;
 		}
 		#endregion
 
 		#region Methods
 
-		private void UpdateContextNode(ref NetworkNode node, NetworkEdgeType edgeType, string value)
+		private void UpdateContextNode(NetworkEdgeType edgeType, string value)
 		{
-			if (value == null)
+			NetworkEdge networkEdge = OutgoingEdges.GetEdge(edgeType);
+
+			if (networkEdge == null)
 			{
-				NetworkEdge edge = OutgoingEdges.GetEdge(edgeType);
-
-				if (edge != null)
+				if (value != null)
 				{
-					Network.Edges.Remove(edge);
-				}
+					NetworkNode networkNode = Network.Nodes.Add(value);
+					Network.Edges.Add(this, networkNode, edgeType);
 
-				Network.Nodes.Remove(node);
-				node = null;
+					NetworkNode baseNode = null;
+
+					switch (edgeType)
+					{
+						case NetworkEdgeType.Action:
+							baseNode = ((TalesNetwork)Network).BaseAction;
+							break;
+
+						case NetworkEdgeType.Template:
+							baseNode = ((TalesNetwork)Network).BaseTemplate;
+							break;
+					}
+
+					Network.Edges.Add(networkNode, baseNode, NetworkEdgeType.IsA);
+				}
 			}
 			else
 			{
-				if (node == null)
+				if (value == null)
 				{
-					node = Network.Nodes.Add(value);
-					Network.Edges.Add(this, node, edgeType);
+					Network.Nodes.Remove(networkEdge.EndNode);
+					Network.Edges.Remove(networkEdge);
 				}
 				else
 				{
-					node.Name = value;
+					networkEdge.EndNode.Name = value;
 				}
 			}
 		}

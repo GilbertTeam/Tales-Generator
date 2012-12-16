@@ -12,12 +12,12 @@ namespace TalesGenerator.Text
 
 		private readonly char[] _punctuationChars =
 		{
-			'.', ',', ':', '!', '?', '-', '\"'
+			',', ':', '!', '?', '-', '\"'
 		};
 
 		private readonly char[] _specialChars =
 		{
-			'~'
+			'~', ':'
 		};
 
 		private readonly char[] _spaceChars =
@@ -28,6 +28,8 @@ namespace TalesGenerator.Text
 		private int _position;
 
 		private int _currentChar;
+
+		private bool _inTemplate;
 		#endregion
 
 		public Lexer(string source)
@@ -110,12 +112,36 @@ namespace TalesGenerator.Text
 
 			if (_currentChar == '{')
 			{
+				_inTemplate = true;
+
 				lexerResult = new LexerResult("{", TokenType.LeftBrace);
 				return true;
 			}
 			else if (_currentChar == '}')
 			{
+				_inTemplate = false;
+
 				lexerResult = new LexerResult("}", TokenType.RightBrace);
+				return true;
+			}
+			else if (_currentChar == '.')
+			{
+				lexerResult = new LexerResult(".", TokenType.Point);
+				return true;
+			}
+			else if (_currentChar == ':')
+			{
+				lexerResult = new LexerResult(":", TokenType.Colon);
+				return true;
+			}
+			else if (_currentChar == '\"')
+			{
+				lexerResult = new LexerResult("\"", TokenType.Quotes);
+				return true;
+			}
+			else if (_inTemplate && IsSpecialChar(_currentChar))
+			{
+				lexerResult = new LexerResult(((char)_currentChar).ToString(), TokenType.SpecialSymbol);
 				return true;
 			}
 			else if (IsPunctuationChar(_currentChar))
@@ -123,30 +149,14 @@ namespace TalesGenerator.Text
 				lexerResult = new LexerResult(((char)_currentChar).ToString(), TokenType.Punctuation);
 				return true;
 			}
-			else if (IsSpecialChar(_currentChar))
-			{
-				lexerResult = new LexerResult(((char)_currentChar).ToString(), TokenType.SpecialSymbol);
-				return true;
-			}
 			else if (char.IsLetter((char)_currentChar))
 			{
-				StringBuilder stringBuilder = new StringBuilder(1024);
-				int peekChar = _currentChar;
-
-				while (true)
-				{
-					stringBuilder.Append((char)peekChar);
-					peekChar = PeekNextChar();
-
-					if ((peekChar == -1 || !char.IsLetter((char)peekChar)))
-					{
-						break;
-					}
-
-					ReadNextChar();
-				}
-
-				lexerResult = new LexerResult(stringBuilder.ToString(), TokenType.Word);
+				lexerResult = new LexerResult(((char)_currentChar).ToString(), TokenType.Letter);
+				return true;
+			}
+			else if (char.IsDigit((char)_currentChar))
+			{
+				lexerResult = new LexerResult(((char)_currentChar).ToString(), TokenType.Digit);
 				return true;
 			}
 

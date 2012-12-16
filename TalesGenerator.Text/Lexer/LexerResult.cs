@@ -4,10 +4,14 @@ namespace TalesGenerator.Text
 {
 	internal enum TokenType
 	{
-		Word,
 		Space,
+		Point,
 		Punctuation,
 		SpecialSymbol,
+		Letter,
+		Quotes,
+		Colon,
+		Digit,
 		LeftBrace,
 		RightBrace,
 		EndOfStream

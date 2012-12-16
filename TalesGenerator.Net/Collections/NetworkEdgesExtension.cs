@@ -37,7 +37,7 @@ namespace TalesGenerator.Net.Collections
 			{
 				List<NetworkEdge> result = new List<NetworkEdge>();
 
-				GetParentEdges(networkEdges, (edge) => { return edge.Type == edgeType; }, false, result);
+				GetParentEdges(networkEdges, (edge) => edge.Type == edgeType, false, result);
 
 				foundEdge = result.FirstOrDefault();
 			}
@@ -58,7 +58,7 @@ namespace TalesGenerator.Net.Collections
 			{
 				List<NetworkEdge> result = new List<NetworkEdge>();
 
-				GetParentEdges(networkEdges, (edge) => { return edge.Type == edgeType; }, true, result);
+				GetParentEdges(networkEdges, (edge) => edge.Type == edgeType, true, result);
 
 				foundEdges = result;
 			}

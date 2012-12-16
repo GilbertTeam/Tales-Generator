@@ -206,10 +206,11 @@ namespace TalesGenerator.Net
 				throw new SerializationException();
 			}
 
-			if (_startNode.OutgoingEdges.GetEdge(edgeType) != null)
-			{
-				throw new SerializationException();
-			}
+			//TODO Насколько понимаю, потеряло свою актуальность для таких типов дуг, как агент, реципиент и т.д.
+			//if (_startNode.OutgoingEdges.GetEdge(edgeType) != null)
+			//{
+			//    throw new SerializationException();
+			//}
 		}
 
 		public override string ToString()

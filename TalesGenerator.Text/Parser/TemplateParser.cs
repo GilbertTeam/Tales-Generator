@@ -7,6 +7,7 @@ using TalesGenerator.Core.Plugins;
 using TalesGenerator.Net;
 using TalesGenerator.Net.Collections;
 using TalesGenerator.Text.Plugins;
+using System.Diagnostics.Contracts;
 
 namespace TalesGenerator.Text
 {
@@ -16,21 +17,28 @@ namespace TalesGenerator.Text
 
 		private readonly TextAnalyzer _textAnalyzer;
 
-		private readonly List<TemplateToken> _context = new List<TemplateToken>();
+		private readonly List<List<TemplateToken>> _sentenceContext = new List<List<TemplateToken>>();
+
+		private List<TemplateToken> _currentSentence;
 
 		private ITemplateParserContext _parserContext;
 		#endregion
 
 		#region Properties
 
+		public IList<TemplateToken> CurrentSentence
+		{
+			get { return _currentSentence; }
+		}
+
 		public ITemplateParserContext ParserContext
 		{
 			get { return _parserContext; }
 		}
 
-		public IList<TemplateToken> Context
+		public TextAnalyzer TextAnalyzer
 		{
-			get { return _context; }
+			get { return _textAnalyzer; }
 		}
 		#endregion
 
@@ -45,62 +53,14 @@ namespace TalesGenerator.Text
 
 			_textAnalyzer = textAnalyzer;
 
-			//TODO Не уверен, что этот вызов должен быть здесь.
+			// TODO: Необходимо продумать логику загрузки плагинов для TemplateParser.
+			// Необходимо убедиться, в каком порядке загружаются плагины,
+			// т.к. это влияет на порядок их применения.
 			PluginManager.LoadPlugins<ITemplateParserPlugin>();
 		}
 		#endregion
 
 		#region Methods
-
-		private string ParseGrammemTemplate(string value, string grammem)
-		{
-			var results = _textAnalyzer.Lemmatize(value);
-			LemmatizeResult result = results.FirstOrDefault();
-
-			if (result == null)
-			{
-				throw new InvalidOperationException();
-			}
-
-			ulong grammemValue = ulong.Parse(grammem);
-
-			var texts = result.GetTextByGrammem((Grammem)grammemValue);
-
-			//TODO Возможно нужен exception в случае, если коллекция texts - пустая.
-			return texts.FirstOrDefault();
-		}
-
-		public string ParseGrammemMatch(Match match, string value, string baseWord = null, bool ignoreCase = false)
-		{
-			string text = string.Empty;
-
-			if (match.Groups[1].Success)
-			{
-				text = ParseGrammemTemplate(value, match.Groups[1].Value.Substring(1));
-			}
-			else if (baseWord != null)
-			{
-				text = ReconcileWord(value, baseWord);
-			}
-			else
-			{
-				text = value;
-			}
-
-			if (!ignoreCase)
-			{
-				if (char.IsUpper(match.Groups[0].Value, 0))
-				{
-					text = char.ToUpper(text[0]) + text.Substring(1);
-				}
-				else
-				{
-					text = char.ToLower(text[0]) + text.Substring(1);
-				}
-			}
-
-			return text;
-		}
 
 		private TemplateParserResult ParseTemplateItem(string templateItem)
 		{
@@ -120,73 +80,6 @@ namespace TalesGenerator.Text
 			return result;
 		}
 
-		private string ParseWord(string word)
-		{
-			string text = word;
-			var results = _textAnalyzer.Lemmatize(word);
-			LemmatizeResult result = results.FirstOrDefault();
-
-			if (result != null)
-			{
-				PartOfSpeech partOfSpeech = result.GetPartOfSpeech();
-
-				switch (partOfSpeech)
-				{
-					case PartOfSpeech.NOUN:
-					{
-						TemplateToken predicate = _context.FirstOrDefault(token => token.PartOfSentence == PartOfSentence.Predicate);
-
-						//TODO Пока предполагается, что подлежащее указывается раньше сказуемого.
-						//Поэтому следующее условие говорит о том, что слово - подлежащее.
-						if (predicate == null)
-						{
-							_context.Add(new TemplateToken(word, word, PartOfSentence.Subject));
-							//TODO Возможно, необходимо переводить слово в именительный падеж.
-							//text = word;
-						}
-						else
-						{
-							_context.Add(new TemplateToken(word, word, PartOfSentence.Object));
-							//var texts = result.GetTextByGrammem(Grammem.Accusativ);
-							//text = texts.FirstOrDefault();
-						}
-
-						break;
-					}
-
-					case PartOfSpeech.VERB:
-					case PartOfSpeech.INFINITIVE:
-					{
-						_context.Add(new TemplateToken(word, word, PartOfSentence.Predicate));
-						//Token subject = _context.FirstOrDefault(token => token.PartOfSentence == PartOfSentence.Subject);
-
-						//if (subject != null)
-						//{
-						//    text = ReconcileWord(word, subject.Text);
-						//}
-						//else
-						//{
-						//    text = word;
-						//}
-
-						break;
-					}
-
-					default:
-						//throw new NotImplementedException();
-						text = word;
-						break;
-				}
-			}
-
-			if (string.IsNullOrEmpty(text))
-			{
-				text = word;
-			}
-
-			return text;
-		}
-
 		private TemplateParserResult ParseNode(NetworkNode networkNode)
 		{
 			NetworkNode templateNode = networkNode.OutgoingEdges.GetEdge(NetworkEdgeType.Template, true).EndNode;
@@ -196,16 +89,44 @@ namespace TalesGenerator.Text
 			StringBuilder stringBuilder = new StringBuilder(1024);
 			List<NetworkEdgeType> unresolvedContext = new List<NetworkEdgeType>();
 
+			_currentSentence = new List<TemplateToken>();
+
 			while (lexer.GetNextToken(out lexerResult))
 			{
 				switch (lexerResult.Type)
 				{
-					case TokenType.Word:
+					case TokenType.Letter:
 						stringBuilder.Append(lexerResult.Token);
+						break;
+
+					case TokenType.Colon:
+						stringBuilder.Append(lexerResult.Token);
+
+						while (lexer.GetNextToken(out lexerResult) &&
+							lexerResult.Type == TokenType.Space)
+						{
+							stringBuilder.Append(lexerResult.Token);
+						}
+
+						if (lexerResult.Type == TokenType.Quotes)
+						{
+							Contract.Assume(_currentSentence != null);
+							_sentenceContext.Add(_currentSentence);
+							_currentSentence = new List<TemplateToken>();
+							stringBuilder.Append(lexerResult.Token);
+						}
 						break;
 
 					case TokenType.Space:
 					case TokenType.Punctuation:
+						stringBuilder.Append(lexerResult.Token);
+						break;
+
+					case TokenType.Point:
+					case TokenType.EndOfStream:
+						Contract.Assume(_currentSentence != null);
+						_sentenceContext.Add(_currentSentence);
+						_currentSentence = new List<TemplateToken>();
 						stringBuilder.Append(lexerResult.Token);
 						break;
 
@@ -248,47 +169,50 @@ namespace TalesGenerator.Text
 
 		public string ReconcileWord(string word, Grammem grammem)
 		{
-			var results = _textAnalyzer.Lemmatize(word);
-			LemmatizeResult result = results.FirstOrDefault();
+			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(word));
+			Contract.Ensures(!string.IsNullOrEmpty(Contract.Result<string>()));
 
-			if (result == null)
+			string resultWord = word;
+			LemmatizeResult result = _textAnalyzer.Lemmatize(word).FirstOrDefault();
+
+			if (result != null)
 			{
-				throw new InvalidOperationException();
+				string text = result.GetTextByGrammem(grammem).FirstOrDefault();
+
+				if (!string.IsNullOrEmpty(text))
+				{
+					resultWord = text.ToLower();
+				}
 			}
 
-			string text = result.GetTextByGrammem(grammem).FirstOrDefault();
-
-			if (string.IsNullOrEmpty(text))
-			{
-				return word;
-			}
-			else
-			{
-				return text.ToLower();
-			}
+			return resultWord;
 		}
 
 		public string ReconcileWord(string word, string baseWord)
 		{
-			var results = _textAnalyzer.Lemmatize(baseWord);
-			LemmatizeResult result = results.FirstOrDefault();
+			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(word));
+			Contract.Ensures(!string.IsNullOrEmpty(Contract.Result<string>()));
 
-			if (result == null)
+			LemmatizeResult result = _textAnalyzer.Lemmatize(baseWord).FirstOrDefault();
+
+			if (result != null)
 			{
-				throw new InvalidOperationException();
+				//TODO В случае если baseGrammem == 0, необходимо брать граммему из контекста.
+				Grammem baseGrammem = result.GetGrammem();
+				Grammem resultGrammem =
+					  baseGrammem & Grammem.Plural
+					| baseGrammem & Grammem.Singular
+					| baseGrammem & Grammem.Masculinum
+					| baseGrammem & Grammem.Feminum
+					| baseGrammem & Grammem.Neutrum
+					| baseGrammem & Grammem.MascFem;
+
+				return ReconcileWord(word, resultGrammem);
 			}
-
-			//TODO В случае если baseGrammem == 0, необходимо брать граммему из контекста.
-			Grammem baseGrammem = result.GetGrammem();
-			Grammem resultGrammem =
-				  baseGrammem & Grammem.Plural
-				| baseGrammem & Grammem.Singular
-				| baseGrammem & Grammem.Masculinum
-				| baseGrammem & Grammem.Feminum
-				| baseGrammem & Grammem.Neutrum
-				| baseGrammem & Grammem.MascFem;
-
-			return ReconcileWord(word, resultGrammem);
+			else
+			{
+				return word;
+			}
 		}
 
 		public TemplateParserResult Parse(NetworkNode networkNode)
@@ -299,7 +223,8 @@ namespace TalesGenerator.Text
 			}
 
 			_parserContext = new TemplateParserNodeContext(networkNode);
-			_context.Clear();
+			_currentSentence = null;
+			_sentenceContext.Clear();
 
 			return ParseNode(networkNode);
 		}
@@ -316,7 +241,8 @@ namespace TalesGenerator.Text
 			}
 
 			_parserContext = parserContext;
-			_context.Clear();
+			_currentSentence = null;
+			_sentenceContext.Clear();
 
 			return ParseNode(networkNode);
 		}

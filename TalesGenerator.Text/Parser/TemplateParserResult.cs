@@ -8,8 +8,14 @@ namespace TalesGenerator.Text
 	{
 		#region Properties
 
+		/// <summary>
+		/// Результирующий текст.
+		/// </summary>
 		public string Text { get; private set; }
 
+		/// <summary>
+		/// Падежи, которые не удалось найти.
+		/// </summary>
 		public IEnumerable<NetworkEdgeType> UnresolvedContext { get; private set; }
 		#endregion
 

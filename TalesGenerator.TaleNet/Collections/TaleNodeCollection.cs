@@ -25,6 +25,8 @@ namespace TalesGenerator.TaleNet.Collections
 
 			TaleNode taleNode = new TaleNode((TalesNetwork)Network, name);
 
+			Network.Edges.Add(taleNode, ((TalesNetwork)Network).BaseTale, Net.NetworkEdgeType.IsA);
+
 			Add(taleNode);
 
 			return taleNode;

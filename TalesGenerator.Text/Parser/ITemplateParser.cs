@@ -8,9 +8,11 @@ namespace TalesGenerator.Text
 	{
 		#region Properties
 
+		IList<TemplateToken> CurrentSentence { get; }
+
 		ITemplateParserContext ParserContext { get; }
 
-		IList<TemplateToken> Context { get; }
+		TextAnalyzer TextAnalyzer { get; }
 		#endregion
 
 		#region Methods
@@ -30,8 +32,6 @@ namespace TalesGenerator.Text
 		/// <param name="baseWord">Слово, в соответствии с формой которого будет выполнено согласование.</param>
 		/// <returns>Согласованная форма слова.</returns>
 		string ReconcileWord(string word, string baseWord);
-
-		string ParseGrammemMatch(Match match, string value, string baseWord = null, bool ignoreCase = false);
 
 		TemplateParserResult Parse(NetworkNode networkNode);
 		#endregion

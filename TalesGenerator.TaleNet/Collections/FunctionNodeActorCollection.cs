@@ -7,7 +7,7 @@ using TalesGenerator.Net.Collections;
 namespace TalesGenerator.TaleNet.Collections
 {
 	//TODO Скорее всего нужно будет переделать на TaleNode.
-	public class FunctionNodeActorCollection : NetworkObjectCollection<NetworkNode>
+	public class FunctionNodeActorCollection : NetworkObjectCollection<TaleItemNode>
 	{
 		#region Fields
 
@@ -28,7 +28,7 @@ namespace TalesGenerator.TaleNet.Collections
 
 		#region Methods
 
-		public override void Add(NetworkNode actorNode)
+		public override void Add(TaleItemNode actorNode)
 		{
 			if (actorNode == null)
 			{
@@ -40,7 +40,7 @@ namespace TalesGenerator.TaleNet.Collections
 			base.Add(actorNode);
 		}
 
-		public override bool Remove(NetworkNode actorNode)
+		public override bool Remove(TaleItemNode actorNode)
 		{
 			if (actorNode == null)
 			{
@@ -57,26 +57,21 @@ namespace TalesGenerator.TaleNet.Collections
 			return base.Remove(actorNode);
 		}
 
-		public void Add(params NetworkNode[] actorNodes)
+		public void Add(params TaleItemNode[] actorNodes)
 		{
-			NetworkObjectCollection<NetworkNode> networkObjectCollection = (NetworkObjectCollection<NetworkNode>)this;
-
-			foreach (NetworkNode actorNode in actorNodes)
-			{
-				networkObjectCollection.Add(actorNode);
-			}
+			Add((IEnumerable<TaleItemNode>)actorNodes);
 		}
 
-		public void Add(IEnumerable<NetworkNode> actorNodes)
+		public void Add(IEnumerable<TaleItemNode> actorNodes)
 		{
 			if (actorNodes == null)
 			{
 				throw new ArgumentNullException("actorNodes");
 			}
 
-			foreach (NetworkNode actorNode in actorNodes)
+			foreach (TaleItemNode actorNode in actorNodes)
 			{
-				Add(actorNode);
+				((NetworkObjectCollection<TaleItemNode>)this).Add(actorNode);
 			}
 		}
 		#endregion

@@ -1,4 +1,6 @@
-﻿using TalesGenerator.Net;
+﻿using System.Collections.Generic;
+using System.Linq;
+using TalesGenerator.Net;
 using TalesGenerator.TaleNet.Collections;
 
 namespace TalesGenerator.TaleNet
@@ -12,9 +14,17 @@ namespace TalesGenerator.TaleNet
 
 		#region Properties
 
-		public TaleFunctionNodeCollection FunctionNodes
+		public TaleFunctionNodeCollection Functions
 		{
 			get { return _functionNodes; }
+		}
+
+		public IEnumerable<FunctionType> Scenario
+		{
+			get
+			{
+				return _functionNodes.Select(functionNode => functionNode.FunctionType);
+			}
 		}
 		#endregion
 

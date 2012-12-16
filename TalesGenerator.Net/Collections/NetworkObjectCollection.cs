@@ -122,6 +122,10 @@ namespace TalesGenerator.Net.Collections
 			{
 				throw new ArgumentNullException("item");
 			}
+			if (_items.Contains(item))
+			{
+				throw new ArgumentException("item");
+			}
 
 			item.PropertyChanged += NetworkObjectOnPropertyChanged;
 
