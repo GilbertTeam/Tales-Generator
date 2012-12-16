@@ -215,6 +215,18 @@ namespace TalesGenerator.UI.Classes
 				edge.Label.FontWeight = FontWeights.Bold;
 			}
 		}
+
+		public static MindFusion.Diagramming.Wpf.ShapeNode FindMfNode(MindFusion.Diagramming.Wpf.Diagram mfDiagram, string p)
+		{
+			foreach (MindFusion.Diagramming.Wpf.ShapeNode node in mfDiagram.Nodes)
+			{
+				if (node.Uid == p)
+				{
+					return node;
+				}
+			}
+			return null;
+		}
 	}
 
 	#region ValueConverters

@@ -99,6 +99,9 @@
     <Compile Include="Windows\StringEditWindow.xaml.cs">
       <DependentUpon>StringEditWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\XmlEditWindow.xaml.cs">
+      <DependentUpon>XmlEditWindow.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\CtrlPropsPanel.xaml.cs">
@@ -159,6 +162,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\StringEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\XmlEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -240,6 +247,10 @@
     <Resource Include="Images\Links\LocativeArrow.png" />
     <Resource Include="Images\Links\ObjectArrow.png" />
     <Resource Include="Images\Links\RecipientArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ribbon\EditXml.png" />
+    <Resource Include="Images\Ribbon\Layout.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

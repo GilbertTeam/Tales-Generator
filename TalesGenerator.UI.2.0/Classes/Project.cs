@@ -181,6 +181,7 @@ namespace TalesGenerator.UI.Classes
 			diagSr.NodeAdded += new DiagramItemEventHandler(NodeAdded);
 			diagSr.LinkAdded += new DiagramItemEventHandler(LinkAdded);
 			diagSr.DiagramLoaded += new NotifyEventHandler(UpdateDiagramStyle);
+			diagSr.NeedBuildDiagram += new NotifyEventHandler(RebuildDiagram);
 			diagSr.LoadFromXDocument(xDoc, _network);
 		}
 
@@ -364,5 +365,97 @@ namespace TalesGenerator.UI.Classes
 		}
 
 		#endregion
+
+		public void RebuildDiagram()
+		{
+			_diagram.ClearAll();
+
+			using (DiagramUpdateLock updateLock = new DiagramUpdateLock(_diagram))
+			{
+				CreateVisual();
+
+				ArrangeVisual();
+			}
+		}
+
+		public void CreateVisual()
+		{
+			if (_network == null)
+				return;
+
+			foreach (var netNode in _network.Nodes)
+			{
+				DiagramNode node = new DiagramNode(_diagram);
+				NodeAdded(node, netNode);
+				node.Bounds = node.Label.Drawer.CalculateGeometry(node.Label).Bounds;
+				if (node.Bounds.Width == 0 || node.Bounds.Height == 0)
+				{
+					node.Bounds = new Rect(0, 0, 25, 25);
+				}
+				else
+				{
+					Rect nodeBounds = node.Bounds;
+					nodeBounds.Width = nodeBounds.Width + 20;
+					nodeBounds.Height = nodeBounds.Height + 12;
+					node.Bounds = nodeBounds;
+				}
+			}
+
+			foreach (var netEdge in _network.Edges)
+			{
+				var origin = Utils.FindItemByUserData(_diagram, netEdge.StartNode.Id) as DiagramNode;
+				var destination = Utils.FindItemByUserData(_diagram, netEdge.EndNode.Id) as DiagramNode;
+
+				var edge = new DiagramEdge(_diagram);
+				edge.AnchoringMode = EdgeAnchoringMode.NodeToNode;
+				edge.SourceNode = origin;
+				edge.DestinationNode = destination;
+
+				LinkAdded(edge, netEdge);
+			}
+		}
+
+		public void ArrangeVisual()
+		{
+			// хаки остались :)
+			MindFusion.Diagramming.Wpf.Diagram mfDiagram = new MindFusion.Diagramming.Wpf.Diagram();
+
+			foreach (var node in _diagram.Nodes)
+			{
+				MindFusion.Diagramming.Wpf.ShapeNode shapeNode = new MindFusion.Diagramming.Wpf.ShapeNode(mfDiagram);
+				shapeNode.Bounds = node.Bounds;
+				shapeNode.Uid = node.UserData;
+
+				mfDiagram.Nodes.Add(shapeNode);
+			}
+
+			foreach (var edge in _diagram.Edges)
+			{
+				if (edge.SourceNode == null || edge.DestinationNode == null)
+					continue;
+
+				MindFusion.Diagramming.Wpf.ShapeNode source = Utils.FindMfNode(mfDiagram, edge.SourceNode.UserData);
+				MindFusion.Diagramming.Wpf.ShapeNode dest = Utils.FindMfNode(mfDiagram, edge.DestinationNode.UserData);
+
+
+				mfDiagram.Links.Add(mfDiagram.Factory.CreateDiagramLink(source, dest));
+
+			}
+			MindFusion.Diagramming.Wpf.Layout.Layout layout = new MindFusion.Diagramming.Wpf.Layout.FractalLayout();
+
+			layout.Arrange(mfDiagram);
+
+			mfDiagram.ResizeToFitItems(50); // TODO create constant somewhere
+
+			//копируем обратно :)
+			foreach (MindFusion.Diagramming.Wpf.ShapeNode shapeNode in mfDiagram.Nodes)
+			{
+				DiagramNode node = Utils.FindItemByUserData(_diagram, Convert.ToInt32(shapeNode.Uid)) as DiagramNode;
+				if (node == null)
+					continue;
+
+				node.Bounds = shapeNode.Bounds;
+			}
+		}
 	}
 }

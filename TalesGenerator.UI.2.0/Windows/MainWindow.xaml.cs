@@ -27,6 +27,8 @@ using Gt.Controls.Diagramming;
 using Gt.Controls.Diagramming.NodeDrawers;
 using Gt.Controls.Diagramming.EdgeDrawers;
 
+using System.Xml.Linq;
+
 namespace TalesGenerator.UI.Windows
 {
 	/// <summary>
@@ -269,6 +271,49 @@ namespace TalesGenerator.UI.Windows
 		private void ZoomIn_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			this.DoZoom(false);
+		}
+
+
+
+		private void Layout_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _project != null && _project.Network != null;
+		}
+
+		private void Layout_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			ApplyLayout();
+		}
+
+		#endregion
+
+		#region Network Category
+
+		private void EditXml_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _project != null && _project.Network != null;
+		}
+
+		private void EditXml_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			string xml = _project.Network.SaveToXml().ToString();
+
+			XmlEditWindow wnd = new XmlEditWindow(xml);
+			bool? result = wnd.ShowDialog();
+			if (result == true)
+			{
+				_lockEdgeUpdate = true;
+				_lockNodeUpdate = true;
+				XDocument xDoc = XDocument.Parse(wnd.Result);
+
+				_project.Network = Network.LoadFromXml(xDoc);
+				_project.RebuildDiagram();
+
+				AssignNetwork();
+
+				_lockEdgeUpdate = false;
+				_lockNodeUpdate = false;
+			}
 		}
 
 		#endregion
@@ -948,6 +993,14 @@ namespace TalesGenerator.UI.Windows
 			else
 			{
 				NetworkVisual.ZoomOut();
+			}
+		}
+
+		protected void ApplyLayout()
+		{
+			using (DiagramUpdateLock locker = new DiagramUpdateLock(NetworkVisual))
+			{
+				_project.ArrangeVisual();
 			}
 		}
 

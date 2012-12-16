@@ -12,7 +12,9 @@
 					 WindowStartupLocation="CenterScreen"
 					 SizeChanged="RibbonWindow_SizeChanged"
 					 Closing="RibbonWindow_Closing"
-					 Icon="/TalesGenerator;component/AppIcon.ico" WindowStyle="SingleBorderWindow" WindowState="Maximized">
+					 Icon="/TalesGenerator;component/AppIcon.ico"
+					 WindowStyle="SingleBorderWindow"
+					 WindowState="Maximized">
 	
 	<Window.Resources>
 		<RoutedUICommand x:Key="CloseProject"/>
@@ -29,6 +31,8 @@
 		<RoutedUICommand x:Key="ZoomInCommandKey"/>
 		<RoutedUICommand x:Key="ZoomOutCommandKey"/>
 		<RoutedUICommand x:Key="StartEditCommandKey"/>
+		<RoutedUICommand x:Key="LayoutCommandKey"/>
+		<RoutedUICommand x:Key="EditXmlCommandKey"/>
 		<!--ContextMenu-->
 		<Style x:Key="ContextMenuLinkTypeStyle">
 			<Setter Property="MenuItem.IsCheckable" Value="True"/>
@@ -83,6 +87,10 @@
 						Executed="ZoomOut_Executed"/>
 		<CommandBinding Command="{StaticResource StartEditCommandKey}" CanExecute="StartEdit_CanExecute"
 						Executed="StartEdit_Executed"/>
+		<CommandBinding Command="{StaticResource LayoutCommandKey}" CanExecute="Layout_CanExecute"
+						Executed="Layout_Executed"/>
+		<CommandBinding Command="{StaticResource EditXmlCommandKey}" CanExecute="EditXml_CanExecute"
+						Executed="EditXml_Executed"/>
 	</Window.CommandBindings>
 	
 	<Grid x:Name="LayoutGrid" ShowGridLines="False">
@@ -159,6 +167,17 @@
 										 Command="{StaticResource ZoomOutCommandKey}"
 										 LargeImageSource="..\Images\Ribbon\ZoomOut.png"
 										 SmallImageSource="..\Images\Ribbon\SmallZoomOut.png"/>
+					<ribbon:RibbonButton x:Name="LayoutButton"
+										 Label="Применить раскладку"
+										 LargeImageSource="..\Images\Ribbon\Layout.png"
+										 Command="{StaticResource LayoutCommandKey}"/>
+				</ribbon:RibbonGroup>
+				<ribbon:RibbonGroup Header="Сеть"
+									LargeImageSource="..\Images\Ribbon\EditXml.png">
+					<ribbon:RibbonButton x:Name="EditXmlButton"
+										 Label="Редактировать XML"
+										 LargeImageSource="..\Images\Ribbon\EditXml.png"
+										 Command="{StaticResource EditXmlCommandKey}"/>
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="{x:Static p:Resources.NodesLabel}"
 									LargeImageSource="..\Images\Ribbon\Rename.png">
@@ -198,10 +217,10 @@
 											  SmallImageSource="..\Images\Links\LocativeArrow.png"
 											  Command="{StaticResource SetLinkTypeKey}"
 											  CommandParameter="{x:Static p:Resources.LocativeLabel}"/>
-					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsInstanceLabel}"
+					<!--<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsInstanceLabel}"
 											  SmallImageSource="..\Images\Links\IsInstanceArrow.png"
 											  Command="{StaticResource SetLinkTypeKey}"
-											  CommandParameter="{x:Static p:Resources.IsInstanceLabel}"/>
+											  CommandParameter="{x:Static p:Resources.IsInstanceLabel}"/>-->
 					<ribbon:RibbonButton x:Name="DeleteLinkButton"
 										 Command="{StaticResource DeleteLinkKey}"
 										 Label="{x:Static p:Resources.DeleteLinkLabel}"
