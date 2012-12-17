@@ -14,7 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using TalesGenerator.Net;
-using TalesGenerator.Net.Collections;
+using TalesGenerator.TaleNet;
+using TalesGenerator.TaleNet.Collections;
 using TalesGenerator.UI.Classes;
 using TalesGenerator.UI.Properties;
 using System.ComponentModel;
@@ -33,7 +34,7 @@ namespace TalesGenerator.UI.Controls
 
 		#region Contrsuctors
 
-		public NetworkContextMenu(Network network)
+		public NetworkContextMenu(TalesNetwork network)
 			: base()
 		{
 			Network = network;
@@ -45,7 +46,7 @@ namespace TalesGenerator.UI.Controls
 
 		#region Properties
 
-		public Network Network { get; set; }
+		public TalesNetwork Network { get; set; }
 
 		#endregion
 
@@ -62,7 +63,7 @@ namespace TalesGenerator.UI.Controls
 	{
 		#region Contrsuctors
 
-		public LinkContextMenu(Network network = null) : base(network)
+		public LinkContextMenu(TalesNetwork network = null) : base(network)
 		{
 		}
 
@@ -206,7 +207,7 @@ namespace TalesGenerator.UI.Controls
 	{
 		#region Contrsuctors
 
-		public NodeContextMenu(Network network = null) : base(network)
+		public NodeContextMenu(TalesNetwork network = null) : base(network)
 		{
 		}
 

@@ -14,7 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using TalesGenerator.Net;
-using TalesGenerator.Net.Collections;
+using TalesGenerator.TaleNet;
+using TalesGenerator.TaleNet.Collections;
 using TalesGenerator.UI.Classes;
 using TalesGenerator.UI.Properties;
 using System.ComponentModel;
@@ -66,7 +67,7 @@ namespace TalesGenerator.UI.Controls
 
 		List<TreeItemInfo> _infos;
 
-		Network _network;
+		TalesNetwork _network;
 
 		LinkContextMenu _linkMenu;
 
@@ -97,7 +98,7 @@ namespace TalesGenerator.UI.Controls
 
 		public bool InUpdate { get; set; }
 
-		public Network CurrentNetwork
+		public TalesNetwork CurrentNetwork
 		{
 			get { return _network; }
 			set

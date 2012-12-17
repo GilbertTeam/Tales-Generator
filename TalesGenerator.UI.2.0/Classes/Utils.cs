@@ -5,6 +5,7 @@ using System.Text;
 using System.Globalization;
 
 using TalesGenerator.Net;
+using TalesGenerator.TaleNet;
 using System.Windows.Data;
 using System.Windows;
 using System.Xml.Linq;

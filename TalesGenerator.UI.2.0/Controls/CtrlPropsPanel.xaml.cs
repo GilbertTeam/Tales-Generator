@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using TalesGenerator.Net;
+using TalesGenerator.TaleNet;
 using TalesGenerator.UI.Classes;
 
 namespace TalesGenerator.UI.Controls

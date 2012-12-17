@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-using System.Globalization;
 
 using TalesGenerator.Net;
+using TalesGenerator.TaleNet;
 
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Media;
-
-using Gt.Controls;
 using Gt.Controls.Diagramming;
 
 namespace TalesGenerator.UI.Classes
@@ -59,7 +51,7 @@ namespace TalesGenerator.UI.Classes
 			serializer.SaveToXDocument(xDoc);
 		}
 
-		public void LoadFromXDocument(XDocument xDoc, Network network)
+		public void LoadFromXDocument(XDocument xDoc, TalesNetwork network)
 		{
 			Gt.Controls.Diagramming.DiagramSerializer serializer =
 				new Gt.Controls.Diagramming.DiagramSerializer(_diagram);

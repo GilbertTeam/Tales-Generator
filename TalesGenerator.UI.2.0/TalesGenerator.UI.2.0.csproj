@@ -46,12 +46,6 @@
     <Reference Include="MindFusion.Diagramming.Wpf">
       <HintPath>..\Dlls\MindFusion\MindFusion.Diagramming.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="MindFusion.Diagramming.Wpf.PdfExport">
-      <HintPath>..\Dlls\MindFusion\MindFusion.Diagramming.Wpf.PdfExport.dll</HintPath>
-    </Reference>
-    <Reference Include="MindFusion.Diagramming.Wpf.SvgExport">
-      <HintPath>..\Dlls\MindFusion\MindFusion.Diagramming.Wpf.SvgExport.dll</HintPath>
-    </Reference>
     <Reference Include="RibbonControlsLibrary, Version=4.0.0.11019, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dlls\Ribbon\RibbonControlsLibrary.dll</HintPath>
@@ -178,6 +172,10 @@
     <ProjectReference Include="..\TalesGenerator.Net\TalesGenerator.Net.csproj">
       <Project>{E891914B-7804-4874-B084-027C2B3D59F8}</Project>
       <Name>TalesGenerator.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TalesGenerator.TaleNet\TalesGenerator.TaleNet.csproj">
+      <Project>{11F9FB60-1E60-4BB1-922E-1D39D7BA5404}</Project>
+      <Name>TalesGenerator.TaleNet</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

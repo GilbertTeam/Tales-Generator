@@ -17,6 +17,7 @@ using Microsoft.Windows.Controls.Ribbon;
 using Microsoft.Win32;
 
 using TalesGenerator.Net;
+using TalesGenerator.TaleNet;
 using TalesGenerator.UI.Classes;
 using TalesGenerator.UI.Properties;
 
@@ -60,10 +61,13 @@ namespace TalesGenerator.UI.Windows
 			_project = new Project();
 			_project.Diagram = NetworkVisual;
 			_project.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(_project_PropertyChanged);
+			_project.LockEdgeUpdate += new BoolNotifyEventHander(_project_LockEdgeUpdate);
 			_project.EdgeCreated += new DiagramItemEventHandler(_project_EdgeCreated);
+			_project.LockNodeUpdate += new BoolNotifyEventHander(_project_LockNodeUpdate);
 
 			NetworkVisual.IsEnabled = _project.Network != null;
 			NetworkVisual.DefaultNodeDrawer = new EllipseNodeDrawer();
+			NetworkVisual.DefaultEdgeDrawer = new ArrowEdgeDrawer();
 
 			NetworkVisual.Nodes.CollectionChanged += new NotifyCollectionChangedEventHandler(VisualNodes_CollectionChanged);
 			NetworkVisual.Edges.CollectionChanged += new NotifyCollectionChangedEventHandler(VisualEdges_CollectionChanged);
@@ -80,6 +84,16 @@ namespace TalesGenerator.UI.Windows
 			_lockNodeUpdate = false;
 
 			AssignNetwork();
+		}
+
+		void _project_LockEdgeUpdate(bool value)
+		{
+			_lockEdgeUpdate = value;
+		}
+
+		void _project_LockNodeUpdate(bool value)
+		{
+			_lockNodeUpdate = value;
 		}
 
 		void _project_EdgeCreated(DiagramItem item, NetworkObject obj)
@@ -108,9 +122,9 @@ namespace TalesGenerator.UI.Windows
 
 		private void New_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			_project.Network = new Network();
-			NetworkVisual.Nodes.Clear();
-			NetworkVisual.Edges.Clear();
+			_project.Network = new TalesNetwork();
+			NetworkVisual.ClearAll();
+			_project.RebuildDiagram();
 		}
 
 		private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -306,7 +320,7 @@ namespace TalesGenerator.UI.Windows
 				_lockNodeUpdate = true;
 				XDocument xDoc = XDocument.Parse(wnd.Result);
 
-				_project.Network = Network.LoadFromXml(xDoc);
+				_project.Network = TalesNetwork.LoadFromXml(xDoc) as TalesNetwork;
 				_project.RebuildDiagram();
 
 				AssignNetwork();
@@ -502,7 +516,7 @@ namespace TalesGenerator.UI.Windows
 			if (node == null)
 				return;
 
-			Network network = _project.Network;
+			TalesNetwork network = _project.Network;
 			NetworkNode netNode = network.Nodes.Add();
 
 			_project.NodeAdded(node, netNode);
@@ -514,7 +528,7 @@ namespace TalesGenerator.UI.Windows
 			if (node == null)
 				return;
 
-			Network network = _project.Network;
+			TalesNetwork network = _project.Network;
 			if (network == null)
 				return;
 
@@ -529,7 +543,7 @@ namespace TalesGenerator.UI.Windows
 			if (node == null)
 				return;
 
-			Network network = _project.Network;
+			TalesNetwork network = _project.Network;
 			if (network == null)
 				return;
 
@@ -560,7 +574,7 @@ namespace TalesGenerator.UI.Windows
 			if (node == null)
 				return;
 
-			Network network = _project.Network;
+			TalesNetwork network = _project.Network;
 			if (network == null)
 				return;
 
@@ -591,7 +605,7 @@ namespace TalesGenerator.UI.Windows
 				return;
 			}
 
-			Network network = _project.Network;
+			TalesNetwork network = _project.Network;
 			if (network == null)
 				return;
 
@@ -617,7 +631,7 @@ namespace TalesGenerator.UI.Windows
 			if (edge == null)
 				return;
 
-			Network network = _project.Network;
+			TalesNetwork network = _project.Network;
 			if (network == null)
 				return;
 
@@ -631,7 +645,7 @@ namespace TalesGenerator.UI.Windows
 			if (edge == null || edge.UserData == null)
 				return;
 
-			Network network = _project.Network;
+			TalesNetwork network = _project.Network;
 			if (network == null)
 				return;
 
@@ -651,7 +665,7 @@ namespace TalesGenerator.UI.Windows
 			if (edge == null)
 				return;
 
-			Network network = _project.Network;
+			TalesNetwork network = _project.Network;
 			if (network == null)
 				return;
 

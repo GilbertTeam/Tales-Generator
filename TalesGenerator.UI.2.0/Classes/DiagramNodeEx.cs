@@ -7,6 +7,7 @@ using System.Windows;
 using MindFusion.Diagramming.Wpf;
 
 using TalesGenerator.Net;
+using TalesGenerator.TaleNet;
 
 namespace TalesGenerator.UI.Classes
 {

@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-using TalesGenerator.Net;
+using TalesGenerator.TaleNet;
 
 namespace TalesGenerator.UI.Windows
 {
@@ -20,10 +20,10 @@ namespace TalesGenerator.UI.Windows
 	/// </summary>
 	public partial class ConsultWindow : Window
 	{
-		Network _network;
+		TalesNetwork _network;
 		//Reasoner _reasoner;
 
-		public ConsultWindow(Network network)
+		public ConsultWindow(TalesNetwork network)
 		{
 			InitializeComponent();
 

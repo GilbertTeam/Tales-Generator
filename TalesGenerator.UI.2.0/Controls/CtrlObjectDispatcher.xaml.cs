@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using TalesGenerator.UI.Classes;
-using TalesGenerator.Net;
+using TalesGenerator.TaleNet;
 
 namespace TalesGenerator.UI.Controls
 {
@@ -39,7 +39,7 @@ namespace TalesGenerator.UI.Controls
 
 		#region Methods
 
-		public void SetNetwork(Network network)
+		public void SetNetwork(TalesNetwork network)
 		{
 			NetworkObjectsTree.CurrentNetwork = network;
 		}

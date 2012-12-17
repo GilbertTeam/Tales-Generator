@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
 using System.ComponentModel;
-using System.Xml;
 
 using TalesGenerator.Net;
+using TalesGenerator.TaleNet;
 using System.Xml.Linq;
-using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows;
-using System.Windows.Controls;
+
 using TalesGenerator.UI.Controls;
 
-using Gt.Controls;
 using Gt.Controls.Diagramming;
-using System.Windows.Media;
 
 
 namespace TalesGenerator.UI.Classes
@@ -28,7 +19,7 @@ namespace TalesGenerator.UI.Classes
 
 		Diagram _diagram;
 
-		Network _network;
+		TalesNetwork _network;
 
 		string _path;
 
@@ -43,6 +34,10 @@ namespace TalesGenerator.UI.Classes
 		public const int DefaultNodeHeight = 50;
 
 		public event DiagramItemEventHandler EdgeCreated;
+
+		public event BoolNotifyEventHander LockEdgeUpdate;
+
+		public event BoolNotifyEventHander LockNodeUpdate;
 
 		#endregion
 
@@ -85,7 +80,7 @@ namespace TalesGenerator.UI.Classes
 		/// <summary>
 		/// Модель текущего проекта
 		/// </summary>
-		public Network Network
+		public TalesNetwork Network
 		{
 			get { return _network; }
 			set 
@@ -139,7 +134,7 @@ namespace TalesGenerator.UI.Classes
 		public void NewProject()
 		{
 			Diagram = new Diagram();
-			Network = new Network();
+			Network = new TalesNetwork();
 			Path = "";
 
 			_linkMenu.Network = Network;
@@ -172,7 +167,7 @@ namespace TalesGenerator.UI.Classes
 				throw new ArgumentException("Path");
 			XDocument xDoc = XDocument.Load(_path);
 
-			_network = Network.LoadFromXml(xDoc);
+			_network = TalesNetwork.LoadFromXml(xDoc) as TalesNetwork;
 
 			_linkMenu.Network = Network;
 			_nodeMenu.Network = Network;
@@ -313,6 +308,8 @@ namespace TalesGenerator.UI.Classes
 
 		private void UpdateNetworkEdge(DiagramEdge edge)
 		{
+			RaiseLockEdgeUpdate(true);
+
 			//delete old
 			NetworkEdge networkEdge = _network.Edges.FindById(Convert.ToInt32(edge.UserData));
 			if (networkEdge != null)
@@ -322,6 +319,8 @@ namespace TalesGenerator.UI.Classes
 
 			//create new
 			RaiseEdgeCreated(edge);
+
+			RaiseLockEdgeUpdate(false);
 		}
 
 		void OnNetworkEdgePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -364,7 +363,21 @@ namespace TalesGenerator.UI.Classes
 			}
 		}
 
-		#endregion
+		private void RaiseLockEdgeUpdate(bool value)
+		{
+			if (LockEdgeUpdate != null)
+			{
+				LockEdgeUpdate(value);
+			}
+		}
+
+		private void RaiseLockNodeUpdate(bool value)
+		{
+			if (LockNodeUpdate != null)
+			{
+				LockNodeUpdate(value);
+			}
+		}
 
 		public void RebuildDiagram()
 		{
@@ -382,6 +395,8 @@ namespace TalesGenerator.UI.Classes
 		{
 			if (_network == null)
 				return;
+
+			RaiseLockNodeUpdate(true);
 
 			foreach (var netNode in _network.Nodes)
 			{
@@ -401,6 +416,10 @@ namespace TalesGenerator.UI.Classes
 				}
 			}
 
+			RaiseLockNodeUpdate(false);
+
+			RaiseLockEdgeUpdate(true);
+
 			foreach (var netEdge in _network.Edges)
 			{
 				var origin = Utils.FindItemByUserData(_diagram, netEdge.StartNode.Id) as DiagramNode;
@@ -413,6 +432,8 @@ namespace TalesGenerator.UI.Classes
 
 				LinkAdded(edge, netEdge);
 			}
+
+			RaiseLockEdgeUpdate(false);
 		}
 
 		public void ArrangeVisual()
@@ -457,5 +478,7 @@ namespace TalesGenerator.UI.Classes
 				node.Bounds = shapeNode.Bounds;
 			}
 		}
+
+		#endregion
 	}
 }

@@ -54,6 +54,8 @@ namespace Gt.Controls.Diagramming
 			_sourceNode = null;
 			_destinationNode = null;
 
+			Background = new SolidColorBrush((BorderPen.Brush as SolidColorBrush).Color);
+
 			_label = new DiagramLabel(diagram, this);
 			_label.NeedRecalc = true;
 
