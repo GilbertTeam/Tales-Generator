@@ -3,48 +3,67 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:p="clr-namespace:TalesGenerator.UI.Properties"
         Title="{x:Static p:Resources.ConsultWindowCaption}"
-		ResizeMode="NoResize"
+		ResizeMode="CanResizeWithGrip"
+		WindowState="Maximized"
 		WindowStyle="SingleBorderWindow"
 		WindowStartupLocation="CenterScreen" 
-		Width="300"
-		Height="220"
+		Width="400"
+		Height="300"
 		Icon="/TalesGenerator;component/AppIcon.ico">
-	<StackPanel>
-		<Border Style="{StaticResource BorderStyleKey}" Margin="5"
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="6"/>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="6"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<Border Grid.Row="0"
+				Style="{StaticResource BorderStyleKey}"
+				Margin="5"
 				Background="{StaticResource BackgroundBrushKey}">
 				<TextBlock Text="{x:Static p:Resources.EnterQuestionLabel}"
-					   HorizontalAlignment="Stretch"
-					   FontWeight="Bold"
-					   Style="{StaticResource WindowElementStyle}"
-					   />
+						   HorizontalAlignment="Stretch"
+						   FontWeight="Bold"
+						   Style="{StaticResource WindowElementStyle}"/>
 		</Border>
-		<Grid>
+		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 			<TextBox x:Name="QuestionTextBox"
 					 Grid.Column="0"
+					 VerticalAlignment="Stretch"
 					 Style="{StaticResource WindowElementStyle}"/>
 			<Button Style="{StaticResource CommandButtonStyle}"
 					Grid.Column="1"
+					VerticalAlignment="Top"
 					Content="{x:Static p:Resources.StartLabel}"
 					IsDefault="True"
 					Click="Button_Click"/>
 		</Grid>
-		<Separator/>
-		<Border Style="{StaticResource BorderStyleKey}" Margin="5"
+		<Separator Grid.Row="2"
+				   VerticalAlignment="Center"/>
+		<Border Grid.Row="3"
+				Style="{StaticResource BorderStyleKey}"
+				Margin="5"
 				Background="{StaticResource BackgroundBrushKey}">
 			<TextBlock Text="{x:Static p:Resources.AnswerLabel}"
 					   Style="{StaticResource WindowElementStyle}"
 					   FontWeight="Bold"/>
 		</Border>
 		<TextBox x:Name="AnswerTextBox"
+				 Grid.Row="4"
 				 Style="{StaticResource WindowElementStyle}"
 				 IsReadOnly="True"/>
-		<Separator/>
-		<Button Style="{StaticResource CommandButtonStyle}"
+		<Separator Grid.Row="5"
+				   VerticalAlignment="Center"/>
+		<Button Grid.Row="6"
+				Style="{StaticResource CommandButtonStyle}"
 				Content="{x:Static p:Resources.ExitLabel}"
 				IsCancel="True"/>
-	</StackPanel>
+	</Grid>
 </Window>
