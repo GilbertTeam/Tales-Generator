@@ -75,7 +75,8 @@ namespace TalesGenerator.UI.Windows
 			//ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
 			//DispatcherPanelButton.IsChecked = this.DispatcherPanel.Visibility == System.Windows.Visibility.Visible;
 
-			DispatcherPanel.SelectionChanged += new OnSelectionChanged(DispatcherPanel_SelectionChanged);
+			DispatcherPanel.SelectionChanged += new IntNotifyEventHandler(DispatcherPanel_SelectionChanged);
+			DispatcherPanel.SelectLinkedNodes += new IntNotifyEventHandler(DispatcherPanel_SelectLinkedNodes);
 			_updatingDiagramSelection = false;
 
 			_currentType = NetworkEdgeType.IsA;
@@ -852,6 +853,37 @@ namespace TalesGenerator.UI.Windows
 			NetworkVisual.Selection.Add(item);
 			NetworkVisual.GoToItem(item);
 			_updatingDiagramSelection = false;
+		}
+
+		void DispatcherPanel_SelectLinkedNodes(int id)
+		{
+			if (_updatingDiagramSelection)
+				return;
+
+			using (DiagramUpdateLock locker = new DiagramUpdateLock(NetworkVisual))
+			{
+
+				_updatingDiagramSelection = true;
+				NetworkVisual.Selection.Clear();
+				DiagramNode node = Utils.FindItemByUserData(NetworkVisual, id) as DiagramNode;
+				if (node != null)
+				{
+					foreach (var edge in node.Edges)
+					{
+						if (edge.AnchoringMode == EdgeAnchoringMode.NodeToNode)
+						{
+							var selNode = edge.SourceNode == node ? edge.DestinationNode : edge.SourceNode;
+							NetworkVisual.Selection.Add(selNode);
+						}
+					}
+
+					if (NetworkVisual.Selection.Count != 0)
+					{
+						NetworkVisual.GoToItem(NetworkVisual.Selection[0]);
+					}
+				}
+				_updatingDiagramSelection = false;
+			}
 		}
 
 		#endregion

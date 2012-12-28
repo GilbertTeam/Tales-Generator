@@ -14,7 +14,7 @@ namespace TalesGenerator.UI.Classes
 
 	public delegate void BoolNotifyEventHander(bool value);
 
-	public delegate void OnSelectionChanged(int id);
+	public delegate void IntNotifyEventHandler(int id);
 	//public delegate void DiagramItemEventHandler(DiagramItem item, NetworkObject obj);
 
 	public delegate void DiagramItemEventHandler(DiagramItem item, NetworkObject obj);

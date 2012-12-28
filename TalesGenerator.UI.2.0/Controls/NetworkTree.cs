@@ -73,6 +73,9 @@ namespace TalesGenerator.UI.Controls
 
 		NodeContextMenu _nodeMenu;
 
+		public event IntNotifyEventHandler SelectLinkedNodes;
+
+
 		#endregion
 
 		#region Contructors
@@ -88,6 +91,8 @@ namespace TalesGenerator.UI.Controls
 			_infos = new List<TreeItemInfo>();
 			_linkMenu = new LinkContextMenu();
 			_nodeMenu = new NodeContextMenu();
+
+			_nodeMenu.SelectLinkedNodes += new IntNotifyEventHandler(OnSelectLinkedNodes);
 
 			InUpdate = false;
 		}
@@ -509,6 +514,19 @@ namespace TalesGenerator.UI.Controls
 		#endregion
 
 		#region EventHandlers
+
+		void OnSelectLinkedNodes(int id)
+		{
+			RaiseSelectLinkedNodes(id);
+		}
+
+		void RaiseSelectLinkedNodes(int id)
+		{
+			if (SelectLinkedNodes != null)
+			{
+				SelectLinkedNodes(id);
+			}
+		}
 
 		#endregion
 	}

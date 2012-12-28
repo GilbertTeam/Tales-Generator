@@ -61,6 +61,7 @@
     <Compile Include="Diagramming\DiagramDelegates.cs" />
     <Compile Include="Diagramming\DiagramEventArgs.cs" />
     <Compile Include="Diagramming\DiagramRecalcLock.cs" />
+    <Compile Include="Diagramming\DiagramSelection.cs" />
     <Compile Include="Diagramming\DiagramSelectionBorder.cs" />
     <Compile Include="Diagramming\DiagramSerializer.cs" />
     <Compile Include="Diagramming\DiagramTextBox.cs" />

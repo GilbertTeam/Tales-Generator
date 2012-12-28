@@ -410,8 +410,8 @@ namespace TalesGenerator.UI.Classes
 				else
 				{
 					Rect nodeBounds = node.Bounds;
-					nodeBounds.Width = nodeBounds.Width + 20;
-					nodeBounds.Height = nodeBounds.Height + 12;
+					nodeBounds.Width = nodeBounds.Width * 1.3;
+					nodeBounds.Height = nodeBounds.Height * 1.2;
 					node.Bounds = nodeBounds;
 				}
 			}
