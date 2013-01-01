@@ -572,6 +572,13 @@ namespace Gt.Controls.Diagramming
 				return isSelectionExists;
 			}
 
+			if (item.IsSelectable == false)
+			{
+				var label = item as DiagramLabel;
+				if (label.Owner != null)
+					item = label.Owner;
+			}
+
 			bool isLabel = item as DiagramLabel != null;
 			bool isNode = item as DiagramNode != null;
 			bool isEdge = item as DiagramEdge != null;

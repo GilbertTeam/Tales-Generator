@@ -67,7 +67,7 @@ namespace Gt.Controls.Diagramming
 
 		private DiagramEdges _edges;
 
-		private DiagramItemCollection<DiagramItem> _selection;
+		private DiagramSelection _selection;
 
 		private DiagramItemCollection<DiagramItem> _itemsInDrawingOrder;
 
@@ -102,7 +102,7 @@ namespace Gt.Controls.Diagramming
 			var scaleMd = new PropertyMetadata(1.0, OnZoomChanged);
 			ScaleProperty = DependencyProperty.Register("Scale", typeof(double), typeof(Diagram), scaleMd);
 
-			var scaleFactorMd = new PropertyMetadata(1.5);
+			var scaleFactorMd = new PropertyMetadata(1.1);
 			ScaleFactorProperty = DependencyProperty.Register("ScaleFactor", typeof(double), typeof(Diagram), scaleFactorMd);
 		}
 
@@ -110,7 +110,7 @@ namespace Gt.Controls.Diagramming
 		{
 			_nodes = new DiagramNodes(this);
 			_edges = new DiagramEdges(this);
-			_selection = new DiagramItemCollection<DiagramItem>(this);
+			_selection = new DiagramSelection(this);
 
 			_itemsInDrawingOrder = new DiagramItemCollection<DiagramItem>(this);
 
@@ -183,7 +183,7 @@ namespace Gt.Controls.Diagramming
 			get { return _edges; }
 		}
 
-		public DiagramItemCollection<DiagramItem> Selection
+		public DiagramSelection Selection
 		{
 			get { return _selection; }
 		}

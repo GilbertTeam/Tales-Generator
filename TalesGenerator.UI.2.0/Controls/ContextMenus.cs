@@ -205,6 +205,8 @@ namespace TalesGenerator.UI.Controls
 
 	class NodeContextMenu : NetworkContextMenu
 	{
+		public event IntNotifyEventHandler SelectLinkedNodes;
+
 		#region Contrsuctors
 
 		public NodeContextMenu(TalesNetwork network = null) : base(network)
@@ -217,12 +219,20 @@ namespace TalesGenerator.UI.Controls
 
 		protected override void CreateMenu()
 		{
+			MenuItem selectLinkedNodesItem = new MenuItem();
+			selectLinkedNodesItem.Header = "Выделить связанные вершины";
+			selectLinkedNodesItem.Click += new RoutedEventHandler(selectLinkedNodesItem_Click);
+			Items.Add(selectLinkedNodesItem);
+
+			var separator = new Separator();
+			Items.Add(separator);
+
 			MenuItem changeNodeNameItem = new MenuItem();
 			changeNodeNameItem.Header = Properties.Resources.ChangeNodeTextLabel;
 			changeNodeNameItem.Click += new RoutedEventHandler(changeNodeNameItem_Click);
 			Items.Add(changeNodeNameItem);
 
-			Separator separator = new Separator();
+			separator = new Separator();
 			Items.Add(separator);
 
 			MenuItem deleteNodeItem = new MenuItem();
@@ -232,6 +242,15 @@ namespace TalesGenerator.UI.Controls
 		}
 
 		#region EventHandlers
+
+		void selectLinkedNodesItem_Click(object sender, RoutedEventArgs e)
+		{
+			NetworkNode node = GetNetworkNode();
+			if (node == null)
+				return;
+
+			RaiseSelectLinkedNodes(node.Id);
+		}
 
 		void changeNodeNameItem_Click(object sender, RoutedEventArgs e)
 		{
@@ -277,6 +296,14 @@ namespace TalesGenerator.UI.Controls
 		}
 
 		#endregion
+
+		protected void RaiseSelectLinkedNodes(int id)
+		{
+			if (SelectLinkedNodes != null)
+			{
+				SelectLinkedNodes(id);
+			}
+		}
 
 		#endregion
 	}

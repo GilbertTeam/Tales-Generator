@@ -24,7 +24,9 @@ namespace TalesGenerator.UI.Controls
 	{
 		#region Fields
 
-		public event OnSelectionChanged SelectionChanged;
+		public event IntNotifyEventHandler SelectionChanged;
+
+		public event IntNotifyEventHandler SelectLinkedNodes;
 
 		#endregion
 
@@ -33,6 +35,8 @@ namespace TalesGenerator.UI.Controls
 		public CtrlObjectDispatcher()
 		{
 			InitializeComponent();
+
+			NetworkObjectsTree.SelectLinkedNodes += new IntNotifyEventHandler(OnSelectLinkedNods);
 		}
 
 		#endregion
@@ -68,6 +72,14 @@ namespace TalesGenerator.UI.Controls
 			}
 		}
 
+		protected void RaiseSelectLinkedNodes(int id)
+		{
+			if (SelectLinkedNodes != null)
+			{
+				SelectLinkedNodes(id);
+			}
+		}
+
 		#endregion
 
 		#region Event Handlers
@@ -86,6 +98,11 @@ namespace TalesGenerator.UI.Controls
 
 				SelectionChanged(id);
 			}
+		}
+
+		void OnSelectLinkedNods(int id)
+		{
+			RaiseSelectLinkedNodes(id);
 		}
 
 		#endregion

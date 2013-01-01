@@ -79,6 +79,8 @@ namespace Gt.Controls.Diagramming
 
 			BorderPen = new Pen(new SolidColorBrush(Colors.Transparent), 0);
 			AllowInPlaceEdit = true;
+
+			IsSelectable = false;
 		}
 
 		#endregion

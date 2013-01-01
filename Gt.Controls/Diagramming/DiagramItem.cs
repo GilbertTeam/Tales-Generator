@@ -58,6 +58,8 @@ namespace Gt.Controls.Diagramming
 			_border = null;
 
 			NeedRecalc = true;
+
+			IsSelectable = true;
 		}
 
 		#endregion
@@ -119,6 +121,8 @@ namespace Gt.Controls.Diagramming
 		}
 
 		internal bool NeedRecalc { get; set; }
+
+		public bool IsSelectable { get; set; }
 
 		#endregion
 
