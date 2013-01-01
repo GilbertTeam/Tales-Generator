@@ -17,17 +17,27 @@ namespace TalesGenerator.Plugin
 
 		private const string PluginName = "Template Parser Plugin";
 
-		private readonly Regex _agentRegex = new Regex(@"^[Aa]gent(:\d+)?$");
+		private readonly Regex _agentRegex = new Regex(@"^[Aa]gent(\d+)?(:\d+)?$");
 
 		private readonly Regex _agentsRegex = new Regex(@"^[Aa]gents(:\d+)?$");
 
-		private readonly Regex _recipientRegex = new Regex(@"^[Rr]ecipient(:\d+)?$");
+		private readonly Regex _recipientRegex = new Regex(@"^[Rr]ecipient(\d+)?(:\d+)?$");
 
 		private readonly Regex _recipientsRegex = new Regex(@"^[Rr]ecipients(:\d+)?$");
 
-		private readonly Regex _actionRegex = new Regex(@"^([Aa]ction)(\d+)?(:\d+)?$");
+		private readonly Regex _actionRegex = new Regex(@"^[Aa]ction(\d+)?(:\d+)?$");
 
 		private readonly Regex _locativeRegex = new Regex(@"^[Ll]ocative(:\d+)?$");
+
+		private readonly Dictionary<string, Grammem> _objectCasesDictionary = new Dictionary<string, Grammem>
+		{
+			{ "говорить", Grammem.Dativ },
+			{ "сказать", Grammem.Dativ },
+			{ "отвечать", Grammem.Dativ },
+			{ "ответить", Grammem.Dativ },
+			{ "видеть", Grammem.Genitiv },
+			{ "увидеть", Grammem.Genitiv },
+		};
 
 		private ITemplateParser _templateParser;
 		#endregion
@@ -42,34 +52,6 @@ namespace TalesGenerator.Plugin
 
 		#region Methods
 
-		private string GetWord(Match match, IEnumerable<NetworkNode> networkNodes)
-		{
-			Contract.Ensures(Contract.Result<string>() != null);
-
-			string text = null;
-
-			// Проверим, задан ли явно индекс.
-			if (match.Groups.Count > 2 &&
-				match.Groups[2].Success)
-			{
-				int index;
-
-				if (int.TryParse(match.Groups[2].Value, out index))
-				{
-					Contract.Assume(networkNodes.Count() > index);
-
-					text = networkNodes.ElementAt(index).Name;
-				}
-			}
-
-			if (text == null)
-			{
-				text = networkNodes.First().Name;
-			}
-
-			return text;
-		}
-
 		private string GetTextByGrammem(Match match, string word)
 		{
 			string result = null;
@@ -77,19 +59,19 @@ namespace TalesGenerator.Plugin
 			Contract.Assume(_templateParser != null);
 
 			// 3. Проверим на предмет явного задания граммемы.
-			if (match.Groups.Count > 2)
+			if (match.Groups.Count > 1)
 			{
 				string grammemText = null;
 
-				if (match.Groups[2].Success &&
-					match.Groups[2].Value.Contains(":"))
+				if (match.Groups[1].Success &&
+					match.Groups[1].Value.Contains(":"))
+				{
+					grammemText = match.Groups[1].Value.Substring(1);
+				}
+				else if (match.Groups[2].Success &&
+						 match.Groups[2].Value.Contains(":"))
 				{
 					grammemText = match.Groups[2].Value.Substring(1);
-				}
-				else if (match.Groups[3].Success &&
-						 match.Groups[3].Value.Contains(":"))
-				{
-					grammemText = match.Groups[3].Value.Substring(1);
 				}
 
 				int grammem;
@@ -118,12 +100,31 @@ namespace TalesGenerator.Plugin
 			}
 		}
 
-		private string ParseActorTemplate(string template, Match match, IList<NetworkEdgeType> unresolvedContext, NetworkEdgeType edgeType)
+		private Grammem FindObjectGrammem(TextAnalyzer textAnalyzer, string predicate)
 		{
-			Contract.Ensures(edgeType == NetworkEdgeType.Agent || edgeType == NetworkEdgeType.Recipient);
+			Contract.Requires<ArgumentNullException>(textAnalyzer != null);
+			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(predicate));
+
+			Grammem grammem = Grammem.None;
+			string[] words = predicate.Split(' ');
+			string verb = words.Length > 1 ? words[1] : words[0];
+			LemmatizeResult result = textAnalyzer.Lemmatize(verb).FirstOrDefault();
+
+			if (result != null)
+			{
+				_objectCasesDictionary.TryGetValue(result.GetTextByFormId(0).ToLower(), out grammem);
+			}
+
+			return grammem;
+		}
+
+		private TemplateToken ParseActorTemplate(string template, Match match, IList<NetworkEdgeType> unresolvedContext, NetworkEdgeType edgeType)
+		{
+			Contract.Requires<ArgumentException>(edgeType == NetworkEdgeType.Agent || edgeType == NetworkEdgeType.Recipient);
+			Contract.Ensures(Contract.Result<TemplateToken>() != null);
 			Contract.Assume(_templateParser != null);
 
-			var actorNodes = _templateParser.ParserContext[edgeType];
+			var actorNodes = _templateParser.NetworkContext[edgeType];
 
 			if (!actorNodes.Any())
 			{
@@ -131,87 +132,117 @@ namespace TalesGenerator.Plugin
 				return null;
 			}
 
-			string actorName = GetWord(match, actorNodes);
+			NetworkNode actorNode = GetContextNodeByIndex(match, 1, actorNodes);
 
-			return ParseActorTemplate(match, actorName);
+			return ParseActorTemplate(match, actorNode.Name, actorNode, edgeType);
 		}
 
-		private string ParseActorTemplate(Match match, string actorName, bool ignoreCase = false)
+		// TODO: Необходимо учитывать, что в actorName может быть несколько слов.
+		private TemplateToken ParseActorTemplate(Match match, string actorName, NetworkNode actorNode, NetworkEdgeType edgeType, bool ignoreCase = false)
 		{
+			Contract.Requires<ArgumentException>(edgeType == NetworkEdgeType.Agent || edgeType == NetworkEdgeType.Recipient);
+			Contract.Ensures(Contract.Result<TemplateToken>() != null);
 			Contract.Assume(_templateParser != null);
 
+			string lemma = Lemmatize(_templateParser.TextAnalyzer, actorName);
 			string resolvedText = null;
 			PartOfSentence partOfSentence = PartOfSentence.Subject;
 
 			// 1. Проверим на предмет явного задания граммемы.
 			resolvedText = GetTextByGrammem(match, actorName);
 
-			if (resolvedText == null)
-			{
-				// 2. Выполним поиск сказуемого.
-				TemplateToken predicate = _templateParser.CurrentSentence.LastOrDefault(token => token.PartOfSentence == PartOfSentence.Predicate);
+			// 2. Выполним поиск сказуемого.
+			TemplateToken predicate = _templateParser.CurrentSentence.LastOrDefault(token => token.PartOfSentence == PartOfSentence.Predicate);
 
-				if (predicate == null)
+			if (predicate == null || edgeType == NetworkEdgeType.Agent)
+			{
+				partOfSentence = PartOfSentence.Subject;
+
+				if (resolvedText == null)
 				{
-					partOfSentence = PartOfSentence.Subject;
 					resolvedText = actorName;
 				}
-				else
+			}
+			else if (edgeType == NetworkEdgeType.Recipient)
+			{
+				Grammem objectGrammem = FindObjectGrammem(_templateParser.TextAnalyzer, predicate.Text);
+
+				if (objectGrammem == Grammem.None)
 				{
-					partOfSentence = PartOfSentence.Object;
-					resolvedText = _templateParser.ReconcileWord(actorName, predicate.Text);
+					objectGrammem = Grammem.Genitiv;
+				}
+
+				partOfSentence = PartOfSentence.Object;
+
+				if (resolvedText == null)
+				{
+					resolvedText = _templateParser.ReconcileWord(actorName, objectGrammem);
 				}
 			}
 
+			// 3. Согласуем регистр.
 			if (!ignoreCase)
 			{
 				resolvedText = ReconcileCase(match.Groups[0].Value, resolvedText);
 			}
 
-			_templateParser.CurrentSentence.Add(new TemplateToken(match.ToString(), resolvedText, partOfSentence));
+			// 4. Запомним граммему.
+			Grammem grammem = Grammem.None;
+			TaleNet.IFormattable formattable = actorNode as TaleNet.IFormattable;
 
-			return resolvedText;
+			if (formattable != null)
+			{
+				grammem = formattable.Grammem;
+			}
+
+			return
+				new TemplateToken(resolvedText, lemma, match.ToString())
+				{
+					PartOfSentence = partOfSentence,
+					Grammem = grammem
+				};
 		}
 
-		private string ParseActorsTemplate(string template, Match match, IList<NetworkEdgeType> unresolvedContext, NetworkEdgeType edgeType)
+		private ParserResult ParseActorsTemplate(string template, Match match, IList<NetworkEdgeType> unresolvedContext, NetworkEdgeType edgeType)
 		{
-			Contract.Ensures(edgeType == NetworkEdgeType.Agent || edgeType == NetworkEdgeType.Recipient);
+			Contract.Requires<ArgumentException>(edgeType == NetworkEdgeType.Agent || edgeType == NetworkEdgeType.Recipient);
 			Contract.Assume(_templateParser != null);
 
-			string resolvedText = null;
-			var actorNodes = _templateParser.ParserContext[NetworkEdgeType.Agent];
+			List<TemplateToken> templateTokens = new List<TemplateToken>();
+			var actorNodes = _templateParser.NetworkContext[edgeType];
 
 			if (!actorNodes.Any())
 			{
-				unresolvedContext.Add(NetworkEdgeType.Agent);
+				unresolvedContext.Add(edgeType);
 				return null;
 			}
 
-			var actorNames = actorNodes.Select(node => node.Name);
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.Append(ParseActorTemplate(match, actorNames.First()));
+			TemplateToken actorToken = ParseActorTemplate(match, actorNodes.First().Name, actorNodes.First(), edgeType);
 
-			foreach (var actorName in actorNames.Skip(1))
+			templateTokens.Add(actorToken);
+			stringBuilder.Append(actorToken.Text);
+
+			foreach (var actorNode in actorNodes.Skip(1))
 			{
-				stringBuilder.AppendFormat(", {0}", ParseActorTemplate(match, actorName.ToLower(), true));
+				actorToken = ParseActorTemplate(match, actorNode.Name.ToLower(), actorNode, edgeType, true);
+
+				templateTokens.Add(actorToken);
+				stringBuilder.AppendFormat(", {0}", actorToken.Text);
 			}
 
-			resolvedText = stringBuilder.ToString();
-
-			return resolvedText;
+			return new ParserResult(stringBuilder.ToString(), templateTokens);
 		}
 
-		private string ParseActionTemplate(string template, Match match, IList<NetworkEdgeType> unresolvedContext)
+		private TemplateToken ParseActionTemplate(string template, Match match, IList<NetworkEdgeType> unresolvedContext)
 		{
 			Contract.Assume(_templateParser != null);
-
-			string resolvedText = null;
 
 			// TODO: Необходимо сделать шаблон более универсальным.
 			// Сейчас предполагается, что формат строки action должен быть таким:
 			// [не] verb {word}
 
-			var actionNodes = _templateParser.ParserContext[NetworkEdgeType.Action];
+			var actionNodes = _templateParser.NetworkContext[NetworkEdgeType.Action];
 
 			if (!actionNodes.Any())
 			{
@@ -219,7 +250,10 @@ namespace TalesGenerator.Plugin
 				return null;
 			}
 
-			string actionText = GetWord(match, actionNodes);
+			NetworkNode actionNode = GetContextNodeByIndex(match, 1, actionNodes);
+			string resolvedText = null;
+			string actionText = actionNode.Name;
+			string lemma = Lemmatize(_templateParser.TextAnalyzer, actionText);
 			string[] words = actionText.Split(' ');
 			string verb = null;
 			string resolvedVerb = null;
@@ -255,8 +289,16 @@ namespace TalesGenerator.Plugin
 				}
 				else if (subjectCount == 1)
 				{
-					string subject = _templateParser.CurrentSentence.First(token => token.PartOfSentence == PartOfSentence.Subject).Text;
-					resolvedVerb = _templateParser.ReconcileWord(verb, subject);
+					TemplateToken subjectToken = _templateParser.CurrentSentence.First(token => token.PartOfSentence == PartOfSentence.Subject);
+
+					if (subjectToken.Grammem != Grammem.None)
+					{
+						resolvedVerb = _templateParser.ReconcileWord(verb, subjectToken.Grammem);
+					}
+					else
+					{
+						resolvedVerb = _templateParser.ReconcileWord(verb, subjectToken.Text);
+					}
 				}
 				else
 				{
@@ -285,9 +327,12 @@ namespace TalesGenerator.Plugin
 
 			resolvedText = stringBuilder.ToString();
 
-			_templateParser.CurrentSentence.Add(new TemplateToken(match.ToString(), resolvedText, PartOfSentence.Predicate));
-
-			return resolvedText;
+			return
+				new TemplateToken(resolvedText, lemma, match.ToString())
+				{
+					PartOfSpeech = PartOfSpeech.VERB,
+					PartOfSentence = PartOfSentence.Predicate
+				};
 		}
 
 		protected override IEnumerable<Regex> GetAvailableRegexes()
@@ -303,14 +348,16 @@ namespace TalesGenerator.Plugin
 			};
 		}
 
-		public override TemplateParserResult Parse(ITemplateParser templateParser, string template)
+		public override TemplateParserPluginResult Parse(ITemplateParser templateParser, string template)
 		{
 			Contract.Requires<ArgumentNullException>(templateParser != null);
 			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(template));
+			Contract.Ensures(Contract.Result<TemplateParserPluginResult>() != null);
 
 			_templateParser = templateParser;
 
 			string resolvedText = null;
+			List<TemplateToken> templateTokens = new List<TemplateToken>();
 			List<NetworkEdgeType> unresolvedContext = new List<NetworkEdgeType>();
 
 			for (; ; )
@@ -318,35 +365,50 @@ namespace TalesGenerator.Plugin
 				Match match = _agentsRegex.Match(template);
 				if (match.Success)
 				{
-					resolvedText = ParseActorsTemplate(template, match, unresolvedContext, NetworkEdgeType.Agent);
+					ParserResult parserResult = ParseActorsTemplate(template, match, unresolvedContext, NetworkEdgeType.Agent);
+
+					resolvedText = parserResult.Text;
+					templateTokens.AddRange(parserResult.TemplateTokens);
 					break;
 				}
 
 				match = _agentRegex.Match(template);
 				if (match.Success)
 				{
-					resolvedText = ParseActorTemplate(template, match, unresolvedContext, NetworkEdgeType.Agent);
+					TemplateToken actorToken = ParseActorTemplate(template, match, unresolvedContext, NetworkEdgeType.Agent);
+
+					resolvedText = actorToken.Text;
+					templateTokens.Add(actorToken);
 					break;
 				}
 
 				match = _recipientsRegex.Match(template);
 				if (match.Success)
 				{
-					resolvedText = ParseActorsTemplate(template, match, unresolvedContext, NetworkEdgeType.Recipient);
+					ParserResult parserResult = ParseActorsTemplate(template, match, unresolvedContext, NetworkEdgeType.Recipient);
+
+					resolvedText = parserResult.Text;
+					templateTokens.AddRange(parserResult.TemplateTokens);
 					break;
 				}
 
 				match = _recipientRegex.Match(template);
 				if (match.Success)
 				{
-					resolvedText = ParseActorTemplate(template, match, unresolvedContext, NetworkEdgeType.Recipient);
+					TemplateToken recipientToken = ParseActorTemplate(template, match, unresolvedContext, NetworkEdgeType.Recipient);
+
+					resolvedText = recipientToken.Text;
+					templateTokens.Add(recipientToken);
 					break;
 				}
 
 				match = _actionRegex.Match(template);
 				if (match.Success)
 				{
-					resolvedText = ParseActionTemplate(template, match, unresolvedContext);
+					TemplateToken actionToken = ParseActionTemplate(template, match, unresolvedContext);
+
+					resolvedText = actionToken.Text;
+					templateTokens.Add(actionToken);
 					break;
 				}
 
@@ -361,7 +423,7 @@ namespace TalesGenerator.Plugin
 
 			_templateParser = null;
 
-			return new TemplateParserResult(resolvedText, unresolvedContext);
+			return new TemplateParserPluginResult(resolvedText, templateTokens, unresolvedContext);
 		}
 		#endregion
 	}

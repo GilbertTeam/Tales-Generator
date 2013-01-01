@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using TalesGenerator.Net;
+using System.Diagnostics.Contracts;
+using System;
 
 namespace TalesGenerator.Text
 {
-	public class TemplateParserDictionaryContext : ITemplateParserContext
+	public class TemplateParserNetworkDictionaryContext : ITemplateParserNetworkContext
 	{
 		#region Fields
 
@@ -43,6 +45,8 @@ namespace TalesGenerator.Text
 
 		public void Add(NetworkEdgeType edgeType, IEnumerable<NetworkNode> networkNodes)
 		{
+			Contract.Requires<ArgumentNullException>(networkNodes != null);
+
 			GetNetworkNodes(edgeType).AddRange(networkNodes);
 		}
 		#endregion

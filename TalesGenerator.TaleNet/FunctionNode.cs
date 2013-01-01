@@ -3,6 +3,8 @@ using TalesGenerator.Net.Collections;
 using TalesGenerator.TaleNet.Collections;
 using System.Diagnostics.Contracts;
 using System;
+using System.Xml.Linq;
+using TalesGenerator.Net.Serialization;
 
 namespace TalesGenerator.TaleNet
 {
@@ -64,36 +66,50 @@ namespace TalesGenerator.TaleNet
 		TestResult
 	}
 
-	public class FunctionNode : NetworkNode
+	public class FunctionNode : TaleBaseItemNode
 	{
 		#region Fields
 
-		private readonly TaleNode _taleNode;
+		private readonly FunctionNodeContextNodeCollection _actionNodes;
 
-		private readonly FunctionType _functionType;
+		private readonly FunctionNodeContextNodeCollection _agentNodes;
 
-		private readonly FunctionNodeActorCollection _agentNodes;
+		private readonly FunctionNodeContextNodeCollection _recipientNodes;
 
-		private readonly FunctionNodeActorCollection _recipientNodes;
-
-		//private NetworkNode _templateNode;
-
-		//private NetworkNode _actionNode;
+		private FunctionType _functionType;
 		#endregion
 
 		#region Properties
 
-		public TaleNode Tale
+		internal override TaleNodeKind NodeKind
 		{
-			get { return _taleNode; }
+			get { return TaleNodeKind.Function; }
 		}
 
-		public FunctionNodeActorCollection Agents
+		public TaleNode Tale
+		{
+			get
+			{
+				Contract.Ensures(Contract.Result<TaleNode>() != null);
+
+				NetworkEdge partOfEdge = OutgoingEdges.GetEdge(NetworkEdgeType.PartOf);
+				TaleNode taleNode = partOfEdge.EndNode as TaleNode;
+
+				return taleNode;
+			}
+		}
+
+		public FunctionNodeContextNodeCollection Actions
+		{
+			get { return _actionNodes; }
+		}
+
+		public FunctionNodeContextNodeCollection Agents
 		{
 			get { return _agentNodes; }
 		}
 
-		public FunctionNodeActorCollection Recipients
+		public FunctionNodeContextNodeCollection Recipients
 		{
 			get { return _recipientNodes; }
 		}
@@ -118,60 +134,38 @@ namespace TalesGenerator.TaleNet
 				OnPropertyChanged("Template");
 			}
 		}
-
-		//public string Action
-		//{
-		//    get
-		//    {
-		//        NetworkEdge actionEdge = OutgoingEdges.GetEdge(NetworkEdgeType.Action, true);
-
-		//        return actionEdge != null ? actionEdge.EndNode.Name : null;
-		//    }
-		//    set
-		//    {
-		//        UpdateContextNode(NetworkEdgeType.Action, value);
-
-		//        OnPropertyChanged("Action");
-		//    }
-		//}
-
-		public TaleItemNode Action
-		{
-			get
-			{
-				NetworkEdge actionEdge = OutgoingEdges.GetEdge(NetworkEdgeType.Action, true);
-
-				return actionEdge != null ? (TaleItemNode)actionEdge.EndNode : null;
-			}
-
-			set
-			{
-				Contract.Requires<ArgumentNullException>(value != null);
-				Contract.Assume(OutgoingEdges.GetEdge(NetworkEdgeType.Action, false) == null);
-
-				Network.Edges.Add(this, value, NetworkEdgeType.Action);
-			}
-		}
 		#endregion
 
 		#region Constructors
 
-		internal FunctionNode(TaleNode taleNode, string name, FunctionType functionType)
-			: base(taleNode.Network, name)
+		internal FunctionNode(TalesNetwork talesNetwork)
+			: base(talesNetwork)
 		{
-			_taleNode = taleNode;
-			_functionType = functionType;
-			_agentNodes = new FunctionNodeActorCollection(this, NetworkEdgeType.Agent);
-			_recipientNodes = new FunctionNodeActorCollection(this, NetworkEdgeType.Recipient);
+			_actionNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Action);
+			_agentNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Agent);
+			_recipientNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Recipient);
 		}
 
-		public FunctionNode(TaleNode taleNode, string name, FunctionNode baseNode)
-			: base(taleNode.Network, name, baseNode)
+		internal FunctionNode(TaleNode taleNode, string name, FunctionType functionType)
+			: base((TalesNetwork)taleNode.Network, name)
 		{
-			_taleNode = taleNode;
+			Network.Edges.Add(this, taleNode, Net.NetworkEdgeType.PartOf);
+
+			_functionType = functionType;
+			_actionNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Action);
+			_agentNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Agent);
+			_recipientNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Recipient);
+		}
+
+		internal FunctionNode(TaleNode taleNode, string name, FunctionNode baseNode)
+			: base((TalesNetwork)taleNode.Network, name, baseNode)
+		{
+			Network.Edges.Add(this, taleNode, Net.NetworkEdgeType.PartOf);
+
 			_functionType = baseNode._functionType;
-			_agentNodes = new FunctionNodeActorCollection(this, NetworkEdgeType.Agent);
-			_recipientNodes = new FunctionNodeActorCollection(this, NetworkEdgeType.Recipient);
+			_actionNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Action);
+			_agentNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Agent);
+			_recipientNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Recipient);
 		}
 		#endregion
 
@@ -185,8 +179,10 @@ namespace TalesGenerator.TaleNet
 			{
 				if (value != null)
 				{
-					NetworkNode networkNode = Network.Nodes.Add(value);
-					Network.Edges.Add(this, networkNode, edgeType);
+					TaleItemNode node = new TaleItemNode((TalesNetwork)Network, value);
+
+					Network.Nodes.Add(node);
+					Network.Edges.Add(this, node, edgeType);
 
 					NetworkNode baseNode = null;
 
@@ -201,7 +197,7 @@ namespace TalesGenerator.TaleNet
 							break;
 					}
 
-					Network.Edges.Add(networkNode, baseNode, NetworkEdgeType.IsA);
+					Network.Edges.Add(node, baseNode, NetworkEdgeType.IsA);
 				}
 			}
 			else
@@ -216,6 +212,25 @@ namespace TalesGenerator.TaleNet
 					networkEdge.EndNode.Name = value;
 				}
 			}
+		}
+
+		public override XElement GetXml()
+		{
+			XElement xElement = base.GetXml();
+
+			xElement.Add(
+				new XAttribute("functionType", _functionType));
+
+			return xElement;
+		}
+
+		public override void LoadFromXml(XElement xElement)
+		{
+			Contract.Requires<ArgumentNullException>(xElement != null);
+
+			base.LoadFromXml(xElement);
+
+			_functionType = (FunctionType)Enum.Parse(typeof(FunctionType), xElement.Attribute("functionType").Value);
 		}
 		#endregion
 	}

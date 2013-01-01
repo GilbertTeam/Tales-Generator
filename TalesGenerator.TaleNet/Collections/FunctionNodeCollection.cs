@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using TalesGenerator.Net.Collections;
+using TalesGenerator.Net;
+using System.Diagnostics.Contracts;
 
 namespace TalesGenerator.TaleNet.Collections
 {
-	public class TaleFunctionNodeCollection : BaseTaleNodeCollection<FunctionNode>
+	public class TaleFunctionNodeCollection : BaseTaleNodeCollection<FunctionNode>, IEnumerable, IEnumerable<FunctionNode>
 	{
 		#region Fields
 
@@ -22,12 +26,31 @@ namespace TalesGenerator.TaleNet.Collections
 
 		#region Methods
 
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return ((IEnumerable<FunctionNode>)this).GetEnumerator();
+		}
+
+		IEnumerator<FunctionNode> IEnumerable<FunctionNode>.GetEnumerator()
+		{
+			var f = Network.Nodes.OfType<FunctionNode>().ToList();
+			var functionNodes = Network.Nodes.OfType<FunctionNode>().Where(
+				node =>
+				{
+					var partOfEdges = node.OutgoingEdges.GetEdges(NetworkEdgeType.PartOf);
+
+					return partOfEdges.Any(edge => edge.EndNode == _taleNode);
+				}
+			);
+
+			return functionNodes.GetEnumerator();
+		}
+
 		public override void Add(FunctionNode functionNode)
 		{
-			if (functionNode == null)
-			{
-				throw new ArgumentNullException("functionNode");
-			}
+			Contract.Requires<ArgumentNullException>(functionNode != null);
+
+			
 
 			base.Add(functionNode);
 		}
@@ -39,6 +62,7 @@ namespace TalesGenerator.TaleNet.Collections
 				throw new ArgumentException("name");
 			}
 
+			// TODO: Необходимо определиться, т.к. функций одного типа в общем случае может быть несколько.
 			if (this.Count(node => node.FunctionType == functionType) != 0)
 			{
 				throw new InvalidOperationException();
@@ -48,13 +72,9 @@ namespace TalesGenerator.TaleNet.Collections
 
 			Network.Edges.Add(functionNode, ((TalesNetwork)_taleNode.Network).BaseFunction, Net.NetworkEdgeType.IsA);
 
-			if (Count == 0)
+			if (Count > 0)
 			{
-				Network.Edges.Add(_taleNode, functionNode, Net.NetworkEdgeType.Follow);
-			}
-			else
-			{
-				Network.Edges.Add(this[Count - 1], functionNode, Net.NetworkEdgeType.Follow);
+				Network.Edges.Add(this.Last(), functionNode, Net.NetworkEdgeType.Follow);
 			}
 
 			Add(functionNode);
@@ -83,6 +103,11 @@ namespace TalesGenerator.TaleNet.Collections
 			Add(functionNode);
 
 			return functionNode;
+		}
+
+		public override bool Remove(FunctionNode item)
+		{
+			throw new NotImplementedException();
 		}
 		#endregion
 	}

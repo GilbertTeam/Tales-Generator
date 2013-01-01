@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using TalesGenerator.Core.Plugins;
 using TalesGenerator.Net;
-using TalesGenerator.Net.Collections;
+using TalesGenerator.TaleNet;
 using TalesGenerator.Text.Plugins;
-using System.Diagnostics.Contracts;
 
 namespace TalesGenerator.Text
 {
-	public class TemplateParser : ITemplateParser
+	public class TemplateParser : ITemplateParser, IDisposable
 	{
 		#region Fields
+
+		private const int DefaultTemplateBufferSize = 2048;
 
 		private readonly TextAnalyzer _textAnalyzer;
 
@@ -21,19 +22,19 @@ namespace TalesGenerator.Text
 
 		private List<TemplateToken> _currentSentence;
 
-		private ITemplateParserContext _parserContext;
+		private ITemplateParserNetworkContext _networkContext;
 		#endregion
 
 		#region Properties
 
-		public IList<TemplateToken> CurrentSentence
+		public IEnumerable<TemplateToken> CurrentSentence
 		{
 			get { return _currentSentence; }
 		}
 
-		public ITemplateParserContext ParserContext
+		public ITemplateParserNetworkContext NetworkContext
 		{
-			get { return _parserContext; }
+			get { return _networkContext; }
 		}
 
 		public TextAnalyzer TextAnalyzer
@@ -62,9 +63,9 @@ namespace TalesGenerator.Text
 
 		#region Methods
 
-		private TemplateParserResult ParseTemplateItem(string templateItem)
+		private TemplateParserPluginResult ParseTemplateItem(string templateItem)
 		{
-			TemplateParserResult result = null;
+			TemplateParserPluginResult result = null;
 			var parserPlugins = PluginManager.GetPlugins<ITemplateParserPlugin>();
 			ITemplateParserPlugin parserPlugin = parserPlugins.FirstOrDefault(plugin => plugin.CanParse(templateItem));
 
@@ -80,18 +81,17 @@ namespace TalesGenerator.Text
 			return result;
 		}
 
-		private TemplateParserResult ParseNode(NetworkNode networkNode)
+		private TemplateParserResult ParseNode(FunctionNode functionNode)
 		{
-			NetworkNode templateNode = networkNode.OutgoingEdges.GetEdge(NetworkEdgeType.Template, true).EndNode;
-			string template = templateNode.Name;
+			string template = functionNode.Template;
 			Lexer lexer = new Lexer(template);
 			LexerResult lexerResult = null;
-			StringBuilder stringBuilder = new StringBuilder(1024);
+			StringBuilder stringBuilder = new StringBuilder(DefaultTemplateBufferSize);
 			List<NetworkEdgeType> unresolvedContext = new List<NetworkEdgeType>();
 
 			_currentSentence = new List<TemplateToken>();
 
-			while (lexer.GetNextToken(out lexerResult))
+			while (lexer.ReadNextToken(out lexerResult))
 			{
 				switch (lexerResult.Type)
 				{
@@ -100,10 +100,12 @@ namespace TalesGenerator.Text
 						break;
 
 					case TokenType.Colon:
+						// TODO: Костыль.
+						// В случае начала прямой речи, необходимо обновить контекст.
 						stringBuilder.Append(lexerResult.Token);
 
-						while (lexer.GetNextToken(out lexerResult) &&
-							lexerResult.Type == TokenType.Space)
+						while (lexer.PeekNextToken(out lexerResult) &&
+							   lexerResult.Type == TokenType.Space)
 						{
 							stringBuilder.Append(lexerResult.Token);
 						}
@@ -123,7 +125,6 @@ namespace TalesGenerator.Text
 						break;
 
 					case TokenType.Point:
-					case TokenType.EndOfStream:
 						Contract.Assume(_currentSentence != null);
 						_sentenceContext.Add(_currentSentence);
 						_currentSentence = new List<TemplateToken>();
@@ -134,7 +135,7 @@ namespace TalesGenerator.Text
 						StringBuilder templateBuilder = new StringBuilder(128);
 						bool isOk = false;
 
-						while (lexer.GetNextToken(out lexerResult))
+						while (lexer.ReadNextToken(out lexerResult))
 						{
 							if (lexerResult.Type == TokenType.RightBrace)
 							{
@@ -150,7 +151,7 @@ namespace TalesGenerator.Text
 							throw new TemplateParserException();
 						}
 
-						TemplateParserResult parserResult = ParseTemplateItem(templateBuilder.ToString());
+						TemplateParserPluginResult parserResult = ParseTemplateItem(templateBuilder.ToString());
 
 						if (parserResult.Text == null)
 						{
@@ -158,13 +159,20 @@ namespace TalesGenerator.Text
 						}
 						else
 						{
+							_currentSentence.AddRange(parserResult.TemplateTokens);
 							stringBuilder.Append(parserResult.Text);
 						}
 						break;
 				}
 			}
 
-			return new TemplateParserResult(stringBuilder.ToString(), unresolvedContext);
+			if (_currentSentence != null &&
+				_currentSentence.Count > 0)
+			{
+				_sentenceContext.Add(_currentSentence);
+			}
+
+			return new TemplateParserResult(stringBuilder.ToString(), _sentenceContext, unresolvedContext);
 		}
 
 		public string ReconcileWord(string word, Grammem grammem)
@@ -215,36 +223,34 @@ namespace TalesGenerator.Text
 			}
 		}
 
-		public TemplateParserResult Parse(NetworkNode networkNode)
+		public TemplateParserResult Parse(FunctionNode functionNode)
 		{
-			if (networkNode == null)
-			{
-				throw new ArgumentNullException("networkNode");
-			}
+			Contract.Requires<ArgumentNullException>(functionNode != null);
+			Contract.Ensures(Contract.Result<TemplateParserResult>() != null);
 
-			_parserContext = new TemplateParserNodeContext(networkNode);
+			_networkContext = new TemplateParserNetworkNodeContext(functionNode);
 			_currentSentence = null;
 			_sentenceContext.Clear();
 
-			return ParseNode(networkNode);
+			return ParseNode(functionNode);
 		}
 
-		public TemplateParserResult Parse(NetworkNode networkNode, ITemplateParserContext parserContext)
+		public TemplateParserResult Parse(FunctionNode functionNode, ITemplateParserNetworkContext parserContext)
 		{
-			if (networkNode == null)
-			{
-				throw new ArgumentNullException("networkNode");
-			}
-			if (parserContext == null)
-			{
-				throw new ArgumentNullException("parserContext");
-			}
+			Contract.Requires<ArgumentNullException>(functionNode != null);
+			Contract.Requires<ArgumentNullException>(parserContext != null);
+			Contract.Ensures(Contract.Result<TemplateParserResult>() != null);
 
-			_parserContext = parserContext;
+			_networkContext = parserContext;
 			_currentSentence = null;
 			_sentenceContext.Clear();
 
-			return ParseNode(networkNode);
+			return ParseNode(functionNode);
+		}
+
+		public void Dispose()
+		{
+			_textAnalyzer.Dispose();
 		}
 		#endregion
 	}

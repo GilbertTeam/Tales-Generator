@@ -54,7 +54,7 @@
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
     <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
     <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
     <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
     <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
@@ -107,7 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\BaseTaleNodeCollection.cs" />
-    <Compile Include="Collections\FunctionNodeActorCollection.cs" />
+    <Compile Include="Collections\FunctionNodeContextNodeCollection.cs" />
     <Compile Include="Collections\TaleItemNodeCollection.cs" />
     <Compile Include="Collections\TaleNodeCollection.cs" />
     <Compile Include="FunctionNode.cs" />
@@ -118,11 +118,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TaleBaseItemNode.cs" />
+    <Compile Include="TaleItemEdge.cs" />
     <Compile Include="TaleItemNode.cs" />
     <Compile Include="TalesNetwork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaleNode.cs" />
-    <Compile Include="Template.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TalesGenerator.Net\TalesGenerator.Net.csproj">

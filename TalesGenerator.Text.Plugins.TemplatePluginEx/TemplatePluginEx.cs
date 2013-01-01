@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Text.RegularExpressions;
 using TalesGenerator.Net;
-using TalesGenerator.Net.Collections;
 
 namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 {
@@ -13,7 +13,7 @@ namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 
 		private const string PluginName = "Advanced Template Parser Plugin";
 
-		private readonly Regex _wordRegex = new Regex(@"^~(\w+):(\w+)$");
+		private readonly Regex _wordRegex = new Regex(@"^~(\w+):([a-z]+)(\d+)?$");
 		#endregion
 
 		#region Properties
@@ -34,17 +34,13 @@ namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 			};
 		}
 
-		public override TemplateParserResult Parse(ITemplateParser templateParser, string template)
+		public override TemplateParserPluginResult Parse(ITemplateParser templateParser, string template)
 		{
-			if (templateParser == null)
-			{
-				throw new ArgumentNullException("templateParser");
-			}
-			if (string.IsNullOrEmpty(template))
-			{
-				throw new ArgumentException("template");
-			}
+			Contract.Requires<ArgumentNullException>(templateParser != null);
+			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(template));
+			Contract.Ensures(Contract.Result<TemplateParserPluginResult>() != null);
 
+			List<TemplateToken> templateTokens = new List<TemplateToken>();
 			List<NetworkEdgeType> unresolvedContext = new List<NetworkEdgeType>();
 			string resolvedText = null;
 			Match match = _wordRegex.Match(template);
@@ -57,7 +53,7 @@ namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 				switch (templateItemType)
 				{
 					case "agent":
-						var agentNodes = templateParser.ParserContext[NetworkEdgeType.Agent];
+						var agentNodes = templateParser.NetworkContext[NetworkEdgeType.Agent];
 
 						if (!agentNodes.Any())
 						{
@@ -65,11 +61,11 @@ namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 							break;
 						}
 
-						wordSample = agentNodes.First().Name;
+						wordSample = GetContextNodeByIndex(match, 3, agentNodes).Name;
 						break;
 
 					case "recipient":
-						var recipientNodes = templateParser.ParserContext[NetworkEdgeType.Recipient];
+						var recipientNodes = templateParser.NetworkContext[NetworkEdgeType.Recipient];
 
 						if (!recipientNodes.Any())
 						{
@@ -77,11 +73,11 @@ namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 							break;
 						}
 
-						wordSample = recipientNodes.First().Name;
+						wordSample = GetContextNodeByIndex(match, 3, recipientNodes).Name;
 						break;
 
 					case "action":
-						var actionNodes = templateParser.ParserContext[NetworkEdgeType.Action];
+						var actionNodes = templateParser.NetworkContext[NetworkEdgeType.Action];
 
 						if (!actionNodes.Any())
 						{
@@ -89,7 +85,7 @@ namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 							break;
 						}
 
-						wordSample = actionNodes.First().Name;
+						wordSample = GetContextNodeByIndex(match, 3, actionNodes).Name;
 						break;
 
 					default:
@@ -99,10 +95,12 @@ namespace TalesGenerator.Text.Plugins.TemplatePluginEx
 				if (!string.IsNullOrEmpty(wordSample))
 				{
 					resolvedText = templateParser.ReconcileWord(match.Groups[1].Value.Trim('~', ':'), wordSample);
+
+					templateTokens.Add(new TemplateToken(resolvedText, Lemmatize(templateParser.TextAnalyzer, wordSample), match.ToString()));
 				}
 			}
 
-			return new TemplateParserResult(resolvedText, unresolvedContext);
+			return new TemplateParserPluginResult(resolvedText, templateTokens, unresolvedContext);
 		}
 		#endregion
 	}

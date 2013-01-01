@@ -167,7 +167,8 @@ namespace TalesGenerator.UI.Classes
 				throw new ArgumentException("Path");
 			XDocument xDoc = XDocument.Load(_path);
 
-			_network = TalesNetwork.LoadFromXml(xDoc) as TalesNetwork;
+			_network = new TalesNetwork();
+			_network.LoadFromXml(xDoc);
 
 			_linkMenu.Network = Network;
 			_nodeMenu.Network = Network;

@@ -10,6 +10,7 @@ namespace TalesGenerator.Net
 	public enum NetworkEdgeType
 	{
 		IsA,
+		PartOf,
 		Agent,
 		Recipient,
 		Locative,
@@ -97,7 +98,7 @@ namespace TalesGenerator.Net
 
 		#region Constructors
 
-		internal NetworkEdge(Network network)
+		protected internal NetworkEdge(Network network)
 			: base(network)
 		{
 		}
@@ -108,7 +109,7 @@ namespace TalesGenerator.Net
 		/// <param name="parent">Сеть, которой должна принадлежать дуга.</param>
 		/// <param name="startNode">Вершина, из которой должна исходить данная дуга.</param>
 		/// <param name="endNode">Вершина, в которую должна входить данная дуга.</param>
-		internal NetworkEdge(Network parent, NetworkNode startNode, NetworkNode endNode)
+		protected internal NetworkEdge(Network parent, NetworkNode startNode, NetworkNode endNode)
 			: this(parent, startNode, endNode, NetworkEdgeType.IsA)
 		{
 			
@@ -121,7 +122,7 @@ namespace TalesGenerator.Net
 		/// <param name="startNode">Вершина, из которой должна исходить данная дуга.</param>
 		/// <param name="endNode">Вершина, в которую должна входить данная дуга.</param>
 		/// <param name="edgeType">Тип дуги.</param>
-		internal NetworkEdge(Network parent, NetworkNode startNode, NetworkNode endNode, NetworkEdgeType edgeType)
+		protected internal NetworkEdge(Network parent, NetworkNode startNode, NetworkNode endNode, NetworkEdgeType edgeType)
 			: base(parent)
 		{
 			if (startNode == null)
@@ -145,7 +146,7 @@ namespace TalesGenerator.Net
 
 		#region Methods
 
-		internal override XElement GetXml()
+		public override XElement GetXml()
 		{
 			XNamespace xNamespace = Namespace;
 			XElement xNetworkEdge = new XElement(xNamespace + "Edge");
@@ -160,12 +161,12 @@ namespace TalesGenerator.Net
 			return xNetworkEdge;
 		}
 
-		internal override void SaveToXml(XElement xElement)
+		public override void SaveToXml(XElement xElement)
 		{
 			base.SaveToXml(xElement);
 		}
 
-		internal override void LoadFromXml(XElement xNetworkEdge)
+		public override void LoadFromXml(XElement xNetworkEdge)
 		{
 			if (xNetworkEdge == null)
 			{
@@ -197,6 +198,7 @@ namespace TalesGenerator.Net
 			}
 
 			_startNode = Network.Nodes.SingleOrDefault(node => node.Id == startNodeId);
+			
 			_endNode= Network.Nodes.SingleOrDefault(node => node.Id == endNodeId);
 			_edgeType = edgeType;
 
@@ -205,12 +207,6 @@ namespace TalesGenerator.Net
 			{
 				throw new SerializationException();
 			}
-
-			//TODO Насколько понимаю, потеряло свою актуальность для таких типов дуг, как агент, реципиент и т.д.
-			//if (_startNode.OutgoingEdges.GetEdge(edgeType) != null)
-			//{
-			//    throw new SerializationException();
-			//}
 		}
 
 		public override string ToString()

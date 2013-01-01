@@ -32,6 +32,7 @@
 		<RoutedUICommand x:Key="StartEditCommandKey"/>
 		<RoutedUICommand x:Key="LayoutCommandKey"/>
 		<RoutedUICommand x:Key="EditXmlCommandKey"/>
+		<RoutedUICommand x:Key="Consult2Key"/>
 		<!--ContextMenu-->
 		<Style x:Key="ContextMenuLinkTypeStyle">
 			<Setter Property="MenuItem.IsCheckable" Value="True"/>
@@ -90,6 +91,8 @@
 						Executed="Layout_Executed"/>
 		<CommandBinding Command="{StaticResource EditXmlCommandKey}" CanExecute="EditXml_CanExecute"
 						Executed="EditXml_Executed"/>
+		<CommandBinding Command="{StaticResource Consult2Key}" CanExecute="Consult2_CanExecute"
+						Executed="Consult2_Executed"/>
 	</Window.CommandBindings>
 	
 	<Grid x:Name="LayoutGrid" ShowGridLines="False">
@@ -227,10 +230,18 @@
 				</ribbon:RibbonGroup>
 				<ribbon:RibbonGroup Header="Консультация"
 									LargeImageSource="..\Images\Ribbon\ConsultImage.png">
-					<ribbon:RibbonButton x:Name="ConsultButton"
+					<ribbon:RibbonSplitButton x:Name="ConsultButton"
 										 Label="{x:Static p:Resources.ConsultStartLabel}"
 										 Command="{StaticResource StartConsultKey}"
-										 LargeImageSource="..\Images\Ribbon\ConsultImage.png"/>
+										 LargeImageSource="..\Images\Ribbon\ConsultImage.png">
+						<ribbon:RibbonSplitButton.Items>
+							<ribbon:RibbonButton x:Name="Consult2Button"
+												 Label="Генерация готовой сказки"
+												 Command="{StaticResource Consult2Key}">
+								
+							</ribbon:RibbonButton>
+						</ribbon:RibbonSplitButton.Items>
+					</ribbon:RibbonSplitButton>
 				</ribbon:RibbonGroup>
 			</ribbon:RibbonTab>
 		</ribbon:Ribbon>

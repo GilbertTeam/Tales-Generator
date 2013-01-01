@@ -1,52 +1,26 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 
 namespace TalesGenerator.Text
 {
-	public enum PartOfSentence
-	{
-		/// <summary>
-		/// Подлежащее
-		/// </summary>
-		Subject,
-
-		/// <summary>
-		/// Сказуемое
-		/// </summary>
-		Predicate,
-
-		/// <summary>
-		/// Дополнение
-		/// </summary>
-		Object
-	}
-
-	public class TemplateToken
+	public class TemplateToken : SentenceToken
 	{
 		#region Properties
 
-		public PartOfSentence PartOfSentence { get; private set; }
+		public Grammem Grammem { get; set; }
 
 		public string TemplateItem { get; private set; }
-
-		public string Text { get; private set; }
 		#endregion
 
 		#region Constructors
 
-		public TemplateToken(string templateItem, string text, PartOfSentence partOfSentence)
+		public TemplateToken(string text, string lemma, string templateItem)
+			: base(text, lemma)
 		{
-			if (string.IsNullOrEmpty(templateItem))
-			{
-				throw new ArgumentNullException("templateItem");
-			}
-			if (string.IsNullOrEmpty(text))
-			{
-				throw new ArgumentNullException("text");
-			}
+			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(templateItem));
 
+			Grammem = Grammem.None;
 			TemplateItem = templateItem;
-			Text = text;
-			PartOfSentence = partOfSentence;
 		}
 		#endregion
 
@@ -54,7 +28,13 @@ namespace TalesGenerator.Text
 
 		public override string ToString()
 		{
-			return string.Format("TemplateItem = {0}. Text = \"{1}\". PartOfSentence = {2}.", TemplateItem, Text, PartOfSentence);
+			return string.Format("Text = \"{0}\". Lemma = \"{1}\". PartOfSpeech = {2}. PartOfSentence = {3}. TemplateItem = \"{4}\". Grammem = {5}.",
+				Text,
+				Lemma,
+				PartOfSpeech,
+				PartOfSentence,
+				TemplateItem,
+				Grammem);
 		}
 		#endregion
 	}

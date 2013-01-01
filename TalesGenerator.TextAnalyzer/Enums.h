@@ -119,11 +119,16 @@ namespace TalesGenerator { namespace Text {
 		/// <summary>
 		/// Инфинитив.
 		/// </summary>
-		INFINITIVE			= 21
+		INFINITIVE			= 21,
+
+		UNKNOWN				= 22,
 	};
 
+	[System::FlagsAttribute]
 	public enum class Grammem : System::UInt64
 	{
+		None				= 0x0,
+
 		/// <summary>
 		/// Множественное число.
 		/// </summary>

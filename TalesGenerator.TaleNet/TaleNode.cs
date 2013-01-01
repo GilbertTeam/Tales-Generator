@@ -5,7 +5,7 @@ using TalesGenerator.TaleNet.Collections;
 
 namespace TalesGenerator.TaleNet
 {
-	public class TaleNode : NetworkNode
+	public class TaleNode : TaleBaseItemNode
 	{
 		#region Fields
 
@@ -13,6 +13,11 @@ namespace TalesGenerator.TaleNet
 		#endregion
 
 		#region Properties
+
+		internal override TaleNodeKind NodeKind
+		{
+			get { return TaleNodeKind.Tale; }
+		}
 
 		public TaleFunctionNodeCollection Functions
 		{
@@ -30,8 +35,14 @@ namespace TalesGenerator.TaleNet
 
 		#region Constructors
 
-		internal TaleNode(TalesNetwork taleNetwork, string name)
-			: base(taleNetwork, name)
+		internal TaleNode(TalesNetwork talesNetwork)
+			: base(talesNetwork)
+		{
+			_functionNodes = new TaleFunctionNodeCollection(this);
+		}
+
+		internal TaleNode(TalesNetwork talesNetwork, string name)
+			: base(talesNetwork, name)
 		{
 			_functionNodes = new TaleFunctionNodeCollection(this);
 

@@ -5,6 +5,7 @@ using TalesGenerator.Net;
 using TalesGenerator.Net.Collections;
 using TalesGenerator.TaleNet;
 using System.Collections.Generic;
+using MoreLinq;
 
 namespace TalesGenerator.Text
 {
@@ -39,15 +40,44 @@ namespace TalesGenerator.Text
 			out IList<FunctionNode> resolvedFunctionNodes,
 			out IDictionary<FunctionNode, TemplateParserResult> parserResults)
 		{
-			string[] sentences = text.Split('\n');
-			SentenceComparer sentenceComparer = new SentenceComparer();
+			string[] sentences = text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+			ExactMatchSentenceComparer sentenceComparer = new ExactMatchSentenceComparer();
 			parserResults = new Dictionary<FunctionNode, TemplateParserResult>();
 			resolvedFunctionNodes = new List<FunctionNode>();
 
-			foreach (string sentence in sentences)
-			{
-				string trimSentence = sentence.Trim('.', '\r', '\n');
+			TextParser textParser = new TextParser(_textAnalyzer);
+			IEnumerable<IEnumerable<SentenceToken>> textTokens = textParser.Parse(text);
 
+			//foreach (string sentence in sentences)
+			//{
+			//    string trimSentence = sentence.Trim('.', '\r', '\n');
+
+			//    foreach (TaleNode taleNode in talesNetwork.Tales)
+			//    {
+			//        foreach (FunctionNode functionNode in taleNode.Functions)
+			//        {
+			//            TemplateParserResult parserResult;
+
+			//            if (!parserResults.TryGetValue(functionNode, out parserResult))
+			//            {
+			//                parserResult = _templateParser.Parse(functionNode);
+			//                parserResults[functionNode] = parserResult;
+			//            }
+
+			//            if (sentenceComparer.Compare(parserResult.Text, trimSentence))
+			//            {
+			//                resolvedFunctionNodes.Add(functionNode);
+			//            }
+			//        }
+			//    }
+			//}
+
+			// TODO: Возможно стоит предварительно проверять на то, не содержит ли входной текст просто имена героев.
+
+			IEqualityComparer<SentenceToken> sentenceTokenEqualityComparer = new SentenceTokenDefaultEqualityComparer();
+
+			foreach (var sentenceTokens in textTokens)
+			{
 				foreach (TaleNode taleNode in talesNetwork.Tales)
 				{
 					foreach (FunctionNode functionNode in taleNode.Functions)
@@ -60,16 +90,17 @@ namespace TalesGenerator.Text
 							parserResults[functionNode] = parserResult;
 						}
 
-						if (sentenceComparer.Compare(parserResult, trimSentence))
+						var parserTemplateTokens = parserResult.TemplateTokens.Aggregate<IEnumerable<SentenceToken>>((result, next) => result.Concat(next));
+
+						if (sentenceTokens.SequenceEqual(parserTemplateTokens, sentenceTokenEqualityComparer))
 						{
 							resolvedFunctionNodes.Add(functionNode);
 						}
 
-						//if (parserResult.Text != null &&
-						//    parserResult.Text.Trim('.') == trimSentence.Trim('.', '\r'))
-						//{
-						//    resolvedFunctionNodes.Add(functionNode);
-						//}
+						if (sentenceTokens.All(token => parserTemplateTokens.Contains(token, sentenceTokenEqualityComparer)))
+						{
+							resolvedFunctionNodes.Add(functionNode);
+						}
 					}
 				}
 			}
@@ -80,7 +111,7 @@ namespace TalesGenerator.Text
 			TaleNode currentTaleNode,
 			FunctionNode baseFunctionNode,
 			NetworkEdgeType edgeType,
-			TemplateParserDictionaryContext newParserContext)
+			TemplateParserNetworkDictionaryContext newParserContext)
 		{
 			TemplateParserResult baseFunctionNodeParserResult = parserResults[baseFunctionNode];
 			var currentTaleContextNodes = new List<NetworkNode>();
@@ -133,6 +164,32 @@ namespace TalesGenerator.Text
 			}
 		}
 
+		private string MergeTales(IEnumerable<FunctionNode> resolvedFunctions)
+		{
+			var tales = resolvedFunctions.Select(function => function.Tale).Distinct();
+
+			// 1. Проверим, имеют ли все сказки одинаковый сценарий.
+			TaleNode baseTale = (TaleNode)resolvedFunctions.First().BaseNode;
+			bool allTalesHaveSameScenario = resolvedFunctions.All(function => function.BaseNode == baseTale);
+
+			if (allTalesHaveSameScenario)
+			{
+				TaleNode scenarioTale = (TaleNode)tales.First().BaseNode;
+				var scenario = scenarioTale.Scenario;
+				
+				// Выберем из всех сказок ту, которая содержит наибольшое число функций.
+				TaleNode mostRelevantTale = tales.MaxBy(tale => tale.Functions.Count());
+
+				// TODO: Нужно ли делать что-то еще?
+			}
+			else
+			{
+
+			}
+
+			throw new NotImplementedException();
+		}
+
 		private string GenerateText(IEnumerable<FunctionNode> functionNodes)
 		{
 			StringBuilder textBuilder = new StringBuilder();
@@ -178,7 +235,22 @@ namespace TalesGenerator.Text
 
 			if (!areMembersOfTheSameTale)
 			{
-				throw new NotImplementedException();
+				//throw new NotImplementedException();
+
+				var tales = resolvedFunctionNodes.Select(function => function.Tale);
+				int maxFunctionCount = 0;
+
+				foreach (TaleNode tale in tales)
+				{
+					if (tale.BaseNode is TaleNode &&
+						tale.Functions.Count() > maxFunctionCount)
+					{
+						maxFunctionCount = tale.Functions.Count();
+						taleNode = tale;
+					}
+				}
+
+				//taleNode = resolvedFunctionNodes.Select(function => function.Tale).MaxBy(tale => tale.Functions.Count());
 			}
 
 			TaleNode baseTaleNode = (TaleNode)taleNode.BaseNode;
@@ -189,13 +261,11 @@ namespace TalesGenerator.Text
 			}
 
 			var scenario = baseTaleNode.Scenario;
-			//Dictionary<FunctionType, FunctionNode> scenarioFunctions = new Dictionary<FunctionType, FunctionNode>();
 			List<FunctionNode> scenarioFunctions = new List<FunctionNode>();
 
 			foreach (FunctionType functionType in scenario)
 			{
-				//TODO Функций конкретного типа в общем случае может быть несколько.
-				FunctionNode resolvedNode = resolvedFunctionNodes.SingleOrDefault(node => node.FunctionType == functionType);
+				FunctionNode resolvedNode = resolvedFunctionNodes.FirstOrDefault(node => node.FunctionType == functionType);
 
 				if (resolvedNode != null)
 				{
@@ -204,8 +274,7 @@ namespace TalesGenerator.Text
 				}
 				else
 				{
-					//TODO Функций конкретного типа в общем случае может быть несколько.
-					FunctionNode currentTaleNode = taleNode.Functions.SingleOrDefault(node => node.FunctionType == functionType);
+					FunctionNode currentTaleNode = taleNode.Functions.FirstOrDefault(node => node.FunctionType == functionType);
 
 					if (currentTaleNode != null)
 					{
@@ -214,15 +283,14 @@ namespace TalesGenerator.Text
 					}
 					else
 					{
-						//TODO Функций конкретного типа в общем случае может быть несколько.
-						FunctionNode baseFunctionNode = baseTaleNode.Functions.SingleOrDefault(node => node.FunctionType == functionType);
+						FunctionNode baseFunctionNode = baseTaleNode.Functions.FirstOrDefault(node => node.FunctionType == functionType);
 
 						if (baseFunctionNode == null)
 						{
 							throw new InvalidOperationException();
 						}
 
-						TemplateParserDictionaryContext newParserContext = new TemplateParserDictionaryContext();
+						TemplateParserNetworkDictionaryContext newParserContext = new TemplateParserNetworkDictionaryContext();
 						GetChildContextNode(parserResults, taleNode, baseFunctionNode, NetworkEdgeType.Agent, newParserContext);
 						GetChildContextNode(parserResults, taleNode, baseFunctionNode, NetworkEdgeType.Recipient, newParserContext);
 						GetChildContextNode(parserResults, taleNode, baseFunctionNode, NetworkEdgeType.Action, newParserContext);

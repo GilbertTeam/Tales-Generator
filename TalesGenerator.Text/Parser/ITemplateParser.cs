@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using TalesGenerator.Net;
+using TalesGenerator.TaleNet;
 
 namespace TalesGenerator.Text
 {
@@ -8,9 +7,9 @@ namespace TalesGenerator.Text
 	{
 		#region Properties
 
-		IList<TemplateToken> CurrentSentence { get; }
+		IEnumerable<TemplateToken> CurrentSentence { get; }
 
-		ITemplateParserContext ParserContext { get; }
+		ITemplateParserNetworkContext NetworkContext { get; }
 
 		TextAnalyzer TextAnalyzer { get; }
 		#endregion
@@ -33,7 +32,9 @@ namespace TalesGenerator.Text
 		/// <returns>Согласованная форма слова.</returns>
 		string ReconcileWord(string word, string baseWord);
 
-		TemplateParserResult Parse(NetworkNode networkNode);
+		TemplateParserResult Parse(FunctionNode functionNode);
+
+		TemplateParserResult Parse(FunctionNode functionNode, ITemplateParserNetworkContext parserContext);
 		#endregion
 	}
 }

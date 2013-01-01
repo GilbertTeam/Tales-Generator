@@ -6,7 +6,7 @@ using TalesGenerator.Net.Collections;
 
 namespace TalesGenerator.Text
 {
-	public class TemplateParserNodeContext : ITemplateParserContext
+	public class TemplateParserNetworkNodeContext : ITemplateParserNetworkContext
 	{
 		#region Fields
 
@@ -26,7 +26,7 @@ namespace TalesGenerator.Text
 
 		#region Constructors
 
-		public TemplateParserNodeContext(NetworkNode networkNode)
+		public TemplateParserNetworkNodeContext(NetworkNode networkNode)
 		{
 			if (networkNode == null)
 			{

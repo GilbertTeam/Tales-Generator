@@ -6,6 +6,7 @@ using System.Text;
 using TalesGenerator.Net;
 using TalesGenerator.TaleNet;
 using TalesGenerator.Text;
+using System.Xml.Linq;
 
 namespace TalesGenerator.ConsoleTest
 {
@@ -27,85 +28,68 @@ namespace TalesGenerator.ConsoleTest
 			#region Scenario Tale
 
 			TaleNode scenarioTaleNode = talesNetwork.Tales.Add("Сказка-сценарий");
-			TaleItemNode grandMotherNode = talesNetwork.Persons.Add("Старушка", parentsNode);
-			TaleItemNode grandFatherNode = talesNetwork.Persons.Add("Старичок", parentsNode);
-			TaleItemNode girlNode = talesNetwork.Persons.Add("Девочка", heroNode);
-			TaleItemNode boyNode = talesNetwork.Persons.Add("Мальчик", seekingPersonNode);
-			TaleItemNode geeseNode = talesNetwork.Persons.Add("Гуси-ледеди", antagonistNode);
-			geeseNode.Grammem = Grammem.Masculinum | Grammem.Nominativ | Grammem.Plural;
-			TaleItemNode stoveNode = talesNetwork.Persons.Add("Печка", donorNode);
-			TaleItemNode appleTreeNode = talesNetwork.Persons.Add("Яблоня", donorNode);
-			TaleItemNode riverNode = talesNetwork.Persons.Add("Река", donorNode);
-			TaleItemNode babaYagaNode = talesNetwork.Persons.Add("Баба-Яга", antagonistNode);
-			TaleItemNode cabinOnChickenLegsNode = talesNetwork.Persons.Add("Избушка на курьих ножках", negativePersonNode);
 
 			FunctionNode initialStateNode = scenarioTaleNode.Functions.Add("Начальная ситуация", FunctionType.InitialState);
-			initialStateNode.Template = "{Action0:123} {agents}.";
-			initialStateNode.Action = talesNetwork.Actions.Add("Жили-были");
+			initialStateNode.Template = "{Action} {agents}.";
+			initialStateNode.Actions.Add(talesNetwork.Actions.Add("Жили-были"));
 			initialStateNode.Agents.Add(heroNode);
 
 			FunctionNode interdictionNode = scenarioTaleNode.Functions.Add("Запрет", FunctionType.Interdiction);
 			interdictionNode.Template = "{Agent} {~сказал:agent}: \"{Recipient}, {action}.\"";
-			interdictionNode.Action = talesNetwork.Actions.Add("Не уходи");
+			interdictionNode.Actions.Add(talesNetwork.Actions.Add("Не уходить"));
 			interdictionNode.Agents.Add(parentsNode);
 			interdictionNode.Recipients.Add(heroNode);
 
 			FunctionNode absentationNode = scenarioTaleNode.Functions.Add("Отлучка старших", FunctionType.Absentation);
 			absentationNode.Template = "{Agents} {action}.";
-			absentationNode.Action = talesNetwork.Actions.Add("Уйти");
+			absentationNode.Actions.Add(talesNetwork.Actions.Add("Уйти"));
 			absentationNode.Agents.Add(parentsNode);
 
 			FunctionNode violationOfInterdictionNode = scenarioTaleNode.Functions.Add("Нарушение запрета", FunctionType.ViolationOfInterdiction);
 			violationOfInterdictionNode.Template = "{Agent} {action}.";
-			violationOfInterdictionNode.Action = talesNetwork.Actions.Add("Нарушить запрет");
+			violationOfInterdictionNode.Actions.Add(talesNetwork.Actions.Add("Нарушить запрет"));
 			violationOfInterdictionNode.Agents.Add(heroNode);
 
 			FunctionNode villainyNode = scenarioTaleNode.Functions.Add("Вредительство", FunctionType.Villainy);
 			villainyNode.Template = "{Agent} {action} {recipient}.";
-			villainyNode.Action = talesNetwork.Actions.Add("Похитить");
+			villainyNode.Actions.Add(talesNetwork.Actions.Add("Похитить"));
 			villainyNode.Agents.Add(antagonistNode);
 			villainyNode.Recipients.Add(seekingPersonNode);
 
 			FunctionNode mediationNode = scenarioTaleNode.Functions.Add("Сообщение беды", FunctionType.Mediation);
 			mediationNode.Template = "{Agent} {action} {recipient}.";
-			mediationNode.Action = talesNetwork.Actions.Add("Обнаружить пропажу");
+			mediationNode.Actions.Add(talesNetwork.Actions.Add("Обнаружить пропажу"));
 			mediationNode.Agents.Add(heroNode);
 			mediationNode.Recipients.Add(seekingPersonNode);
 
 			FunctionNode departureNode = scenarioTaleNode.Functions.Add("Отправка на поиски", FunctionType.Departure);
 			departureNode.Template = "{Agent} {action}.";
-			departureNode.Action = talesNetwork.Actions.Add("Отправиться на поиски");
+			departureNode.Actions.Add(talesNetwork.Actions.Add("Отправиться на поиски"));
 			departureNode.Agents.Add(heroNode);
 
 			FunctionNode donorMeeting = scenarioTaleNode.Functions.Add("Встреча с испытателем", FunctionType.DonorMeeting);
 			donorMeeting.Template = "{Agent} {action} {recipient}.";
-			donorMeeting.Action = talesNetwork.Actions.Add("Встретить");
+			donorMeeting.Actions.Add(talesNetwork.Actions.Add("Встретить"));
 			donorMeeting.Agents.Add(heroNode);
 			donorMeeting.Recipients.Add(donorNode);
 
 			FunctionNode testNode = scenarioTaleNode.Functions.Add("Испытание", FunctionType.Test);
 			testNode.Template = "{Agent} {action} {recipient}";
-			testNode.Action = talesNetwork.Actions.Add("Испытать");
+			testNode.Actions.Add(talesNetwork.Actions.Add("Испытать"));
 			testNode.Agents.Add(donorNode);
 			testNode.Recipients.Add(heroNode);
 
 			FunctionNode testAttemptNode = scenarioTaleNode.Functions.Add("Попытка пройти испытание", FunctionType.TestAttempt);
 			testAttemptNode.Template = "{Agent} {action} {recipient}.";
-			testAttemptNode.Action = talesNetwork.Actions.Add("Отказать");
+			testAttemptNode.Actions.Add(talesNetwork.Actions.Add("Отказать"));
 			testAttemptNode.Agents.Add(heroNode);
 			testAttemptNode.Recipients.Add(donorNode);
 
-			//NetworkNode testAttemptTemplateNode = network.Nodes.Add("{Agent} {~ответил:agent} {recipient}: \"О, у моего батюшки пшеничные не едятся\".");
-			//NetworkNode testAttemptActionNode = network.Nodes.Add("Встретить");
-			//network.Edges.Add(testAttemptNode, testAttemptTemplateNode, NetworkEdgeType.Template);
-			//network.Edges.Add(testAttemptNode, testAttemptActionNode, NetworkEdgeType.Action);
-
-			//NetworkNode testResultNode = network.Nodes.Add("Результат испытания");
-			////TODO В этом случае ответил не определяется как сказуемое.
-			//NetworkNode testResultTemplateNode = network.Nodes.Add("{Agent} не сказала {recipient}.");
-			//NetworkNode testResultActionNode = network.Nodes.Add("Сказать");
-			//network.Edges.Add(testResultNode, testResultTemplateNode, NetworkEdgeType.Template);
-			//network.Edges.Add(testResultNode, testResultActionNode, NetworkEdgeType.Action);
+			FunctionNode testResultNode = scenarioTaleNode.Functions.Add("Результат испытания", FunctionType.TestResult);
+			testResultNode.Template = "{Agent} {action} {recipient}.";
+			testResultNode.Actions.Add(talesNetwork.Actions.Add("Сказать"));
+			testResultNode.Agents.Add(donorNode);
+			testResultNode.Recipients.Add(heroNode);
 
 			//NetworkNode antagonistHomeNode = network.Nodes.Add("Жилище антагониста");
 			//NetworkNode antagonistHomeTemplateNode = network.Nodes.Add("{Agent} {action} {recipient}.");
@@ -143,38 +127,83 @@ namespace TalesGenerator.ConsoleTest
 			#region Сказка "Гуси-лебеди"
 
 			TaleNode geeseTaleNode = talesNetwork.Tales.Add("Сказка \"Гуси-лебеди\"", scenarioTaleNode);
+			TaleItemNode grandMotherNode = talesNetwork.Persons.Add("Старушка", parentsNode);
+			TaleItemNode grandFatherNode = talesNetwork.Persons.Add("Старичок", parentsNode);
+			TaleItemNode girlNode = talesNetwork.Persons.Add("Девочка", heroNode);
+			TaleItemNode boyNode = talesNetwork.Persons.Add("Мальчик", seekingPersonNode);
+			TaleItemNode geeseNode = talesNetwork.Persons.Add("Гуси-лебеди", antagonistNode, Grammem.Plural);
+			TaleItemNode stoveNode = talesNetwork.Persons.Add("Печка", donorNode);
+			TaleItemNode appleTreeNode = talesNetwork.Persons.Add("Яблоня", donorNode);
+			TaleItemNode riverNode = talesNetwork.Persons.Add("Река", donorNode);
+			TaleItemNode babaYagaNode = talesNetwork.Persons.Add("Баба-Яга", antagonistNode);
+			TaleItemNode cabinOnChickenLegsNode = talesNetwork.Persons.Add("Избушка на курьих ножках", negativePersonNode);
 
 			FunctionNode gtInitialStateNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Начальная ситуация", initialStateNode);
+			gtInitialStateNode.Template = "{Action} {agent0},`` {agent1}; у них {~был:agent2} {agent2}, да {~маленький:agent3} {agent3}.";
 			gtInitialStateNode.Agents.Add(grandMotherNode, grandFatherNode, girlNode, boyNode);
 
-			FunctionNode gtProhibitionNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Запрет", interdictionNode);
-			gtProhibitionNode.Action = talesNetwork.Actions.Add("Не уходи со двора");
-			gtProhibitionNode.Agents.Add(grandMotherNode);
-			gtProhibitionNode.Recipients.Add(girlNode);
+			FunctionNode gtInterdictionNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Запрет", interdictionNode);
+			gtInterdictionNode.Template = "\"{Recipient}, {recipient}, - {~говорить:agent} {agent}, - мы пойдем на работу, принесем тебе булочку, сошьем платьице, купим платочек: только {action}.\"";
+			// TODO: Ошибки генератора. Неправильно определяется время.
+			gtInterdictionNode.Actions.Add(talesNetwork.Actions.Add("Не уходить со двора"));
+			gtInterdictionNode.Agents.Add(grandMotherNode);
+			gtInterdictionNode.Recipients.Add(girlNode);
 
-			FunctionNode gtSeniorsDepartureNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Уход старших", absentationNode);
-			gtSeniorsDepartureNode.Agents.Add(grandMotherNode, grandFatherNode);
+			FunctionNode gtAbsentationNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Отлучка старших", absentationNode);
+			gtAbsentationNode.Agents.Add(grandMotherNode, grandFatherNode);
 
-			FunctionNode gtProhibitionViolationNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Нарушение запрета", violationOfInterdictionNode);
-			gtProhibitionViolationNode.Agents.Add(girlNode);
+			FunctionNode gtViolationOfInterdictionNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Нарушение запрета", violationOfInterdictionNode);
+			gtViolationOfInterdictionNode.Template = "А {agent} {action} про запрет, {~посадил:agent} {recipient} на травку под окошко, а {~сам:agent} {~побежал:agent} на улицу.";
+			gtViolationOfInterdictionNode.Actions.Add(talesNetwork.Actions.Add("Забыть"));
+			gtViolationOfInterdictionNode.Agents.Add(girlNode);
+			gtViolationOfInterdictionNode.Recipients.Add(boyNode);
 
-			FunctionNode gtSabotageNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Вредительство", villainyNode);
-			gtSabotageNode.Action = talesNetwork.Actions.Add("Похитить");
-			gtSabotageNode.Agents.Add(geeseNode);
-			gtSabotageNode.Recipients.Add(boyNode);
+			FunctionNode gtVillainyNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Вредительство", villainyNode);
+			gtVillainyNode.Template = "{Agent} {action0}, {action1} {recipient}, {action2}.";
+			gtVillainyNode.Actions.Add(talesNetwork.Actions.Add("Налететь"), talesNetwork.Actions.Add("Подхватить"), talesNetwork.Actions.Add("Унести"));
+			gtVillainyNode.Agents.Add(geeseNode);
+			gtVillainyNode.Recipients.Add(boyNode);
 
-			FunctionNode gtWoesPostNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Сообщение беды", mediationNode);
-			gtWoesPostNode.Agents.Add(girlNode);
-			gtWoesPostNode.Recipients.Add(boyNode);
+			FunctionNode gtMediationNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Сообщение беды", mediationNode);
+			gtMediationNode.Template = "{Agent} {action}, глядь - {recipient} нету.";
+			gtMediationNode.Actions.Add(talesNetwork.Actions.Add("Прийти"));
+			gtMediationNode.Agents.Add(girlNode);
+			gtMediationNode.Recipients.Add(boyNode);
 
-			FunctionNode gtSearchSubmittingNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Отправка на поиски", departureNode);
-			gtSearchSubmittingNode.Agents.Add(girlNode);
+			FunctionNode gtDepartureNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Отправка на поиски", departureNode);
+			gtDepartureNode.Template = "Тогда {agent} {action} {recipient}.";
+			gtDepartureNode.Actions.Add(talesNetwork.Actions.Add("Отправилась на поиски"));
+			gtDepartureNode.Agents.Add(girlNode);
+			gtDepartureNode.Recipients.Add(boyNode);
+
+			FunctionNode gtFirstDonorMeetingNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Встреча с первым испытателем", donorMeeting);
+			gtFirstDonorMeetingNode.Template = "{Agent} {action0}, {action0}. {Recipient0} стоит. {Agent} {~спросить:agent}: \"{Recipient0}, {recipient0}, куда {recipient1} {action1}?\"";
+			gtFirstDonorMeetingNode.Actions.Add(talesNetwork.Actions.Add("Бежать"), talesNetwork.Actions.Add("Полететь"));
+			gtFirstDonorMeetingNode.Agents.Add(girlNode);
+			gtFirstDonorMeetingNode.Recipients.Add(stoveNode, geeseNode);
+
+			FunctionNode gtFirstTestNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Первое испытание", testNode);
+			gtFirstTestNode.Template = "{Agent} {action} {recipient}: \"Съешь моего ржаного пирожка - скажу.\"";
+			gtFirstTestNode.Actions.Add(talesNetwork.Actions.Add("Сказать"));
+			gtFirstTestNode.Agents.Add(stoveNode);
+			gtFirstTestNode.Recipients.Add(girlNode);
+
+			FunctionNode gtFirstTestAttempt = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Попытка пройти первое испытание", testAttemptNode);
+			gtFirstTestAttempt.Template = "{Agent} {action} {recipient}: \"О, у моего батюшки пшеничные не едятся\".";
+			gtFirstTestAttempt.Actions.Add(talesNetwork.Actions.Add("Ответить"));
+			gtFirstTestAttempt.Agents.Add(girlNode);
+			gtFirstTestAttempt.Recipients.Add(stoveNode);
+
+			FunctionNode gtFirstTestResult = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Результат первого испытания", testResultNode);
+			gtFirstTestResult.Actions.Add(talesNetwork.Actions.Add("Не сказать"));
+			gtFirstTestResult.Agents.Add(stoveNode);
+			gtFirstTestResult.Recipients.Add(girlNode);
 
 			//FunctionNode gtFirstTesterMeetingNode = geeseTaleNode.FunctionNodes.Add("Сказка \"Гуси-лебеди\". Встреча с испытателем", testerMeetingNode);
 			//network.Edges.Add(gtFirstTesterMeetingNode, testerMeetingNode, NetworkEdgeType.IsA);
 			//network.Edges.Add(gtFirstTesterMeetingNode, girlNode, NetworkEdgeType.Agent);
 			//network.Edges.Add(gtFirstTesterMeetingNode, stoveNode, NetworkEdgeType.Recipient);
-			//{Agent} {~сказал:agent}: \"Съешь моего ржаного пирожка - скажу\"."
+			//
 
 			//NetworkNode gtFirstTestNode = network.Nodes.Add("Испытание");
 			//network.Edges.Add(gtFirstTestNode, testNode, NetworkEdgeType.IsA);
@@ -385,7 +414,7 @@ namespace TalesGenerator.ConsoleTest
 			atInitialStateNode.Agents.Add(girlNode, boyNode);
 
 			FunctionNode atProhibitionNode = alenushkaTaleNode.Functions.Add("Сказка \"Сестрица Аленушка и братец Иванушка\". Запрет", interdictionNode);
-			atProhibitionNode.Action = talesNetwork.Actions.Add("Не пей из лужи");
+			atProhibitionNode.Actions.Add(talesNetwork.Actions.Add("Не пей из лужи"));
 			atProhibitionNode.Agents.Add(girlNode);
 			atProhibitionNode.Recipients.Add(boyNode);
 
@@ -421,18 +450,18 @@ namespace TalesGenerator.ConsoleTest
 			btInitialStateNode.Agents.Add(ladyNode, sisterNode, brotherNode);
 
 			FunctionNode btIterdictionNode = brotherTaleNode.Functions.Add("Сказка \"Братец\". Запрет", interdictionNode);
-			btIterdictionNode.Action = talesNetwork.Actions.Add("Отпустить брата");
+			btIterdictionNode.Actions.Add(talesNetwork.Actions.Add("Отпустить брата"));
 			btIterdictionNode.Agents.Add(sisterNode);
 			btIterdictionNode.Recipients.Add(ladyNode);
 
 			FunctionNode btVillainyNode = brotherTaleNode.Functions.Add("Сказка \"Братец\". Вредительство", villainyNode);
-			btVillainyNode.Action = talesNetwork.Actions.Add("Вырвать из рук няньки");
+			btVillainyNode.Actions.Add(talesNetwork.Actions.Add("Вырвать из рук няньки"));
 			btVillainyNode.Agents.Add(windNode);
 			btVillainyNode.Recipients.Add(brotherNode);
 
 			FunctionNode btMediationNode = brotherTaleNode.Functions.Add("Сказка \"Братец\". Сообщение беды", mediationNode);
 			//TODO Не учитывается отрицание (частица "не").
-			btMediationNode.Action = talesNetwork.Actions.Add("Не нашла");
+			btMediationNode.Actions.Add(talesNetwork.Actions.Add("Не нашла"));
 			btMediationNode.Agents.Add(sisterNode);
 			btMediationNode.Recipients.Add(brotherNode);
 
@@ -643,25 +672,36 @@ namespace TalesGenerator.ConsoleTest
 			TextAnalyzer textAnalyzer = CreateTextAnalyzer();
 			TextGenerator textGenerator = new TextGenerator(textAnalyzer);
 			Console.OutputEncoding = Encoding.UTF8;
+			bool generateByNetwork = false;
 
-			//while (true)
-			//{
-			//    string text = textGenerator.GenerateText(talesNetwork, File.ReadAllText(@"Input.txt"));
-			//    File.WriteAllText(@"Output.txt", text);
+			talesNetwork.SaveToXml().Save(@"C:\Temp\TalesNetwork.xml");
 
-			//    Console.WriteLine("Press 'r' to repeat, 'q' to exit.");
+			TalesNetwork loadedNetwork = new TalesNetwork();
+			loadedNetwork.LoadFromXml(XDocument.Load(@"C:\Temp\TalesNetwork.xml"));
 
-			//    string input = Console.ReadLine();
+			if (generateByNetwork)
+			{
+				string text = textGenerator.GenerateText(loadedNetwork.Tales[1]);
+				Console.WriteLine(text);
+			}
+			else
+			{
+				while (true)
+				{
+					string text = textGenerator.GenerateText(loadedNetwork, File.ReadAllText(@"Input.txt"));
+					//File.WriteAllText(@"Output.txt", text);
+					Console.WriteLine(text);
 
-			//    if (input.ToLower() == "q")
-			//    {
-			//        break;
-			//    }
-			//}
+					Console.WriteLine("Press 'r' to repeat, 'q' to exit.");
 
-			string text = textGenerator.GenerateText(talesNetwork.Tales[1]);
-			Console.WriteLine(text);
-			Console.ReadKey();
+					string input = Console.ReadLine();
+
+					if (input.ToLower() == "q")
+					{
+						break;
+					}
+				}
+			}
 		}
 		#endregion
 	}

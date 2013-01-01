@@ -95,6 +95,10 @@ namespace TalesGenerator { namespace Text {
 		{
 			uint64_t currentGrammem = ::turglem_paradigms_get_grammem(m_tlem->paradigms, result->Paradigm, formId);
 
+#ifdef _DEBUG
+			String^ text = GetTextByFormId(result, formId);
+#endif
+
 			if (grammemValue == (currentGrammem & grammemValue))
 			{
 				textList->Add(GetTextByFormId(result, formId));

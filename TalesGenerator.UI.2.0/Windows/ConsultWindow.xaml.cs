@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics.Contracts;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
 using TalesGenerator.TaleNet;
+using TalesGenerator.Text;
 
 namespace TalesGenerator.UI.Windows
 {
@@ -20,25 +11,46 @@ namespace TalesGenerator.UI.Windows
 	/// </summary>
 	public partial class ConsultWindow : Window
 	{
-		TalesNetwork _network;
-		//Reasoner _reasoner;
+		#region Fields
 
-		public ConsultWindow(TalesNetwork network)
+		private readonly TalesNetwork _talesNetwork;
+
+		private readonly TextGenerator _textGenerator;
+		#endregion
+
+		#region Constructors
+
+		public ConsultWindow()
 		{
 			InitializeComponent();
+		}
 
-			_network = network;
+		public ConsultWindow(TalesNetwork talesNetwork)
+			: this()
+		{
+			Contract.Requires<ArgumentNullException>(talesNetwork != null);
 
-			//_reasoner = new Reasoner(_network);
+			_talesNetwork = talesNetwork;
+
+			TextAnalyzer textAnalyzer = new TextAnalyzer(AdapterKind.RussianCp1251Adapter);
+			textAnalyzer.Load(
+				@"Dictionaries\Russian\Dictionary.auto",
+				@"Dictionaries\Russian\Paradigms.bin",
+				@"Dictionaries\Russian\PredictionDictionary.auto");
+
+			_textGenerator = new TextGenerator(textAnalyzer);
 
 			QuestionTextBox.Focus();
 		}
+		#endregion
+
+		#region Event Handlers
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
-				//AnswerTextBox.Text = _reasoner.Confirm(QuestionTextBox.Text);
+				AnswerTextBox.Text = _textGenerator.GenerateText(_talesNetwork, QuestionTextBox.Text);
 			}
 			catch (Exception ex)
 			{
@@ -46,5 +58,6 @@ namespace TalesGenerator.UI.Windows
 					MessageBoxImage.Error);
 			}
 		}
+		#endregion
 	}
 }

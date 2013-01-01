@@ -161,7 +161,7 @@ namespace TalesGenerator.Net
 
 		#region Methods
 
-		internal override XElement GetXml()
+		public override XElement GetXml()
 		{
 			XElement xNetworkNode = new XElement(XNamespace + "Node");
 
@@ -172,12 +172,12 @@ namespace TalesGenerator.Net
 			return xNetworkNode;
 		}
 
-		internal override void SaveToXml(XElement xElement)
+		public override void SaveToXml(XElement xElement)
 		{
 			base.SaveToXml(xElement);
 		}
 
-		internal override void LoadFromXml(XElement xElement)
+		public override void LoadFromXml(XElement xElement)
 		{
 			base.LoadFromXml(xElement);
 
@@ -201,6 +201,7 @@ namespace TalesGenerator.Net
 			{
 				NetworkNode baseNode = BaseNode;
 
+				// TODO: Скорее всего ошибка.
 				if (useIsInstance &&
 					baseNode == null)
 				{
@@ -212,6 +213,7 @@ namespace TalesGenerator.Net
 					if (baseNode == networkNode)
 					{
 						isInherit = true;
+						break;
 					}
 
 					baseNode = baseNode.BaseNode;

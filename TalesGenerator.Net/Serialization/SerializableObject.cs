@@ -8,7 +8,7 @@ namespace TalesGenerator.Net.Serialization
 
 		internal const string Namespace = "http://www.gilbertteam.com";
 
-		internal static readonly XNamespace XNamespace = Namespace;
+		public static readonly XNamespace XNamespace = Namespace;
 		#endregion
 
 		#region Methods
@@ -17,19 +17,19 @@ namespace TalesGenerator.Net.Serialization
 		/// Возвращает XML представление объекта.
 		/// </summary>
 		/// <returns></returns>
-		internal abstract XElement GetXml();
+		public abstract XElement GetXml();
 
 		/// <summary>
 		/// Сохраняет XML представление объекта.
 		/// </summary>
 		/// <param name="xElement">Элемент, в котором должно быть сохранено XML представление объекта.</param>
-		internal abstract void SaveToXml(XElement xElement);
+		public abstract void SaveToXml(XElement xElement);
 
 		/// <summary>
 		/// Загружает объект на основе XML представления.
 		/// </summary>
 		/// <param name="xElement"></param>
-		internal abstract void LoadFromXml(XElement xElement);
+		public abstract void LoadFromXml(XElement xElement);
 		#endregion
 	}
 }

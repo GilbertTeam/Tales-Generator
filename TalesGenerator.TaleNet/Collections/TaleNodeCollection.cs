@@ -1,9 +1,11 @@
-﻿using TalesGenerator.Net.Collections;
-using System;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TalesGenerator.TaleNet.Collections
 {
-	public class TaleNodeCollection : BaseTaleNodeCollection<TaleNode>
+	public class TaleNodeCollection : BaseTaleNodeCollection<TaleNode>, IEnumerable, IEnumerable<TaleNode>
 	{
 		#region Constructors
 
@@ -15,6 +17,16 @@ namespace TalesGenerator.TaleNet.Collections
 		#endregion
 
 		#region Methods
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return ((IEnumerable<TaleNode>)this).GetEnumerator();
+		}
+
+		IEnumerator<TaleNode> IEnumerable<TaleNode>.GetEnumerator()
+		{
+			return Network.Nodes.OfType<TaleNode>().GetEnumerator();
+		}
 
 		public TaleNode Add(string name)
 		{

@@ -1,48 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using TalesGenerator.Net;
 
 namespace TalesGenerator.Text
 {
-	public class TemplateParserResult
+	public class TemplateParserResult : TemplateParserBaseResult
 	{
 		#region Properties
 
 		/// <summary>
-		/// Результирующий текст.
+		/// Набор токенов, получившихся в результате разбора шаблона.
 		/// </summary>
-		public string Text { get; private set; }
-
-		/// <summary>
-		/// Падежи, которые не удалось найти.
-		/// </summary>
-		public IEnumerable<NetworkEdgeType> UnresolvedContext { get; private set; }
+		public IEnumerable<IEnumerable<TemplateToken>> TemplateTokens { get; private set; }
 		#endregion
 
 		#region Constructors
 
-		public TemplateParserResult(string text)
+		public TemplateParserResult(string text, IEnumerable<IEnumerable<TemplateToken>> templateTokens)
+			: base(text)
 		{
-			Text = text;
+			Contract.Requires<ArgumentNullException>(templateTokens != null);
+
+			TemplateTokens = templateTokens;
 		}
 
-		public TemplateParserResult(string text, IEnumerable<NetworkEdgeType> unresolvedContext)
+		public TemplateParserResult(string text, IEnumerable<IEnumerable<TemplateToken>> templateTokens, IEnumerable<NetworkEdgeType> unresolvedContext)
+			: base(text, unresolvedContext)
 		{
-			if (unresolvedContext == null)
-			{
-				throw new ArgumentNullException("unresolvedContext");
-			}
+			Contract.Requires<ArgumentNullException>(templateTokens != null);
 
-			Text = text;
-			UnresolvedContext = unresolvedContext;
-		}
-		#endregion
-
-		#region Methods
-
-		public override string ToString()
-		{
-			return string.Format("Text = {0}", Text);
+			TemplateTokens = templateTokens;
 		}
 		#endregion
 	}

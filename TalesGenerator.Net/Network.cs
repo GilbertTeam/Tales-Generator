@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using TalesGenerator.Net.Collections;
 using TalesGenerator.Net.Serialization;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
 namespace TalesGenerator.Net
 {
@@ -140,56 +141,11 @@ namespace TalesGenerator.Net
 			return xDocument;
 		}
 
-		private static Network LoadFromXElement(XElement xNetwork)
-		{
-			Network network = new Network();
-			XNamespace xNamespace = SerializableObject.XNamespace;
-
-			XElement xNodesBase = xNetwork.Element(xNamespace + "Nodes");
-			var xNodes = xNodesBase.Elements(xNamespace + "Node");
-			foreach (XElement xNode in xNodes)
-			{
-				NetworkNode networkNode = new NetworkNode(network);
-
-				networkNode.LoadFromXml(xNode);
-
-				network.Nodes.Add(networkNode);
-			}
-
-			XElement xEdgesBase = xNetwork.Element(xNamespace + "Edges");
-			var xEdges = xEdgesBase.Elements(xNamespace + "Edge");
-			foreach (XElement xEdge in xEdges)
-			{
-				NetworkEdge networkEdge = new NetworkEdge(network);
-
-				networkEdge.LoadFromXml(xEdge);
-
-				network.Edges.Add(networkEdge);
-			}
-
-			//TODO Необходимо доработать логику десериализации.
-			if (network._nodes.Count == 0)
-			{
-				network._nextId = network._edges.Max(edge => edge.Id) + 1;
-			}
-			else if (network._edges.Count == 0)
-			{
-				network._nextId = network._nodes.Max(node => node.Id) + 1;
-			}
-			else
-			{
-				network._nextId = Math.Max(network.Nodes.Max(node => node.Id), network.Edges.Max(edge => edge.Id)) + 1;
-			}
-
-			network._isDirty = false;
-
-			return network;
-		}
-
-		private static Network LoadFromXDocument(XDocument xDocument)
+		private void LoadFromXDocument(XDocument xDocument)
 		{
 			XNamespace xNamespace = SerializableObject.XNamespace;
 			XElement xNetwork = xDocument.Element(xNamespace + "Network");
+
 			if (xNetwork == null && xDocument.Root != null)
 			{
 				xNetwork = xDocument.Root.Element(xNamespace + "Network");
@@ -200,9 +156,63 @@ namespace TalesGenerator.Net
 				throw new SerializationException();
 			}
 
-			Network network = LoadFromXElement(xNetwork);
+			LoadFromXElement(xNetwork);
+		}
 
-			return network;
+		protected virtual void LoadFromXElement(XElement xNetwork)
+		{
+			XNamespace xNamespace = SerializableObject.XNamespace;
+
+			XElement xNodesBase = xNetwork.Element(xNamespace + "Nodes");
+			var xNodes = xNodesBase.Elements(xNamespace + "Node");
+			foreach (XElement xNode in xNodes)
+			{
+				NetworkNode networkNode = new NetworkNode(this);
+
+				networkNode.LoadFromXml(xNode);
+
+				// TODO: Необходимо избавиться от этого костыля.
+				if (!Nodes.Where(node => node.Id == networkNode.Id).Any())
+				{
+					Nodes.Add(networkNode);
+				}
+			}
+
+			XElement xEdgesBase = xNetwork.Element(xNamespace + "Edges");
+			var xEdges = xEdgesBase.Elements(xNamespace + "Edge");
+			foreach (XElement xEdge in xEdges)
+			{
+				NetworkEdge networkEdge = new NetworkEdge(this);
+
+				networkEdge.LoadFromXml(xEdge);
+
+				// TODO: Необходимо избавиться от этого костыля.
+				if (!Edges.Where(edge => edge.Id == networkEdge.Id).Any())
+				{
+					Edges.Add(networkEdge);
+				}
+			}
+
+			SetId();
+
+			_isDirty = false;
+		}
+
+		protected void SetId()
+		{
+			//TODO Необходимо доработать логику десериализации.
+			if (_nodes.Count == 0)
+			{
+				_nextId = _edges.Max(edge => edge.Id) + 1;
+			}
+			else if (_edges.Count == 0)
+			{
+				_nextId = _nodes.Max(node => node.Id) + 1;
+			}
+			else
+			{
+				_nextId = Math.Max(Nodes.Max(node => node.Id), Edges.Max(edge => edge.Id)) + 1;
+			}
 		}
 
 		/// <summary>
@@ -221,16 +231,11 @@ namespace TalesGenerator.Net
 		/// </summary>
 		/// <param name="xNetwork">XML представление сети.</param>
 		/// <returns>Загруженная сеть.</returns>
-		public static Network LoadFromXml(XElement xNetwork)
+		public void LoadFromXml(XElement xNetwork)
 		{
-			if (xNetwork == null)
-			{
-				throw new ArgumentException("xElement");
-			}
+			Contract.Requires<ArgumentNullException>(xNetwork != null);
 
-			Network network = LoadFromXElement(xNetwork);
-
-			return network;
+			LoadFromXElement(xNetwork);
 		}
 
 		/// <summary>
@@ -238,16 +243,11 @@ namespace TalesGenerator.Net
 		/// </summary>
 		/// <param name="xDocument">XML документ, содержащий представление сети.</param>
 		/// <returns></returns>
-		public static Network LoadFromXml(XDocument xDocument)
+		public void LoadFromXml(XDocument xDocument)
 		{
-			if (xDocument == null)
-			{
-				throw new ArgumentNullException("xDocument");
-			}
+			Contract.Requires<ArgumentNullException>(xDocument != null);
 
-			Network network = LoadFromXDocument(xDocument);
-
-			return network;
+			LoadFromXDocument(xDocument);
 		}
 
 		/// <summary>
@@ -289,17 +289,12 @@ namespace TalesGenerator.Net
 		/// </summary>
 		/// <param name="path">Файл, из которого должна быть загружена сеть.</param>
 		/// <returns>Загруженная сеть.</returns>
-		public static Network LoadFromFile(string path)
+		public void LoadFromFile(string path)
 		{
-			if (string.IsNullOrEmpty(path))
-			{
-				throw new ArgumentException("path");
-			}
+			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(path));
 
 			XDocument xDocument = XDocument.Load(path);
-			Network network = LoadFromXDocument(xDocument);
-
-			return network;
+			LoadFromXDocument(xDocument);
 		}
 
 		/// <summary>
@@ -307,17 +302,12 @@ namespace TalesGenerator.Net
 		/// </summary>
 		/// <param name="stream">Поток, из которого должна быть загружена сеть.</param>
 		/// <returns>Загруженная сеть.</returns>
-		public static Network LoadFromStream(Stream stream)
+		public void LoadFromStream(Stream stream)
 		{
-			if (stream == null)
-			{
-				throw new ArgumentNullException("stream");
-			}
+			Contract.Requires<ArgumentNullException>(stream != null);
 
 			XDocument xDocument = XDocument.Load(stream);
-			Network network = LoadFromXDocument(xDocument);
-
-			return network;
+			LoadFromXDocument(xDocument);
 		}
 
 		public IEnumerable<NetworkNode> GetPrimaryNodes()

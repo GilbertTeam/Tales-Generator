@@ -54,7 +54,7 @@
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
     <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
     <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
     <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
     <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
@@ -100,6 +100,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq">
+      <HintPath>..\Dlls\morelinq-1.0-beta\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -109,19 +112,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lexer\LexerUtils.cs" />
+    <Compile Include="Parser\ISentenceComparer.cs" />
     <Compile Include="Parser\ITemplateParser.cs" />
     <Compile Include="Lexer\LexerException.cs" />
     <Compile Include="Lexer\LexerResult.cs" />
     <Compile Include="Lexer\Lexer.cs" />
-    <Compile Include="Parser\ITemplateParserContext.cs" />
-    <Compile Include="Parser\SentenceComparer.cs" />
-    <Compile Include="Parser\TemplateParserDictionaryContext.cs" />
+    <Compile Include="Parser\ITemplateParserNetworkContext.cs" />
+    <Compile Include="Parser\ExactMatchSentenceComparer.cs" />
+    <Compile Include="Parser\SentenceContext.cs" />
+    <Compile Include="Parser\SentenceToken.cs" />
+    <Compile Include="Parser\SentenceTokenDefaultEqualityComparer.cs" />
+    <Compile Include="Parser\SentenceTokenFullEqualityComparer.cs" />
+    <Compile Include="Parser\TemplateParserBaseResult.cs" />
+    <Compile Include="Parser\TemplateParserNetworkDictionaryContext.cs" />
     <Compile Include="Parser\TemplateParserException.cs" />
     <Compile Include="Parser\TemplateParser.cs" />
-    <Compile Include="Parser\TemplateParserNodeContext.cs" />
+    <Compile Include="Parser\TemplateParserNetworkNodeContext.cs" />
     <Compile Include="Parser\TemplateParserResult.cs" />
+    <Compile Include="Parser\TextContext.cs" />
+    <Compile Include="Parser\TextParser.cs" />
     <Compile Include="Plugins\ITemplateParserPlugin.cs" />
     <Compile Include="Plugins\TemplateParserPlugin.cs" />
+    <Compile Include="Plugins\TemplateParserPluginResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

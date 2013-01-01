@@ -6,6 +6,7 @@ namespace TalesGenerator.Text.Plugins
 	{
 		bool CanParse(string template);
 
-		TemplateParserResult Parse(ITemplateParser parser, string template);
+		// TODO: Нужно избавиться от передачи парсера плагинам.
+		TemplateParserPluginResult Parse(ITemplateParser parser, string template);
 	}
 }

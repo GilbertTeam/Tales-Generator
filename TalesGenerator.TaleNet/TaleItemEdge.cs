@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TalesGenerator.Net;
 
 namespace TalesGenerator.TaleNet
 {
-	public class Template
+	public class TaleItemEdge : NetworkEdge
 	{
-		#region Properties
-
-		public TaleNode TemplateNode { get; private set; }
-		#endregion
-
 		#region Constructors
 
+		internal TaleItemEdge(TalesNetwork talesNetwork)
+			: base(talesNetwork)
+		{
+
+		}
 		#endregion
 	}
 }

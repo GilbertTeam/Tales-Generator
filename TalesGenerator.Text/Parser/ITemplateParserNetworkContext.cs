@@ -3,7 +3,7 @@ using TalesGenerator.Net;
 
 namespace TalesGenerator.Text
 {
-	public interface ITemplateParserContext
+	public interface ITemplateParserNetworkContext
 	{
 		#region Properties
 

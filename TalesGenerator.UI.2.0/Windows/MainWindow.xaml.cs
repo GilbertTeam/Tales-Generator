@@ -320,7 +320,10 @@ namespace TalesGenerator.UI.Windows
 				_lockNodeUpdate = true;
 				XDocument xDoc = XDocument.Parse(wnd.Result);
 
-				_project.Network = TalesNetwork.LoadFromXml(xDoc) as TalesNetwork;
+				TalesNetwork talesNetwork = new TalesNetwork();
+				talesNetwork.LoadFromXml(xDoc);
+
+				_project.Network = talesNetwork;
 				_project.RebuildDiagram();
 
 				AssignNetwork();
@@ -409,6 +412,17 @@ namespace TalesGenerator.UI.Windows
 		{
 			ConsultWindow consultWnd = new ConsultWindow(_project.Network);
 			consultWnd.ShowDialog();
+		}
+
+		private void Consult2_Executed(object sender, ExecutedRoutedEventArgs e)
+		{
+			ConsultWindow2 consultWnd = new ConsultWindow2(_project.Network);
+			consultWnd.ShowDialog();
+		}
+
+		private void Consult2_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+		{
+			e.CanExecute = _project != null && _project.Network != null;
 		}
 
 		#endregion

@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using TalesGenerator.Net;
 using TalesGenerator.Net.Collections;
+using TalesGenerator.Text;
 
 namespace TalesGenerator.TaleNet
 {
-	public class TaleItemNodeCollection : NetworkObjectCollection<TaleItemNode>
+	public class TaleItemNodeCollection : NetworkObjectCollection<TaleItemNode>, IEnumerable, IEnumerable<TaleItemNode>
 	{
 		#region Fields
 
@@ -24,6 +28,16 @@ namespace TalesGenerator.TaleNet
 		#endregion
 
 		#region Methods
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return ((IEnumerable<TaleItemNode>)this).GetEnumerator();
+		}
+
+		IEnumerator<TaleItemNode> IEnumerable<TaleItemNode>.GetEnumerator()
+		{
+			return Network.Nodes.OfType<TaleItemNode>().Where(node => node.IsInherit(_baseNode, false)).GetEnumerator();
+		}
 
 		public override void Add(TaleItemNode taleItemNode)
 		{
@@ -57,9 +71,14 @@ namespace TalesGenerator.TaleNet
 
 		public TaleItemNode Add(string name)
 		{
+			return Add(name, (Grammem)0);
+		}
+
+		public TaleItemNode Add(string name, Grammem grammem)
+		{
 			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(name));
 
-			TaleItemNode taleItemNode = new TaleItemNode((TalesNetwork)Network, name);
+			TaleItemNode taleItemNode = new TaleItemNode((TalesNetwork)Network, name) { Grammem = grammem };
 
 			Network.Edges.Add(taleItemNode, _baseNode, NetworkEdgeType.IsA);
 
@@ -68,12 +87,17 @@ namespace TalesGenerator.TaleNet
 			return taleItemNode;
 		}
 
-		public TaleItemNode Add(string name, TaleItemNode baseNode)
+		public TaleItemNode Add(string name,TaleItemNode baseNode)
+		{
+			return Add(name, baseNode, (Grammem)0);
+		}
+
+		public TaleItemNode Add(string name, TaleItemNode baseNode, Grammem grammem)
 		{
 			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(name));
 			Contract.Requires<ArgumentNullException>(baseNode != null);
 
-			TaleItemNode taleItemNode = new TaleItemNode((TalesNetwork)Network, name, baseNode);
+			TaleItemNode taleItemNode = new TaleItemNode((TalesNetwork)Network, name, baseNode) { Grammem = grammem };
 
 			Add(taleItemNode);
 

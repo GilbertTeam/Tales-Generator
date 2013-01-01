@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
 
 namespace TalesGenerator.Net.Collections
 {
@@ -123,6 +122,10 @@ namespace TalesGenerator.Net.Collections
 				throw new ArgumentNullException("item");
 			}
 			if (_items.Contains(item))
+			{
+				throw new ArgumentException("item");
+			}
+			if (_items.Where(i => i.Id == item.Id).Any())
 			{
 				throw new ArgumentException("item");
 			}

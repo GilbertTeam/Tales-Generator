@@ -10,26 +10,24 @@ namespace TalesGenerator.Text
 
 		private readonly StringReader _stringReader;
 
-		private readonly char[] _punctuationChars =
+		private int _position;
+
+		private bool _inTemplate;
+
+		public static char[] PunctuationChars =
 		{
-			',', ':', '!', '?', '-', '\"'
+			',', ':', ';', '!', '?', '-', '\"'
 		};
 
-		private readonly char[] _specialChars =
-		{
-			'~', ':'
-		};
-
-		private readonly char[] _spaceChars =
+		public static char[] SpaceChars =
 		{
 			' ', '\t'
 		};
 
-		private int _position;
-
-		private int _currentChar;
-
-		private bool _inTemplate;
+		public static char[] SpecialChars =
+		{
+			'~', ':'
+		};
 		#endregion
 
 		public Lexer(string source)
@@ -46,24 +44,24 @@ namespace TalesGenerator.Text
 
 		private bool IsPunctuationChar(int character)
 		{
-			return Array.IndexOf(_punctuationChars, (char)character) != -1;
+			return Array.IndexOf(PunctuationChars, (char)character) != -1;
 		}
 
 		private bool IsSpaceChar(int character)
 		{
-			return Array.IndexOf(_spaceChars, (char)character) != -1;
+			return Array.IndexOf(SpaceChars, (char)character) != -1;
 		}
 
 		private bool IsSpecialChar(int character)
 		{
-			return Array.IndexOf(_specialChars, (char)character) != -1;
+			return Array.IndexOf(SpecialChars, (char)character) != -1;
 		}
 
 		private int ReadNextChar()
 		{
 			_position++;
 
-			return _currentChar = _stringReader.Read();
+			return _stringReader.Read();
 		}
 
 		private int PeekNextChar()
@@ -71,97 +69,118 @@ namespace TalesGenerator.Text
 			return _stringReader.Peek();
 		}
 
-		private void RaiseLexerException()
+		private void RaiseLexerException(int invalidChar)
 		{
-			throw new LexerException(_currentChar, _position);
+			throw new LexerException(invalidChar, _position);
 		}
 
-		private void RaiseLexerException(Exception innerException)
+		private void RaiseLexerException(int invalidChar, Exception innerException)
 		{
-			throw new LexerException(_currentChar, _position, null, innerException);
+			throw new LexerException(invalidChar, _position, null, innerException);
 		}
 
-		private void RaiseLexerException(string invalidLexeme)
+		private bool AnalyzeChar(int character, out LexerResult lexerResult)
 		{
-			throw new LexerException(_currentChar, _position, string.Format(Properties.Resources.InvalidLexemeError, invalidLexeme));
-		}
-
-		private void RaiseLexerException(string invalidLexeme, Exception innerException)
-		{
-			throw new LexerException(_currentChar, _position, string.Format(Properties.Resources.InvalidLexemeError, invalidLexeme), innerException);
-		}
-
-		public bool GetNextToken(out LexerResult lexerResult)
-		{
-			if (ReadNextChar() == -1)
-			{
-				lexerResult = new LexerResult(null, TokenType.EndOfStream);
-				return false;
-			}
-
-			if (IsSpaceChar(_currentChar))
-			{
-				while (IsSpaceChar(PeekNextChar()))
-				{
-					ReadNextChar();
-				}
-
-				lexerResult = new LexerResult(" ", TokenType.Space);
-				return true;
-			}
-
-			if (_currentChar == '{')
+			if (character == '{')
 			{
 				_inTemplate = true;
 
 				lexerResult = new LexerResult("{", TokenType.LeftBrace);
 				return true;
 			}
-			else if (_currentChar == '}')
+			else if (character == '}')
 			{
 				_inTemplate = false;
 
 				lexerResult = new LexerResult("}", TokenType.RightBrace);
 				return true;
 			}
-			else if (_currentChar == '.')
+			else if (character == '.')
 			{
 				lexerResult = new LexerResult(".", TokenType.Point);
 				return true;
 			}
-			else if (_currentChar == ':')
+			else if (character == ':')
 			{
 				lexerResult = new LexerResult(":", TokenType.Colon);
 				return true;
 			}
-			else if (_currentChar == '\"')
+			else if (character == '\"')
 			{
 				lexerResult = new LexerResult("\"", TokenType.Quotes);
 				return true;
 			}
-			else if (_inTemplate && IsSpecialChar(_currentChar))
+			else if (_inTemplate && IsSpecialChar(character))
 			{
-				lexerResult = new LexerResult(((char)_currentChar).ToString(), TokenType.SpecialSymbol);
+				lexerResult = new LexerResult(((char)character).ToString(), TokenType.SpecialSymbol);
 				return true;
 			}
-			else if (IsPunctuationChar(_currentChar))
+			else if (IsPunctuationChar(character))
 			{
-				lexerResult = new LexerResult(((char)_currentChar).ToString(), TokenType.Punctuation);
+				lexerResult = new LexerResult(((char)character).ToString(), TokenType.Punctuation);
 				return true;
 			}
-			else if (char.IsLetter((char)_currentChar))
+			else if (char.IsLetter((char)character))
 			{
-				lexerResult = new LexerResult(((char)_currentChar).ToString(), TokenType.Letter);
+				lexerResult = new LexerResult(((char)character).ToString(), TokenType.Letter);
 				return true;
 			}
-			else if (char.IsDigit((char)_currentChar))
+			else if (char.IsDigit((char)character))
 			{
-				lexerResult = new LexerResult(((char)_currentChar).ToString(), TokenType.Digit);
+				lexerResult = new LexerResult(((char)character).ToString(), TokenType.Digit);
 				return true;
 			}
 
 			//TODO Необходима нейтрализация ошибок.
 			throw new InvalidOperationException();
+		}
+
+		public bool ReadNextToken(out LexerResult lexerResult)
+		{
+			int character = ReadNextChar();
+
+			if (character == -1)
+			{
+				lexerResult = new LexerResult(null, TokenType.EndOfStream);
+				return false;
+			}
+
+			if (IsSpaceChar(character))
+			{
+				while (IsSpaceChar(PeekNextChar()))
+				{
+					character = ReadNextChar();
+				}
+
+				lexerResult = new LexerResult(" ", TokenType.Space);
+				return true;
+			}
+
+			return AnalyzeChar(character, out lexerResult);
+		}
+
+		public bool PeekNextToken(out LexerResult lexerResult)
+		{
+			int character = PeekNextChar();
+
+			if (character == -1)
+			{
+				lexerResult = new LexerResult(null, TokenType.EndOfStream);
+				return false;
+			}
+
+			if (IsSpaceChar(character))
+			{
+				while (IsSpaceChar(PeekNextChar()))
+				{
+					character = ReadNextChar();
+				}
+
+				lexerResult = new LexerResult(" ", TokenType.Space);
+				return true;
+			}
+
+			return AnalyzeChar(character, out lexerResult);
 		}
 
 		public void Dispose()

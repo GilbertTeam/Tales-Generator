@@ -72,7 +72,7 @@ namespace TalesGenerator.Net
 			}
 		}
 
-		internal override void LoadFromXml(XElement xElement)
+		public override void LoadFromXml(XElement xElement)
 		{
 			XAttribute xIdAttribute = xElement.Attribute("id");
 
@@ -89,7 +89,7 @@ namespace TalesGenerator.Net
 			}
 		}
 
-		internal override void SaveToXml(XElement xElement)
+		public override void SaveToXml(XElement xElement)
 		{
 			xElement.Add(new XAttribute("id", _id));
 		}
