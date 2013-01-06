@@ -7,6 +7,11 @@ namespace TalesGenerator.Text
 	{
 		internal static string TrimText(string text)
 		{
+			return TrimText(text, '-');
+		}
+
+		internal static string TrimText(string text, params char[] skipChars)
+		{
 			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(text));
 			Contract.Ensures(Contract.Result<string>() != null);
 
@@ -15,8 +20,10 @@ namespace TalesGenerator.Text
 			// TODO: Необходимо придумать более быстрый способ.
 			foreach (char trimChar in Lexer.PunctuationChars)
 			{
-				if (trimChar != '-')
-				trimText = trimText.Replace(trimChar.ToString(), string.Empty);
+				if (Array.IndexOf(skipChars, trimChar) == -1)
+				{
+					trimText = trimText.Replace(trimChar.ToString(), string.Empty);
+				}
 			}
 
 			return trimText;

@@ -112,20 +112,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FunctionConflictSet.cs" />
+    <Compile Include="FunctionResolveContext.cs" />
+    <Compile Include="TaleGenerationInfo.cs" />
+    <Compile Include="TextGenerationContext.cs" />
     <Compile Include="Lexer\LexerUtils.cs" />
     <Compile Include="Parser\ISentenceComparer.cs" />
     <Compile Include="Parser\ITemplateParser.cs" />
     <Compile Include="Lexer\LexerException.cs" />
     <Compile Include="Lexer\LexerResult.cs" />
     <Compile Include="Lexer\Lexer.cs" />
-    <Compile Include="Parser\ITemplateParserNetworkContext.cs" />
+    <Compile Include="Parser\ITemplateParserContext.cs" />
     <Compile Include="Parser\ExactMatchSentenceComparer.cs" />
     <Compile Include="Parser\SentenceContext.cs" />
     <Compile Include="Parser\SentenceToken.cs" />
     <Compile Include="Parser\SentenceTokenDefaultEqualityComparer.cs" />
     <Compile Include="Parser\SentenceTokenFullEqualityComparer.cs" />
     <Compile Include="Parser\TemplateParserBaseResult.cs" />
-    <Compile Include="Parser\TemplateParserNetworkDictionaryContext.cs" />
+    <Compile Include="Parser\TemplateParserDictionaryContext.cs" />
     <Compile Include="Parser\TemplateParserException.cs" />
     <Compile Include="Parser\TemplateParser.cs" />
     <Compile Include="Parser\TemplateParserNetworkNodeContext.cs" />

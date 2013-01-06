@@ -76,6 +76,8 @@ namespace TalesGenerator.TaleNet
 
 		private readonly FunctionNodeContextNodeCollection _recipientNodes;
 
+		private readonly FunctionNodeContextNodeCollection _locativeNodes;
+
 		private FunctionType _functionType;
 		#endregion
 
@@ -114,6 +116,11 @@ namespace TalesGenerator.TaleNet
 			get { return _recipientNodes; }
 		}
 
+		public FunctionNodeContextNodeCollection Locatives
+		{
+			get { return _locativeNodes; }
+		}
+
 		public FunctionType FunctionType
 		{
 			get { return _functionType; }
@@ -144,6 +151,7 @@ namespace TalesGenerator.TaleNet
 			_actionNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Action);
 			_agentNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Agent);
 			_recipientNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Recipient);
+			_locativeNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Locative);
 		}
 
 		internal FunctionNode(TaleNode taleNode, string name, FunctionType functionType)
@@ -155,6 +163,7 @@ namespace TalesGenerator.TaleNet
 			_actionNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Action);
 			_agentNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Agent);
 			_recipientNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Recipient);
+			_locativeNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Locative);
 		}
 
 		internal FunctionNode(TaleNode taleNode, string name, FunctionNode baseNode)
@@ -166,6 +175,7 @@ namespace TalesGenerator.TaleNet
 			_actionNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Action);
 			_agentNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Agent);
 			_recipientNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Recipient);
+			_locativeNodes = new FunctionNodeContextNodeCollection(this, NetworkEdgeType.Locative);
 		}
 		#endregion
 

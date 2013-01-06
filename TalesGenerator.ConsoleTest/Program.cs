@@ -656,7 +656,7 @@ namespace TalesGenerator.ConsoleTest
 
 		private static TextAnalyzer CreateTextAnalyzer()
 		{
-			TextAnalyzer textAnalyzer = new TextAnalyzer(AdapterKind.RussianCp1251Adapter);
+			TextAnalyzer textAnalyzer = new TextAnalyzer(AdapterKind.RussianUtf8Adapter);
 
 			textAnalyzer.Load(
 				Path.Combine(Environment.CurrentDirectory, "Dictionaries", "Russian", "Dictionary.auto"),

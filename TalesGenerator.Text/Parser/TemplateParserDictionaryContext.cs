@@ -5,7 +5,7 @@ using System;
 
 namespace TalesGenerator.Text
 {
-	public class TemplateParserNetworkDictionaryContext : ITemplateParserNetworkContext
+	public class TemplateParserDictionaryContext : ITemplateParserContext
 	{
 		#region Fields
 

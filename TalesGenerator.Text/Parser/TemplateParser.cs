@@ -22,7 +22,7 @@ namespace TalesGenerator.Text
 
 		private List<TemplateToken> _currentSentence;
 
-		private ITemplateParserNetworkContext _networkContext;
+		private ITemplateParserContext _networkContext;
 		#endregion
 
 		#region Properties
@@ -32,7 +32,7 @@ namespace TalesGenerator.Text
 			get { return _currentSentence; }
 		}
 
-		public ITemplateParserNetworkContext NetworkContext
+		public ITemplateParserContext NetworkContext
 		{
 			get { return _networkContext; }
 		}
@@ -235,7 +235,7 @@ namespace TalesGenerator.Text
 			return ParseNode(functionNode);
 		}
 
-		public TemplateParserResult Parse(FunctionNode functionNode, ITemplateParserNetworkContext parserContext)
+		public TemplateParserResult Parse(FunctionNode functionNode, ITemplateParserContext parserContext)
 		{
 			Contract.Requires<ArgumentNullException>(functionNode != null);
 			Contract.Requires<ArgumentNullException>(parserContext != null);

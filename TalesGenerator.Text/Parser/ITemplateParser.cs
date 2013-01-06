@@ -9,7 +9,7 @@ namespace TalesGenerator.Text
 
 		IEnumerable<TemplateToken> CurrentSentence { get; }
 
-		ITemplateParserNetworkContext NetworkContext { get; }
+		ITemplateParserContext NetworkContext { get; }
 
 		TextAnalyzer TextAnalyzer { get; }
 		#endregion
@@ -34,7 +34,7 @@ namespace TalesGenerator.Text
 
 		TemplateParserResult Parse(FunctionNode functionNode);
 
-		TemplateParserResult Parse(FunctionNode functionNode, ITemplateParserNetworkContext parserContext);
+		TemplateParserResult Parse(FunctionNode functionNode, ITemplateParserContext parserContext);
 		#endregion
 	}
 }
