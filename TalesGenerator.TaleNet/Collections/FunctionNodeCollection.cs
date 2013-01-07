@@ -33,7 +33,6 @@ namespace TalesGenerator.TaleNet.Collections
 
 		IEnumerator<FunctionNode> IEnumerable<FunctionNode>.GetEnumerator()
 		{
-			var f = Network.Nodes.OfType<FunctionNode>().ToList();
 			var functionNodes = Network.Nodes.OfType<FunctionNode>().Where(
 				node =>
 				{

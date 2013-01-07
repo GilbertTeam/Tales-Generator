@@ -139,7 +139,7 @@ namespace TalesGenerator.ConsoleTest
 			TaleItemNode cabinOnChickenLegsNode = talesNetwork.Persons.Add("Избушка на курьих ножках", negativePersonNode);
 
 			FunctionNode gtInitialStateNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Начальная ситуация", initialStateNode);
-			gtInitialStateNode.Template = "{Action} {agent0},`` {agent1}; у них {~был:agent2} {agent2}, да {~маленький:agent3} {agent3}.";
+			gtInitialStateNode.Template = "{Action} {agent0}, {agent1}; у них {~был:agent2} {agent2}, да {~маленький:agent3} {agent3}.";
 			gtInitialStateNode.Agents.Add(grandMotherNode, grandFatherNode, girlNode, boyNode);
 
 			FunctionNode gtInterdictionNode = geeseTaleNode.Functions.Add("Сказка \"Гуси-лебеди\". Запрет", interdictionNode);
@@ -656,7 +656,7 @@ namespace TalesGenerator.ConsoleTest
 
 		private static TextAnalyzer CreateTextAnalyzer()
 		{
-			TextAnalyzer textAnalyzer = new TextAnalyzer(AdapterKind.RussianUtf8Adapter);
+			TextAnalyzer textAnalyzer = new TextAnalyzer(AdapterKind.RussianCp1251Adapter);
 
 			textAnalyzer.Load(
 				Path.Combine(Environment.CurrentDirectory, "Dictionaries", "Russian", "Dictionary.auto"),
@@ -686,10 +686,12 @@ namespace TalesGenerator.ConsoleTest
 			}
 			else
 			{
+				File.WriteAllText(@"Output.txt", string.Empty);
+
 				while (true)
 				{
 					string text = textGenerator.GenerateText(loadedNetwork, File.ReadAllText(@"Input.txt"));
-					//File.WriteAllText(@"Output.txt", text);
+					File.AppendAllText(@"Output.txt", text + Environment.NewLine);
 					Console.WriteLine(text);
 
 					Console.WriteLine("Press 'r' to repeat, 'q' to exit.");

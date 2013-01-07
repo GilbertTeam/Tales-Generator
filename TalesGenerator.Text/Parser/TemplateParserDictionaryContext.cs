@@ -2,6 +2,8 @@
 using TalesGenerator.Net;
 using System.Diagnostics.Contracts;
 using System;
+using System.Linq;
+using System.Collections;
 
 namespace TalesGenerator.Text
 {
@@ -19,6 +21,14 @@ namespace TalesGenerator.Text
 			get
 			{
 				return GetNetworkNodes(edgeType);
+			}
+		}
+
+		public int Count
+		{
+			get
+			{
+				return _dictionary.Count;
 			}
 		}
 		#endregion
@@ -47,7 +57,28 @@ namespace TalesGenerator.Text
 		{
 			Contract.Requires<ArgumentNullException>(networkNodes != null);
 
-			GetNetworkNodes(edgeType).AddRange(networkNodes);
+			List<NetworkNode> dictionaryList = GetNetworkNodes(edgeType);
+
+			foreach (NetworkNode node in networkNodes)
+			{
+				if (!dictionaryList.Contains(node))
+				{
+					dictionaryList.Add(node);
+				}
+			}
+		}
+
+		public IEnumerator<KeyValuePair<NetworkEdgeType, IEnumerable<NetworkNode>>> GetEnumerator()
+		{
+			return
+				_dictionary
+				.Select(pair => new KeyValuePair<NetworkEdgeType, IEnumerable<NetworkNode>>(pair.Key, pair.Value))
+				.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _dictionary.GetEnumerator();
 		}
 		#endregion
 	}

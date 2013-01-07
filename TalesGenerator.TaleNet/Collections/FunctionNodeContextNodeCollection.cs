@@ -36,14 +36,29 @@ namespace TalesGenerator.TaleNet.Collections
 
 		IEnumerator<TaleItemNode> IEnumerable<TaleItemNode>.GetEnumerator()
 		{
-			var contextNodes = Network.Nodes.OfType<TaleItemNode>().Where(
-				node =>
-				{
-					NetworkEdge contextEdge = node.IncomingEdges.GetEdge(_edgeType);
+			//var contextNodes = Network.Nodes.OfType<TaleItemNode>().Where(
+			//	node =>
+			//	{
+			//		NetworkEdge contextEdge = node.IncomingEdges.GetEdge(_edgeType, false);
 
-					return contextEdge != null && contextEdge.StartNode == _functionNode;
-				}
-			);
+			//		return contextEdge != null && contextEdge.StartNode == _functionNode;
+			//	}
+			//);
+			var contextNodes = _functionNode
+				.OutgoingEdges
+				.GetEdges(_edgeType)
+				.Select(edge => edge.EndNode)
+				.OfType<TaleItemNode>();
+
+			if (!contextNodes.Any() &&
+				_functionNode.BaseNode != null)
+			{
+				contextNodes = _functionNode.BaseNode
+				.OutgoingEdges
+				.GetEdges(_edgeType)
+				.Select(edge => edge.EndNode)
+				.OfType<TaleItemNode>();
+			}
 			
 			return contextNodes.GetEnumerator();
 		}

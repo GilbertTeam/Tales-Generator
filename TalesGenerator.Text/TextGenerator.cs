@@ -12,12 +12,6 @@ namespace TalesGenerator.Text
 {
 	public class TextGenerator
 	{
-		#region NestedClasses
-
-		
-
-		#endregion
-
 		#region Fields
 
 		private readonly TextAnalyzer _textAnalyzer;
@@ -48,36 +42,47 @@ namespace TalesGenerator.Text
 
 		private IEnumerable<IEnumerable<SentenceToken>> Shingle(IEnumerable<SentenceToken> tokens, int maxCount)
 		{
-			return new[] { tokens };
-		}
+			List<IEnumerable<SentenceToken>> shingles = new List<IEnumerable<SentenceToken>>();
 
-		private FunctionConflictSet GetConflictSet(TaleGenerationInfo taleInfo, FunctionType functionType)
-		{
-			FunctionConflictSet conflictSet = taleInfo.ConflictSets.FirstOrDefault(set => set.FunctionType == functionType);
-
-			if (conflictSet != null)
+			foreach (SentenceToken token in tokens)
 			{
-				foreach (FunctionConflictSet otherConflictSet in taleInfo.ConflictSets)
-				{
-					if (!otherConflictSet.Closed)
-					{
-						otherConflictSet.Next();
-
-						break;
-					}
-
-					otherConflictSet.Reset();
-				}
+				shingles.Add(new[] { token });
 			}
 
-			return conflictSet;
+			return shingles;
 		}
 
-		private IEnumerable<NetworkNode> ResolveSentence(IEnumerable<SentenceToken> sentenceTokens, IEnumerable<NetworkNode> contextNodes)
+		//private FunctionConflictSet GetConflictSet(TaleGenerationInfo taleInfo, FunctionType functionType)
+		//{
+		//	FunctionConflictSet conflictSet = taleInfo.ConflictSets.FirstOrDefault(set => set.FunctionType == functionType);
+
+		//	if (conflictSet != null &&
+		//		taleInfo.CanToogleConflictSets)
+		//	{
+		//		taleInfo.CanToogleConflictSets = false;
+
+		//		foreach (FunctionConflictSet otherConflictSet in taleInfo.ConflictSets)
+		//		{
+		//			if (!otherConflictSet.Closed)
+		//			{
+		//				otherConflictSet.Next();
+
+		//				break;
+		//			}
+
+		//			otherConflictSet.Reset();
+		//		}
+		//	}
+
+		//	return conflictSet;
+		//}
+
+		private void ResolveSentence(
+			IEnumerable<SentenceToken> sentenceTokens,
+			IEnumerable<NetworkNode> contextNodes,
+			ICollection<NetworkNode> resultCollection)
 		{
 			Contract.Assume(_currentContext != null);
-
-			List<NetworkNode> resolvedNodes = new List<NetworkNode>();
 
 			foreach (NetworkNode contextNode in contextNodes)
 			{
@@ -88,15 +93,16 @@ namespace TalesGenerator.Text
 				{
 					if (shingle.SequenceEqual(contextTokens, new SentenceTokenDefaultEqualityComparer()))
 					{
-						resolvedNodes.Add(contextNode);
+						if (!resultCollection.Contains(contextNode))
+						{
+							resultCollection.Add(contextNode);
+						}
 					}
 				}
 			}
-
-			return resolvedNodes;
 		}
 
-		private bool AreHaveCommonAncestor(NetworkNode firstNode, NetworkNode secondNode)
+		private bool AreHaveCommonAncestor(NetworkNode firstNode, NetworkNode secondNode, params NetworkNode[] stopNodes)
 		{
 			if (secondNode.IsInherit(firstNode, false))
 			{
@@ -105,7 +111,8 @@ namespace TalesGenerator.Text
 
 			NetworkNode baseNode = firstNode.BaseNode;
 
-			while (baseNode != null)
+			while (baseNode != null &&
+				Array.IndexOf(stopNodes, baseNode) == -1)
 			{
 				if (secondNode.IsInherit(baseNode, false))
 				{
@@ -123,38 +130,91 @@ namespace TalesGenerator.Text
 			Contract.Assume(_currentContext != null);
 
 			TemplateParserDictionaryContext dictionaryContext = new TemplateParserDictionaryContext();
-
+			// TODO: Необходимо добавить учет связи Is-Instance.
+			NetworkNode[] stopNodes =
+			{
+				function.Network.Nodes.GetNode("Персонаж"),
+				function.Network.Nodes.GetNode("Положительный персонаж"),
+				function.Network.Nodes.GetNode("Отрицательный персонаж"),
+				function.Network.Nodes.GetNode("Место"),
+				function.Network.Nodes.GetNode("Действие")
+			};
 			Action<IEnumerable<NetworkNode>, IEnumerable<NetworkNode>, NetworkEdgeType> fillDictionaryAction =
 				(functionNodes, contextNodes, contextType) =>
 				{
 					foreach (NetworkNode functionNode in functionNodes)
 					{
-						NetworkNode contextNode = contextNodes.FirstOrDefault(node => AreHaveCommonAncestor(functionNode, node));
+						NetworkNode contextNode = contextNodes.FirstOrDefault(
+							node => AreHaveCommonAncestor(functionNode, node, stopNodes));
 
-						if (contextNode != null)
+						if (contextNode != null &&
+							!functionNodes.Contains(contextNode))
 						{
 							dictionaryContext.Add(contextType, contextNode);
+						}
+						else
+						{
+							dictionaryContext.Add(contextType, functionNode);
 						}
 					}
 				};
 
-			fillDictionaryAction(function.Agents, _currentContext.Persons, NetworkEdgeType.Agent);
-			fillDictionaryAction(function.Recipients, _currentContext.Persons, NetworkEdgeType.Recipient);
-			fillDictionaryAction(function.Locatives, _currentContext.Locatives, NetworkEdgeType.Locative);
-			fillDictionaryAction(function.Actions, _currentContext.Actions, NetworkEdgeType.Action);
+			// TODO: Пока не уверен, должны ли унаследованные контекстные вершины
+			//       также появляться в списке.
+
+			fillDictionaryAction(
+				function.Agents,
+				_currentContext.ResolvedPersons,
+				NetworkEdgeType.Agent);
+
+			fillDictionaryAction(
+				function.Recipients,
+				_currentContext.ResolvedPersons,
+				NetworkEdgeType.Recipient);
+
+			fillDictionaryAction(
+				function.Locatives,
+				_currentContext.ResolvedLocatives,
+				NetworkEdgeType.Locative);
+
+			fillDictionaryAction(
+				function.Actions,
+				_currentContext.ResolvedActions,
+				NetworkEdgeType.Action);
+
+			//fillDictionaryAction(function.Recipients, _currentContext.Persons, NetworkEdgeType.Recipient);
+			//fillDictionaryAction(function.Locatives, _currentContext.Locatives, NetworkEdgeType.Locative);
+			//fillDictionaryAction(function.Actions, _currentContext.Actions, NetworkEdgeType.Action);
 
 			return dictionaryContext;
 		}
 
 		private string GenerateText(FunctionNode function)
 		{
+			Contract.Assume(_currentContext != null);
+
 			// 1. Сначала выполняется операция замещения контекста.
 
 			ITemplateParserContext parserContext = ReplaceFunctionContext(function);
 
-			// 2. Затем текст функции генерируется с учетом измененного контекста.
+			// 2. Запомним контекстные вершины текущей функции.
+			//    В последующем они будут использоваться для определения
+			//    соблюдения принципа монотонности.
 
-			return _templateParser.Parse(function, parserContext).Text;
+			_currentContext.CurrentContextNodes.AddRange(parserContext.SelectMany(pair => pair.Value));
+
+			// 3. Затем текст функции генерируется с учетом измененного контекста.
+
+			if (parserContext.Count == 0)
+			{
+				// TODO: Контекст генерации должен заполняться в любом случае.
+				throw new InvalidOperationException();
+				//return _templateParser.Parse(function).Text;
+			}
+			else
+			{
+				return _templateParser.Parse(function, parserContext).Text;
+			}
 		}
 
 		private void ResolveText(TalesNetwork talesNetwork, string text)
@@ -171,9 +231,9 @@ namespace TalesGenerator.Text
 
 			foreach (var sentenceTokens in textTokens)
 			{
-				_currentContext.Persons.Concat(ResolveSentence(sentenceTokens, talesNetwork.Persons));
-				_currentContext.Locatives.Concat(ResolveSentence(sentenceTokens, talesNetwork.Locatives));
-				_currentContext.Actions.Concat(ResolveSentence(sentenceTokens, talesNetwork.Actions));
+				ResolveSentence(sentenceTokens, talesNetwork.Persons, _currentContext.ResolvedPersons);
+				ResolveSentence(sentenceTokens, talesNetwork.Locatives, _currentContext.ResolvedLocatives);
+				ResolveSentence(sentenceTokens, talesNetwork.Actions, _currentContext.ResolvedActions);
 			}
 
 			// 3. Затем выполняется поиск функций, которые содержат привязавшиеся концепты.
@@ -182,37 +242,52 @@ namespace TalesGenerator.Text
 
 			foreach (TaleNode tale in talesNetwork.Tales)
 			{
+				// TODO: Функции базовой сказки не учитываются при формировании 
+				//       набора привязавшихся функций и списка генерации.
+
+				if (!(tale.BaseNode is TaleNode))
+				{
+					continue;
+				}
+
 				foreach (FunctionNode function in tale.Functions)
 				{
-					int resolvedFunctionNodes =
-						function.Agents.Count(agent => _currentContext.Persons.Contains(agent)) +
-						function.Recipients.Count(recipient => _currentContext.Persons.Contains(recipient)) +
-						function.Locatives.Count(locative => _currentContext.Locatives.Contains(locative)) +
-						function.Actions.Count(action => _currentContext.Actions.Contains(action));
+					double resolvedFunctionNodes =
+						function.Agents.Count(agent => _currentContext.ResolvedPersons.Contains(agent)) +
+						function.Recipients.Count(recipient => _currentContext.ResolvedPersons.Contains(recipient)) +
+						function.Locatives.Count(locative => _currentContext.ResolvedLocatives.Contains(locative)) +
+						function.Actions.Count(action => _currentContext.ResolvedActions.Contains(action));
 
 					if (resolvedFunctionNodes != 0)
 					{
-						int generalFunctionNodes =
-							function.Agents.Count +
-							function.Recipients.Count +
-							function.Locatives.Count +
-							function.Actions.Count;
-						int functionRelevanceLevel = resolvedFunctionNodes / generalFunctionNodes;
+						double generalFunctionNodes =
+							function.Agents.Count() +
+							function.Recipients.Count() +
+							function.Locatives.Count() +
+							function.Actions.Count();
+						double functionRelevanceLevel = resolvedFunctionNodes / generalFunctionNodes;
 
-						_currentContext.ResolvedFunctions.Add(new FunctionResolveContext(function, functionRelevanceLevel));
+						_currentContext.ResolvedFunctions.Add(new FunctionGenerationInfo(function, functionRelevanceLevel));
 					}
 				}
 			}
 
-			// 4. Затем выполняется составляется отсортированный
+			// 4. Затем составляется отсортированный
 			//    в соответсвии уровнем релевантности список сказок.
 
 			Dictionary<TaleNode, double> taleRelevanceLevels = new Dictionary<TaleNode, double>();
 
-			foreach (FunctionResolveContext functionResolveContext in _currentContext.ResolvedFunctions)
+			foreach (FunctionGenerationInfo functionResolveContext in _currentContext.ResolvedFunctions)
 			{
 				TaleNode currentTale = functionResolveContext.Function.Tale;
-				TaleNode baseTale = (TaleNode)currentTale.BaseNode;
+				TaleNode baseTale = currentTale.BaseNode as TaleNode;
+
+				// TODO: Базовые сказки пока не попадают в список генерации.
+				if (baseTale == null)
+				{
+					continue;
+				}
+
 				double taleRelevanceLevel;
 
 				if (!taleRelevanceLevels.TryGetValue(currentTale, out taleRelevanceLevel))
@@ -220,18 +295,20 @@ namespace TalesGenerator.Text
 					taleRelevanceLevel = 0.0;
 				}
 
-				taleRelevanceLevel += functionResolveContext.RelevanceLevel / baseTale.Functions.Count;
+				taleRelevanceLevel += functionResolveContext.RelevanceLevel / baseTale.Functions.Count();
 
 				taleRelevanceLevels[currentTale] = taleRelevanceLevel;
 			}
 
 			List<KeyValuePair<TaleNode, double>> list = taleRelevanceLevels.ToList();
 
-			list.Sort((firstPair, nextPair) => firstPair.Value.CompareTo(nextPair.Value));
+			// Список сортируется в порядке уменьшения уровня релевантности.
+
+			list.Sort((firstPair, secondPair) => secondPair.Value.CompareTo(firstPair.Value));
 
 			foreach (var pair in list)
 			{
-				_currentContext.GenerationList.Add(new TaleGenerationInfo(pair.Key, pair.Value));
+				_currentContext.Tales.Add(new TaleGenerationInfo(pair.Key, pair.Value));
 			}
 		}
 
@@ -293,8 +370,6 @@ namespace TalesGenerator.Text
 			}
 		}
 
-		
-
 		private string GenerateText(IEnumerable<FunctionNode> functionNodes)
 		{
 			StringBuilder textBuilder = new StringBuilder();
@@ -302,7 +377,6 @@ namespace TalesGenerator.Text
 			foreach (FunctionNode functionNode in functionNodes)
 			{
 				textBuilder.AppendFormat("{0}{1}", _templateParser.Parse(functionNode).Text, Environment.NewLine);
-				//textBuilder.AppendLine(
 			}
 
 			return textBuilder.ToString();
@@ -338,23 +412,32 @@ namespace TalesGenerator.Text
 
 			// 2. Найдем сказку, для которой еще остались неиспользованные сочетания функций в конфликтных наборах.
 
-			TaleGenerationInfo currentTaleInfo = _currentContext.GenerationList.FirstOrDefault(
-				taleInfo => taleInfo.ConflictSets.Any(
-					conflictSet => !conflictSet.Closed));
+			TaleGenerationInfo currentTaleInfo = _currentContext.Tales.GetCurrentTale();
+
+			if (currentTaleInfo == null)
+			{
+				return null;
+			}
+			//TaleGenerationInfo currentTaleInfo = _currentContext.GenerationList.FirstOrDefault(
+			//	taleInfo => taleInfo.ConflictSets.Any(
+			//		conflictSet => !conflictSet.Closed));
 
 			// Если такой сказки нет, то необходимо сбросить все индексы во всех конфликтных наборах
 			// и начать процесс генерации c первой сказки в списке генерации.
 
-			if (currentTaleInfo == null)
-			{
-				_currentContext.GenerationList.ForEach(taleInfo =>
-					taleInfo.ConflictSets.ForEach(conflictSet =>
-						conflictSet.Reset()));
+			//if (currentTaleInfo == null)
+			//{
+			//	_currentContext.GenerationList.ForEach(taleInfo =>
+			//		taleInfo.ConflictSets.ForEach(conflictSet =>
+			//			conflictSet.Reset()));
 
-				currentTaleInfo = _currentContext.GenerationList.First();
-			}
+			//	currentTaleInfo = _currentContext.GenerationList.First();
+			//}
 
-			Contract.Assume(currentTaleInfo != null);
+			//Contract.Assume(currentTaleInfo != null);
+
+			// TODO: Необходимо вручную задавать режим переключения конфликтных наборов.
+			//currentTaleInfo.CanToogleConflictSets = true;
 
 			// Запомним текущую сказку, сценарий и выберем первую функцию.
 
@@ -362,31 +445,36 @@ namespace TalesGenerator.Text
 			IEnumerable<FunctionType> scenario = currentTale.Scenario;
 			FunctionNode firstFunction = currentTale.Functions.FirstOrDefault();
 
+			// Перед началом процесса генерации необходимо очистить список текущих контекстных вершин,
+			// на основе которых будет определяться выполнение принципа монотонности.
+
+			_currentContext.CurrentContextNodes.Clear();
+
 			if (firstFunction == null)
 			{
 				// TODO: Должна быть выполнена генерация для вершины базовой (сценарной) сказки с выполнением замещения контекста.
 				throw new NotImplementedException();
 			}
 
+			// Отдельно выполним процесс генерации для первой функции.
+
 			textBuilder.AppendLine(GenerateText(firstFunction));
-			
-			// Для отслеживания выполнения принципа монотонности необходимо хранить список
-			// всех контекстных вершин текущей сказки, который заполняется в процессе генерации.
 
-			List<NetworkNode> currentContextNodes = new List<NetworkNode>();
+			// Процесс генерации начинается со второй по счету функции.
 
-			// Начало процесса генерации.
-			foreach (FunctionType functionType in scenario)
+			foreach (FunctionType functionType in scenario.Skip(1))
 			{
 				// 1. Определим наличие конфликтного набора для текущего типа функции.
-				FunctionConflictSet conflictSet = GetConflictSet(currentTaleInfo, functionType);
+
+				// TODO: Возникнут проблемы, если в сказке несколько функций с одним типом.
+				FunctionConflictSet conflictSet = currentTaleInfo.ConflictSets.FirstOrDefault(set => set.FunctionType == functionType);
 
 				if (conflictSet != null)
 				{
 					// Если конфликтный набор нашелся, то
 					// процесс генерации выполняется для текущей функции этого набора.
 
-					textBuilder.AppendLine(GenerateText(conflictSet.CurrentFunction));
+					textBuilder.AppendLine(GenerateText(conflictSet.CurrentFunction.Function));
 					continue;
 				}
 
@@ -407,9 +495,8 @@ namespace TalesGenerator.Text
 					{
 						// Если функций с необходимым типом во входном наборе больше 1, то
 						// необходимо сформировать конфликтный набор.
-						// Функции в конфликтном наборе упорядочиваются в соответсвии с принципом монотонности.
 
-						List<FunctionNode> sortedFunctionsList = resolvedFunctions.ToList();
+						ICollection<NetworkNode> currentContextNodes = _currentContext.CurrentContextNodes;
 						Func<FunctionNode, int> getContextNodesCount =
 							function =>
 							{
@@ -418,17 +505,21 @@ namespace TalesGenerator.Text
 									function.Recipients.Count(recipient => currentContextNodes.Contains(recipient)) +
 									function.Locatives.Count(locative => currentContextNodes.Contains(locative));
 							};
+						List<FunctionGenerationInfo> sortedFunctionsList = resolvedFunctions
+							.Select(function => new FunctionGenerationInfo(function, getContextNodesCount(function)))
+							.ToList();
+
+						// Функции в конфликтном наборе упорядочиваются в соответсвии с принципом монотонности.
 
 						sortedFunctionsList.Sort(
-							(firstFunc, secondFunc) =>
-								getContextNodesCount(firstFunc).CompareTo(getContextNodesCount(secondFunc)));
+							(firstFunc, secondFunc) => secondFunc.RelevanceLevel.CompareTo(firstFunc.RelevanceLevel));
 
 						currentTaleInfo.ConflictSets.Add(new FunctionConflictSet(sortedFunctionsList));
 
 						// Процесс генерации выполняется для функции, которая больше всего
 						// удовлетворяет принципу монотонности, т.е. для первой функции из конфликтного набора.
 
-						textBuilder.AppendLine(GenerateText(sortedFunctionsList.First()));
+						textBuilder.AppendLine(GenerateText(sortedFunctionsList.First().Function));
 						continue;
 					}
 				}

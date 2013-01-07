@@ -10,7 +10,7 @@ namespace TalesGenerator.Text
 	{
 		#region Fields
 
-		private readonly List<FunctionNode> _functions;
+		private readonly List<FunctionGenerationInfo> _functions;
 
 		private int _currentIndex;
 		#endregion
@@ -24,7 +24,7 @@ namespace TalesGenerator.Text
 			get { return _currentIndex == _functions.Count - 1; }
 		}
 
-		public FunctionNode CurrentFunction
+		public FunctionGenerationInfo CurrentFunction
 		{
 			get
 			{
@@ -36,14 +36,14 @@ namespace TalesGenerator.Text
 
 		#region Constructors
 
-		public FunctionConflictSet(IEnumerable<FunctionNode> functions)
+		public FunctionConflictSet(IEnumerable<FunctionGenerationInfo> functions)
 		{
 			Contract.Requires<ArgumentNullException>(functions != null);
 			Contract.Requires<ArgumentException>(functions.Any());
 
-			_functions = new List<FunctionNode>(functions);
+			_functions = new List<FunctionGenerationInfo>(functions);
 			_currentIndex = 0;
-			FunctionType = _functions.First().FunctionType;
+			FunctionType = _functions.First().Function.FunctionType;
 		}
 		#endregion
 
@@ -60,6 +60,15 @@ namespace TalesGenerator.Text
 			{
 				_currentIndex++;
 			}
+		}
+
+		public override string ToString()
+		{
+			return string.Format(
+				"Function type = {0}. Current index = {1}. Count = {2}.",
+				FunctionType,
+				_currentIndex,
+				_functions.Count);
 		}
 		#endregion
 	}

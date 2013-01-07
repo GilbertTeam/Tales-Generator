@@ -14,15 +14,17 @@ namespace TalesGenerator.Text
 
 		public TalesNetwork Network { get; private set; }
 
-		public ICollection<FunctionResolveContext> ResolvedFunctions { get; private set; }
+		public GenerationCollection Tales { get; private set; }
 
-		public ICollection<TaleGenerationInfo> GenerationList { get; private set; }
+		public ICollection<FunctionGenerationInfo> ResolvedFunctions { get; private set; }
 
-		public ICollection<NetworkNode> Persons { get; private set; }
+		public ICollection<NetworkNode> ResolvedPersons { get; private set; }
 
-		public ICollection<NetworkNode> Locatives { get; private set; }
+		public ICollection<NetworkNode> ResolvedLocatives { get; private set; }
 
-		public ICollection<NetworkNode> Actions { get; private set; }
+		public ICollection<NetworkNode> ResolvedActions { get; private set; }
+
+		public DistinctCollection<NetworkNode> CurrentContextNodes { get; private set; }
 		#endregion
 
 		#region Constructors
@@ -34,11 +36,12 @@ namespace TalesGenerator.Text
 
 			Network = network;
 			Text = text;
-			ResolvedFunctions = new List<FunctionResolveContext>();
-			GenerationList = new List<TaleGenerationInfo>();
-			Persons = new List<NetworkNode>();
-			Locatives = new List<NetworkNode>();
-			Actions = new List<NetworkNode>();
+			ResolvedFunctions = new List<FunctionGenerationInfo>();
+			ResolvedPersons = new DistinctCollection<NetworkNode>();
+			ResolvedLocatives = new DistinctCollection<NetworkNode>();
+			ResolvedActions = new DistinctCollection<NetworkNode>();
+			CurrentContextNodes = new DistinctCollection<NetworkNode>();
+			Tales = new GenerationCollection();
 		}
 		#endregion
 	}

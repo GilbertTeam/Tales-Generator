@@ -112,8 +112,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseCollection.cs" />
+    <Compile Include="FunctionConflictSetCollection.cs" />
+    <Compile Include="DistinctCollection.cs" />
     <Compile Include="FunctionConflictSet.cs" />
-    <Compile Include="FunctionResolveContext.cs" />
+    <Compile Include="FunctionGenerationInfo.cs" />
+    <Compile Include="GenerationCollection.cs" />
     <Compile Include="TaleGenerationInfo.cs" />
     <Compile Include="TextGenerationContext.cs" />
     <Compile Include="Lexer\LexerUtils.cs" />

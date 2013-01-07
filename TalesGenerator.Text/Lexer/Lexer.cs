@@ -131,8 +131,9 @@ namespace TalesGenerator.Text
 				return true;
 			}
 
-			//TODO Необходима нейтрализация ошибок.
-			throw new InvalidOperationException();
+			lexerResult = null;
+			RaiseLexerException(character);
+			return false;
 		}
 
 		public bool ReadNextToken(out LexerResult lexerResult)

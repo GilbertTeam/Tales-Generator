@@ -22,6 +22,14 @@ namespace TalesGenerator.Text
 				return _networkNode.OutgoingEdges.GetEdges(edgeType, true).Select(edge => edge.EndNode);
 			}
 		}
+
+		public int Count
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
 		#endregion
 
 		#region Constructors
@@ -34,6 +42,19 @@ namespace TalesGenerator.Text
 			}
 
 			_networkNode = networkNode;
+		}
+		#endregion
+
+		#region Methods
+
+		public IEnumerator<KeyValuePair<NetworkEdgeType, IEnumerable<NetworkNode>>> GetEnumerator()
+		{
+			throw new NotImplementedException();
+		}
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			throw new NotImplementedException();
 		}
 		#endregion
 	}

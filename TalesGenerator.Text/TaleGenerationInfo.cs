@@ -13,7 +13,7 @@ namespace TalesGenerator.Text
 
 		public double RelevanceLevel { get; private set; }
 
-		public ICollection<FunctionConflictSet> ConflictSets { get; private set; }
+		public FunctionConflictSetCollection ConflictSets { get; private set; }
 		#endregion
 
 		#region Constructors
@@ -24,7 +24,15 @@ namespace TalesGenerator.Text
 
 			Tale = tale;
 			RelevanceLevel = relevanceLevel;
-			ConflictSets = new List<FunctionConflictSet>();
+			ConflictSets = new FunctionConflictSetCollection();
+		}
+		#endregion
+
+		#region Methods
+
+		public override string ToString()
+		{
+			return string.Format("Tale = {0}. Relevance level = {1}.", Tale, RelevanceLevel);
 		}
 		#endregion
 	}
