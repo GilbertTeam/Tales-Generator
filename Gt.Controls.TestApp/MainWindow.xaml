@@ -39,9 +39,19 @@
 				<ColumnDefinition Width="200"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
-			<c:Diagram x:Name="MyDiagram" MouseDown="MyDiagram_MouseDown" ClipToBounds="True" Width="400" Height="200"
-					   VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="1">
-			</c:Diagram>
+			<ScrollViewer x:Name="dsf"
+						  HorizontalScrollBarVisibility="Auto"
+						  VerticalScrollBarVisibility="Auto"
+						  CanContentScroll="True"
+						  Grid.Column="1">
+				<c:Diagram x:Name="MyDiagram"
+						   MouseDown="MyDiagram_MouseDown"
+						   ClipToBounds="True"
+						   VerticalAlignment="Stretch"
+						   HorizontalAlignment="Stretch"
+						   SnapsToDevicePixels="True">
+				</c:Diagram>
+			</ScrollViewer>
 			<c:DiagramViewer x:Name="Viewer" Grid.Column="0" ClipToBounds="True" Width="200" Height="100"
 							 VerticalAlignment="Top" HorizontalAlignment="Left"/>
 		</Grid>

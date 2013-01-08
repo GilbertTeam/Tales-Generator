@@ -74,6 +74,7 @@
     <Compile Include="Diagramming\NodeDrawers\EllipseNodeDrawer.cs" />
     <Compile Include="Diagramming\NodeDrawers\RoundedRectangleItemDrawer.cs" />
     <Compile Include="Diagramming\NodeEventArgs.cs" />
+    <Compile Include="Diagramming\DiagramSelector.cs" />
     <Compile Include="GeometryTranslater.cs" />
     <Compile Include="GlobalData.cs" />
     <Compile Include="Diagramming\ResizeInfo.cs" />

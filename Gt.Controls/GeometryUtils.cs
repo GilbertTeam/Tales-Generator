@@ -33,15 +33,15 @@ namespace Gt.Controls
 			return result;
 		}
 
-		public static bool IsIntersects(Geometry geometry1, Pen pen1, Geometry geometry2, Pen pen2)
+		public static bool AreIntersectOrContain(Geometry geometry1, Pen pen1, Geometry geometry2, Pen pen2)
 		{
 			PathGeometry og1 = geometry1.GetWidenedPathGeometry(pen1);
 			PathGeometry og2 = geometry2.GetWidenedPathGeometry(pen2);
 
-			CombinedGeometry cg = new CombinedGeometry(og1, og2);
+			CombinedGeometry cg = new CombinedGeometry(GeometryCombineMode.Intersect,og1, og2);
 			PathGeometry pg = cg.GetFlattenedPathGeometry();
 
-			return pg.Figures.Count > 0;
+			return pg.Figures.Count > 0 || geometry1.FillContains(geometry2) || geometry2.FillContains(geometry1);
 		}
 	}
 }

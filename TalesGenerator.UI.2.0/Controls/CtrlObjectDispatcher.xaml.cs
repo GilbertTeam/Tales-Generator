@@ -68,6 +68,7 @@ namespace TalesGenerator.UI.Controls
 						parent.IsExpanded = true;
 						parent = parent.Parent as TreeViewItem;
 					}
+					item.BringIntoView();
 				}
 			}
 		}
