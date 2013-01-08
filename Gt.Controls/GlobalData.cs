@@ -35,8 +35,25 @@ namespace Gt.Controls
 		public static readonly Pen BUCPen = new Pen(BUCBrush, BUCThickness);
 
 		//Константы
-		public static readonly double Precision = 0.000001;
+		public static readonly double Precision = 0.00001;
 
 		public static readonly double PointPrecision = 3;
+
+		//Selector
+
+		public static readonly Color SelectorColor = Colors.LightBlue;
+
+		public static double SelectorBorderThickness = 1;
+
+		public static readonly Brush SelectorBrush = new SolidColorBrush(SelectorColor);
+
+		public static readonly Brush SelectorBorderBrush = new SolidColorBrush(SelectorColor);
+
+		public static readonly Pen SelectorBorderPen = new Pen(SelectorBorderBrush, SelectorBorderThickness);
+
+		static GlobalData()
+		{
+			SelectorBrush.Opacity = 0.5;
+		}
 	}
 }

@@ -4,6 +4,10 @@ using System.Windows;
 using System.Windows.Input;
 using System;
 using System.Diagnostics;
+using System.Windows.Media;
+using System.ComponentModel;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace Gt.Controls.Diagramming
 {
@@ -36,6 +40,8 @@ namespace Gt.Controls.Diagramming
 		protected double _baseXViewOffset;
 
 		protected double _baseYViewOffset;
+
+		protected BackgroundWorker _offsetWorker;
 
 		#region events
 
@@ -72,7 +78,17 @@ namespace Gt.Controls.Diagramming
 
 			_baseXViewOffset = 0;
 			_baseYViewOffset = 0;
+
+			_offsetWorker = null;
+
+			Selector = null;
 		}
+
+		#endregion
+
+		#region props
+
+		public DiagramSelector Selector { get; set; }
 
 		#endregion
 
@@ -115,6 +131,8 @@ namespace Gt.Controls.Diagramming
 			if (_rightButtonDown)
 				return;
 
+			Selector = null;
+
 			_diagram.CaptureMouse();
 
 			_leftButtonDown = true;
@@ -138,12 +156,24 @@ namespace Gt.Controls.Diagramming
 				{
 					_leftButtonAction = MouseAction.CreateEdge;
 				}
+				else
+				{
+					_leftButtonAction = MouseAction.MultiSelect;
+				}
 			}
 			_leftButtonDownMousePosition = _currentMousePosition;
 		}
 
 		public virtual void ProcessLeftButtonUp()
 		{
+			if (_offsetWorker != null)
+			{
+				_offsetWorker.CancelAsync();
+				//_offsetWorker.
+				//while (_offsetWorker.IsBusy) { }
+				_offsetWorker = null;
+			}
+
 			if (_leftButtonDown && _leftButtonDownMousePosition != null && _currentMousePosition != null)
 			{
 				var isMouseMoved = MathUtils.Compare(GeometryUtils.Distance(_leftButtonDownMousePosition.Value, _currentMousePosition.Value), 0, GlobalData.PointPrecision) != 0;
@@ -165,22 +195,34 @@ namespace Gt.Controls.Diagramming
 					_currentResizeDirection = ResizeDirection.None;
 					SetupSelectionEdgesEndings(direction);
 				}
+				else if (_leftButtonAction == MouseAction.MultiSelect)
+				{
+					UseSelector();
+				}
 				ChangeCursorKind(_currentMousePosition.Value);
 			}
 
 			_diagram.ReleaseMouseCapture();
 
+			Selector = null;
 			_leftButtonDown = false;
 			_leftButtonDownMousePosition = null;
 			_leftButtonAction = MouseAction.None;
 		}
 
-		public virtual void ProcessMouseMove(Point mousePosition)
+		public virtual void ProcessMouseMove(Point mousePosition, bool createSelector = true)
 		{
 			ResetIsUnderCursor(mousePosition);
 
 			if (_leftButtonDown)
 			{
+				if (_offsetWorker == null)
+				{
+					_offsetWorker = new BackgroundWorker();
+					_offsetWorker.WorkerSupportsCancellation = true;
+					_offsetWorker.DoWork += new DoWorkEventHandler(CheckOffsets);
+					_offsetWorker.RunWorkerAsync();
+				}
 
 				if (_leftButtonAction == MouseAction.MoveItem)
 				{
@@ -189,6 +231,10 @@ namespace Gt.Controls.Diagramming
 				if (_leftButtonAction == MouseAction.CreateEdge)
 				{
 					CreateEdge(mousePosition);
+				}
+				if (_leftButtonAction == MouseAction.MultiSelect)
+				{
+					ExpandSelector(mousePosition, createSelector);
 				}
 			}
 			else if (_rightButtonDown)
@@ -665,6 +711,53 @@ namespace Gt.Controls.Diagramming
 			}
 		}
 
+		private void ExpandSelector(Point mousePosition, bool createSelector)
+		{
+			if (Selector == null)
+			{
+				if (createSelector)
+				{
+					Selector = new DiagramSelector();
+					Selector.StartPoint = mousePosition;
+				}
+				return;
+			}
+
+			Selector.EndPoint = mousePosition;
+
+			_diagram.InvalidateVisual();
+		}
+
+		private void UseSelector()
+		{
+			if (Selector == null)
+				return;
+
+			using (DiagramUpdateLock locker = new DiagramUpdateLock(_diagram))
+			{
+				Geometry selectorGeometry = Selector.Geometry;
+
+				_diagram.Selection.Clear();
+
+				foreach (var node in _diagram.Nodes)
+				{
+					if (node.Geometry == null || node.NeedRecalc)
+						node.CalculateGeometry();
+
+					if (node.Geometry == null)
+						continue;
+
+					if (GeometryUtils.AreIntersectOrContain(node.Geometry, node.BorderPen,
+						selectorGeometry, GlobalData.SelectorBorderPen))
+					{
+						_diagram.Selection.Add(node);
+					}
+				}
+
+				Selector = null;
+			}
+		}
+
 		protected IEnumerable<DiagramItem> FindHittedItems(Point mousePoint)
 		{
 			var result = new List<DiagramItem>();
@@ -739,6 +832,65 @@ namespace Gt.Controls.Diagramming
 			if (edge != null && EdgeLButtonDblClick != null)
 			{
 				EdgeLButtonDblClick(new EdgeEventArgs(_diagram, edge));
+			}
+		}
+
+		protected void CheckOffsets(object sender, DoWorkEventArgs args)
+		{
+			BackgroundWorker worker = sender as BackgroundWorker;
+			if (worker == null)
+				return;
+
+			while (true)
+			{
+				if (worker.CancellationPending == true)
+					break;
+
+				_diagram.Dispatcher.Invoke((Action)(() =>
+					{
+						Rect viewport = _diagram.Viewport;
+						Point currentPoint = _currentMousePosition.Value;
+						Point currentScreenPoint = currentPoint.ToDisplayPoint(_diagram.Offset, _diagram.Scale);
+
+						bool moveUp = false;
+						bool moveDown = false;
+						bool moveLeft = false;
+						bool moveRight = false;
+
+						double offsetX = viewport.Width * 0.05;
+						double offsetY = viewport.Height * 0.05;
+
+						if (currentPoint.X - viewport.Left < offsetX)
+							moveLeft = true;
+
+						if (viewport.Right - currentPoint.X < offsetX)
+							moveRight = true;
+
+						if (currentPoint.Y - viewport.Top < offsetY)
+							moveUp = true;
+
+						if (viewport.Bottom - currentPoint.Y < offsetY)
+							moveDown = true;
+
+						using (DiagramRenderLock locker = new DiagramRenderLock(_diagram))
+						{
+							if (moveUp)
+								_diagram.YViewOffset += offsetY;
+
+							if (moveDown)
+								_diagram.YViewOffset -= offsetY;
+
+							if (moveLeft)
+								_diagram.XViewOffset += offsetX;
+
+							if (moveRight)
+								_diagram.XViewOffset -= offsetX;
+						}
+
+						ProcessMouseMove(currentScreenPoint.ToViewPoint(_diagram.Offset, _diagram.Scale), false);
+					}));
+
+				Thread.Sleep(100);
 			}
 		}
 

@@ -74,6 +74,7 @@ namespace TalesGenerator.UI.Windows
 			NetworkVisual.Selection.CollectionChanged += new NotifyCollectionChangedEventHandler(VisualSelection_CollectionChanged);
 			//ButtonViewShowPropsPanel.IsChecked = this.PanelProps.Visibility == Visibility.Visible;
 			//DispatcherPanelButton.IsChecked = this.DispatcherPanel.Visibility == System.Windows.Visibility.Visible;
+			DiagramView.Diagram = NetworkVisual;
 
 			DispatcherPanel.SelectionChanged += new IntNotifyEventHandler(DispatcherPanel_SelectionChanged);
 			DispatcherPanel.SelectLinkedNodes += new IntNotifyEventHandler(DispatcherPanel_SelectLinkedNodes);

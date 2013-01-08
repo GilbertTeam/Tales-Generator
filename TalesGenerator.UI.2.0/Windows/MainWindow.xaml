@@ -260,11 +260,28 @@
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
-			<controls:CtrlObjectDispatcher x:Name="DispatcherPanel"
-										   VerticalAlignment="Stretch" 
-										   Width="{Binding Source=ElementName, Path=Width}"
-										   Margin="5,5,11,5"
-										   Grid.Column="0"/>
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="150"/>
+				</Grid.RowDefinitions>
+				<controls:CtrlObjectDispatcher x:Name="DispatcherPanel"
+											   VerticalAlignment="Stretch"
+											   Width="{Binding Source=ElementName, Path=Width}"
+											   Margin="5,5,11,5"
+											   Grid.Row="0"/>
+				<GridSplitter Height="6"
+							  VerticalAlignment="Center"
+							  Background="{StaticResource BackgroundBrushKey}"
+							  Grid.Row="1"/>
+				<Border Style="{StaticResource BorderStyleKey}" Margin="5"
+					Grid.Row="2">
+					<c:DiagramViewer x:Name="DiagramView"
+									 ClipToBounds="True"
+									 Margin="5,5,11,5"/>
+				</Border>
+			</Grid>
 			<GridSplitter Width="6"
 						  HorizontalAlignment="Center"
 						  Margin="0,5,0,5"
@@ -276,6 +293,7 @@
 				<ScrollViewer x:Name="ScrollDiagram"
 						  HorizontalScrollBarVisibility="Auto"
 						  VerticalScrollBarVisibility="Auto"
+						  CanContentScroll="True"
 						  MouseWheel="DiagramNetwork_MouseWheel"
 						  KeyDown="ScrollDiagram_KeyDown">
 					<!--<diag:Diagram x:Name="DiagramNetwork"

@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Collections.Specialized;
-using System.IO;
-
 using Gt.Controls.Diagramming.EdgeDrawers;
 using Gt.Controls.Diagramming.NodeDrawers;
-
-using System.ComponentModel;
-using System.Collections;
-using System.Collections.ObjectModel;
-using System.Xml.Linq;
+using System.Windows.Controls.Primitives;
 
 namespace Gt.Controls.Diagramming
 {
@@ -47,7 +44,7 @@ namespace Gt.Controls.Diagramming
 	///     <MyNamespace:Diagram/>
 	///
 	/// </summary>
-	public class Diagram : Control
+	public class Diagram : Control, IScrollInfo
 	{
 		#region Fields
 
@@ -86,6 +83,8 @@ namespace Gt.Controls.Diagramming
 		public event DiagramNotifyDelegate DiagramRecalc;
 
 		public event DiagramNotifyDelegate DiagramRender;
+
+		protected ScrollViewer _scrollViewer;
 
 		#endregion
 
@@ -138,6 +137,8 @@ namespace Gt.Controls.Diagramming
 
 			LockRender = false;
 			LockRecalc = false;
+
+			_scrollViewer = null;
 		}
 
 		#endregion
@@ -195,6 +196,12 @@ namespace Gt.Controls.Diagramming
 			{
 				_defaultNodeDrawer = value;
 
+				foreach (var node in _nodes)
+				{
+					if (node.Drawer == null)
+						node.NeedRecalc = true;
+				}
+
 				InvalidateDiagram();
 			}
 		}
@@ -205,6 +212,12 @@ namespace Gt.Controls.Diagramming
 			set
 			{
 				_defaultEdgeDrawer = value;
+
+				foreach (var edge in _edges)
+				{
+					if (edge.Drawer == null)
+						edge.NeedRecalc = true;
+				}
 
 				InvalidateDiagram();
 			}
@@ -277,6 +290,9 @@ namespace Gt.Controls.Diagramming
 				return;
 
 			diagram.InvalidateVisual();
+
+			if (diagram.ScrollOwner != null)
+				diagram.ScrollOwner.InvalidateScrollInfo();
 		}
 
 		protected static void OnYViewOffsetChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -286,6 +302,9 @@ namespace Gt.Controls.Diagramming
 				return;
 
 			diagram.InvalidateVisual();
+
+			if (diagram.ScrollOwner != null)
+				diagram.ScrollOwner.InvalidateScrollInfo();
 		}
 
 		protected static void OnZoomChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -295,6 +314,9 @@ namespace Gt.Controls.Diagramming
 				return;
 
 			diagram.InvalidateVisual();
+
+			if (diagram.ScrollOwner != null)
+				diagram.ScrollOwner.InvalidateScrollInfo();
 		}
 
 		#endregion
@@ -426,7 +448,7 @@ namespace Gt.Controls.Diagramming
 			if (LockRecalc)
 				return;
 
-			OnCalculateShape();
+			OnRecalc();
 
 			if (DiagramRecalc != null)
 			{
@@ -434,7 +456,7 @@ namespace Gt.Controls.Diagramming
 			}
 		}
 
-		protected virtual void OnCalculateShape()
+		protected virtual void OnRecalc()
 		{
 			foreach (var node in Nodes)
 			{
@@ -459,6 +481,9 @@ namespace Gt.Controls.Diagramming
 				if (edge.Label != null)
 					edge.Label.CalculateGeometry();
 			}
+
+			if (_scrollViewer != null)
+				_scrollViewer.InvalidateScrollInfo();
 		}
 
 		#endregion
@@ -484,6 +509,7 @@ namespace Gt.Controls.Diagramming
 
 			CalculateViewport();
 			DrawItems(drawingContext);
+			DrawSelector(drawingContext);
 
 			drawingContext.Pop();
 			drawingContext.Pop();
@@ -599,6 +625,15 @@ namespace Gt.Controls.Diagramming
 					
 				}
 			}
+		}
+
+		private void DrawSelector(DrawingContext drawingContext)
+		{
+			if (_mouseManager.Selector == null)
+				return;
+
+			drawingContext.DrawGeometry(GlobalData.SelectorBrush, GlobalData.SelectorBorderPen,
+				_mouseManager.Selector.Geometry);
 		}
 
 		#endregion
@@ -832,6 +867,198 @@ namespace Gt.Controls.Diagramming
 		}
 
 		#endregion
+
+		#endregion
+
+		#region IScrollInfo implementation
+
+		public bool CanHorizontallyScroll
+		{
+			get;
+			set;
+		}
+
+		public bool CanVerticallyScroll
+		{
+			get;
+			set;
+		}
+
+		public Rect Extent
+		{
+			get
+			{
+				Rect viewport = Viewport;
+				Rect boundaries = Boundaries;
+
+				double bottom = Math.Max(Viewport.Bottom, Boundaries.Bottom);
+				double top = Math.Min(Viewport.Top, Boundaries.Top);
+				double right = Math.Max(Viewport.Right, Boundaries.Right);
+				double left = Math.Min(Viewport.Left, Boundaries.Left);
+
+				return new Rect(new Point(left, top), new Point(right, bottom));
+			}
+		}
+
+		public double ExtentHeight
+		{
+			get
+			{
+				return Extent.Height;
+			}
+		}
+
+		public double ExtentWidth
+		{
+			get
+			{
+				return Extent.Width;
+			}
+		}
+
+		public double HorizontalOffset
+		{
+			get
+			{
+				return -Extent.X - XViewOffset;// XViewOffset + Extent.X;
+			}
+		}
+
+		public double VerticalOffset
+		{
+			get
+			{
+				return -Extent.Y - YViewOffset;
+			}
+		}
+
+		public void LineDown()
+		{
+			double offset = Viewport.Height * 0.05;
+
+			YViewOffset -= offset;
+		}
+
+		public void LineLeft()
+		{
+			double offset = Viewport.Width * 0.05;
+
+			XViewOffset += offset;
+		}
+
+		public void LineRight()
+		{
+			double offset = Viewport.Width * 0.05;
+
+			XViewOffset -= offset;
+		}
+
+		public void LineUp()
+		{
+			double offset = Viewport.Height * 0.05;
+
+			YViewOffset += offset;
+		}
+
+		public Rect MakeVisible(Visual visual, Rect rectangle)
+		{
+			return Viewport;
+		}
+
+		#region not implemented
+
+		public void MouseWheelDown()
+		{
+		}
+
+		public void MouseWheelLeft()
+		{
+		}
+
+		public void MouseWheelRight()
+		{
+		}
+
+		public void MouseWheelUp()
+		{
+		}
+
+		public void PageDown()
+		{
+		}
+
+		public void PageLeft()
+		{
+		}
+
+		public void PageRight()
+		{
+		}
+
+		public void PageUp()
+		{
+		}
+
+		#endregion
+
+		public ScrollViewer ScrollOwner
+		{
+			get
+			{
+				return _scrollViewer;
+			}
+			set
+			{
+				_scrollViewer = value;
+			}
+		}
+
+		public void SetHorizontalOffset(double offset)
+		{
+			double currentOffset = HorizontalOffset;
+			double newX = Extent.X + offset;
+			if (MathUtils.Compare(offset, currentOffset, GlobalData.Precision) != -1)
+			{
+				if (newX > Boundaries.Right - Viewport.Width)
+					newX = Boundaries.Right - Viewport.Width;
+			}
+			else
+			{
+				if (newX < Boundaries.Left)
+					newX = Boundaries.Left;
+			}
+
+			XViewOffset = -newX;
+		}
+
+		public void SetVerticalOffset(double offset)
+		{
+			double currentOffset = VerticalOffset;
+			double newY = -YViewOffset;
+			newY = Extent.Y + offset;
+			if (MathUtils.Compare(offset, currentOffset, GlobalData.Precision) != -1)
+			{
+				if (newY > Boundaries.Bottom - Viewport.Height)
+					newY = Boundaries.Bottom - Viewport.Height;
+			}
+			else
+			{
+				if (newY < Boundaries.Top)
+					newY = Boundaries.Top;
+			}
+
+			YViewOffset = -newY;
+		}
+
+		public double ViewportHeight
+		{
+			get { return Viewport.Height; }
+		}
+
+		public double ViewportWidth
+		{
+			get { return Viewport.Width; }
+		}
 
 		#endregion
 	}

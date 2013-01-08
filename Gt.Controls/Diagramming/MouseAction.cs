@@ -6,6 +6,7 @@
 		Select = 1,
 		MoveItem = 2,
 		CreateEdge = 3,
-		MoveViewpot = 4
+		MoveViewpot = 4,
+		MultiSelect = 5
 	}
 }
