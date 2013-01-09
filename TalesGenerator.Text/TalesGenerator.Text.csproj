@@ -119,7 +119,6 @@
     <Compile Include="FunctionGenerationInfo.cs" />
     <Compile Include="GenerationCollection.cs" />
     <Compile Include="TaleGenerationInfo.cs" />
-    <Compile Include="TextGenerationContext.cs" />
     <Compile Include="Lexer\LexerUtils.cs" />
     <Compile Include="Parser\ISentenceComparer.cs" />
     <Compile Include="Parser\ITemplateParser.cs" />
@@ -151,6 +150,7 @@
     </Compile>
     <Compile Include="TextGenerator.cs" />
     <Compile Include="Parser\TemplateToken.cs" />
+    <Compile Include="TextGeneratorContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TalesGenerator.Core\TalesGenerator.Core.csproj">

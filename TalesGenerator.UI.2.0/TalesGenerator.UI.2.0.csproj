@@ -126,6 +126,9 @@
     <Compile Include="Windows\ConsultWindow2.xaml.cs">
       <DependentUpon>ConsultWindow2.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ExplanationWindow.xaml.cs">
+      <DependentUpon>ExplanationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\StringEditWindow.xaml.cs">
       <DependentUpon>StringEditWindow.xaml</DependentUpon>
     </Compile>
@@ -188,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ConsultWindow2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ExplanationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

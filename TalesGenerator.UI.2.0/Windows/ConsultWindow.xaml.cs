@@ -17,13 +17,17 @@ namespace TalesGenerator.UI.Windows
 		private readonly TalesNetwork _talesNetwork;
 
 		private readonly TextGenerator _textGenerator;
+
+		private TextGeneratorContext _resultContext;
 		#endregion
 
 		#region Constructors
 
-		public ConsultWindow()
+		private ConsultWindow()
 		{
 			InitializeComponent();
+
+			_resultContext = null;
 		}
 
 		public ConsultWindow(TalesNetwork talesNetwork)
@@ -54,20 +58,22 @@ namespace TalesGenerator.UI.Windows
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
+			_resultContext = null;
+
 			try
 			{
 				statusText.Text = string.Empty;
 
-				TextGeneratorContext result = _textGenerator.GenerateText(_talesNetwork, QuestionTextBox.Text);
+				_resultContext = _textGenerator.GenerateText(_talesNetwork, QuestionTextBox.Text);
 
-				if (result == null)
+				if (_resultContext == null)
 				{
 					btnStart.IsEnabled = false;
 					statusText.Text = "Процесс генерации завершен";
 				}
 				else
 				{
-					AnswerTextBox.Text = result.OutputText;
+					AnswerTextBox.Text = _resultContext.OutputText;
 				}
 			}
 			catch (Exception ex)
@@ -76,6 +82,16 @@ namespace TalesGenerator.UI.Windows
 					MessageBoxImage.Error);
 			}
 		}
+
+		private void btnShowExplanation_Click(object sender, RoutedEventArgs e)
+		{
+			if (_resultContext == null)
+				return;
+
+			ExplanationWindow wnd = new ExplanationWindow(_resultContext);
+			wnd.ShowDialog();
+		}
+
 		#endregion
 	}
 }

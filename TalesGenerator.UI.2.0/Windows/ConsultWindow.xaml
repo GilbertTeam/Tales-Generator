@@ -61,15 +61,22 @@
 				 IsReadOnly="True"/>
 		<Separator Grid.Row="5"
 				   VerticalAlignment="Center"/>
-        <Button Style="{StaticResource CommandButtonStyle}"
-                    x:Name="btnStart"
-                    Grid.Row="6"
-					Grid.Column="1"
-					VerticalAlignment="Top"
-					Content="{x:Static p:Resources.StartLabel}"
-					IsDefault="True"
-					Click="Button_Click"/>
-        <StatusBar x:Name="statusBar"
+		<StackPanel Orientation="Horizontal"
+					Grid.Row="6"
+					Grid.Column="1" FlowDirection="RightToLeft">
+			<Button Style="{StaticResource CommandButtonStyle}"
+						x:Name="btnStart"
+						VerticalAlignment="Top"
+						Content="{x:Static p:Resources.StartLabel}"
+						IsDefault="True"
+						Click="Button_Click"/>
+			<Button Style="{StaticResource CommandButtonStyle}"
+					x:Name="btnShowExplanation"
+					Content="Показать объяснение"
+					Width="150"
+					Click="btnShowExplanation_Click"/>
+		</StackPanel>
+		<StatusBar x:Name="statusBar"
                    VerticalAlignment="Stretch"
                    Grid.Row="7">
             <StatusBarItem>

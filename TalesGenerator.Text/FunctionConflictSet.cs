@@ -24,6 +24,14 @@ namespace TalesGenerator.Text
 			get { return _currentIndex == _functions.Count - 1; }
 		}
 
+		/// <summary>
+		/// Моя реализация, для интерфейса
+		/// </summary>
+		public bool ClosedEx
+		{
+			get { return _currentIndex == _functions.Count; }
+		}
+
 		public FunctionGenerationInfo CurrentFunction
 		{
 			get
@@ -57,6 +65,14 @@ namespace TalesGenerator.Text
 		public void Next()
 		{
 			if (!Closed)
+			{
+				_currentIndex++;
+			}
+		}
+
+		public void NextEx()
+		{
+			if (!ClosedEx)
 			{
 				_currentIndex++;
 			}
