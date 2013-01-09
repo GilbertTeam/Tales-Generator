@@ -205,10 +205,15 @@ namespace Gt.Controls.Diagramming
 				CalculateGeometry(Drawer);
 		}
 
-		public override void Draw(DrawingContext dc)
+		public override bool Draw(DrawingContext dc, bool considerViewport)
 		{
+			if (!base.Draw(dc, considerViewport))
+				return false;
+
 			if (Drawer != null)
 				Drawer.Draw(dc, new Rect(), this);
+
+			return true;
 		}
 
 		public void BeginEdit()

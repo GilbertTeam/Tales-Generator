@@ -53,6 +53,12 @@ namespace TalesGenerator.UI.Classes
 				case "#is_instance":
 					result = NetworkEdgeType.IsInstance;
 					break;
+				case "#шаблон":
+					result = NetworkEdgeType.Template;
+					break;
+				case "#part_of":
+					result = NetworkEdgeType.PartOf;
+					break;
 			}
 
 			return result;
@@ -90,6 +96,12 @@ namespace TalesGenerator.UI.Classes
 				case NetworkEdgeType.IsInstance:
 					res = Properties.Resources.IsInstanceLabel;
 					break;
+				case NetworkEdgeType.Template:
+					res = Properties.Resources.TemplateLabel;
+					break;
+				case NetworkEdgeType.PartOf:
+					res = Properties.Resources.PartOfLabel;
+					break;
 			}
 
 			return res;
@@ -121,6 +133,12 @@ namespace TalesGenerator.UI.Classes
 					break;
 				case NetworkEdgeType.IsInstance:
 					res = Properties.Resources.IsInstanceResourceLabel;
+					break;
+				case NetworkEdgeType.Template:
+					res = Properties.Resources.TemlateResourceLabel;
+					break;
+				case NetworkEdgeType.PartOf:
+					res = Properties.Resources.PartOfResourceLabell;
 					break;
 			}
 
@@ -202,6 +220,12 @@ namespace TalesGenerator.UI.Classes
 						break;
 					case NetworkEdgeType.IsInstance:
 						str = "IsInstance";
+						break;
+					case NetworkEdgeType.Template:
+						str = "Template";
+						break;
+					case NetworkEdgeType.PartOf:
+						str = "PartOf";
 						break;
 					default:
 						str = "IsA";

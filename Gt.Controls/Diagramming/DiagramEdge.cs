@@ -218,8 +218,11 @@ namespace Gt.Controls.Diagramming
 			}
 		}
 
-		public override void Draw(DrawingContext dc)
+		public override bool Draw(DrawingContext dc, bool considerViewport)
 		{
+			if (!base.Draw(dc, considerViewport))
+				return false;
+
 			if (Drawer != null)
 				Drawer.Draw(dc, new Rect(), this);
 			else
@@ -228,6 +231,8 @@ namespace Gt.Controls.Diagramming
 				if (diagramDrawer != null)
 					diagramDrawer.Draw(dc, new Rect(), this);
 			}
+
+			return true;
 		}
 
 		void RaiseSourceNodeChanged()

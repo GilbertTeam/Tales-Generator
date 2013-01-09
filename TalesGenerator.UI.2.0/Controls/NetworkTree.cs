@@ -306,6 +306,10 @@ namespace TalesGenerator.UI.Controls
 			CreateTypedDescendant(linksRoot, node, NetworkEdgeType.Follow);
 			//Locative
 			CreateTypedDescendant(linksRoot, node, NetworkEdgeType.Locative);
+			//Template
+			CreateTypedDescendant(linksRoot, node, NetworkEdgeType.Template);
+			//PartOf
+			CreateTypedDescendant(linksRoot, node, NetworkEdgeType.PartOf);
 			//Экземплярыэ
 			CreateInstances(root, node);
 			//Is-a потомки
@@ -380,14 +384,14 @@ namespace TalesGenerator.UI.Controls
 
 		private void CreateTypedDescendant(TreeViewItem root, NetworkNode node, NetworkEdgeType currentType)
 		{
-			NetworkEdge edge = node.GetTypedOutgoingEdge(currentType);
-			if (edge != null)
-			{
-				string str = Utils.ConvertToResourcesType(currentType) + "TemplateKey";
-				DataTemplate template = Application.Current.TryFindResource(str) as DataTemplate;
-				str = Utils.ConvertToResourcesType(currentType) + "ItemTemplateKey";
-				DataTemplate itemTemplate = Application.Current.TryFindResource(str) as DataTemplate;
+			string str = Utils.ConvertToResourcesType(currentType) + "TemplateKey";
+			DataTemplate template = Application.Current.TryFindResource(str) as DataTemplate;
+			str = Utils.ConvertToResourcesType(currentType) + "ItemTemplateKey";
+			DataTemplate itemTemplate = Application.Current.TryFindResource(str) as DataTemplate;
 
+			var edges = node.GetTypedOutGoingEdges(currentType);
+			foreach(var edge in edges)
+			{
 				TreeViewItem linkRoot = new TreeViewItem();
 				linkRoot.Header = Utils.ConvertType(edge.Type);
 				linkRoot.HeaderTemplate = template;

@@ -135,6 +135,8 @@ namespace Gt.Controls.Diagramming
 			_viewport = null;
 			_boundaries = null;
 
+			CalculateBoundaries();
+
 			LockRender = false;
 			LockRecalc = false;
 
@@ -251,7 +253,6 @@ namespace Gt.Controls.Diagramming
 		{
 			get
 			{
-				CalculateBoundaries();
 				return _boundaries.Value;
 			}
 		}
@@ -482,6 +483,8 @@ namespace Gt.Controls.Diagramming
 					edge.Label.CalculateGeometry();
 			}
 
+			CalculateBoundaries();
+
 			if (_scrollViewer != null)
 				_scrollViewer.InvalidateScrollInfo();
 		}
@@ -508,7 +511,7 @@ namespace Gt.Controls.Diagramming
 			drawingContext.PushTransform(translateTransform);
 
 			CalculateViewport();
-			DrawItems(drawingContext);
+			DrawItems(drawingContext, true);
 			DrawSelector(drawingContext);
 
 			drawingContext.Pop();
@@ -520,7 +523,7 @@ namespace Gt.Controls.Diagramming
 				DiagramRender();
 		}
 
-		internal void DrawItems(DrawingContext drawingContext)
+		internal void DrawItems(DrawingContext drawingContext, bool considerViewport = false)
 		{
 			_itemsInDrawingOrder.Clear();
 
@@ -528,17 +531,17 @@ namespace Gt.Controls.Diagramming
 
 			foreach (var node in _nodes)
 			{
-				DrawNode(drawingContext, node, ref itemsToDraw);
+				DrawNode(drawingContext, node, ref itemsToDraw, considerViewport);
 			}
 
 			foreach (var edge in _edges)
 			{
-				DrawEdge(drawingContext, edge, ref itemsToDraw);
+				DrawEdge(drawingContext, edge, ref itemsToDraw, considerViewport);
 			}
 
 			foreach (var item in itemsToDraw)
 			{
-				item.Draw(drawingContext);
+				item.Draw(drawingContext, considerViewport);
 				//item.DrawSelectionBorder(drawingContext);
 
 				_itemsInDrawingOrder.Add(item);
@@ -546,14 +549,14 @@ namespace Gt.Controls.Diagramming
 				{
 					if (item.Label != null)
 					{
-						item.Label.Draw(drawingContext);
+						item.Label.Draw(drawingContext, considerViewport);
 						_itemsInDrawingOrder.Add(item.Label);
 					}
 				}
 			}
 		}
 
-		private void DrawNode(DrawingContext dc, DiagramNode node, ref List<DiagramItem> itemsToDraw)
+		private void DrawNode(DrawingContext dc, DiagramNode node, ref List<DiagramItem> itemsToDraw, bool considerViewport)
 		{
 			if (_itemsInDrawingOrder.Contains(node) || itemsToDraw.Contains(node))
 				return;
@@ -566,7 +569,7 @@ namespace Gt.Controls.Diagramming
 			}
 			else
 			{
-				node.Draw(dc);
+				node.Draw(dc, considerViewport);
 				_itemsInDrawingOrder.Add(node);
 
 				if (_selection.Contains(node.Label))
@@ -578,7 +581,7 @@ namespace Gt.Controls.Diagramming
 				{
 					if (node.Label != null)
 					{
-						node.Label.Draw(dc);
+						node.Label.Draw(dc, considerViewport);
 						_itemsInDrawingOrder.Add(node.Label);
 					}
 				}
@@ -587,18 +590,18 @@ namespace Gt.Controls.Diagramming
 
 			foreach (var edge in node.Edges)
 			{
-				DrawEdge(dc, edge, ref itemsToDraw);
+				DrawEdge(dc, edge, ref itemsToDraw, considerViewport);
 
 				if (node == edge.SourceNode && edge.DestinationNode != null)
-					DrawNode(dc, edge.DestinationNode, ref itemsToDraw);
+					DrawNode(dc, edge.DestinationNode, ref itemsToDraw, considerViewport);
 
 				if (node == edge.DestinationNode && edge.SourceNode != null)
-					DrawNode(dc, edge.SourceNode, ref itemsToDraw);
+					DrawNode(dc, edge.SourceNode, ref itemsToDraw, considerViewport);
 			}
 
 		}
 
-		private void DrawEdge(DrawingContext dc, DiagramEdge edge, ref List<DiagramItem> itemsToDraw)
+		private void DrawEdge(DrawingContext dc, DiagramEdge edge, ref List<DiagramItem> itemsToDraw, bool considerViewport)
 		{
 			if (_itemsInDrawingOrder.Contains(edge) || itemsToDraw.Contains(edge))
 				return;
@@ -610,7 +613,7 @@ namespace Gt.Controls.Diagramming
 			}
 			else
 			{
-				edge.Draw(dc);
+				edge.Draw(dc, considerViewport);
 				_itemsInDrawingOrder.Add(edge);
 
 				if (_selection.Contains(edge.Label))
@@ -620,7 +623,7 @@ namespace Gt.Controls.Diagramming
 				}
 				else if (edge.Label != null)
 				{
-					edge.Label.Draw(dc);
+					edge.Label.Draw(dc, considerViewport);
 					_itemsInDrawingOrder.Add(edge.Label);
 					
 				}

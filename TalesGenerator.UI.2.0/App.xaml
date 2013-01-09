@@ -113,8 +113,9 @@
 		<SolidColorBrush x:Key="GoalBrush" Color="#FD4B00"/>
 		<SolidColorBrush x:Key="LocativeBrush" Color="#8811FF"/>
 		<SolidColorBrush x:Key="FollowBrush" Color="#A80054"/>
-		<SolidColorBrush x:Key="IsInstanceBrush" Color="#008A8A"/>
+		<SolidColorBrush x:Key="TemplateBrush" Color="#008A8A"/>
 		<SolidColorBrush x:Key="ObjectBrush" Color="#EA0000"/>
+		<SolidColorBrush x:Key="PartOfBrush" Color="DarkGray"/>
 		
 		<Pen x:Key="IsAPen" Brush="{StaticResource IsABrush}" Thickness="2"/>
 		<Pen x:Key="AgentPen" Brush="{StaticResource AgentBrush}" Thickness="2"/>
@@ -122,8 +123,9 @@
 		<Pen x:Key="GoalPen" Brush="{StaticResource GoalBrush}" Thickness="2"/>
 		<Pen x:Key="LocativePen" Brush="{StaticResource LocativeBrush}" Thickness="2"/>
 		<Pen x:Key="FollowPen" Brush="{StaticResource FollowBrush}" Thickness="2"/>
-		<Pen x:Key="IsInstancePen" Brush="{StaticResource IsInstanceBrush}" Thickness="2"/>
+		<Pen x:Key="TemplatePen" Brush="{StaticResource TemplateBrush}" Thickness="2"/>
 		<Pen x:Key="ObjectPen" Brush="{StaticResource ObjectBrush}" Thickness="2"/>
+		<Pen x:Key="PartOfPen" Brush="{StaticResource PartOfBrush}" Thickness="2"/>
 
 		<!--brand new templates-->
 		<DataTemplate x:Key="IsATemplateKey">
@@ -259,10 +261,10 @@
 			</StackPanel>
 		</DataTemplate>
 
-		<DataTemplate x:Key="IsInstanceTemplateKey">
+		<DataTemplate x:Key="TemplateTemplateKey">
 			<StackPanel Orientation="Horizontal">
 				<TextBlock Text="{Binding}" Margin="5,0"
-						   Foreground="{StaticResource IsInstanceBrush}"/>
+						   Foreground="{StaticResource TemplateBrush}"/>
 				<Image Name="LinkImage"
 					   Width="16"
 					   Height="16"
@@ -271,10 +273,29 @@
 			</StackPanel>
 		</DataTemplate>
 
-		<DataTemplate x:Key="IsInstanceItemTemplateKey">
+		<DataTemplate x:Key="TemplateItemTemplateKey">
 			<StackPanel Orientation="Horizontal">
 				<TextBlock Text="{Binding}" Margin="5,0"
-						   Foreground="{StaticResource IsInstanceBrush}"/>
+						   Foreground="{StaticResource TemplateBrush}"/>
+			</StackPanel>
+		</DataTemplate>
+		
+		<DataTemplate x:Key="PartOfTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource PartOfBrush}"/>
+				<Image Name="LinkImage"
+					   Width="16"
+					   Height="16"
+					   Stretch="Fill"
+					   Source="/TalesGenerator;component/Images/Tree/IsInstanceArrowUp.png"/>
+			</StackPanel>
+		</DataTemplate>
+
+		<DataTemplate x:Key="PartOfItemTemplateKey">
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{Binding}" Margin="5,0"
+						   Foreground="{StaticResource PartOfBrush}"/>
 			</StackPanel>
 		</DataTemplate>
 

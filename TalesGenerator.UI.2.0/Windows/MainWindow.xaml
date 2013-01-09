@@ -219,10 +219,14 @@
 											  SmallImageSource="..\Images\Links\LocativeArrow.png"
 											  Command="{StaticResource SetLinkTypeKey}"
 											  CommandParameter="{x:Static p:Resources.LocativeLabel}"/>
-					<!--<ribbon:RibbonRadioButton Label="{x:Static p:Resources.IsInstanceLabel}"
-											  SmallImageSource="..\Images\Links\IsInstanceArrow.png"
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.TemplateLabel}"
+											  SmallImageSource="..\Images\Links\TemplateArrow.png"
 											  Command="{StaticResource SetLinkTypeKey}"
-											  CommandParameter="{x:Static p:Resources.IsInstanceLabel}"/>-->
+											  CommandParameter="{x:Static p:Resources.TemplateLabel}"/>
+					<ribbon:RibbonRadioButton Label="{x:Static p:Resources.PartOfLabel}"
+											  SmallImageSource="..\Images\Links\PartOfArrow.png"
+											  Command="{StaticResource SetLinkTypeKey}"
+											  CommandParameter="{x:Static p:Resources.PartOfLabel}"/>
 					<ribbon:RibbonButton x:Name="DeleteLinkButton"
 										 Command="{StaticResource DeleteLinkKey}"
 										 Label="{x:Static p:Resources.DeleteLinkLabel}"
@@ -296,42 +300,12 @@
 						  CanContentScroll="True"
 						  MouseWheel="DiagramNetwork_MouseWheel"
 						  KeyDown="ScrollDiagram_KeyDown">
-					<!--<diag:Diagram x:Name="DiagramNetwork"
-								  DockPanel.Dock="Right"
-								  VerticalAlignment="Stretch"
-								  HorizontalAlignment="Stretch"
-								  Margin="5"
-								  Behavior="LinkShapes"
-								  DefaultShape="Ellipse"
-								  ZoomFactor="100"
-								  AutoResize="AllDirections"
-								  HorizontalContentAlignment="Stretch"
-								  VerticalContentAlignment="Stretch"
-								  BackBrush="{StaticResource DefaultBackBrush}"
-								  MouseWheel="DiagramNetwork_MouseWheel"
-								  NodeSelected="DiagramNetwork_NodeSelected"
-								  NodeDeselected="DiagramNetwork_NodeDeselected"
-								  NodeDeleted="DiagramNetwork_NodeDeleted"
-								  NodeCreated="DiagramNetwork_NodeCreated"
-								  LinkSelected="DiagramNetwork_LinkSelected"
-								  LinkDeselected="DiagramNetwork_LinkDeselected"
-								  LinkDeleted="DiagramNetwork_LinkDeleted"
-								  LinkCreated="DiagramNetwork_LinkCreated"
-								  DelKeyAction="DeleteSelectedItems"
-								  SelectionChanged="DiagramNetwork_SelectionChanged"
-								  AllowInplaceEdit="False"
-								  InplaceEditAcceptOnEnter="True"
-								  AutoScroll="True"
-								  ContextMenu="{StaticResource DiagramContextMenu}"
-								  Visibility="Hidden">
-					</diag:Diagram>-->
 					<c:Diagram x:Name="NetworkVisual"
 							   DockPanel.Dock="Right"
 							   VerticalAlignment="Stretch"
 							   HorizontalAlignment="Stretch"
 							   Margin="5">
 					</c:Diagram>
-							   
 				</ScrollViewer>
 			</Border>
 		</Grid>

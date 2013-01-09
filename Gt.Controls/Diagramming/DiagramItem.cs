@@ -192,7 +192,16 @@ namespace Gt.Controls.Diagramming
 			NeedRecalc = false;
 		}
 
-		public abstract void Draw(DrawingContext dc);
+		public virtual bool Draw(DrawingContext dc, bool considerViewport)
+		{
+			if (considerViewport && Geometry != null)
+			{
+				if (!Geometry.Bounds.IntersectsWith(Diagram.Viewport))
+					return false;
+			}
+
+			return true;
+		}
 
 		//public abstract void DrawSelectionBorder(DrawingContext dc);
 

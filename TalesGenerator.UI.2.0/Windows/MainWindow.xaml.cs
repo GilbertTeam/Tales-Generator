@@ -139,7 +139,7 @@ namespace TalesGenerator.UI.Windows
 			if (_project.Network != null)
 				this.CloseProject_Executed(sender, e);
 			OpenFileDialog openDialog = new OpenFileDialog();
-			openDialog.Filter = "TalesGeneratorProject files (*.tgp)|*.tgp";
+			openDialog.Filter = "TalesGeneratorProject files (*.tgp)|*.tgp | Xml files (*.xml)|*xml";
 			bool? result = openDialog.ShowDialog();
 			if (result == true)
 			{

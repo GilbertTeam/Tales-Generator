@@ -289,7 +289,7 @@
     <Resource Include="Images\Links\FollowArrow.png" />
     <Resource Include="Images\Links\GoalArrow.png" />
     <Resource Include="Images\Links\IsAArrow.png" />
-    <Resource Include="Images\Links\IsInstanceArrow.png" />
+    <Resource Include="Images\Links\TemplateArrow.png" />
     <Resource Include="Images\Links\LocativeArrow.png" />
     <Resource Include="Images\Links\ObjectArrow.png" />
     <Resource Include="Images\Links\RecipientArrow.png" />
@@ -297,6 +297,9 @@
   <ItemGroup>
     <Resource Include="Images\Ribbon\EditXml.png" />
     <Resource Include="Images\Ribbon\Layout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Links\PartOfArrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

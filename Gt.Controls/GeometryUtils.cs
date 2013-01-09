@@ -8,6 +8,9 @@ namespace Gt.Controls
 	{
 		public static bool HitTest(this Geometry geometry, Point hitPoint, Pen pen)
 		{
+			if (!geometry.Bounds.Contains(hitPoint))
+				return false;
+
 			return geometry.FillContains(hitPoint) || geometry.StrokeContains(pen, hitPoint, GlobalData.PointPrecision, ToleranceType.Absolute);
 		}
 

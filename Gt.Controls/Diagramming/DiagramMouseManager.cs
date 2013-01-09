@@ -138,6 +138,7 @@ namespace Gt.Controls.Diagramming
 			_leftButtonDown = true;
 			_leftButtonAction = MouseAction.None;
 
+			ResetIsUnderCursor(_currentMousePosition.HasValue ? _currentMousePosition.Value : new Point(0, 0));
 			_mouseDownOnItem = _itemUnderCursor;
 
 			if (_diagram.Edges.Count != 0)
@@ -179,6 +180,7 @@ namespace Gt.Controls.Diagramming
 				var isMouseMoved = MathUtils.Compare(GeometryUtils.Distance(_leftButtonDownMousePosition.Value, _currentMousePosition.Value), 0, GlobalData.PointPrecision) != 0;
 				if (!isMouseMoved)
 				{
+					ResetIsUnderCursor(_currentMousePosition.Value);
 					var selectionSucceded = SelectItem(_itemUnderCursor);
 					if (!selectionSucceded)
 					{
@@ -212,8 +214,6 @@ namespace Gt.Controls.Diagramming
 
 		public virtual void ProcessMouseMove(Point mousePosition, bool createSelector = true)
 		{
-			ResetIsUnderCursor(mousePosition);
-
 			if (_leftButtonDown)
 			{
 				if (_offsetWorker == null)
@@ -230,6 +230,8 @@ namespace Gt.Controls.Diagramming
 				}
 				if (_leftButtonAction == MouseAction.CreateEdge)
 				{
+					ResetIsUnderCursor(mousePosition);
+
 					CreateEdge(mousePosition);
 				}
 				if (_leftButtonAction == MouseAction.MultiSelect)
@@ -512,6 +514,8 @@ namespace Gt.Controls.Diagramming
 						break;
 					case ResizeDirection.AllRoundSource:
 						{
+							ResetIsUnderCursor(mousePosition);
+
 							foreach (var item in _diagram.Selection)
 							{
 								var edge = item as DiagramEdge;
@@ -531,6 +535,8 @@ namespace Gt.Controls.Diagramming
 						break;
 					case ResizeDirection.AllRoundDestination:
 						{
+							ResetIsUnderCursor(mousePosition);
+
 							foreach (var item in _diagram.Selection)
 							{
 								var edge = item as DiagramEdge;
@@ -841,6 +847,9 @@ namespace Gt.Controls.Diagramming
 			if (worker == null)
 				return;
 
+			if (!_leftButtonDown)
+				return;
+
 			while (true)
 			{
 				if (worker.CancellationPending == true)
@@ -872,22 +881,26 @@ namespace Gt.Controls.Diagramming
 						if (viewport.Bottom - currentPoint.Y < offsetY)
 							moveDown = true;
 
-						using (DiagramRenderLock locker = new DiagramRenderLock(_diagram))
+						if (moveLeft || moveRight || moveUp || moveDown)
 						{
-							if (moveUp)
-								_diagram.YViewOffset += offsetY;
 
-							if (moveDown)
-								_diagram.YViewOffset -= offsetY;
+							using (DiagramRenderLock locker = new DiagramRenderLock(_diagram))
+							{
+								if (moveUp)
+									_diagram.YViewOffset += offsetY;
 
-							if (moveLeft)
-								_diagram.XViewOffset += offsetX;
+								if (moveDown)
+									_diagram.YViewOffset -= offsetY;
 
-							if (moveRight)
-								_diagram.XViewOffset -= offsetX;
+								if (moveLeft)
+									_diagram.XViewOffset += offsetX;
+
+								if (moveRight)
+									_diagram.XViewOffset -= offsetX;
+							}
+
+							ProcessMouseMove(currentScreenPoint.ToViewPoint(_diagram.Offset, _diagram.Scale), false);
 						}
-
-						ProcessMouseMove(currentScreenPoint.ToViewPoint(_diagram.Offset, _diagram.Scale), false);
 					}));
 
 				Thread.Sleep(100);

@@ -279,4 +279,16 @@
   <data name="CreateNewNodeLabel" xml:space="preserve">
     <value>Создать новую вершину</value>
   </data>
+  <data name="PartOfLabel" xml:space="preserve">
+    <value>#part_of</value>
+  </data>
+  <data name="PartOfResourceLabell" xml:space="preserve">
+    <value>PartOf</value>
+  </data>
+  <data name="TemlateResourceLabel" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="TemplateLabel" xml:space="preserve">
+    <value>#шаблон</value>
+  </data>
 </root>

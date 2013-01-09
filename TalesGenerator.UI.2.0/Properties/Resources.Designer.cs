@@ -412,6 +412,24 @@ namespace TalesGenerator.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #part_of.
+        /// </summary>
+        public static string PartOfLabel {
+            get {
+                return ResourceManager.GetString("PartOfLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PartOf.
+        /// </summary>
+        public static string PartOfResourceLabell {
+            get {
+                return ResourceManager.GetString("PartOfResourceLabell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #реципиент.
         /// </summary>
         public static string RecipientLabel {
@@ -489,6 +507,24 @@ namespace TalesGenerator.UI.Properties {
         public static string StringEditWndEnterLabel {
             get {
                 return ResourceManager.GetString("StringEditWndEnterLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template.
+        /// </summary>
+        public static string TemlateResourceLabel {
+            get {
+                return ResourceManager.GetString("TemlateResourceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #шаблон.
+        /// </summary>
+        public static string TemplateLabel {
+            get {
+                return ResourceManager.GetString("TemplateLabel", resourceCulture);
             }
         }
         
