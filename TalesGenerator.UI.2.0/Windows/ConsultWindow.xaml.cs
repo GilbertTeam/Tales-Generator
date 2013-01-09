@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
 using System.Windows;
+using System.Windows.Controls;
 using TalesGenerator.TaleNet;
 using TalesGenerator.Text;
 
@@ -46,11 +47,28 @@ namespace TalesGenerator.UI.Windows
 
 		#region Event Handlers
 
+		private void QuestionTextBoxOnTextChanged(object sender, TextChangedEventArgs e)
+		{
+			btnStart.IsEnabled = true;
+		}
+
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
-				AnswerTextBox.Text = _textGenerator.GenerateText(_talesNetwork, QuestionTextBox.Text);
+				statusText.Text = string.Empty;
+
+				TextGeneratorContext result = _textGenerator.GenerateText(_talesNetwork, QuestionTextBox.Text);
+
+				if (result == null)
+				{
+					btnStart.IsEnabled = false;
+					statusText.Text = "Процесс генерации завершен";
+				}
+				else
+				{
+					AnswerTextBox.Text = result.OutputText;
+				}
 			}
 			catch (Exception ex)
 			{

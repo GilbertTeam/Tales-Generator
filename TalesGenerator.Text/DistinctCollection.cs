@@ -2,7 +2,7 @@
 
 namespace TalesGenerator.Text
 {
-	internal class DistinctCollection<T> : BaseCollection<T>
+	public class DistinctCollection<T> : BaseCollection<T>
 	{
 		#region Methods
 

@@ -6,11 +6,13 @@ using TalesGenerator.TaleNet;
 
 namespace TalesGenerator.Text
 {
-	internal class TextGenerationContext
+	public class TextGeneratorContext
 	{
 		#region Properties
 
-		public string Text { get; private set; }
+		public string InputText { get; private set; }
+
+		public string OutputText { get; set; }
 
 		public TalesNetwork Network { get; private set; }
 
@@ -29,13 +31,13 @@ namespace TalesGenerator.Text
 
 		#region Constructors
 
-		public TextGenerationContext(TalesNetwork network, string text)
+		public TextGeneratorContext(TalesNetwork network, string text)
 		{
 			Contract.Requires<ArgumentNullException>(network != null);
 			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(text));
 
 			Network = network;
-			Text = text;
+			InputText = text;
 			ResolvedFunctions = new List<FunctionGenerationInfo>();
 			ResolvedPersons = new DistinctCollection<NetworkNode>();
 			ResolvedLocatives = new DistinctCollection<NetworkNode>();

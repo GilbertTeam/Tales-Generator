@@ -20,7 +20,7 @@ namespace TalesGenerator.Text
 
 		private readonly TemplateParser _templateParser;
 
-		private TextGenerationContext _currentContext;
+		private TextGeneratorContext _currentContext;
 		#endregion
 
 		#region Constructors
@@ -219,7 +219,7 @@ namespace TalesGenerator.Text
 
 		private void ResolveText(TalesNetwork talesNetwork, string text)
 		{
-			_currentContext = new TextGenerationContext(talesNetwork, text);
+			_currentContext = new TextGeneratorContext(talesNetwork, text);
 
 			// 1. Сначала входной текст разбиваем на предложения,
 			//    а каждое предложение в свою очередь на лексемы.
@@ -392,7 +392,7 @@ namespace TalesGenerator.Text
 			return GenerateText(taleNode.Functions);
 		}
 
-		public string GenerateText(TalesNetwork talesNetwork, string text)
+		public TextGeneratorContext GenerateText(TalesNetwork talesNetwork, string text)
 		{
 			Contract.Requires<ArgumentNullException>(talesNetwork != null);
 			Contract.Requires<ArgumentException>(!string.IsNullOrEmpty(text));
@@ -403,7 +403,7 @@ namespace TalesGenerator.Text
 
 			if (_currentContext == null ||
 				_currentContext.Network != talesNetwork ||
-				string.Compare(_currentContext.Text, text) != 0)
+				string.Compare(_currentContext.InputText, text) != 0)
 			{
 				// Если контекст изменился или его не было, необходимо выполнить этап анализа.
 
@@ -528,7 +528,9 @@ namespace TalesGenerator.Text
 				textBuilder.AppendLine(GenerateText(currentTale.Functions.First(function => function.FunctionType == functionType)));
 			}
 
-			return textBuilder.ToString();
+			_currentContext.OutputText = textBuilder.ToString();
+
+			return _currentContext;
 		}
 		#endregion
 	}

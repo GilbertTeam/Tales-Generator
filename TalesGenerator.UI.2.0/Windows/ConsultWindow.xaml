@@ -19,8 +19,9 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="6"/>
 			<RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<Border Grid.Row="0"
+       <Border Grid.Row="0"
 				Style="{StaticResource BorderStyleKey}"
 				Margin="5"
 				Background="{StaticResource BackgroundBrushKey}">
@@ -38,13 +39,10 @@
 					 Grid.Column="0"
 					 AcceptsReturn="True"
 					 VerticalAlignment="Stretch"
-					 Style="{StaticResource WindowElementStyle}"/>
-			<Button Style="{StaticResource CommandButtonStyle}"
-					Grid.Column="1"
-					VerticalAlignment="Top"
-					Content="{x:Static p:Resources.StartLabel}"
-					IsDefault="True"
-					Click="Button_Click"/>
+					 Style="{StaticResource WindowElementStyle}"
+                     TextChanged="QuestionTextBoxOnTextChanged"
+                     />
+			
 		</Grid>
 		<Separator Grid.Row="2"
 				   VerticalAlignment="Center"/>
@@ -63,9 +61,20 @@
 				 IsReadOnly="True"/>
 		<Separator Grid.Row="5"
 				   VerticalAlignment="Center"/>
-		<Button Grid.Row="6"
-				Style="{StaticResource CommandButtonStyle}"
-				Content="{x:Static p:Resources.ExitLabel}"
-				IsCancel="True"/>
-	</Grid>
+        <Button Style="{StaticResource CommandButtonStyle}"
+                    x:Name="btnStart"
+                    Grid.Row="6"
+					Grid.Column="1"
+					VerticalAlignment="Top"
+					Content="{x:Static p:Resources.StartLabel}"
+					IsDefault="True"
+					Click="Button_Click"/>
+        <StatusBar x:Name="statusBar"
+                   VerticalAlignment="Stretch"
+                   Grid.Row="7">
+            <StatusBarItem>
+                <TextBlock x:Name="statusText"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
 </Window>

@@ -2,7 +2,7 @@
 
 namespace TalesGenerator.Text
 {
-	internal class FunctionConflictSetCollection : BaseCollection<FunctionConflictSet>
+	public class FunctionConflictSetCollection : BaseCollection<FunctionConflictSet>
 	{
 		#region Methods
 

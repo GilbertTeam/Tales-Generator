@@ -6,7 +6,7 @@ using TalesGenerator.TaleNet;
 
 namespace TalesGenerator.Text
 {
-	internal class FunctionConflictSet
+	public class FunctionConflictSet
 	{
 		#region Fields
 

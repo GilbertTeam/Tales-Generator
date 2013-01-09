@@ -4,7 +4,7 @@ using TalesGenerator.TaleNet;
 
 namespace TalesGenerator.Text
 {
-	internal class FunctionGenerationInfo
+	public class FunctionGenerationInfo
 	{
 		#region Properties
 

@@ -2,7 +2,7 @@
 
 namespace TalesGenerator.Text
 {
-	internal class GenerationCollection : BaseCollection<TaleGenerationInfo>
+	public class GenerationCollection : BaseCollection<TaleGenerationInfo>
 	{
 		#region Fields
 

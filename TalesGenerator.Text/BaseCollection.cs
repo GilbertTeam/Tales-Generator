@@ -5,7 +5,7 @@ using System.Diagnostics.Contracts;
 
 namespace TalesGenerator.Text
 {
-	internal class BaseCollection<T> : ICollection<T>
+	public class BaseCollection<T> : ICollection<T>
 	{
 		#region Fields
 

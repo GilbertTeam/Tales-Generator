@@ -690,10 +690,15 @@ namespace TalesGenerator.ConsoleTest
 
 				while (true)
 				{
-					string text = textGenerator.GenerateText(loadedNetwork, File.ReadAllText(@"Input.txt"));
-					File.AppendAllText(@"Output.txt", text + Environment.NewLine);
-					Console.WriteLine(text);
+					TextGeneratorContext result = textGenerator.GenerateText(loadedNetwork, File.ReadAllText(@"Input.txt"));
 
+					if (result != null)
+					{
+						string text = result.OutputText;
+						File.AppendAllText(@"Output.txt", text + Environment.NewLine);
+						Console.WriteLine(text);
+					}
+					
 					Console.WriteLine("Press 'r' to repeat, 'q' to exit.");
 
 					string input = Console.ReadLine();
